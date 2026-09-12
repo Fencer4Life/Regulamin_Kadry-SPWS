@@ -1,0 +1,21 @@
+---
+layout: default
+---
+<article class="decision">
+  <p class="eyebrow">{{ page.id | escape }} · {{ page.typ | escape }}</p>
+  <h1>{{ page.tytul | escape }}</h1>
+  <dl class="metadata">
+    <div><dt>Status</dt><dd><span class="status status-{{ page.status | slugify }}">{{ page.status }}</span></dd></div>
+    <div><dt>Data decyzji</dt><dd>{{ page.data_decyzji | default: '—' }}</dd></div>
+    <div><dt>Sezon</dt><dd>{{ page.sezon | default: '—' }}</dd></div>
+    <div><dt>Dotyczy</dt><dd>{{ page.dotyczy | default: '—' }}</dd></div>
+    <div><dt>Termin oceny</dt><dd>{{ page.termin_oceny | default: '—' }}</dd></div>
+  </dl>
+  <div class="decision-content">{{ content }}</div>
+  <nav class="record-links" aria-label="Materiały powiązane">
+    {% if page.discussion_url and page.discussion_url != '' %}<a href="{{ page.discussion_url }}">Dyskusja</a>{% endif %}
+    {% if page.pr_url and page.pr_url != '' %}<a href="{{ page.pr_url }}">Pull Request</a>{% endif %}
+    <a href="{{ site.github.repository_url }}/blob/main/{{ page.path }}">Źródłowy Markdown</a>
+    <a href="{{ '/' | relative_url }}">Powrót do rejestru</a>
+  </nav>
+</article>

@@ -1,0 +1,50 @@
+:root {
+  color-scheme: light dark;
+  --background: #eef2f7; --surface: #ffffff; --ink: #142033; --muted: #58667a;
+  --line: #c6d0dc; --accent: #174a84; --accent-dark: #0f3765; --good: #17663c;
+  --warn: #815300; --shadow: 0 14px 40px rgb(20 32 51 / 10%);
+}
+@media (prefers-color-scheme: dark) {
+  :root { --background: #111722; --surface: #1a2230; --ink: #edf3fa; --muted: #aebac9;
+    --line: #344054; --accent: #8bc1f4; --accent-dark: #b5d8f7; --good: #73d69d;
+    --warn: #efc36d; --shadow: none; }
+}
+* { box-sizing: border-box; }
+html { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; line-height: 1.6; }
+body { margin: 0; color: var(--ink); background: var(--background); }
+a { color: var(--accent-dark); text-underline-offset: .16em; }
+.shell { width: min(72rem, calc(100% - 2rem)); margin-inline: auto; }
+.site-header { border-bottom: 1px solid var(--line); background: var(--surface); }
+.header-inner { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding-block: 1rem; }
+.brand { color: var(--ink); font-family: Georgia, serif; font-size: 1.15rem; font-weight: 700; text-decoration: none; }
+nav { display: flex; flex-wrap: wrap; gap: .7rem 1.25rem; }
+main.shell { min-height: 75vh; padding-block: clamp(2.5rem, 6vw, 5rem); }
+h1, h2, h3 { font-family: Georgia, serif; line-height: 1.15; }
+h1 { max-width: 18ch; margin: 0; font-size: clamp(2.5rem, 7vw, 4.9rem); letter-spacing: -.035em; }
+h2 { margin-top: 2.2rem; }
+.eyebrow { margin: 0 0 .8rem; color: var(--accent); font-size: .78rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+.lead { max-width: 48rem; color: var(--muted); font-size: clamp(1.15rem, 2vw, 1.4rem); }
+.notice { max-width: 54rem; padding: 1rem 1.2rem; border-left: .3rem solid var(--warn); background: var(--surface); }
+.filters { display: grid; grid-template-columns: minmax(14rem, 2fr) repeat(4, minmax(9rem, 1fr)); gap: .8rem; }
+label { color: var(--muted); font-size: .82rem; font-weight: 700; }
+input, select { width: 100%; margin-top: .3rem; padding: .7rem .75rem; border: 1px solid var(--line); border-radius: .35rem; color: var(--ink); background: var(--surface); font: inherit; }
+.result-count { color: var(--muted); }
+.decision-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.decision-card { padding: 1.2rem 1.35rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--surface); box-shadow: var(--shadow); }
+.decision-card h2 { margin: .7rem 0; font-size: 1.25rem; }
+.card-topline { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.record-id { color: var(--accent); font-family: ui-monospace, monospace; font-weight: 800; }
+.status { display: inline-block; padding: .18rem .5rem; border-radius: 99rem; color: var(--good); background: color-mix(in srgb, var(--good) 14%, transparent); font-size: .74rem; font-weight: 800; }
+.card-meta { color: var(--muted); font-size: .88rem; }
+.metadata { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .6rem; padding: 1rem; border: 1px solid var(--line); background: var(--surface); }
+.metadata div { min-width: 0; }
+.metadata dt { color: var(--muted); font-size: .75rem; font-weight: 700; text-transform: uppercase; }
+.metadata dd { margin: .2rem 0 0; }
+.decision-content { max-width: 52rem; margin-block: 2.5rem; }
+.decision-content h2 { padding-top: .6rem; border-top: 1px solid var(--line); }
+.record-links { padding-top: 1.2rem; border-top: 1px solid var(--line); }
+.site-footer { padding-block: 1.5rem; border-top: 1px solid var(--line); color: var(--muted); background: var(--surface); font-size: .85rem; }
+.hidden { display: none !important; }
+@media (max-width: 58rem) { .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 38rem) { .header-inner { align-items: flex-start; flex-direction: column; } .filters { grid-template-columns: 1fr; } }
+@media print { .site-header, .site-footer, .filters, .result-count { display: none; } body { background: #fff; color: #000; } .decision-card { break-inside: avoid; box-shadow: none; } }

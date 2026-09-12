@@ -1,0 +1,43 @@
+name: Propozycja decyzji regulaminowej
+description: Zgłoszenie problemu, wariantów i proponowanego rozstrzygnięcia.
+title: "[Propozycja decyzji] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Opisz problem i warianty. Numer DR nadaje komisja dopiero po zakwalifikowaniu propozycji.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Jaki konkretny problem regulaminowy wymaga rozstrzygnięcia?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Kontekst
+      description: Jakie fakty, przepisy lub doświadczenia sezonu mają znaczenie?
+    validations:
+      required: true
+  - type: textarea
+    id: variants
+    attributes:
+      label: Rozważane warianty
+      description: Wymień możliwe rozwiązania wraz z ich skutkami.
+    validations:
+      required: true
+  - type: textarea
+    id: recommendation
+    attributes:
+      label: Proponowane rozstrzygnięcie
+      description: Podaj proponowane brzmienie albo jednoznaczny kierunek zmiany.
+    validations:
+      required: true
+  - type: textarea
+    id: evaluation
+    attributes:
+      label: Sposób oceny po sezonie
+      description: Po czym poznamy, że rozwiązanie spełniło oczekiwania?
+    validations:
+      required: true
