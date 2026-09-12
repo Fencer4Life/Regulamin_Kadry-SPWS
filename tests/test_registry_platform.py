@@ -53,6 +53,8 @@ class RegistryPlatformTests(unittest.TestCase):
         self.assertIn("branches: [main]", pages)
         self.assertIn("pages: write", pages)
         self.assertIn("id-token: write", pages)
+        self.assertIn("bundle exec jekyll build --strict_front_matter", pages)
+        self.assertNotIn("actions/jekyll-build-pages", pages)
         self.assertNotIn("pull_request:", pages)
 
 
