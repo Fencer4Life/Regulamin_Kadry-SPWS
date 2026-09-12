@@ -52,29 +52,45 @@
     <li>Nieprawidłowe parametry URL są bezpiecznie sprowadzane do pierwszej strony i wartości 20.</li>
   </ul>
 
-  <h2>5. Migracja istniejących kart</h2>
+  <h2>5. Dyskusje i przejście do decyzji</h2>
+  <p>Na samej górze rejestru znajdują się dwa stałe działania: <code>Otwarte dyskusje · N</code>, prowadzące do strony <code>/dyskusje/</code>, oraz <code>Otwórz nową dyskusję</code>, prowadzące bezpośrednio do formularza kategorii „Propozycje zmian regulaminu” na GitHub.</p>
+  <p>Strona <code>/dyskusje/</code> pokazuje tytuł, autora, datę otwarcia, liczbę wypowiedzi, etykiety i link do rozmowy. Widoczna jest data ostatniej synchronizacji oraz awaryjny link do zawsze aktualnej listy na GitHub.</p>
+  <ol>
+    <li>Użytkownik otwiera ustrukturyzowany formularz w kategorii „Propozycje zmian regulaminu”.</li>
+    <li>Dyskusja pozostaje otwarta podczas zbierania argumentów i wariantów.</li>
+    <li>Komisja nadaje dojrzałej rozmowie etykietę <code>do rozstrzygnięcia</code>.</li>
+    <li>Automatyzacja nadaje kolejny numer DR, tworzy gałąź, roboczą kartę ze statusem <code>do zatwierdzenia</code> i draft pull request. Karta od początku zawiera link do dyskusji.</li>
+    <li>W PR komisja zapisuje rozstrzygnięcie, uzasadnienie, relacje i końcowy status <code>przyjęta</code> albo <code>odrzucona</code>.</li>
+    <li>Po scaleniu PR system komentuje dyskusję linkiem do karty DR i zamyka ją jako <code>rozwiązana</code>.</li>
+  </ol>
+  <p>Dyskusję bez karty DR można zamknąć jako <code>nieaktualna</code> albo <code>duplikat</code>. Usunięcie służy wyłącznie moderacji spamu lub naruszeń. Merytoryczne odrzucenie propozycji zawsze prowadzi do karty DR ze statusem <code>odrzucona</code>. Proces nie tworzy pośredniego GitHub Issue.</p>
+  <p>Lista dyskusji jest statycznym, bezpiecznym snapshotem generowanym przez GitHub Actions z użyciem tokenu dostępnego wyłącznie w CI. Synchronizacja uruchamia się po obsługiwanych zdarzeniach Discussions, ręcznie oraz co 15 minut. Harmonogram zabezpiecza także zmiany, dla których GitHub nie udostępnia zdarzenia Actions, w szczególności zamknięcie i ponowne otwarcie rozmowy.</p>
+
+  <h2>6. Migracja istniejących kart</h2>
   <p>DR-001–DR-016 otrzymują <code>stan_obowiązywania: obowiązuje</code> oraz jawne puste listy relacji. Szablon nowej decyzji otrzymuje wszystkie nowe pola wraz z instrukcją ich użycia. Nie zmienia to treści merytorycznej istniejących decyzji.</p>
 
-  <h2>6. Architektura i odpowiedzialności</h2>
+  <h2>7. Architektura i odpowiedzialności</h2>
   <ul>
     <li>Markdown/YAML pozostaje źródłem statusów, stanów oraz relacji.</li>
     <li>Jekyll generuje pasek statusu, relacje i linki, dlatego pozostają dostępne bez JavaScriptu.</li>
     <li>JavaScript odpowiada wyłącznie za filtrowanie, paginację, synchronizację URL i zapamiętanie preferencji.</li>
     <li>CSS odpowiada za stany wizualne, przekreślenie i responsywność.</li>
+    <li>GitHub Actions pobiera wyłącznie publiczne metadane dyskusji, generuje snapshot oraz przeprowadza kontrolowaną inicjację karty DR.</li>
     <li>CI blokuje publikację niespójnych kart.</li>
   </ul>
 
-  <h2>7. Realizacja obowiązkowo przez TDD</h2>
+  <h2>8. Realizacja obowiązkowo przez TDD</h2>
   <ol>
     <li>Zapisać testy akceptacyjne dla kontraktu metadanych, relacji, sortowania, paginacji i wyrenderowanego HTML.</li>
     <li>Uruchomić testy przed implementacją i zachować w opisie PR dowód stanu RED.</li>
     <li>Wprowadzać najmniejsze zmiany produkcyjne prowadzące do GREEN.</li>
     <li>Po każdej grupie zmian uruchamiać testy wąskie, następnie pełny zestaw Python i rygorystyczny build Jekyll.</li>
     <li>Zweryfikować wynikowy HTML dla listy, karty aktualnej, częściowo zmienionej i zastąpionej oraz dla stron 20/50/100.</li>
+    <li>Testami kontraktowymi objąć formularz dyskusji, generowany snapshot, harmonogram 15 minut, obsługę etykiety <code>do rozstrzygnięcia</code>, nadawanie numeru bez kolizji, draft PR oraz zamknięcie rozmowy dopiero po scaleniu decyzji.</li>
   </ol>
   <div class="note"><strong>Walidacja relacji:</strong> dozwolone wartości pól; istnienie celu; zakaz samoodwołania; zgodność relacji odwrotnych; wymagany zakres zmiany częściowej; wymagane wskazanie decyzji zastępującej; chronologiczna zbieżność numerów z datą inicjacji.</div>
 
-  <h2>8. Kryteria odbioru</h2>
+  <h2>9. Kryteria odbioru</h2>
   <ul>
     <li>Najwyższy numer DR znajduje się na początku listy.</li>
     <li>Wybór 20, 50 i 100 działa łącznie z każdym filtrem i wyszukiwaniem.</li>
@@ -83,6 +99,10 @@
     <li>Decyzja częściowo zmieniona nie jest przekreślona; zastąpiona jest przygaszona i przekreślona.</li>
     <li>Wszystkie wskazane decyzje są klikalne, istnieją i mają zgodne relacje odwrotne.</li>
     <li>Strona działa responsywnie i nie komunikuje stanu wyłącznie kolorem.</li>
+    <li>Na górze strony są widoczne linki do listy otwartych rozmów i formularza nowej dyskusji.</li>
+    <li>Strona dyskusji pokazuje wyłącznie otwarte rozmowy z właściwej kategorii, liczbę rozmów i czas synchronizacji.</li>
+    <li>Etykieta <code>do rozstrzygnięcia</code> tworzy dokładnie jedną kartę i jeden draft PR, również po ponownym uruchomieniu workflow.</li>
+    <li>Dyskusja jest zamykana jako rozwiązana dopiero po opublikowaniu powiązanej karty; warianty nieaktualna i duplikat nie tworzą DR.</li>
     <li>Pełne testy i oba workflow GitHub Actions kończą się powodzeniem.</li>
   </ul>
 
