@@ -1,11 +1,12 @@
+{% assign record_id = include.decision.slug | slice: 0, 6 | upcase %}
 <article class="decision-card"
-  data-search="{{ include.decision.id | append: ' ' | append: include.decision.tytul | append: ' ' | append: include.decision.dotyczy | downcase | escape }}"
+  data-search="{{ record_id | append: ' ' | append: include.decision.tytul | append: ' ' | append: include.decision.dotyczy | downcase | escape }}"
   data-type="{{ include.decision.typ | escape }}"
   data-status="{{ include.decision.status | escape }}"
   data-season="{{ include.decision.sezon | escape }}"
   data-subject="{{ include.decision.dotyczy | escape }}">
   <div class="card-topline">
-    <span class="record-id">{{ include.decision.id }}</span>
+    <span class="record-id">{{ record_id }}</span>
     <span class="status status-{{ include.decision.status | slugify }}">{{ include.decision.status }}</span>
   </div>
   <h2><a href="{{ include.decision.url | relative_url }}">{{ include.decision.tytul }}</a></h2>
