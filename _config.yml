@@ -1,0 +1,28 @@
+title: Rejestr Decyzji Regulaminu Kadry SPWS
+description: Uzasadnienia, warianty i ocena decyzji dotyczących regulaminu kadry weteranów w szermierce.
+lang: pl
+url: https://fencer4life.github.io
+baseurl: /Regulamin_Kadry-SPWS
+markdown: kramdown
+permalink: pretty
+
+collections:
+  decyzje:
+    output: true
+    permalink: /decyzje/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: decyzje
+    values:
+      layout: decision
+
+exclude:
+  - .DS_Store
+  - .venv
+  - Gemfile
+  - Gemfile.lock
+  - narzedzia
+  - tests
+  - vendor

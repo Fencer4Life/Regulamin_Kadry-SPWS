@@ -1,14 +1,42 @@
-<!doctype html>
-<html lang="pl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Rejestr Decyzji — Regulamin Kadry SPWS</title>
-</head>
-<body>
-  <main>
-    <h1>Rejestr Decyzji</h1>
-    <p>Publiczny indeks decyzji regulaminowych jest przygotowywany w kolejnym etapie wdrożenia.</p>
-  </main>
-</body>
-</html>
+---
+layout: default
+title: Rejestr Decyzji
+description: Publiczny rejestr decyzji dotyczących Regulaminu Kadry SPWS.
+---
+<section class="hero">
+  <p class="eyebrow">Sezon 2026/2027 · projekt do konsultacji</p>
+  <h1>Rejestr Decyzji Regulaminu Kadry</h1>
+  <p class="lead">Każda karta pokazuje problem, rozważane warianty, przyjęte rozwiązanie, jego uzasadnienie oraz sposób oceny po sezonie.</p>
+  <p class="notice"><strong>Uwaga:</strong> rejestr dokumentuje prace nad projektem. Nie stanowi decyzji PZSz ani obowiązującego regulaminu.</p>
+</section>
+
+<section aria-labelledby="filters-heading">
+  <h2 id="filters-heading">Znajdź decyzję</h2>
+  <div class="filters">
+    <label>Wyszukaj
+      <input id="search" type="search" placeholder="Numer, tytuł lub przedmiot" autocomplete="off">
+    </label>
+    <label>Typ
+      <select id="filter-type"><option value="">Wszystkie</option>{% assign types = site.decyzje | map: 'typ' | uniq | sort %}{% for value in types %}<option>{{ value }}</option>{% endfor %}</select>
+    </label>
+    <label>Status
+      <select id="filter-status"><option value="">Wszystkie</option>{% assign statuses = site.decyzje | map: 'status' | uniq | sort %}{% for value in statuses %}<option>{{ value }}</option>{% endfor %}</select>
+    </label>
+    <label>Sezon
+      <select id="filter-season"><option value="">Wszystkie</option>{% assign seasons = site.decyzje | map: 'sezon' | uniq | sort %}{% for value in seasons %}<option>{{ value }}</option>{% endfor %}</select>
+    </label>
+    <label>Dotyczy
+      <select id="filter-subject"><option value="">Wszystkie</option>{% assign subjects = site.decyzje | map: 'dotyczy' | uniq | sort %}{% for value in subjects %}<option>{{ value }}</option>{% endfor %}</select>
+    </label>
+  </div>
+  <p id="result-count" class="result-count" aria-live="polite"></p>
+</section>
+
+<section id="decision-list" class="decision-grid" aria-label="Decyzje">
+  {% assign decisions = site.decyzje | sort: 'id' %}
+  {% for decision in decisions %}
+    {% include decision-card.html decision=decision %}
+  {% else %}
+    <p class="empty">Karty decyzji zostaną opublikowane w następnym etapie.</p>
+  {% endfor %}
+</section>
