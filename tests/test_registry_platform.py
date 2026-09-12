@@ -14,7 +14,7 @@ REQUIRED_PLATFORM_FILES = (
     "_includes/decision-card.html",
     "assets/rejestr.css",
     "assets/rejestr.js",
-    ".github/DISCUSSION_TEMPLATE/nowa-decyzja.yml",
+    ".github/DISCUSSION_TEMPLATE/propozycje-zmian-regulaminu.yml",
     ".github/workflows/validate.yml",
     ".github/workflows/pages.yml",
 )
@@ -33,11 +33,25 @@ class RegistryPlatformTests(unittest.TestCase):
             'id="filter-status"',
             'id="filter-season"',
             'id="filter-subject"',
+            'id="filter-effect"',
+            'id="page-size"',
+            'id="pagination-top"',
+            'id="pagination-bottom"',
             "site.decyzje",
             "decision-card.html",
         )
         missing = [fragment for fragment in required if fragment not in index]
         self.assertEqual(missing, [], f"Indeks nie zawiera wyszukiwarki lub filtrów: {missing}")
+
+    def test_newest_decisions_are_rendered_first(self):
+        index = (ROOT / "index.html").read_text(encoding="utf-8")
+        self.assertIn("site.decyzje | sort: 'slug' | reverse", index)
+
+    def test_header_links_to_discussions_and_new_proposal(self):
+        layout = (ROOT / "_layouts" / "default.html").read_text(encoding="utf-8")
+        self.assertIn("Otwarte dyskusje", layout)
+        self.assertIn("Otwórz nową dyskusję", layout)
+        self.assertTrue((ROOT / "dyskusje.html").is_file())
 
     def test_config_publishes_decision_collection(self):
         config = (ROOT / "_config.yml").read_text(encoding="utf-8")
@@ -74,6 +88,28 @@ class RegistryPlatformTests(unittest.TestCase):
         self.assertIn("bundle exec jekyll build --strict_front_matter", pages)
         self.assertNotIn("actions/jekyll-build-pages", pages)
         self.assertNotIn("pull_request:", pages)
+
+    def test_pages_refreshes_discussions_safely(self):
+        pages = (ROOT / ".github/workflows/pages.yml").read_text(encoding="utf-8")
+        self.assertIn("schedule:", pages)
+        self.assertIn("*/15", pages)
+        self.assertIn("discussion:", pages)
+        self.assertIn("discussions: read", pages)
+        self.assertIn("sync_discussions.py", pages)
+
+    def test_decision_creation_workflow_is_idempotent_and_serialized(self):
+        workflow = ROOT / ".github" / "workflows" / "create-decision.yml"
+        self.assertTrue(workflow.is_file())
+        text = workflow.read_text(encoding="utf-8")
+        for fragment in ("do rozstrzygnięcia", "concurrency:", "discussion_url", "--draft", "decyzja"):
+            self.assertIn(fragment, text)
+
+    def test_merged_decision_closes_its_discussion_as_resolved(self):
+        workflow = ROOT / ".github" / "workflows" / "resolve-discussion.yml"
+        self.assertTrue(workflow.is_file())
+        text = workflow.read_text(encoding="utf-8")
+        for fragment in ("pull_request:", "closed", "merged", "discussion_url", "RESOLVED", "closeDiscussion"):
+            self.assertIn(fragment, text)
 
 
 if __name__ == "__main__":

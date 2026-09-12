@@ -1,0 +1,30 @@
+name: Zamknięcie dyskusji po decyzji
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: read
+  pull-requests: read
+  discussions: write
+
+jobs:
+  resolve:
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'decyzja')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Powiązanie opublikowanej decyzji i zamknięcie rozmowy
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          path=$(gh pr view "$PR_NUMBER" --json files --jq '.files[].path | select(startswith("_decyzje/DR-") and endswith(".md"))' | head -n 1)
+          test -n "$path"
+          discussion_url=$(sed -n 's/^discussion_url: //p' "$path")
+          discussion_number=${discussion_url##*/}
+          discussion_id=$(gh api graphql -f query='query($owner:String!,$name:String!,$number:Int!){repository(owner:$owner,name:$name){discussion(number:$number){id}}}' -f owner=Fencer4Life -f name=Regulamin_Kadry-SPWS -F number="$discussion_number" --jq '.data.repository.discussion.id')
+          slug=$(basename "$path" .md | tr '[:upper:]' '[:lower:]')
+          card_url="https://fencer4life.github.io/Regulamin_Kadry-SPWS/decyzje/${slug}/"
+          gh api graphql -f query='mutation($discussionId:ID!,$body:String!){addDiscussionComment(input:{discussionId:$discussionId,body:$body}){comment{id}}}' -F discussionId="$discussion_id" -f body="Opublikowano kartę decyzji: ${card_url}"
+          gh api graphql -f query='mutation($discussionId:ID!){closeDiscussion(input:{discussionId:$discussionId,reason:RESOLVED}){discussion{id}}}' -F discussionId="$discussion_id"
