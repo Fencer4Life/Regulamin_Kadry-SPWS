@@ -54,6 +54,14 @@ class RegistryPlatformTests(unittest.TestCase):
         self.assertIn("site.repository_url", layout)
         self.assertNotIn("site.github.repository_url", layout)
 
+    def test_views_derive_the_public_decision_number_from_the_slug(self):
+        card = (ROOT / "_includes" / "decision-card.html").read_text(encoding="utf-8")
+        layout = (ROOT / "_layouts" / "decision.html").read_text(encoding="utf-8")
+        self.assertIn("include.decision.slug | slice: 0, 6 | upcase", card)
+        self.assertNotIn("include.decision.id", card)
+        self.assertIn("page.slug | slice: 0, 6 | upcase", layout)
+        self.assertNotIn("page.id", layout)
+
     def test_pull_requests_validate_but_only_main_deploys_pages(self):
         validate = (ROOT / ".github/workflows/validate.yml").read_text(encoding="utf-8")
         pages = (ROOT / ".github/workflows/pages.yml").read_text(encoding="utf-8")

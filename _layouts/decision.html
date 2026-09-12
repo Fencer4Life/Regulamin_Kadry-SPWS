@@ -2,7 +2,8 @@
 layout: default
 ---
 <article class="decision">
-  <p class="eyebrow">{{ page.id | escape }} · {{ page.typ | escape }}</p>
+  {% assign record_id = page.slug | slice: 0, 6 | upcase %}
+  <p class="eyebrow">{{ record_id | escape }} · {{ page.typ | escape }}</p>
   <h1>{{ page.tytul | escape }}</h1>
   <dl class="metadata">
     <div><dt>Status</dt><dd><span class="status status-{{ page.status | slugify }}">{{ page.status }}</span></dd></div>
