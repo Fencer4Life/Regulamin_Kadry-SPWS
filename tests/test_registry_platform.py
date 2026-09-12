@@ -44,6 +44,16 @@ class RegistryPlatformTests(unittest.TestCase):
         for fragment in ("decyzje:", "output: true", "permalink: /decyzje/:name/", "- .DS_Store"):
             self.assertIn(fragment, config)
 
+    def test_source_link_uses_the_explicit_repository_url(self):
+        config = (ROOT / "_config.yml").read_text(encoding="utf-8")
+        layout = (ROOT / "_layouts" / "decision.html").read_text(encoding="utf-8")
+        self.assertIn(
+            "repository_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS",
+            config,
+        )
+        self.assertIn("site.repository_url", layout)
+        self.assertNotIn("site.github.repository_url", layout)
+
     def test_pull_requests_validate_but_only_main_deploys_pages(self):
         validate = (ROOT / ".github/workflows/validate.yml").read_text(encoding="utf-8")
         pages = (ROOT / ".github/workflows/pages.yml").read_text(encoding="utf-8")

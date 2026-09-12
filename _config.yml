@@ -3,6 +3,7 @@ description: Uzasadnienia, warianty i ocena decyzji dotyczących regulaminu kadr
 lang: pl
 url: https://fencer4life.github.io
 baseurl: /Regulamin_Kadry-SPWS
+repository_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS
 markdown: kramdown
 permalink: pretty
 
