@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Projekt: cykl życia decyzji i paginacja rejestru</title>
+  <style>
+    :root{--bg:#e8ecf3;--surface:#fff;--surface2:#dce2ec;--ink:#0f1319;--muted:#414b59;--line:#c9d1dc;--accent:#12467e;--good:#17633a;--goodbg:#e3f3e9;--warn:#805600;--warnbg:#fff1ce;--danger:#8c2732;--dangerbg:#f8dfe2;--serif:"Iowan Old Style",Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,"SF Mono",monospace}
+    @media(prefers-color-scheme:dark){:root{--bg:#12151b;--surface:#1b2029;--surface2:#232935;--ink:#f1f4f8;--muted:#aeb8c6;--line:#3c4552;--accent:#8cbdec;--good:#6cdc98;--goodbg:#15271b;--warn:#e6bd6f;--warnbg:#282011;--danger:#f59a90;--dangerbg:#331d1a}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.62 var(--sans)}main{max-width:68rem;margin:auto;padding:56px 28px 100px}h1,h2{font-family:var(--serif);line-height:1.1}h1{font-size:clamp(38px,6vw,58px);max-width:19ch;margin:.2em 0}h2{font-size:32px;margin-top:52px}h3{margin-top:28px}p,li{max-width:72ch}.dek{font-size:22px;color:var(--muted)}.eyebrow{font:700 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}code{font-family:var(--mono);font-size:.86em;background:var(--surface2);border:1px solid var(--line);padding:.1em .4em;border-radius:5px}.meta,.bar{display:flex;gap:9px;flex-wrap:wrap}.chip{padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font:700 13px var(--mono)}.good{color:var(--good);background:var(--goodbg)}.warn{color:var(--warn);background:var(--warnbg)}.danger{color:var(--danger);background:var(--dangerbg)}.note{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);padding:17px 21px;border-radius:10px;margin:20px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font:700 14px var(--mono)}table{border-collapse:collapse;width:100%;background:var(--surface)}th,td{padding:10px 12px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:var(--surface2)}.tablewrap{overflow:auto}.strike{text-decoration:line-through;opacity:.62}.foot{margin-top:60px;border-top:2px solid var(--line);padding-top:18px;color:var(--muted);font:14px var(--mono)}
+  </style>
+</head>
+<body><main>
+  <p class="eyebrow">Regulamin Kadry SPWS · specyfikacja UX i danych</p>
+  <h1>Cykl życia decyzji, powiązania i paginacja rejestru</h1>
+  <p class="dek">Rejestr rozróżnia wynik procesu decyzyjnego od aktualnego obowiązywania decyzji, pokazuje wpływ późniejszych rozstrzygnięć i prezentuje najnowsze karty jako pierwsze.</p>
+  <div class="meta"><span class="chip">Specyfikacja zatwierdzona w rozmowie</span><span class="chip">TDD obowiązkowe</span><span class="chip">20 / 50 / 100 kart</span></div>
+
+  <h2>1. Dwa niezależne wymiary</h2>
+  <p><code>status</code> opisuje etap albo wynik procedury: <code>projekt</code>, <code>w dyskusji</code>, <code>do zatwierdzenia</code>, <code>przyjęta</code>, <code>odrzucona</code> lub <code>wstrzymana</code>. Przyjęcie późniejszej decyzji nie zmienia historycznego faktu, że wcześniejsza decyzja została przyjęta.</p>
+  <p><code>stan_obowiązywania</code> opisuje aktualną skuteczność ustalenia w pracach nad projektem: <code>nie dotyczy</code>, <code>obowiązuje</code>, <code>częściowo zmieniona</code> lub <code>zastąpiona</code>.</p>
+  <div class="note"><strong>Znaczenie „obowiązuje”.</strong> Oznacza aktualne ustalenie komisji dotyczące projektu regulaminu. Nie oznacza zatwierdzenia regulaminu przez PZSz ani jego wejścia w życie.</div>
+  <div class="flow"><span>PROJEKT</span><span>→</span><span>DYSKUSJA</span><span>→</span><span class="good chip">PRZYJĘTA · OBOWIĄZUJE</span><span>→</span><span class="warn chip">CZĘŚCIOWO ZMIENIONA</span><span>→</span><span class="danger chip strike">ZASTĄPIONA</span></div>
+
+  <h2>2. Relacje między decyzjami</h2>
+  <div class="tablewrap"><table><thead><tr><th>Pole</th><th>Znaczenie</th><th>Postać</th></tr></thead><tbody>
+    <tr><td><code>zmienia</code></td><td>Wcześniejsze decyzje częściowo zmieniane przez bieżącą decyzję.</td><td>Lista identyfikatorów DR.</td></tr>
+    <tr><td><code>zmieniona_przez</code></td><td>Późniejsze decyzje, które częściowo zmieniły bieżącą decyzję.</td><td>Lista identyfikatorów DR.</td></tr>
+    <tr><td><code>zakres_zmiany</code></td><td>Precyzyjny opis zakresu zmiany przypisany do konkretnej relacji.</td><td>Lista obiektów: identyfikator i opis.</td></tr>
+    <tr><td><code>zastepuje</code></td><td>Decyzje całkowicie zastępowane przez bieżącą decyzję.</td><td>Lista identyfikatorów DR.</td></tr>
+    <tr><td><code>zastapiona_przez</code></td><td>Decyzja albo decyzje, które całkowicie zastąpiły bieżącą decyzję.</td><td>Lista identyfikatorów DR.</td></tr>
+  </tbody></table></div>
+  <p>Relacje są dwukierunkowe. Jekyll zamienia identyfikatory zapisane w metadanych w linki do kart. Pełna karta zawiera blok „Powiązane decyzje” wraz z rodzajem i zakresem relacji. W zwykłym tekście link powstaje tylko wtedy, gdy autor świadomie zapisze odsyłacz Markdown; system nie linkuje automatycznie każdego ciągu podobnego do <code>DR-xxx</code>.</p>
+  <p>Kontrakt YAML jest jednoznaczny: pola relacyjne są listami identyfikatorów, np. <code>zmienia: [DR-015]</code>, natomiast <code>zakres_zmiany</code> jest mapą, której kluczem jest identyfikator decyzji, np. <code>zakres_zmiany: {DR-015: "współczynniki PEW i MEW"}</code>. Pustą relację zapisuje się jako <code>[]</code>, a pusty zakres jako <code>{}</code>.</p>
+
+  <h2>3. Prezentacja stanu</h2>
+  <div class="grid">
+    <div class="card"><div class="bar"><span class="chip">DR-024</span><span class="chip good">PRZYJĘTA</span><span class="chip good">OBOWIĄZUJE</span><span class="chip">12.09.2026</span></div><h3>Decyzja aktualna</h3><p>Normalna ekspozycja i zielone oznaczenie.</p></div>
+    <div class="card"><div class="bar"><span class="chip">DR-015</span><span class="chip good">PRZYJĘTA</span><span class="chip warn">CZĘŚCIOWO ZMIENIONA</span></div><h3>Decyzja częściowo zmieniona</h3><p>Nieprzekreślony tytuł. Żółty komunikat wskazuje zakres zmiany oraz klikalne decyzje zmieniające.</p></div>
+    <div class="card" style="opacity:.68"><div class="bar"><span class="chip">DR-009</span><span class="chip good">PRZYJĘTA</span><span class="chip danger">ZASTĄPIONA</span></div><h3 class="strike">Decyzja całkowicie zastąpiona</h3><p>Czerwony komunikat prowadzi do decyzji zastępującej. Karta pozostaje dostępna jako historia.</p></div>
+  </div>
+  <p>Stan jest komunikowany tekstem, symbolem i kolorem. Filtry obejmują również <code>stan_obowiązywania</code>. Układ zawija się na wąskich ekranach bez przewijania poziomego.</p>
+
+  <h2>4. Sortowanie i paginacja</h2>
+  <ul>
+    <li>Indeks sortuje karty malejąco według liczbowej części identyfikatora: najwyższy numer DR jest pierwszy.</li>
+    <li>Domyślny rozmiar strony wynosi 20; dostępne wartości to 20, 50 i 100.</li>
+    <li>Paginacja działa na wynikach po zastosowaniu wyszukiwania i filtrów.</li>
+    <li>Zmiana zapytania, filtra albo rozmiaru strony przenosi widok na stronę pierwszą.</li>
+    <li>Pasek nad i pod listą pokazuje zakres, łączną liczbę wyników, bieżącą stronę oraz przyciski „Poprzednia” i „Następna”.</li>
+    <li>Rozmiar strony jest zapamiętywany lokalnie. Parametry <code>strona</code> i <code>na_stronie</code> trafiają do URL, aby widok można było udostępnić.</li>
+    <li>Nieprawidłowe parametry URL są bezpiecznie sprowadzane do pierwszej strony i wartości 20.</li>
+  </ul>
+
+  <h2>5. Migracja istniejących kart</h2>
+  <p>DR-001–DR-016 otrzymują <code>stan_obowiązywania: obowiązuje</code> oraz jawne puste listy relacji. Szablon nowej decyzji otrzymuje wszystkie nowe pola wraz z instrukcją ich użycia. Nie zmienia to treści merytorycznej istniejących decyzji.</p>
+
+  <h2>6. Architektura i odpowiedzialności</h2>
+  <ul>
+    <li>Markdown/YAML pozostaje źródłem statusów, stanów oraz relacji.</li>
+    <li>Jekyll generuje pasek statusu, relacje i linki, dlatego pozostają dostępne bez JavaScriptu.</li>
+    <li>JavaScript odpowiada wyłącznie za filtrowanie, paginację, synchronizację URL i zapamiętanie preferencji.</li>
+    <li>CSS odpowiada za stany wizualne, przekreślenie i responsywność.</li>
+    <li>CI blokuje publikację niespójnych kart.</li>
+  </ul>
+
+  <h2>7. Realizacja obowiązkowo przez TDD</h2>
+  <ol>
+    <li>Zapisać testy akceptacyjne dla kontraktu metadanych, relacji, sortowania, paginacji i wyrenderowanego HTML.</li>
+    <li>Uruchomić testy przed implementacją i zachować w opisie PR dowód stanu RED.</li>
+    <li>Wprowadzać najmniejsze zmiany produkcyjne prowadzące do GREEN.</li>
+    <li>Po każdej grupie zmian uruchamiać testy wąskie, następnie pełny zestaw Python i rygorystyczny build Jekyll.</li>
+    <li>Zweryfikować wynikowy HTML dla listy, karty aktualnej, częściowo zmienionej i zastąpionej oraz dla stron 20/50/100.</li>
+  </ol>
+  <div class="note"><strong>Walidacja relacji:</strong> dozwolone wartości pól; istnienie celu; zakaz samoodwołania; zgodność relacji odwrotnych; wymagany zakres zmiany częściowej; wymagane wskazanie decyzji zastępującej; chronologiczna zbieżność numerów z datą inicjacji.</div>
+
+  <h2>8. Kryteria odbioru</h2>
+  <ul>
+    <li>Najwyższy numer DR znajduje się na początku listy.</li>
+    <li>Wybór 20, 50 i 100 działa łącznie z każdym filtrem i wyszukiwaniem.</li>
+    <li>Odświeżenie i udostępnienie URL zachowuje stronę i rozmiar strony.</li>
+    <li>Status proceduralny nigdy nie jest nadpisywany stanem obowiązywania.</li>
+    <li>Decyzja częściowo zmieniona nie jest przekreślona; zastąpiona jest przygaszona i przekreślona.</li>
+    <li>Wszystkie wskazane decyzje są klikalne, istnieją i mają zgodne relacje odwrotne.</li>
+    <li>Strona działa responsywnie i nie komunikuje stanu wyłącznie kolorem.</li>
+    <li>Pełne testy i oba workflow GitHub Actions kończą się powodzeniem.</li>
+  </ul>
+
+  <p class="foot">Wersja 1.0 · 12.09.2026 · zakres zatwierdzony w rozmowie projektowej</p>
+</main></body></html>
