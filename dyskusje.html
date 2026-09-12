@@ -1,0 +1,20 @@
+---
+layout: default
+title: Otwarte dyskusje
+permalink: /dyskusje/
+---
+<section class="hero">
+  <p class="eyebrow">Propozycje zmian regulaminu</p>
+  <h1>Otwarte dyskusje</h1>
+  <p class="lead">Rozmowy, które mogą prowadzić do przyjęcia albo odrzucenia decyzji regulaminowej.</p>
+  <p><a class="action" href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/new?category=propozycje-zmian-regulaminu">Otwórz nową dyskusję</a></p>
+</section>
+{% assign snapshot = site.data.open_discussions %}
+<p class="result-count">Ostatnia synchronizacja: {{ snapshot.generated_at | default: 'oczekuje na pierwszą synchronizację' }}</p>
+<section class="discussion-list">
+{% for discussion in snapshot.items %}
+  <article class="decision-card"><p class="eyebrow">Dyskusja #{{ discussion.number }}</p><h2><a href="{{ discussion.url }}">{{ discussion.title | escape }}</a></h2><p class="card-meta">{{ discussion.author | escape }} · {{ discussion.created_at }} · wypowiedzi: {{ discussion.comments }}</p></article>
+{% else %}
+  <p class="notice">Brak otwartych dyskusji w snapshotcie. <a href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions">Sprawdź aktualną listę na GitHub.</a></p>
+{% endfor %}
+</section>

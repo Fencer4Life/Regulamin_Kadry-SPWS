@@ -10,8 +10,12 @@ dotyczy: Paragraf lub obszar regulaminu
 decydenci: Komisja regulaminowa SPWS
 discussion_url: ""
 pr_url: ""
-zastepuje: ""
-zastapiona_przez: ""
+stan_obowiązywania: nie dotyczy
+zmienia: []
+zmieniona_przez: []
+zakres_zmiany: {}
+zastepuje: []
+zastapiona_przez: []
 termin_oceny: Termin albo warunek przeglądu
 ---
 

@@ -16,7 +16,10 @@ Numeru DR nie otrzymują poprawki literowe, zmiany fleksyjne, techniczne ponowie
 2. Autor opisuje problem, kontekst, warianty i oczekiwany rezultat.
 3. Komisja kwalifikuje propozycję jako decyzję regulaminową albo zmianę techniczną.
 4. Po kwalifikacji komisja nadaje kolejny trwały numer `DR-NNN`.
-5. Powstaje karta Markdown ze statusem `w dyskusji` oraz Pull Request.
+5. Po oznaczeniu dyskusji etykietą `do rozstrzygnięcia` powstaje karta Markdown ze statusem `do zatwierdzenia` oraz roboczy Pull Request.
+6. Scalenie Pull Requestu publikuje kartę, dodaje jej adres do dyskusji i zamyka dyskusję jako `rozwiązana`.
+
+Dyskusję zakończoną bez rozstrzygnięcia zamyka się jako `nieaktualna` albo `duplikat`. Merytoryczne odrzucenie propozycji jest decyzją i otrzymuje kartę DR ze statusem `odrzucona`.
 
 Numer raz nadany nie jest używany ponownie. Karta decyzji odrzuconej pozostaje w rejestrze.
 
@@ -28,7 +31,17 @@ Numer raz nadany nie jest używany ponownie. Karta decyzji odrzuconej pozostaje 
 - `przyjęta` — rozstrzygnięcie zostało zaakceptowane do projektu regulaminu;
 - `odrzucona` — wariant nie został przyjęty, ale pozostaje w historii;
 - `wstrzymana` — rozstrzygnięcie odłożono do czasu spełnienia wskazanego warunku;
-- `zastąpiona` — późniejsza decyzja przejęła zakres wcześniejszej decyzji.
+
+Status opisuje wynik procesu i nie zmienia się tylko dlatego, że późniejsze rozstrzygnięcie wpłynęło na wcześniejsze.
+
+## Stan obowiązywania i relacje
+
+- `nie dotyczy` — decyzja nie została przyjęta;
+- `obowiązuje` — aktualne ustalenie w pracach nad projektem;
+- `częściowo zmieniona` — późniejsza decyzja zmieniła wskazaną część;
+- `zastąpiona` — późniejsza decyzja przejęła całość rozstrzygnięcia.
+
+Pola `zmienia`, `zmieniona_przez`, `zastepuje` i `zastapiona_przez` zawierają listy identyfikatorów decyzji. `zakres_zmiany` opisuje część zmienioną przez konkretną decyzję. Relacje muszą działać w obu kierunkach.
 
 ## Zawartość karty
 
@@ -38,7 +51,7 @@ Nie wolno uzupełniać uzasadnień z wyobraźni. Jeżeli argument nie został ut
 
 ## Przyjęcie i zmiana decyzji
 
-Zmiana merytoryczna przyjętej decyzji wymaga nowej decyzji albo jawnego wskazania decyzji zastępującej. Pola `zastepuje` i `zastapiona_przez` muszą tworzyć wzajemne powiązanie.
+Zmiana merytoryczna przyjętej decyzji wymaga nowej decyzji. Zmiana częściowa korzysta z pól `zmienia` i `zmieniona_przez`; zmiana całkowita z pól `zastepuje` i `zastapiona_przez`.
 
 Korekta oczywistej omyłki może zostać wykonana bez nowego numeru, jeżeli nie zmienia sensu rozstrzygnięcia. Zakres korekty należy opisać w historii zmian karty.
 

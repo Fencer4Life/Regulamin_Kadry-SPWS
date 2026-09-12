@@ -4,9 +4,14 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+  discussion:
+    types: [created, edited, deleted, transferred, labeled, unlabeled, category_changed]
 
 permissions:
   contents: read
+  discussions: read
   pages: write
   id-token: write
 
@@ -19,6 +24,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - name: Pobranie otwartych dyskusji
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api graphql -f query='query { repository(owner:"Fencer4Life", name:"Regulamin_Kadry-SPWS") { discussions(first:100, states:OPEN, orderBy:{field:UPDATED_AT,direction:DESC}) { nodes { number title url createdAt author { login } category { slug } comments { totalCount } labels(first:20) { nodes { name } } } } } }' > /tmp/open-discussions.json
+          python narzedzia/sync_discussions.py /tmp/open-discussions.json _data/open_discussions.json
       - uses: actions/configure-pages@v6
       - uses: ruby/setup-ruby@v1
         with:

@@ -2,16 +2,23 @@
 layout: default
 ---
 <article class="decision">
-  {% assign record_id = page.slug | slice: 0, 6 | upcase %}
+{% assign record_id = page.slug | slice: 0, 6 | upcase %}
+  {% assign effect = page["stan_obowiązywania"] %}
   <p class="eyebrow">{{ record_id | escape }} · {{ page.typ | escape }}</p>
   <h1>{{ page.tytul | escape }}</h1>
   <dl class="metadata">
     <div><dt>Status</dt><dd><span class="status status-{{ page.status | slugify }}">{{ page.status }}</span></dd></div>
+    <div><dt>Stan obowiązywania</dt><dd><span class="effect effect-{{ effect | slugify }}">{{ effect }}</span></dd></div>
     <div><dt>Data decyzji</dt><dd>{{ page.data_decyzji | default: '—' }}</dd></div>
     <div><dt>Sezon</dt><dd>{{ page.sezon | default: '—' }}</dd></div>
     <div><dt>Dotyczy</dt><dd>{{ page.dotyczy | default: '—' }}</dd></div>
     <div><dt>Termin oceny</dt><dd>{{ page.termin_oceny | default: '—' }}</dd></div>
   </dl>
+  {% assign relation_count = page.zmienia.size | plus: page.zmieniona_przez.size | plus: page.zastepuje.size | plus: page.zastapiona_przez.size %}
+  {% if relation_count > 0 %}<section class="related-decisions"><h2>Powiązane decyzje</h2>
+  {% assign relation_names = "zmienia:Zmienia,zmieniona_przez:Zmieniona przez,zastepuje:Zastępuje,zastapiona_przez:Zastąpiona przez" | split: "," %}
+  {% for relation_name in relation_names %}{% assign pair = relation_name | split: ":" %}{% assign key = pair[0] %}{% assign values = page[key] %}{% if values.size > 0 %}<p><strong>{{ pair[1] }}:</strong> {% for id in values %}{% for related in site.decyzje %}{% assign related_id = related.slug | slice: 0, 6 | upcase %}{% if related_id == id %}<a href="{{ related.url | relative_url }}">{{ id }}</a>{% endif %}{% endfor %}{% unless forloop.last %}, {% endunless %}{% endfor %}</p>{% endif %}{% endfor %}
+  {% if page.zakres_zmiany.size > 0 %}<h3>Zakres zmian</h3>{% for change in page.zakres_zmiany %}<p><strong>{{ change[0] }}:</strong> {{ change[1] }}</p>{% endfor %}{% endif %}</section>{% endif %}
   <div class="decision-content">{{ content }}</div>
   <nav class="record-links" aria-label="Materiały powiązane">
     {% if page.discussion_url and page.discussion_url != '' %}<a href="{{ page.discussion_url }}">Dyskusja</a>{% endif %}

@@ -10,8 +10,12 @@ dotyczy: Rozdział I
 decydenci: Komisja regulaminowa SPWS — na etapie inicjalnym autor projektu
 discussion_url: ""
 pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/4
-zastepuje: ""
-zastapiona_przez: ""
+stan_obowiązywania: obowiązuje
+zmienia: []
+zmieniona_przez: []
+zakres_zmiany: {}
+zastepuje: []
+zastapiona_przez: []
 termin_oceny: przed przekazaniem projektu do PZSz
 ---
 

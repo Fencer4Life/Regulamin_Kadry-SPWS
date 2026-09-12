@@ -1,14 +1,18 @@
 {% assign record_id = include.decision.slug | slice: 0, 6 | upcase %}
+{% assign effect = include.decision["stan_obowiązywania"] %}
 <article class="decision-card"
   data-search="{{ record_id | append: ' ' | append: include.decision.tytul | append: ' ' | append: include.decision.dotyczy | downcase | escape }}"
   data-type="{{ include.decision.typ | escape }}"
   data-status="{{ include.decision.status | escape }}"
+  data-effect="{{ effect | escape }}"
   data-season="{{ include.decision.sezon | escape }}"
   data-subject="{{ include.decision.dotyczy | escape }}">
   <div class="card-topline">
     <span class="record-id">{{ record_id }}</span>
-    <span class="status status-{{ include.decision.status | slugify }}">{{ include.decision.status }}</span>
+    <span class="badge-row"><span class="status">{{ include.decision.status }}</span><span class="effect effect-{{ effect | slugify }}">{{ effect }}</span></span>
   </div>
-  <h2><a href="{{ include.decision.url | relative_url }}">{{ include.decision.tytul }}</a></h2>
+  <h2{% if effect == 'zastąpiona' %} class="superseded-title"{% endif %}><a href="{{ include.decision.url | relative_url }}">{{ include.decision.tytul }}</a></h2>
+  {% if include.decision.zmieniona_przez.size > 0 %}<p class="relation-note warning">Zmieniona przez: {% for id in include.decision.zmieniona_przez %}{% for related in site.decyzje %}{% assign related_id = related.slug | slice: 0, 6 | upcase %}{% if related_id == id %}<a href="{{ related.url | relative_url }}">{{ id }}</a>{% endif %}{% endfor %}{% unless forloop.last %}, {% endunless %}{% endfor %}</p>{% endif %}
+  {% if include.decision.zastapiona_przez.size > 0 %}<p class="relation-note danger">Zastąpiona przez: {% for id in include.decision.zastapiona_przez %}{% for related in site.decyzje %}{% assign related_id = related.slug | slice: 0, 6 | upcase %}{% if related_id == id %}<a href="{{ related.url | relative_url }}">{{ id }}</a>{% endif %}{% endfor %}{% unless forloop.last %}, {% endunless %}{% endfor %}</p>{% endif %}
   <p class="card-meta">{{ include.decision.typ }} · {{ include.decision.sezon }} · {{ include.decision.dotyczy }}</p>
 </article>

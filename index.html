@@ -22,6 +22,9 @@ description: Publiczny rejestr decyzji dotyczących Regulaminu Kadry SPWS.
     <label>Status
       <select id="filter-status"><option value="">Wszystkie</option>{% assign statuses = site.decyzje | map: 'status' | uniq | sort %}{% for value in statuses %}<option>{{ value }}</option>{% endfor %}</select>
     </label>
+    <label>Stan obowiązywania
+      <select id="filter-effect"><option value="">Wszystkie</option>{% assign effects = site.decyzje | map: 'stan_obowiązywania' | uniq | sort %}{% for value in effects %}<option>{{ value }}</option>{% endfor %}</select>
+    </label>
     <label>Sezon
       <select id="filter-season"><option value="">Wszystkie</option>{% assign seasons = site.decyzje | map: 'sezon' | uniq | sort %}{% for value in seasons %}<option>{{ value }}</option>{% endfor %}</select>
     </label>
@@ -32,11 +35,19 @@ description: Publiczny rejestr decyzji dotyczących Regulaminu Kadry SPWS.
   <p id="result-count" class="result-count" aria-live="polite"></p>
 </section>
 
+<div id="pagination-top" class="pagination" aria-label="Paginacja nad listą">
+  <button type="button" data-page="previous">Poprzednia</button><span data-page-summary></span><button type="button" data-page="next">Następna</button>
+  <label>Kart na stronie <select id="page-size"><option>20</option><option>50</option><option>100</option></select></label>
+</div>
+
 <section id="decision-list" class="decision-grid" aria-label="Decyzje">
-  {% assign decisions = site.decyzje | sort: 'id' %}
+  {% assign decisions = site.decyzje | sort: 'slug' | reverse %}
   {% for decision in decisions %}
     {% include decision-card.html decision=decision %}
   {% else %}
     <p class="empty">Karty decyzji zostaną opublikowane w następnym etapie.</p>
   {% endfor %}
 </section>
+<div id="pagination-bottom" class="pagination" aria-label="Paginacja pod listą">
+  <button type="button" data-page="previous">Poprzednia</button><span data-page-summary></span><button type="button" data-page="next">Następna</button>
+</div>

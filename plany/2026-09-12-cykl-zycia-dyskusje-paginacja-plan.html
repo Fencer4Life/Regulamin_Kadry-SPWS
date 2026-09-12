@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plan implementacji cyklu życia decyzji, dyskusji i paginacji</title>
+<style>
+:root{--bg:#e8ecf3;--surface:#fff;--surface2:#dce2ec;--ink:#0f1319;--muted:#414b59;--line:#c9d1dc;--accent:#12467e;--good:#0f5f37;--goodbg:#d8eede;--warn:#7a4d02;--warnbg:#f4e6c8;--serif:"Iowan Old Style",Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,"SF Mono",monospace}@media(prefers-color-scheme:dark){:root{--bg:#12151b;--surface:#1b2029;--surface2:#232935;--ink:#f1f4f8;--muted:#aeb8c6;--line:#3c4552;--accent:#8cbdec;--good:#6cdc98;--goodbg:#15271b;--warn:#e6bd6f;--warnbg:#282011}}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.62 var(--sans)}main{max-width:70rem;margin:auto;padding:56px 28px 100px}h1,h2{font-family:var(--serif);line-height:1.1}h1{font-size:clamp(38px,6vw,58px);max-width:20ch}h2{font-size:32px;margin-top:52px}h3{margin:28px 0 8px}p,li{max-width:76ch}.dek{font-size:22px;color:var(--muted)}.eyebrow{font:700 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}code{font-family:var(--mono);font-size:.84em;background:var(--surface2);border:1px solid var(--line);padding:.1em .4em;border-radius:5px}.meta{display:flex;gap:9px;flex-wrap:wrap}.chip{padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font:700 13px var(--mono)}.note{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);padding:17px 21px;border-radius:10px;margin:20px 0}.good{border-left-color:var(--good);background:var(--goodbg)}.warn{border-left-color:var(--warn);background:var(--warnbg)}.steps{counter-reset:step;list-style:none;padding:0}.steps>li{position:relative;padding:0 0 18px 52px}.steps>li:before{counter-increment:step;content:counter(step);position:absolute;left:0;top:0;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#fff;font:800 14px var(--mono)}table{border-collapse:collapse;width:100%;background:var(--surface)}th,td{padding:10px 12px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:var(--surface2)}.tablewrap{overflow:auto}.foot{margin-top:60px;border-top:2px solid var(--line);padding-top:18px;color:var(--muted);font:14px var(--mono)}
+</style></head><body><main>
+<p class="eyebrow">Regulamin Kadry SPWS · plan implementacji</p>
+<h1>Cykl życia decyzji, dyskusje i paginacja rejestru</h1>
+<p class="dek">Wdrożenie zatwierdzonej specyfikacji w małych, kontrolowanych etapach. Każdy etap zaczyna się od testu akceptacyjnego i udokumentowanego stanu RED.</p>
+<div class="meta"><span class="chip">Plan do zatwierdzenia</span><span class="chip">TDD</span><span class="chip">bez nowych zależności produkcyjnych</span><span class="chip">GitHub Pages + Discussions</span></div>
+
+<div class="note good"><strong>Rezultat:</strong> najnowsze decyzje na górze, paginacja 20/50/100, niezależny stan obowiązywania, klikalne relacje, publiczna lista otwartych dyskusji oraz kontrolowane utworzenie karty DR z dyskusji.</div>
+
+<h2>1. Granice i zasady realizacji</h2>
+<ul>
+<li>Nie zmieniamy merytorycznej treści DR-001–DR-016.</li>
+<li>Nie dodajemy frameworka frontendowego ani bazy danych.</li>
+<li>Markdown/YAML pozostaje źródłem decyzji, Jekyll generuje HTML, a JavaScript obsługuje tylko interakcję listy.</li>
+<li>Publiczny frontend nigdy nie otrzymuje tokenu GitHub.</li>
+<li>Każdy etap przechodzi: test akceptacyjny, RED, minimalna implementacja, GREEN, refaktoryzacja, testy pełne.</li>
+<li>Zmiany trafiają przez gałęzie i pull requesty; chroniona gałąź <code>main</code> pozostaje nienaruszona.</li>
+</ul>
+
+<h2>2. Etapy TDD</h2>
+<ol class="steps">
+<li><strong>Kontrakt stanu obowiązywania.</strong> Rozszerzyć <code>tests/test_decision_registry.py</code> o dozwolone wartości i reguły zgodności statusu ze stanem. Uruchomić RED. Następnie dodać <code>stan_obowiązywania</code> oraz strukturalne puste relacje do szablonu i DR-001–DR-016. Oczekiwany GREEN: wszystkie istniejące karty mają stan <code>obowiązuje</code>.</li>
+<li><strong>Walidator grafu relacji.</strong> Najpierw dodać fikstury decyzji poprawnej, częściowo zmienionej, zastąpionej, samoodwołującej się i wskazującej brakujący rekord. Testy mają wykazać RED dla obecnego parsera. Następnie wydzielić parser YAML i walidator sprawdzający cele, relacje odwrotne, zakresy zmian oraz brak cykli całkowitego zastąpienia.</li>
+<li><strong>Klikalne relacje i pasek statusu.</strong> Test wygenerowanego HTML najpierw wymaga dwóch znaczników statusu, linków do decyzji powiązanych, żółtej prezentacji zmiany częściowej oraz przekreślenia wyłącznie decyzji zastąpionej. Po RED dodać include relacji, zmienić layout karty i listy oraz CSS. Sprawdzić semantykę i responsywność.</li>
+<li><strong>Sortowanie malejące.</strong> Test builda Jekyll ma odczytać kolejność kart i oczekiwać DR-016 przed DR-015 aż do DR-001. Po RED sortować według stabilnego sluga w kolejności odwrotnej, bez użycia zarezerwowanego pola Jekyll <code>id</code>. Dodać test chronologicznej zbieżności numeru z <code>data_inicjacji</code>.</li>
+<li><strong>Czysty moduł paginacji.</strong> Utworzyć testy Node bez zewnętrznych bibliotek dla funkcji obliczających przefiltrowany zbiór, liczbę stron, granice i bezpieczne parametry URL. Udokumentować RED przed dodaniem modułu. Zaimplementować wartości 20/50/100, domyślne 20 i korektę niepoprawnych parametrów.</li>
+<li><strong>Integracja paginacji z DOM.</strong> Test kontraktowy wymaga kontrolek nad i pod listą, informacji „Decyzje X–Y z N”, stron, disabled na granicach oraz filtra stanu obowiązywania. Po RED połączyć moduł z istniejącym wyszukiwaniem; resetować stronę po zmianie kryteriów, synchronizować URL przez History API i zapamiętywać rozmiar w <code>localStorage</code>.</li>
+<li><strong>Strona otwartych dyskusji.</strong> Na bazie zapisanej fikstury GraphQL najpierw przetestować normalizację wyłącznie otwartych dyskusji z kategorii „Propozycje zmian regulaminu”, kolejność, liczbę komentarzy i czas synchronizacji. Po RED dodać skrypt generujący dane oraz stronę <code>/dyskusje/</code>. Pusty lub niedostępny snapshot ma pokazać jasny komunikat i bezpośredni link do GitHub.</li>
+<li><strong>Pasek działań.</strong> Test HTML najpierw wymaga na samej górze linków „Otwarte dyskusje · N” i „Otwórz nową dyskusję”. Po RED dodać wspólny include nawigacyjny z liczbą ze snapshotu oraz bezpośrednim adresem właściwej kategorii i formularza.</li>
+<li><strong>Synchronizacja dyskusji.</strong> Test struktury workflow ma wymagać minimalnego <code>discussions: read</code>, wywołania ręcznego, harmonogramu co 15 minut i obsługiwanych zdarzeń <code>discussion</code>. Po RED rozszerzyć workflow Pages o bezpieczne pobranie snapshotu przed buildem. Harmonogram pokrywa także zamknięcie i ponowne otwarcie, których zdarzenie Actions nie raportuje.</li>
+<li><strong>Inicjacja decyzji z dyskusji.</strong> Najpierw testować generator na fiksturach: kolejny numer, status <code>do zatwierdzenia</code>, link do rozmowy, brak duplikatu i deterministyczna nazwa gałęzi. Następnie dodać workflow reagujący na etykietę <code>do rozstrzygnięcia</code>. Sekcja <code>concurrency</code>, wyszukiwanie istniejącego <code>discussion_url</code> i stała nazwa gałęzi chronią przed kolizją. Workflow tworzy dokładnie jeden draft PR i komentuje dyskusję jego adresem.</li>
+<li><strong>Zamknięcie po decyzji.</strong> Test workflow wymaga merge, etykiety PR <code>decyzja</code> i obecności <code>discussion_url</code>. Dopiero wtedy automatyzacja komentuje link do opublikowanej DR i zamyka rozmowę jako <code>rozwiązana</code>. Zamknięcie jako <code>nieaktualna</code> albo <code>duplikat</code> pozostaje ręczne i nie tworzy karty.</li>
+<li><strong>Dokumentacja i pełna walidacja.</strong> Zaktualizować README, CONTRIBUTING, ZASADY_REJESTRU oraz formularz kategorii. Uruchomić pełne testy Python, Node, rygorystyczny build Jekyll, parser wynikowego HTML i kontrolę diffu. Następnie PR, wymagane kontrole, merge, publikacja Pages oraz kontrola produkcyjna.</li>
+</ol>
+
+<h2>3. Pliki planowane do zmiany</h2>
+<div class="tablewrap"><table><thead><tr><th>Obszar</th><th>Pliki</th></tr></thead><tbody>
+<tr><td>Dane decyzji</td><td><code>_decyzje/*.md</code>, <code>szablony/nowa-decyzja.md</code></td></tr>
+<tr><td>Widoki</td><td><code>index.html</code>, <code>dyskusje.html</code>, <code>_includes/decision-card.html</code>, nowy include relacji i paginacji, <code>_layouts/decision.html</code></td></tr>
+<tr><td>Interakcje</td><td><code>assets/rejestr.js</code>, nowy czysty moduł paginacji, <code>assets/rejestr.css</code></td></tr>
+<tr><td>Automatyzacja</td><td><code>narzedzia/</code>, <code>.github/workflows/pages.yml</code>, nowe workflow inicjacji i zamknięcia decyzji</td></tr>
+<tr><td>GitHub Discussions</td><td><code>.github/DISCUSSION_TEMPLATE/</code>, kategoria i etykiety utworzone przez API po przejściu testów</td></tr>
+<tr><td>Testy</td><td><code>tests/test_decision_registry.py</code>, <code>tests/test_registry_platform.py</code>, fikstury GraphQL, testy generatorów i testy Node</td></tr>
+<tr><td>Dokumentacja</td><td><code>README.md</code>, <code>CONTRIBUTING.md</code>, <code>ZASADY_REJESTRU.md</code></td></tr>
+</tbody></table></div>
+
+<h2>4. Uprawnienia i bezpieczeństwo</h2>
+<ul>
+<li>Workflow publikacyjny: <code>contents: read</code>, <code>discussions: read</code>, standardowe uprawnienia Pages.</li>
+<li>Workflow inicjacji: tylko zdarzenie właściwej etykiety; <code>contents: write</code>, <code>pull-requests: write</code>, <code>discussions: write</code>.</li>
+<li>Workflow zamknięcia: tylko scalony, oznaczony PR decyzji; <code>contents: read</code>, <code>pull-requests: read</code>, <code>discussions: write</code>.</li>
+<li>Żaden sekret ani token nie trafia do artefaktu Pages, logu testowego lub pliku repozytorium.</li>
+<li>Operacje zapisujące stan GitHub zostaną wykonane dopiero po zielonych testach i w ramach zaakceptowanego przepływu.</li>
+</ul>
+
+<h2>5. Kryteria końcowe</h2>
+<ul>
+<li>DR-016 jest pierwszą kartą obecnego rejestru, a przyszłe numery automatycznie trafiają wyżej.</li>
+<li>Wyszukiwanie, wszystkie filtry i rozmiary 20/50/100 współpracują z paginacją oraz URL.</li>
+<li>Każda relacja prowadzi do istniejącej karty i ma zgodną relację odwrotną.</li>
+<li>Lista otwartych dyskusji jest widoczna z góry strony i odświeża się najpóźniej po cyklu harmonogramu.</li>
+<li>Jedna dyskusja może utworzyć najwyżej jeden draft PR i jedną kartę DR.</li>
+<li>Przyjęcie i odrzucenie tworzą DR; nieaktualność i duplikat nie tworzą DR.</li>
+<li>Pełne kontrole lokalne, PR i produkcyjny Pages kończą się powodzeniem.</li>
+</ul>
+
+<div class="note warn"><strong>Kontrola przed automatyzacją:</strong> najpierw utworzymy i przetestujemy generatory na danych fikcyjnych. Dopiero później włączymy kategorię, etykiety i workflow zapisujące dane na GitHub.</div>
+<p class="foot">Wersja 1.0 · 12.09.2026 · plan przygotowany na podstawie zatwierdzonej specyfikacji</p>
+</main></body></html>
