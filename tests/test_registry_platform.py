@@ -110,6 +110,8 @@ class RegistryPlatformTests(unittest.TestCase):
         for fragment in ("rozstrzygnięta", "concurrency:", "discussion_url", "--draft", "decyzja"):
             self.assertIn(fragment, text)
         self.assertNotIn("FORMULARZ-ROZSTRZYGNIECIA", text)
+        for fragment in ("gh pr list", "git switch --track", "istniejącej roboczej gałęzi"):
+            self.assertIn(fragment, text)
 
     def test_merged_decision_closes_its_discussion_as_resolved(self):
         workflow = ROOT / ".github" / "workflows" / "resolve-discussion.yml"
