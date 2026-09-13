@@ -14,7 +14,6 @@ REQUIRED_PLATFORM_FILES = (
     "_includes/decision-card.html",
     "assets/rejestr.css",
     "assets/rejestr.js",
-    ".github/DISCUSSION_TEMPLATE/propozycje-zmian-regulaminu.yml",
     ".github/workflows/validate.yml",
     ".github/workflows/pages.yml",
 )
@@ -79,6 +78,8 @@ class RegistryPlatformTests(unittest.TestCase):
     def test_pull_requests_validate_but_only_main_deploys_pages(self):
         validate = (ROOT / ".github/workflows/validate.yml").read_text(encoding="utf-8")
         pages = (ROOT / ".github/workflows/pages.yml").read_text(encoding="utf-8")
+        self.assertTrue(validate.startswith("name: CI\n"))
+        self.assertTrue(pages.startswith("name: Release\n"))
         self.assertIn("pull_request:", validate)
         self.assertIn("workflow_dispatch:", validate)
         self.assertIn("python -m unittest discover -s tests -v", validate)

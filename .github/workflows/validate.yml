@@ -1,4 +1,4 @@
-name: Walidacja
+name: CI
 
 on:
   workflow_dispatch:

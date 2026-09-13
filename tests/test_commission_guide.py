@@ -7,12 +7,15 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class CommissionGuideTests(unittest.TestCase):
-    def test_decision_cards_and_discussion_form_have_public_return_links(self):
+    def test_decision_cards_and_prefilled_discussion_form_have_public_return_links(self):
         decision = (ROOT / "_layouts/decision.html").read_text(encoding="utf-8")
-        discussion_form = (ROOT / ".github/DISCUSSION_TEMPLATE/propozycje-zmian-regulaminu.yml").read_text(encoding="utf-8")
+        links = "\n".join((ROOT / path).read_text(encoding="utf-8") for path in ("_layouts/default.html", "dyskusje.html", "przewodnik.html"))
         self.assertEqual(decision.count("/?strona=1&amp;na_stronie=20"), 2)
         self.assertEqual(decision.count("Powrót do Rejestru Decyzji"), 2)
-        self.assertIn("https://fencer4life.github.io/Regulamin_Kadry-SPWS/dyskusje/", discussion_form)
+        self.assertEqual(links.count("discussions/new?category=propozycje-zmian-regulaminu&amp;title="), 3)
+        for value in ("%23%23%20Koordynator%20dyskusji", "%23%23%20Problem", "%23%23%23%20Opcjonalnie", "%5B%E2%86%90%20Powr%C3%B3t%20do%20publicznej%20listy%20dyskusji%5D"):
+            self.assertIn(value, links)
+        self.assertFalse((ROOT / ".github/DISCUSSION_TEMPLATE/propozycje-zmian-regulaminu.yml").exists())
 
     def test_new_discussion_receives_persistent_return_link(self):
         workflow = ROOT / ".github/workflows/welcome-discussion.yml"
@@ -26,14 +29,6 @@ class CommissionGuideTests(unittest.TestCase):
             "addDiscussionComment",
         ):
             self.assertIn(value, text)
-
-    def test_discussion_form_has_only_two_required_fields(self):
-        text = (ROOT / ".github/DISCUSSION_TEMPLATE/propozycje-zmian-regulaminu.yml").read_text(encoding="utf-8")
-        self.assertEqual(text.count("required: true"), 2)
-        for value in ("Koordynator dyskusji", "Problem", "Priorytet", "Obszar", "Proponowane rozwiązanie", "Powiązane decyzje"):
-            self.assertIn(value, text)
-        self.assertNotIn("Dlaczego warto", text)
-        self.assertNotIn("Czy temat dotyczy obecnego sezonu", text)
 
     def test_public_guide_explains_roles_sync_and_full_process(self):
         guide = ROOT / "przewodnik.html"
