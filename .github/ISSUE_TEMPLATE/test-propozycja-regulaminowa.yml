@@ -1,0 +1,66 @@
+name: TEST — propozycja do regulaminu
+description: Tymczasowy formularz do oceny, czy GitHub Issue Forms odpowiada komisji.
+title: "[TEST dyskusji] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        To jest test formularza. Nie tworzy decyzji ani zmiany regulaminu.
+
+        Po ocenie usuniemy testowe Issue.
+  - type: input
+    id: coordinator
+    attributes:
+      label: Koordynator dyskusji
+      description: Login GitHub lub pseudonim osoby porządkującej rozmowę.
+      placeholder: "@login"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Opisz krótko sprawę, którą komisja ma omówić.
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorytet
+      options:
+        - Nie określono
+        - Niski
+        - Średni
+        - Wysoki
+  - type: dropdown
+    id: area
+    attributes:
+      label: Obszar
+      options:
+        - Nie określono
+        - Ranking
+        - Powołania indywidualne
+        - Drużyna
+        - Zawody
+        - Punktacja
+        - Terminy
+        - Redakcja regulaminu
+        - Inne
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proponowane rozwiązanie
+      description: Pole opcjonalne.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Inne rozważane podejścia
+  - type: textarea
+    id: materials
+    attributes:
+      label: Materiały lub przykłady
+  - type: input
+    id: related
+    attributes:
+      label: Powiązane decyzje
+      description: Na przykład DR-015.
