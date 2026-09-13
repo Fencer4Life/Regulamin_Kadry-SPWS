@@ -31,7 +31,7 @@ jobs:
           if git ls-remote --exit-code --heads origin "$branch"; then exit 0; fi
           if grep -R --fixed-strings "discussion_url: ${DISCUSSION_URL}" _decyzje; then exit 0; fi
           gh api graphql \
-            -f query='query($owner:String!,$name:String!,$number:Int!){repository(owner:$owner,name:$name){discussion(number:$number){comments(last:100){nodes{body createdAt}}}}}' \
+            -f query='query($owner:String!,$name:String!,$number:Int!){repository(owner:$owner,name:$name){discussion(number:$number){comments(last:100){nodes{body createdAt author{login}}}}}}' \
             -f owner="$REPOSITORY_OWNER" -f name="$REPOSITORY_NAME" -F number="$DISCUSSION_NUMBER" \
             > /tmp/discussion-comments.json
           if ! path=$(python narzedzia/create_decision_from_discussion.py "$GITHUB_EVENT_PATH" _decyzje /tmp/discussion-comments.json 2>/tmp/resolution-error.txt); then

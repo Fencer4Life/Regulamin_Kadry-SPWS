@@ -61,7 +61,7 @@ permalink: /przewodnik/
 <section class="guide-card">
   <h2>Jak zamknięta dyskusja staje się decyzją</h2>
   <ol>
-    <li>Po uzgodnieniu wyniku Koordynator dyskusji kopiuje <a href="{{ '/szablony/formularz-rozstrzygniecia.md' | relative_url }}"><code>formularz-rozstrzygniecia.md</code></a>, wypełnia go i publikuje jako końcowy komentarz. Znacznik <code>FORMULARZ-ROZSTRZYGNIECIA</code> pozwala automatyzacji odnaleźć właściwe podsumowanie.</li>
+    <li>Po uzgodnieniu wyniku Koordynator dyskusji kopiuje <a href="{{ '/szablony/formularz-rozstrzygniecia.md' | relative_url }}"><code>formularz-rozstrzygniecia.md</code></a>, wypełnia wynik, treść decyzji, uzasadnienie i odrzucone alternatywy, a następnie publikuje go jako końcowy komentarz. Dane podane przy otwarciu dyskusji automat przenosi do karty DR. Znacznik <code>FORMULARZ-ROZSTRZYGNIECIA</code> pozwala odnaleźć właściwe podsumowanie.</li>
     <li>Koordynator dodaje etykietę <b>rozstrzygnięta</b>. Automatyzacja sprawdza pola obowiązkowe; przy brakach nie tworzy karty i wskazuje, co uzupełnić.</li>
     <li>Z kompletnego formularza powstaje kolejna karta DR oraz roboczy pull request. DR zachowuje wynik, treść, uzasadnienie, alternatywy i powiązanie z dyskusją.</li>
     <li>Jeżeli formularz wskazuje „Zmiana regulaminu: tak”, Redaktor regulaminu dołącza odpowiednią zmianę DOCX do tego samego pull requestu. Dzięki temu nie publikujemy decyzji bez wymaganej zmiany regulaminu.</li>

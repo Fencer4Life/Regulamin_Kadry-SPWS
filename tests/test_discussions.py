@@ -18,14 +18,15 @@ class DiscussionSnapshotTests(unittest.TestCase):
 ## Formularz rozstrzygnięcia dyskusji
 **Wynik:** przyjęta
 **Treść decyzji:** Przyjmujemy wariant A.
-**Sposób potwierdzenia:** w dyskusji GitHub
-**Koordynator:** @ala
+**Uzasadnienie:** Uzasadnienie A.
 **Zmiana regulaminu:** tak
+**Odrzucone alternatywy:** Wariant B.
 - [x] Potwierdzam zgodność ze stanowiskiem komisji.
 """
         result = parse_resolution(comment)
         self.assertEqual(result["wynik"], "przyjęta")
         self.assertEqual(result["decyzja"], "Przyjmujemy wariant A.")
+        self.assertEqual(result["uzasadnienie"], "Uzasadnienie A.")
         self.assertTrue(result["potwierdzenie"])
 
     def test_rejects_incomplete_resolution_form(self):
@@ -33,21 +34,47 @@ class DiscussionSnapshotTests(unittest.TestCase):
             parse_resolution("<!-- FORMULARZ-ROZSTRZYGNIECIA -->\n**Wynik:** przyjęta")
 
     def test_generated_card_maps_resolution_fields_to_matching_sections(self):
-        event = {"discussion": {"html_url": "https://example/7", "title": "Próba", "created_at": "2026-09-13T10:00:00Z", "body": "Problem źródłowy", "user": {"login": "ala"}}}
+        event = {"discussion": {"html_url": "https://example/7", "title": "Próba", "created_at": "2026-09-13T10:00:00Z", "body": """### Koordynator dyskusji
+
+@ala
+
+### Problem
+
+Problem źródłowy
+
+### Priorytet
+
+Średni
+
+### Obszar
+
+Punktacja
+
+### Proponowane rozwiązanie
+
+Wariant A
+
+### Inne rozważane podejścia
+
+Wariant B
+
+### Materiały lub przykłady
+
+https://example.com/material
+
+### Powiązane decyzje
+
+DR-002
+""", "user": {"login": "ala"}}}
         resolution = """<!-- FORMULARZ-ROZSTRZYGNIECIA -->
 **Wynik:** przyjęta
 **Treść decyzji:** Treść A.
-**Sposób potwierdzenia:** głosowanie
-**Koordynator:** @ala
+**Uzasadnienie:** Uzasadnienie A.
 **Zmiana regulaminu:** tak
 - [x] Potwierdzam zgodność ze stanowiskiem komisji.
-### Informacje opcjonalne
-**Uzasadnienie:** Uzasadnienie A.
-**Rozważane warianty:** Wariant A i B.
 **Odrzucone alternatywy:** Wariant B.
-**Termin oceny:** po sezonie
 """
-        comments = {"data": {"repository": {"discussion": {"comments": {"nodes": [{"body": resolution, "createdAt": "2026-09-13T12:00:00Z"}]}}}}}
+        comments = {"data": {"repository": {"discussion": {"comments": {"nodes": [{"body": "Opinia", "createdAt": "2026-09-13T11:00:00Z", "author": {"login": "jan"}}, {"body": resolution, "createdAt": "2026-09-13T12:00:00Z", "author": {"login": "ala"}}]}}}}}
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             event_path, comments_path, decisions = root / "event.json", root / "comments.json", root / "decyzje"
@@ -56,7 +83,19 @@ class DiscussionSnapshotTests(unittest.TestCase):
             comments_path.write_text(json.dumps(comments), encoding="utf-8")
             card = create(event_path, decisions, comments_path).read_text(encoding="utf-8")
         self.assertIn("## Odrzucone alternatywy\n\nWariant B.", card)
-        self.assertIn("## Plan oceny\n\npo sezonie", card)
+        self.assertIn("## Problem\n\nProblem źródłowy", card)
+        self.assertIn("## Rozważane warianty\n\n**Proponowane rozwiązanie:** Wariant A\n\n**Inne rozważane podejścia:** Wariant B", card)
+        self.assertIn("Punktacja", card)
+        self.assertIn("https://example.com/material", card)
+        self.assertIn("DR-002", card)
+        self.assertIn("@ala, @jan", card)
+
+    def test_resolution_template_contains_only_final_decision_fields(self):
+        template = (Path(__file__).resolve().parents[1] / "szablony/formularz-rozstrzygniecia.md").read_text(encoding="utf-8")
+        for value in ("**Wynik:**", "**Treść decyzji:**", "**Uzasadnienie:**", "**Zmiana regulaminu:**", "**Odrzucone alternatywy:**"):
+            self.assertIn(value, template)
+        for removed in ("**Sposób potwierdzenia:**", "**Koordynator:**", "**Uczestnicy:**", "**Rozważane warianty:**", "**Termin oceny:**", "**Redaktor regulaminu:**"):
+            self.assertNotIn(removed, template)
 
     def test_keeps_only_open_regulation_proposals_and_sorts_newest_first(self):
         payload = {"data": {"repository": {"discussions": {"nodes": [
