@@ -15,14 +15,14 @@ Publiczne repozytorium prac nad **Regulaminem powoływania reprezentacji Polski 
 
 ## Najważniejsze dokumenty
 
-- [Aktualny projekt regulaminu w formacie MS Word](regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx)
-- [Rejestr Decyzji — widok HTML](index.html)
-- [Załącznik nr 1 — pełna tabela punktacji dla stawek od 4 do 300 zawodników](zalaczniki/Zalacznik-1-tabela-punktacji-SPWS_2026-2027.html)
-- [Informacja o zatwierdzonych wydaniach](wydania/README.md)
+- [Aktualny projekt regulaminu w formacie MS Word](https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/regulamin/Regulamin-powolywania-reprezentacji-Polski-weteran%C3%B3w-w-szermierce_2026.docx)
+- [Rejestr Decyzji — widok HTML](https://html-preview.github.io/?url=https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/index.html)
+- [Załącznik nr 1 — pełna tabela punktacji dla stawek od 4 do 300 zawodników](https://html-preview.github.io/?url=https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/zalaczniki/Zalacznik-1-tabela-punktacji-SPWS_2026-2027.html)
+- [Informacja o zatwierdzonych wydaniach](https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/wydania/README.md)
 - [Kalkulator punktów SPWS](https://fencer4life.github.io/spws-automated-ranklist/kalkulator-punktow.html?lang=pl)
-- [Zasady prowadzenia Rejestru Decyzji](ZASADY_REJESTRU.md)
-- [Przewodnik: jak pracujemy nad regulaminem](przewodnik.html)
-- [Zasady współpracy](CONTRIBUTING.md)
+- [Zasady prowadzenia Rejestru Decyzji](https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/ZASADY_REJESTRU.md)
+- [Przewodnik: jak pracujemy nad regulaminem](https://html-preview.github.io/?url=https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/przewodnik.html)
+- [Zasady współpracy](https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/CONTRIBUTING.md)
 
 ## Role SPWS i PZSz
 
@@ -73,7 +73,7 @@ Skrócony przebieg:
 6. przegląd i scalenie dokumentacji oraz treści;
 7. publikacja i ocena skutków po zakończeniu sezonu.
 
-Pełny proces opisuje [przewodnik dla komisji](przewodnik.html), reguły dokumentowania zawierają [Zasady prowadzenia Rejestru Decyzji](ZASADY_REJESTRU.md), a instrukcję techniczną przygotowania zmian — [CONTRIBUTING.md](CONTRIBUTING.md).
+Pełny proces opisuje [przewodnik dla komisji](https://html-preview.github.io/?url=https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/przewodnik.html), reguły dokumentowania zawierają [Zasady prowadzenia Rejestru Decyzji](https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/ZASADY_REJESTRU.md), a instrukcję techniczną przygotowania zmian — [CONTRIBUTING.md](https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/CONTRIBUTING.md).
 
 ## Praca z dokumentem Word
 
@@ -119,3 +119,7 @@ Repozytorium jest publiczne. Nie wolno publikować prywatnej korespondencji, dan
 Przed dodaniem DOCX należy sprawdzić komentarze, śledzone zmiany i metadane. W kartach decyzji zapisujemy uzgodnione streszczenia argumentów, nie prywatne transkrypcje rozmów.
 
 Repozytorium nie ma obecnie licencji. Publiczna widoczność kodu i dokumentów nie oznacza automatycznie udzielenia zgody na ich kopiowanie albo ponowne wykorzystanie.
+
+## Strona publiczna
+
+[Otwórz Rejestr Decyzji w GitHub Pages](https://fencer4life.github.io/Regulamin_Kadry-SPWS/?strona=1&na_stronie=20)
