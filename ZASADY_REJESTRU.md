@@ -13,13 +13,14 @@ Numeru DR nie otrzymują poprawki literowe, zmiany fleksyjne, techniczne ponowie
 ## Inicjowanie decyzji
 
 1. Propozycja rozpoczyna się w GitHub Discussions.
-2. Autor opisuje problem, kontekst, warianty i oczekiwany rezultat.
-3. Komisja kwalifikuje propozycję jako decyzję regulaminową albo zmianę techniczną.
-4. Po kwalifikacji komisja nadaje kolejny trwały numer `DR-NNN`.
-5. Po oznaczeniu dyskusji etykietą `do rozstrzygnięcia` powstaje karta Markdown ze statusem `do zatwierdzenia` oraz roboczy Pull Request.
-6. Scalenie Pull Requestu publikuje kartę, dodaje jej adres do dyskusji i zamyka dyskusję jako `rozwiązana`.
+2. Przy utworzeniu wskazuje się Koordynatora dyskusji przez login GitHub lub pseudonim oraz opisuje problem. Pozostałe pola są opcjonalne.
+3. Komisja rozważa warianty i uzgadnia wynik. Nie obowiązuje minimalny czas dyskusji ani minimalna liczba komentarzy.
+4. Koordynator publikuje końcowy formularz rozstrzygnięcia zgodny ze stanowiskiem komisji i nadaje etykietę `rozstrzygnięta`.
+5. Automatyzacja waliduje formularz, nadaje kolejny trwały numer `DR-NNN`, tworzy kartę Markdown z wynikiem `przyjęta` albo `odrzucona` oraz roboczy Pull Request.
+6. Jeżeli decyzja wymaga zmiany regulaminu, Redaktor regulaminu dołącza zmianę DOCX do tego samego Pull Requestu.
+7. Scalenie Pull Requestu publikuje kartę, dodaje jej adres do dyskusji i technicznie zamyka dyskusję jako `RESOLVED`; jej status dla komisji to `Rozstrzygnięta`.
 
-Dyskusję zakończoną bez rozstrzygnięcia zamyka się jako `nieaktualna` albo `duplikat`. Merytoryczne odrzucenie propozycji jest decyzją i otrzymuje kartę DR ze statusem `odrzucona`.
+Dyskusję zakończoną bez rozstrzygnięcia zamyka się jako `Porzucona` (`OUTDATED`) albo `Duplikat` (`DUPLICATE`). Nie tworzy się wtedy karty DR. Merytoryczne odrzucenie propozycji jest decyzją i otrzymuje kartę DR ze statusem `odrzucona`.
 
 Numer raz nadany nie jest używany ponownie. Karta decyzji odrzuconej pozostaje w rejestrze.
 
@@ -61,4 +62,6 @@ Każda decyzja wymagająca weryfikacji zawiera mierzalny plan oceny i termin prz
 
 ## Odpowiedzialność
 
-Komisja regulaminowa SPWS formalizuje rekordy i zmienia ich status. Publiczna dyskusja i recenzja pomagają przygotować rozstrzygnięcie, ale nie zastępują decyzji komisji ani formalnego zatwierdzenia regulaminu przez właściwy organ PZSz.
+Komisja regulaminowa SPWS podejmuje decyzje i akceptuje ich dokumentację. Każda dyskusja ma własnego Koordynatora dyskusji, który porządkuje rozmowę i zapisuje jej uzgodniony wynik, ale nie rozstrzyga samodzielnie. Redaktor regulaminu przenosi przyjęte decyzje do dokumentu DOCX i czuwa nad spójnością jego treści. Publiczna dyskusja i recenzja nie zastępują decyzji komisji ani formalnego zatwierdzenia regulaminu przez właściwy organ PZSz.
+
+Szczegółową instrukcję dla członków komisji zawiera [publiczny przewodnik](przewodnik.html).

@@ -24,6 +24,6 @@ layout: default
     {% if page.discussion_url and page.discussion_url != '' %}<a href="{{ page.discussion_url }}">Dyskusja</a>{% endif %}
     {% if page.pr_url and page.pr_url != '' %}<a href="{{ page.pr_url }}">Pull Request</a>{% endif %}
     <a href="{{ site.repository_url }}/blob/main/{{ page.path }}">Źródłowy Markdown</a>
-    <a href="{{ '/' | relative_url }}">Powrót do rejestru</a>
+    <a href="{{ site.baseurl }}/?strona=1&amp;na_stronie=20">Powrót do Rejestru Decyzji</a>
   </nav>
 </article>

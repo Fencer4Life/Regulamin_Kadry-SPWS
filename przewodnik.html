@@ -1,0 +1,104 @@
+---
+layout: default
+title: Jak pracujemy nad regulaminem
+description: Przewodnik po dyskusjach, decyzjach i zmianach Regulaminu Kadry SPWS.
+permalink: /przewodnik/
+---
+<style>
+  .guide-hero{padding:2rem;border-radius:18px;background:linear-gradient(135deg,#173f70,#2866a5);color:#fff;margin:1.5rem 0}.guide-hero h1{margin-top:0}
+  .guide-card{margin:1.25rem 0;padding:1.25rem;border:1px solid #ccd7e4;border-radius:14px;background:var(--card-bg,#fff)}
+  .guide-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.8rem}.guide-step{padding:1rem;border-radius:12px;background:#eaf2fb;color:#17324e;border-top:5px solid #477cab}
+  .role-table,.status-table{width:100%;border-collapse:collapse}.role-table th,.role-table td,.status-table th,.status-table td{padding:.75rem;text-align:left;border-bottom:1px solid #d8e0e9}.role-table th,.status-table th{background:#173f70;color:#fff}
+  .pill{display:inline-block;padding:.22rem .6rem;border-radius:999px;font-weight:750}.open{background:#dbeafe;color:#174a7e}.done{background:#dff3e7;color:#17633a}.closed{background:#f1f2f4;color:#4f5967}
+  .note{padding:1rem;border-left:5px solid #d09a23;background:#fff5d9;color:#4e3b0b}.process-scroll{overflow-x:auto;padding-bottom:.5rem}.swimlane{min-width:920px;border:1px solid #c8d2df;border-radius:14px;overflow:hidden}.lane{display:grid;grid-template-columns:150px repeat(5,1fr);align-items:stretch}.lane>*{padding:.8rem;border-bottom:1px solid #d9e0e8}.lane.head{background:#173f70;color:#fff;font-weight:800;text-align:center}.lane .who{background:#edf3fa;color:#17233b;font-weight:800}.box{border:2px solid #7894b2;border-radius:9px;background:#f0f5fb;color:#17233b;text-align:center}.auto{background:#e8f6ef;border-color:#42a06c}.edit{background:#f4e9ff;border-color:#8c63b5}
+  @media(prefers-color-scheme:dark){.guide-card{--card-bg:#152033}.guide-step,.lane .who,.box{color:#17233b}.note{color:#4e3b0b}.role-table td,.status-table td{border-color:#415064}}
+</style>
+
+<section class="guide-hero">
+  <p>PUBLICZNY PRZEWODNIK KOMISJI</p>
+  <h1>Od problemu do udokumentowanej zmiany regulaminu</h1>
+  <p>Ten przewodnik jest przeznaczony dla obecnych i przyszłych członków komisji — także dla osób, które po raz pierwszy korzystają z GitHuba.</p>
+</section>
+
+<section class="guide-card">
+  <h2>Najkrótsza ścieżka</h2>
+  <div class="guide-steps">
+    <div class="guide-step"><b>1. Otwórz dyskusję</b><br>Podaj koordynatora i opisz problem.</div>
+    <div class="guide-step"><b>2. Omów warianty</b><br>Komisja dopisuje argumenty i propozycje.</div>
+    <div class="guide-step"><b>3. Podsumuj wynik</b><br>Koordynator wkleja gotowy formularz.</div>
+    <div class="guide-step"><b>4. Sprawdź zmianę</b><br>Komisja zatwierdza DR i, gdy potrzeba, regulamin.</div>
+    <div class="guide-step"><b>5. Opublikuj</b><br>Po scaleniu rejestr i dokument są aktualizowane.</div>
+  </div>
+  <p><a class="button" href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/new?category=propozycje-zmian-regulaminu">Otwórz nową dyskusję na GitHubie</a></p>
+</section>
+
+<section class="guide-card">
+  <h2>Role</h2>
+  <table class="role-table">
+    <thead><tr><th>Rola</th><th>Odpowiedzialność</th><th>Czego ta rola nie oznacza</th></tr></thead>
+    <tbody>
+      <tr><td><b>Komisja regulaminowa</b></td><td>Rozważa warianty, uzgadnia wynik oraz akceptuje kartę decyzji i brzmienie regulaminu.</td><td>Decyzji nie zastępuje samo zamknięcie wątku.</td></tr>
+      <tr><td><b>Koordynator dyskusji</b></td><td>Jest wskazywany przy otwarciu każdej dyskusji przez login GitHub lub pseudonim. Porządkuje rozmowę i zapisuje uzgodniony wynik w formularzu.</td><td>Nie podejmuje decyzji samodzielnie. Dla każdej dyskusji może to być inna osoba.</td></tr>
+      <tr><td><b>Redaktor regulaminu</b></td><td>Przenosi przyjętą decyzję do DOCX i pilnuje spójności całego regulaminu. Początkowo funkcję może pełnić jedna osoba; później komisja może wskazać kolejne.</td><td>Nie zmienia sensu decyzji komisji.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="guide-card">
+  <h2>Diagram swimlane — kto i kiedy działa</h2>
+  <div class="process-scroll">
+    <div class="swimlane">
+      <div class="lane head"><div>ROLA / ETAP</div><div>ZGŁOSZENIE</div><div>DYSKUSJA</div><div>KONIEC?</div><div>DOKUMENTACJA DECYZJI</div><div>REDAKCJA I PUBLIKACJA</div></div>
+      <div class="lane"><div class="who">👥 Komisja</div><div><div class="box">Problem</div></div><div><div class="box">Argumenty i warianty</div></div><div><div class="box">Tak / Nie?</div></div><div><div class="box">Akceptacja DR</div></div><div><div class="box">Akceptacja brzmienia</div></div></div>
+      <div class="lane"><div class="who">🧭 Koordynator dyskusji</div><div><div class="box">@login</div></div><div><div class="box">Porządkuje</div></div><div><div class="box">Formularz wyniku</div></div><div><div class="box">Sprawdza wierność DR</div></div><div></div></div>
+      <div class="lane"><div class="who">⚙️ Automatyzacja</div><div><div class="box auto">Synchronizuje</div></div><div></div><div><div class="box auto">Waliduje</div></div><div><div class="box auto">Tworzy DR i draft PR</div></div><div><div class="box auto">Testuje i publikuje</div></div></div>
+      <div class="lane"><div class="who">✍️ Redaktor regulaminu</div><div></div><div></div><div></div><div></div><div><div class="box edit">Zmienia DOCX zgodnie z DR</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="guide-card">
+  <h2>Status dyskusji</h2>
+  <table class="status-table">
+    <thead><tr><th>Status komisji</th><th>Znaczenie</th><th>Odpowiednik GitHub</th><th>Karta DR</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill open">Otwarta</span></td><td>Trwa zbieranie argumentów albo nie uzgodniono wyniku.</td><td>Open</td><td>Nie</td></tr>
+      <tr><td><span class="pill done">Rozstrzygnięta</span></td><td>Komisja uzgodniła wynik i powstaje dokumentacja decyzji.</td><td>RESOLVED</td><td>Tak</td></tr>
+      <tr><td><span class="pill closed">Porzucona</span></td><td>Temat nie będzie dalej procedowany.</td><td>OUTDATED</td><td>Nie</td></tr>
+      <tr><td><span class="pill closed">Duplikat</span></td><td>Ten sam problem jest omawiany w innym wątku.</td><td>DUPLICATE</td><td>Nie powstaje nowa DR</td></tr>
+    </tbody>
+  </table>
+  <p class="note"><b>Ważne:</b> „przyjęta” albo „odrzucona” to wynik zapisany w karcie DR, a nie status dyskusji.</p>
+</section>
+
+<section class="guide-card">
+  <h2>Jak otworzyć i prowadzić dyskusję</h2>
+  <ol>
+    <li>Zaloguj się lub utwórz bezpłatne konto na GitHubie.</li>
+    <li>Wybierz „Otwórz nową dyskusję”. Wymagane są tylko dwa pola: <b>Koordynator dyskusji</b> i <b>Problem</b>.</li>
+    <li>Opcjonalnie wybierz priorytet i obszar oraz dopisz rozwiązanie, alternatywy, materiały i powiązane decyzje.</li>
+    <li>Odpowiadaj komentarzami. Dla krótkiej, oczywistej sprawy dyskusja może od razu przejść do rozstrzygnięcia — nie obowiązuje minimalny czas ani liczba komentarzy.</li>
+  </ol>
+</section>
+
+<section class="guide-card">
+  <h2>Jak zamknięta dyskusja staje się decyzją</h2>
+  <ol>
+    <li>Po uzgodnieniu wyniku Koordynator dyskusji kopiuje <a href="{{ '/szablony/formularz-rozstrzygniecia.md' | relative_url }}"><code>formularz-rozstrzygniecia.md</code></a>, wypełnia go i publikuje jako końcowy komentarz. Znacznik <code>FORMULARZ-ROZSTRZYGNIECIA</code> pozwala automatyzacji odnaleźć właściwe podsumowanie.</li>
+    <li>Koordynator dodaje etykietę <b>rozstrzygnięta</b>. Automatyzacja sprawdza pola obowiązkowe; przy brakach nie tworzy karty i wskazuje, co uzupełnić.</li>
+    <li>Z kompletnego formularza powstaje kolejna karta DR oraz roboczy pull request. DR zachowuje wynik, treść, uzasadnienie, alternatywy i powiązanie z dyskusją.</li>
+    <li>Jeżeli formularz wskazuje „Zmiana regulaminu: tak”, Redaktor regulaminu dołącza odpowiednią zmianę DOCX do tego samego pull requestu. Dzięki temu nie publikujemy decyzji bez wymaganej zmiany regulaminu.</li>
+    <li>Komisja przegląda kartę i dokument. Po akceptacji i scaleniu publikowane są DR oraz regulamin, a dyskusja jest technicznie zamykana jako <b>RESOLVED</b>. Dla użytkownika pozostaje <b>Rozstrzygnięta</b>.</li>
+  </ol>
+</section>
+
+<section class="guide-card">
+  <h2>Co dzieje się automatycznie</h2>
+  <ul>
+    <li>Lista otwartych dyskusji synchronizuje się natychmiast po obsługiwanych zdarzeniach GitHub: utworzeniu, edycji oraz zmianie kategorii lub etykiety.</li>
+    <li>Awaryjna synchronizacja działa <b>co 15 minut</b>. GitHub może uruchomić zadanie okresowe z opóźnieniem.</li>
+    <li>Zamknięcie lub ponowne otwarcie wątku pojawi się na stronie po synchronizacji okresowej, ponieważ to zdarzenie nie jest objęte użytym wyzwalaczem GitHub Actions.</li>
+    <li>Automatyzacja waliduje formularz, numeruje DR, zakłada draft PR, uruchamia testy i po scaleniu publikuje stronę.</li>
+  </ul>
+  <p>Jeżeli nowa dyskusja nie jest jeszcze widoczna, sprawdź jej kategorię i poczekaj na najbliższą synchronizację. Wątek musi należeć do kategorii propozycji zmian regulaminu.</p>
+</section>
