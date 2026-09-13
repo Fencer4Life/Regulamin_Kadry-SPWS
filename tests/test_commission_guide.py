@@ -25,10 +25,26 @@ class CommissionGuideTests(unittest.TestCase):
     def test_public_guide_explains_roles_sync_and_full_process(self):
         guide = ROOT / "przewodnik.html"
         self.assertTrue(guide.is_file())
-        text = guide.read_text(encoding="utf-8")
-        for value in ("Koordynator dyskusji", "Redaktor regulaminu", "co 15 minut", "Rozstrzygnięta", "FORMULARZ-ROZSTRZYGNIECIA", "swimlane", "Tak / Nie?", "DOKUMENTACJA DECYZJI"):
+        text = guide.read_text(encoding="utf-8") + (ROOT / "_includes/process-diagrams.html").read_text(encoding="utf-8")
+        for value in ("Koordynator dyskusji", "Redaktor regulaminu", "co 15 minut", "Rozstrzygnięta", "FORMULARZ-ROZSTRZYGNIECIA", "swimlane", "Tak / Nie?", "DOKUMENTACJA<br>DECYZJI"):
             self.assertIn(value, text)
         self.assertNotIn("Redaktor prowadzący", text)
+
+    def test_public_guide_preserves_both_approved_diagrams_and_legend(self):
+        guide = (ROOT / "przewodnik.html").read_text(encoding="utf-8")
+        self.assertIn("{% include process-diagrams.html %}", guide)
+        text = (ROOT / "_includes/process-diagrams.html").read_text(encoding="utf-8")
+        for value in (
+            "grid-template-columns:150px repeat(7,1fr)",
+            'aria-label="Diagram statusów dyskusji"',
+            "Formularz wyniku",
+            "GitHub: OUTDATED · bez DR",
+            "GitHub: DUPLICATE · bez nowej DR",
+            "Artefakty, które powstają",
+            "Zmieniony regulamin DOCX",
+            "Notacja",
+        ):
+            self.assertIn(value, text)
 
     def test_resolution_template_exists_and_is_linked_from_guide(self):
         template = ROOT / "szablony/formularz-rozstrzygniecia.md"
