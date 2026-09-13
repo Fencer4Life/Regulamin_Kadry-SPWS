@@ -1,0 +1,89 @@
+title: "[Dyskusja] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Nowa dyskusja komisji regulaminowej
+
+        Wymagane są tylko pola **Koordynator dyskusji** i **Problem**. Pozostałe informacje można uzupełnić teraz albo dopisać później w toku rozmowy.
+
+  - type: input
+    id: coordinator
+    attributes:
+      label: Koordynator dyskusji
+      description: Podaj login GitHub lub pseudonim osoby porządkującej rozmowę.
+      placeholder: "@login"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Opisz krótko sprawę, którą komisja ma omówić, oraz jej skutki.
+      placeholder: Na czym polega problem?
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Informacje opcjonalne
+
+        Te pola pomagają uporządkować rozmowę, ale nie blokują rozpoczęcia krótkiej dyskusji.
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorytet
+      options:
+        - Nie określono
+        - Niski
+        - Średni
+        - Wysoki
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Obszar
+      options:
+        - Nie określono
+        - Ranking
+        - Powołania indywidualne
+        - Drużyna
+        - Zawody
+        - Punktacja
+        - Terminy
+        - Redakcja regulaminu
+        - Inne
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proponowane rozwiązanie
+      description: Jeżeli masz już propozycję, opisz ją tutaj.
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Inne rozważane podejścia
+      description: Wymień alternatywy, które warto omówić.
+
+  - type: textarea
+    id: materials
+    attributes:
+      label: Materiały lub przykłady
+      description: Dodaj odnośniki, dokumenty albo przykłady istotne dla rozmowy.
+
+  - type: input
+    id: related
+    attributes:
+      label: Powiązane decyzje
+      description: Podaj numery istniejących decyzji, na przykład DR-015.
+
+  - type: markdown
+    attributes:
+      value: |
+        Po uzgodnieniu wyniku Koordynator publikuje **Formularz rozstrzygnięcia dyskusji** zgodnie z [przewodnikiem komisji](https://fencer4life.github.io/Regulamin_Kadry-SPWS/przewodnik/).
+
+        [← Powrót do publicznej listy dyskusji](https://fencer4life.github.io/Regulamin_Kadry-SPWS/dyskusje/)

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plan wdrożenia wzorcowej dyskusji</title>
+<style>
+:root{--bg:#e8ecf3;--surface:#fff;--ink:#0f1319;--muted:#414b59;--line:#c9d1dc;--accent:#12467e;--good:#0f5f37;--goodbg:#d8eede;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--serif:"Iowan Old Style",Georgia,serif;--mono:ui-monospace,"SF Mono",monospace}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.6 var(--sans)}main{max-width:70rem;margin:auto;padding:56px 28px 100px}h1,h2{font-family:var(--serif);line-height:1.1}h1{font-size:clamp(38px,6vw,58px);max-width:20ch}h2{font-size:30px;margin-top:44px}.dek{font-size:22px;color:var(--muted)}.eyebrow{font:700 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}.meta{display:flex;gap:9px;flex-wrap:wrap}.chip{padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font:700 13px var(--mono)}.note{background:var(--goodbg);border-left:5px solid var(--good);padding:17px 21px;border-radius:10px;margin:22px 0}code{font-family:var(--mono);font-size:.84em;background:#dce2ec;padding:.1em .4em;border-radius:5px}li{max-width:78ch;margin:.45em 0}.foot{margin-top:56px;border-top:2px solid var(--line);padding-top:16px;color:var(--muted);font:14px var(--mono)}
+</style></head><body><main>
+<p class="eyebrow">Regulamin Kadry SPWS · plan implementacji</p>
+<h1>Wzorcowa dyskusja na GitHubie</h1>
+<p class="dek">Przycisk na stronie publicznej otwiera natywny formularz kategorii „propozycje-zmian-regulaminu”. GitHub tworzy z niego nową, uporządkowaną dyskusję.</p>
+<div class="meta"><span class="chip">zatwierdzony kierunek</span><span class="chip">TDD</span><span class="chip">bez serwera i tokenów</span></div>
+<div class="note"><strong>Rezultat:</strong> zalogowana osoba klika „Otwórz nową dyskusję”, wypełnia pola Koordynator i Problem oraz opcjonalne listy i pola pomocnicze, a GitHub publikuje odpowiedzi jako treść nowej dyskusji.</div>
+
+<h2>Zakres</h2>
+<ol>
+  <li>Dodać test kontraktowy wymagający pliku <code>.github/DISCUSSION_TEMPLATE/propozycje-zmian-regulaminu.yml</code>.</li>
+  <li>Test ma dopuścić na najwyższym poziomie wyłącznie klucze obsługiwane przez GitHub Discussions: <code>title</code>, <code>labels</code> i <code>body</code>. Klucze <code>name</code> i <code>description</code> mają być zabronione.</li>
+  <li>Zdefiniować dwa pola wymagane: Koordynator dyskusji i Problem. Priorytet, Obszar, proponowane rozwiązanie, alternatywy, materiały i powiązane decyzje pozostają opcjonalne.</li>
+  <li>Usunąć z trzech przycisków niedziałające parametry <code>title</code> i <code>body</code>. Każdy przycisk ma otwierać bezpośrednio właściwą kategorię.</li>
+  <li>Uruchomić testy Python i build Jekyll. Następnie utworzyć PR, poczekać na CI, scalić i sprawdzić formularz na domyślnej gałęzi.</li>
+</ol>
+
+<h2>Kryteria akceptacji</h2>
+<ul>
+  <li>Formularz jest powiązany z istniejącym slugiem kategorii <code>propozycje-zmian-regulaminu</code>.</li>
+  <li>GitHub pokazuje natywne pola tekstowe i listy wyboru zamiast pustego edytora.</li>
+  <li>Przyciski w nagłówku, rejestrze dyskusji i przewodniku prowadzą do tego samego formularza.</li>
+  <li>Nie dodajemy OAuth, backendu ani sekretów do GitHub Pages.</li>
+</ul>
+<p class="foot">Wersja 1.0 · 13.09.2026</p>
+</main></body></html>
