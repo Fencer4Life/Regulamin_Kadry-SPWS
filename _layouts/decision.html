@@ -4,6 +4,7 @@ layout: default
 <article class="decision">
 {% assign record_id = page.slug | slice: 0, 6 | upcase %}
   {% assign effect = page["stan_obowiązywania"] %}
+  <p><a class="action" href="{{ site.baseurl }}/?strona=1&amp;na_stronie=20">← Powrót do Rejestru Decyzji</a></p>
   <p class="eyebrow">{{ record_id | escape }} · {{ page.typ | escape }}</p>
   <h1>{{ page.tytul | escape }}</h1>
   <dl class="metadata">

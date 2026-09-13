@@ -1,0 +1,24 @@
+name: Link powrotny w nowej dyskusji
+
+on:
+  discussion:
+    types: [created]
+
+permissions:
+  contents: read
+  discussions: write
+
+jobs:
+  add-return-link:
+    if: github.event.discussion.category.slug == 'propozycje-zmian-regulaminu'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dodanie stałego powrotu do listy dyskusji
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DISCUSSION_ID: ${{ github.event.discussion.node_id }}
+        run: |
+          gh api graphql \
+            -f query='mutation($discussionId:ID!,$body:String!){addDiscussionComment(input:{discussionId:$discussionId,body:$body}){comment{id}}}' \
+            -F discussionId="$DISCUSSION_ID" \
+            -f body='← [Powrót do publicznej listy dyskusji](https://fencer4life.github.io/Regulamin_Kadry-SPWS/dyskusje/)'

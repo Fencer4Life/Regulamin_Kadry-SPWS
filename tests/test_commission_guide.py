@@ -10,9 +10,22 @@ class CommissionGuideTests(unittest.TestCase):
     def test_decision_cards_and_discussion_form_have_public_return_links(self):
         decision = (ROOT / "_layouts/decision.html").read_text(encoding="utf-8")
         discussion_form = (ROOT / ".github/DISCUSSION_TEMPLATE/propozycje-zmian-regulaminu.yml").read_text(encoding="utf-8")
-        self.assertIn("/?strona=1&amp;na_stronie=20", decision)
-        self.assertIn("Powrót do Rejestru Decyzji", decision)
+        self.assertEqual(decision.count("/?strona=1&amp;na_stronie=20"), 2)
+        self.assertEqual(decision.count("Powrót do Rejestru Decyzji"), 2)
         self.assertIn("https://fencer4life.github.io/Regulamin_Kadry-SPWS/dyskusje/", discussion_form)
+
+    def test_new_discussion_receives_persistent_return_link(self):
+        workflow = ROOT / ".github/workflows/welcome-discussion.yml"
+        self.assertTrue(workflow.is_file())
+        text = workflow.read_text(encoding="utf-8")
+        for value in (
+            "types: [created]",
+            "propozycje-zmian-regulaminu",
+            "discussions: write",
+            "https://fencer4life.github.io/Regulamin_Kadry-SPWS/dyskusje/",
+            "addDiscussionComment",
+        ):
+            self.assertIn(value, text)
 
     def test_discussion_form_has_only_two_required_fields(self):
         text = (ROOT / ".github/DISCUSSION_TEMPLATE/propozycje-zmian-regulaminu.yml").read_text(encoding="utf-8")
