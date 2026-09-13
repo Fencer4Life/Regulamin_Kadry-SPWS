@@ -1,0 +1,117 @@
+<h2>Od problemu do zmiany regulaminu</h2>
+<p class="subtitle">Uproszczony diagram swimlane: role mają własne tory, a kolory pokazują status dyskusji i powstające dokumenty.</p>
+
+<div style="overflow-x:auto;padding-bottom:10px">
+<div style="min-width:1080px;border:1px solid #c8d2df;border-radius:14px;overflow:hidden;background:#fff;color:#17233b">
+  <div style="display:grid;grid-template-columns:150px repeat(7,1fr);background:#173f70;color:#fff;font-size:12px;font-weight:800;text-align:center">
+    <div style="padding:12px;text-align:left">ROLA / ETAP</div><div style="padding:12px">ZGŁOSZENIE</div><div style="padding:12px">DYSKUSJA</div><div style="padding:12px">KONIEC?</div><div style="padding:12px">DOKUMENTACJA<br>DECYZJI</div><div style="padding:12px">REDAKCJA</div><div style="padding:12px">KONTROLA</div><div style="padding:12px">PUBLIKACJA</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:150px repeat(7,1fr);min-height:112px;border-bottom:1px solid #d9e0e8;align-items:center">
+    <div style="height:100%;padding:15px;background:#edf3fa;font-weight:800">👥 Komisja regulaminowa</div>
+    <div style="padding:8px"><div style="background:#dbeafe;border:2px solid #5b8fc4;border-radius:9px;padding:10px"><b>Problem</b><br><small>nowa dyskusja</small></div></div>
+    <div style="padding:8px"><div style="background:#dbeafe;border:2px solid #5b8fc4;border-radius:9px;padding:10px"><b>Argumenty</b><br><small>warianty i komentarze</small></div></div>
+    <div style="padding:8px"><div style="transform:rotate(45deg);width:76px;height:76px;margin:auto;background:#fff1ce;border:2px solid #d09a23"><div style="transform:rotate(-45deg);padding:18px 3px;text-align:center;font-size:11px"><b>Tak / Nie?</b></div></div></div>
+    <div></div><div></div>
+    <div style="padding:8px"><div style="background:#f4e9ff;border:2px solid #8c63b5;border-radius:9px;padding:10px"><b>Akceptacja</b><br><small>karty i brzmienia</small></div></div>
+    <div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:150px repeat(7,1fr);min-height:112px;border-bottom:1px solid #d9e0e8;align-items:center">
+    <div style="height:100%;padding:15px;background:#edf3fa;font-weight:800">🧭 Koordynator dyskusji</div>
+    <div style="padding:8px"><div style="background:#f0f5fb;border:2px solid #7894b2;border-radius:9px;padding:10px"><b>@login</b><br><small>przypisany przy otwarciu</small></div></div>
+    <div style="padding:8px"><div style="background:#f0f5fb;border:2px solid #7894b2;border-radius:9px;padding:10px"><b>Porządkuje</b><br><small>nie rozstrzyga sam</small></div></div>
+    <div style="padding:8px"><div style="background:#fff1ce;border:2px solid #d09a23;border-radius:9px;padding:10px"><b>Formularz wyniku</b><br><small>etykieta: rozstrzygnięta</small></div></div>
+    <div style="padding:8px"><div style="background:#f0f5fb;border:2px solid #7894b2;border-radius:9px;padding:10px"><b>Sprawdza DR</b><br><small>wierność dyskusji</small></div></div>
+    <div></div><div></div><div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:150px repeat(7,1fr);min-height:112px;border-bottom:1px solid #d9e0e8;align-items:center">
+    <div style="height:100%;padding:15px;background:#edf3fa;font-weight:800">⚙️ Automatyzacja GitHub</div>
+    <div style="padding:8px"><div style="background:#e8f6ef;border:2px solid #42a06c;border-radius:9px;padding:10px"><b>Synchronizuje</b><br><small>zdarzenia + co 15 min</small></div></div>
+    <div></div>
+    <div style="padding:8px"><div style="background:#e8f6ef;border:2px solid #42a06c;border-radius:9px;padding:10px"><b>Waliduje</b><br><small>kompletność formularza</small></div></div>
+    <div style="padding:8px"><div style="background:#e8f6ef;border:2px solid #42a06c;border-radius:9px;padding:10px"><b>Tworzy DR</b><br><small>draft pull request</small></div></div>
+    <div></div>
+    <div style="padding:8px"><div style="background:#e8f6ef;border:2px solid #42a06c;border-radius:9px;padding:10px"><b>Testuje</b><br><small>spójność i DOCX</small></div></div>
+    <div style="padding:8px"><div style="background:#dff3e7;border:2px solid #278652;border-radius:9px;padding:10px"><b>Publikuje</b><br><small>DR + regulamin<br>zamyka: RESOLVED</small></div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:150px repeat(7,1fr);min-height:112px;align-items:center">
+    <div style="height:100%;padding:15px;background:#edf3fa;font-weight:800">✍️ Redaktor regulaminu</div>
+    <div></div><div></div><div></div><div></div>
+    <div style="padding:8px"><div style="background:#f4e9ff;border:2px solid #8c63b5;border-radius:9px;padding:10px"><b>Zmienia przepisy</b><br><small>zgodnie z DR</small></div></div>
+    <div style="padding:8px"><div style="background:#f4e9ff;border:2px solid #8c63b5;border-radius:9px;padding:10px"><b>Poprawia</b><br><small>po uwagach komisji</small></div></div>
+    <div></div>
+  </div>
+</div>
+</div>
+
+<div class="section">
+  <h3>Status dyskusji</h3>
+  <div style="overflow-x:auto;background:#fff;border:1px solid #d7dee8;border-radius:12px;padding:12px;text-align:center">
+  <svg viewBox="0 0 1040 455" role="img" aria-label="Diagram statusów dyskusji" style="display:block;width:min(100%,760px);height:auto;margin:0 auto;font-family:system-ui,-apple-system,Segoe UI,sans-serif">
+    <defs>
+      <marker id="arrow-blue" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#477cab"/></marker>
+      <marker id="arrow-green" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#278652"/></marker>
+      <marker id="arrow-gray" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#7a8492"/></marker>
+      <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity=".14"/></filter>
+    </defs>
+
+    <rect x="24" y="117" width="150" height="70" rx="18" fill="#dbeafe" stroke="#477cab" stroke-width="2" filter="url(#soft-shadow)"/>
+    <text x="99" y="146" text-anchor="middle" font-size="17" font-weight="800" fill="#174a7e">OTWARTA</text>
+    <text x="99" y="169" text-anchor="middle" font-size="12" fill="#48637d">zgłoszenie problemu</text>
+
+    <path d="M174 152 H246" fill="none" stroke="#477cab" stroke-width="4" marker-end="url(#arrow-blue)"/>
+    <rect x="258" y="117" width="150" height="70" rx="18" fill="#dbeafe" stroke="#477cab" stroke-width="2" filter="url(#soft-shadow)"/>
+    <text x="333" y="146" text-anchor="middle" font-size="17" font-weight="800" fill="#174a7e">DYSKUSJA</text>
+    <text x="333" y="169" text-anchor="middle" font-size="12" fill="#48637d">argumenty i warianty</text>
+
+    <path d="M408 152 H466" fill="none" stroke="#477cab" stroke-width="4" marker-end="url(#arrow-blue)"/>
+    <polygon points="550,77 634,152 550,227 466,152" fill="#fff1ce" stroke="#d09a23" stroke-width="3" filter="url(#soft-shadow)"/>
+    <text x="550" y="160" text-anchor="middle" font-size="18" font-weight="900" fill="#684600">Koniec?</text>
+
+    <path d="M634 152 H744" fill="none" stroke="#278652" stroke-width="5" marker-end="url(#arrow-green)"/>
+    <rect x="646" y="105" width="48" height="25" rx="12" fill="#fff" stroke="#278652"/>
+    <text x="670" y="123" text-anchor="middle" font-size="12" font-weight="900" fill="#17633a">TAK</text>
+    <rect x="758" y="101" width="252" height="102" rx="18" fill="#dff3e7" stroke="#278652" stroke-width="3" filter="url(#soft-shadow)"/>
+    <text x="884" y="139" text-anchor="middle" font-size="18" font-weight="900" fill="#17633a">ROZSTRZYGNIĘTA</text>
+    <text x="884" y="164" text-anchor="middle" font-size="13" fill="#356a4c">GitHub: RESOLVED</text>
+    <text x="884" y="184" text-anchor="middle" font-size="13" fill="#356a4c">powstaje karta DR</text>
+
+    <path d="M550 227 V270" fill="none" stroke="#7a8492" stroke-width="5" marker-end="url(#arrow-gray)"/>
+    <path d="M550 277 V390" fill="none" stroke="#7a8492" stroke-width="5"/>
+    <rect x="478" y="218" width="48" height="25" rx="12" fill="#fff" stroke="#7a8492"/>
+    <text x="502" y="236" text-anchor="middle" font-size="12" font-weight="900" fill="#596273">NIE</text>
+
+    <circle cx="550" cy="277" r="6" fill="#7a8492"/>
+    <path d="M550 277 H744" fill="none" stroke="#7a8492" stroke-width="4" marker-end="url(#arrow-gray)"/>
+    <rect x="758" y="231" width="252" height="92" rx="18" fill="#f1f2f4" stroke="#7a8492" stroke-width="2" filter="url(#soft-shadow)"/>
+    <text x="884" y="269" text-anchor="middle" font-size="18" font-weight="900" fill="#4f5967">PORZUCONA</text>
+    <text x="884" y="294" text-anchor="middle" font-size="13" fill="#656f7d">GitHub: OUTDATED · bez DR</text>
+
+    <circle cx="550" cy="390" r="6" fill="#7a8492"/>
+    <path d="M550 390 H744" fill="none" stroke="#7a8492" stroke-width="4" marker-end="url(#arrow-gray)"/>
+    <rect x="758" y="344" width="252" height="92" rx="18" fill="#f1f2f4" stroke="#7a8492" stroke-width="2" filter="url(#soft-shadow)"/>
+    <text x="884" y="382" text-anchor="middle" font-size="18" font-weight="900" fill="#4f5967">DUPLIKAT</text>
+    <text x="884" y="407" text-anchor="middle" font-size="13" fill="#656f7d">GitHub: DUPLICATE · bez nowej DR</text>
+  </svg>
+  </div>
+  <p style="margin-top:12px"><b>Wynik decyzji:</b> „przyjęta” albo „odrzucona” jest zapisywany w karcie DR, a nie jako status dyskusji.</p>
+</div>
+
+<div class="section">
+  <h3>Artefakty, które powstają</h3>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <span style="padding:10px 14px;background:#dbeafe;border-radius:8px">💬 Dyskusja</span><b>→</b>
+    <span style="padding:10px 14px;background:#fff1ce;border-radius:8px">📋 Formularz rozstrzygnięcia</span><b>→</b>
+    <span style="padding:10px 14px;background:#e8f6ef;border-radius:8px">📄 Karta DR</span><b>→</b>
+    <span style="padding:10px 14px;background:#f4e9ff;border-radius:8px">📝 Zmieniony regulamin DOCX</span><b>→</b>
+    <span style="padding:10px 14px;background:#dff3e7;border-radius:8px">🌐 Publikacja</span>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Notacja</h3>
+  <p><b>Prostokąt</b> = czynność · <b>romb</b> = rozstrzygnięcie · <b>kolor niebieski</b> = dyskusja · <b>żółty</b> = uzgodniony wynik oczekujący na dokumentację · <b>zielony</b> = automatyzacja lub publikacja · <b>fioletowy</b> = redakcja prawna dokumentu.</p>
+</div>

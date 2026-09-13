@@ -44,31 +44,8 @@ permalink: /przewodnik/
   </table>
 </section>
 
-<section class="guide-card">
-  <h2>Diagram swimlane — kto i kiedy działa</h2>
-  <div class="process-scroll">
-    <div class="swimlane">
-      <div class="lane head"><div>ROLA / ETAP</div><div>ZGŁOSZENIE</div><div>DYSKUSJA</div><div>KONIEC?</div><div>DOKUMENTACJA DECYZJI</div><div>REDAKCJA I PUBLIKACJA</div></div>
-      <div class="lane"><div class="who">👥 Komisja</div><div><div class="box">Problem</div></div><div><div class="box">Argumenty i warianty</div></div><div><div class="box">Tak / Nie?</div></div><div><div class="box">Akceptacja DR</div></div><div><div class="box">Akceptacja brzmienia</div></div></div>
-      <div class="lane"><div class="who">🧭 Koordynator dyskusji</div><div><div class="box">@login</div></div><div><div class="box">Porządkuje</div></div><div><div class="box">Formularz wyniku</div></div><div><div class="box">Sprawdza wierność DR</div></div><div></div></div>
-      <div class="lane"><div class="who">⚙️ Automatyzacja</div><div><div class="box auto">Synchronizuje</div></div><div></div><div><div class="box auto">Waliduje</div></div><div><div class="box auto">Tworzy DR i draft PR</div></div><div><div class="box auto">Testuje i publikuje</div></div></div>
-      <div class="lane"><div class="who">✍️ Redaktor regulaminu</div><div></div><div></div><div></div><div></div><div><div class="box edit">Zmienia DOCX zgodnie z DR</div></div></div>
-    </div>
-  </div>
-</section>
-
-<section class="guide-card">
-  <h2>Status dyskusji</h2>
-  <table class="status-table">
-    <thead><tr><th>Status komisji</th><th>Znaczenie</th><th>Odpowiednik GitHub</th><th>Karta DR</th></tr></thead>
-    <tbody>
-      <tr><td><span class="pill open">Otwarta</span></td><td>Trwa zbieranie argumentów albo nie uzgodniono wyniku.</td><td>Open</td><td>Nie</td></tr>
-      <tr><td><span class="pill done">Rozstrzygnięta</span></td><td>Komisja uzgodniła wynik i powstaje dokumentacja decyzji.</td><td>RESOLVED</td><td>Tak</td></tr>
-      <tr><td><span class="pill closed">Porzucona</span></td><td>Temat nie będzie dalej procedowany.</td><td>OUTDATED</td><td>Nie</td></tr>
-      <tr><td><span class="pill closed">Duplikat</span></td><td>Ten sam problem jest omawiany w innym wątku.</td><td>DUPLICATE</td><td>Nie powstaje nowa DR</td></tr>
-    </tbody>
-  </table>
-  <p class="note"><b>Ważne:</b> „przyjęta” albo „odrzucona” to wynik zapisany w karcie DR, a nie status dyskusji.</p>
+<section class="guide-card approved-diagrams">
+  {% include process-diagrams.html %}
 </section>
 
 <section class="guide-card">
