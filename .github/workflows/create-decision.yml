@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   create:
-    if: github.event.label.name == 'do rozstrzygnięcia' && github.event.discussion.category.slug == 'propozycje-zmian-regulaminu'
+    if: github.event.label.name == 'rozstrzygnięta' && github.event.discussion.category.slug == 'propozycje-zmian-regulaminu'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -24,18 +24,30 @@ jobs:
           DISCUSSION_NUMBER: ${{ github.event.discussion.number }}
           DISCUSSION_URL: ${{ github.event.discussion.html_url }}
           DISCUSSION_ID: ${{ github.event.discussion.node_id }}
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+          REPOSITORY_NAME: ${{ github.event.repository.name }}
         run: |
           branch="decision/discussion-${DISCUSSION_NUMBER}"
           if git ls-remote --exit-code --heads origin "$branch"; then exit 0; fi
           if grep -R --fixed-strings "discussion_url: ${DISCUSSION_URL}" _decyzje; then exit 0; fi
-          path=$(python narzedzia/create_decision_from_discussion.py "$GITHUB_EVENT_PATH" _decyzje)
+          gh api graphql \
+            -f query='query($owner:String!,$name:String!,$number:Int!){repository(owner:$owner,name:$name){discussion(number:$number){comments(last:100){nodes{body createdAt}}}}}' \
+            -f owner="$REPOSITORY_OWNER" -f name="$REPOSITORY_NAME" -F number="$DISCUSSION_NUMBER" \
+            > /tmp/discussion-comments.json
+          if ! path=$(python narzedzia/create_decision_from_discussion.py "$GITHUB_EVENT_PATH" _decyzje /tmp/discussion-comments.json 2>/tmp/resolution-error.txt); then
+            error=$(cat /tmp/resolution-error.txt)
+            gh api graphql -f query='mutation($discussionId:ID!,$body:String!){addDiscussionComment(input:{discussionId:$discussionId,body:$body}){comment{id}}}' \
+              -F discussionId="$DISCUSSION_ID" \
+              -f body="Nie utworzono karty decyzji. Uzupełnij końcowy komentarz według szablonu FORMULARZ-ROZSTRZYGNIECIA. ${error}"
+            exit 1
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git switch -c "$branch"
           git add -- "$path"
           git commit -m "docs: initiate decision from discussion ${DISCUSSION_NUMBER}"
           git push origin "$branch"
-          pr_url=$(gh pr create --draft --label decyzja --title "Decyzja z dyskusji #${DISCUSSION_NUMBER}" --body "Robocza karta utworzona z ${DISCUSSION_URL}. Uzupełnij rozstrzygnięcie, uzasadnienie, relacje i status przed scaleniem.")
+          pr_url=$(gh pr create --draft --label decyzja --title "Decyzja z dyskusji #${DISCUSSION_NUMBER}" --body "Karta utworzona z formularza rozstrzygnięcia w ${DISCUSSION_URL}. Sprawdź treść, relacje między decyzjami oraz — gdy formularz wskazuje zmianę regulaminu — dołącz zmianę DOCX przed scaleniem.")
           sed -i "s|pr_url: \"\"|pr_url: ${pr_url}|" "$path"
           git add -- "$path"
           git commit -m "docs: link decision draft pull request"

@@ -21,6 +21,7 @@ Publiczne repozytorium prac nad **Regulaminem powoływania reprezentacji Polski 
 - [Informacja o zatwierdzonych wydaniach](wydania/README.md)
 - [Kalkulator punktów SPWS](https://fencer4life.github.io/spws-automated-ranklist/kalkulator-punktow.html?lang=pl)
 - [Zasady prowadzenia Rejestru Decyzji](ZASADY_REJESTRU.md)
+- [Przewodnik: jak pracujemy nad regulaminem](przewodnik.html)
 - [Zasady współpracy](CONTRIBUTING.md)
 
 ## Role SPWS i PZSz
@@ -60,19 +61,19 @@ Automatyczne kopie DOCX, pliki blokady Worda, wynik `_site/` oraz środowisko `.
 
 ## Jak współpracować
 
-Zmianę rozpoczyna dyskusja opisująca problem, kontekst i możliwe rozwiązania. Po zakwalifikowaniu jej jako decyzji regulaminowej komisja nadaje trwały numer `DR-NNN`. Treść, karta decyzji, testy i dokument Word są przeglądane w Pull Requeście.
+Zmianę rozpoczyna dyskusja ze wskazanym Koordynatorem dyskusji i opisem problemu. Po uzgodnieniu wyniku koordynator publikuje formularz rozstrzygnięcia. Automatyzacja waliduje formularz, nadaje trwały numer `DR-NNN` i tworzy roboczy Pull Request. Karta decyzji oraz — jeżeli decyzja tego wymaga — zmiana dokumentu Word są przeglądane razem.
 
 Skrócony przebieg:
 
 1. zgłoszenie problemu w GitHub Discussions;
-2. kwalifikacja i nadanie numeru DR;
-3. przygotowanie karty decyzji i proponowanego brzmienia regulaminu;
-4. dyskusja nad wariantami i konsekwencjami;
-5. Pull Request z treścią, DOCX i testami;
-6. zatwierdzenie albo odrzucenie decyzji;
-7. ocena skutków po zakończeniu sezonu.
+2. dyskusja komisji nad wariantami i konsekwencjami;
+3. formularz rozstrzygnięcia opublikowany przez koordynatora;
+4. automatyczne przygotowanie karty decyzji i draft Pull Requestu;
+5. wprowadzenie zmiany DOCX przez Redaktora regulaminu, jeżeli jest wymagana;
+6. przegląd i scalenie dokumentacji oraz treści;
+7. publikacja i ocena skutków po zakończeniu sezonu.
 
-Pełny proces opisują [Zasady prowadzenia Rejestru Decyzji](ZASADY_REJESTRU.md), a instrukcję przygotowania zmian zawiera [CONTRIBUTING.md](CONTRIBUTING.md).
+Pełny proces opisuje [przewodnik dla komisji](przewodnik.html), reguły dokumentowania zawierają [Zasady prowadzenia Rejestru Decyzji](ZASADY_REJESTRU.md), a instrukcję techniczną przygotowania zmian — [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Praca z dokumentem Word
 

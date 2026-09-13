@@ -1,43 +1,54 @@
-name: Propozycja decyzji regulaminowej
-description: Zgłoszenie problemu, wariantów i proponowanego rozstrzygnięcia.
-title: "[Propozycja decyzji] "
+name: Propozycja zmiany regulaminu
+description: Rozpocznij prostą dyskusję nad problemem dotyczącym regulaminu.
+title: "[Dyskusja] "
 body:
   - type: markdown
     attributes:
       value: |
-        Opisz problem i warianty. Numer DR nadaje komisja dopiero po zakwalifikowaniu propozycji.
+        Wystarczą dwa krótkie pola. Pozostałe informacje możesz dodać teraz albo później w komentarzu.
+
+        [Powrót do publicznej listy dyskusji](https://fencer4life.github.io/Regulamin_Kadry-SPWS/dyskusje/)
+  - type: input
+    id: coordinator
+    attributes:
+      label: Koordynator dyskusji
+      description: Podaj login GitHub lub pseudonim osoby, która będzie porządkowała tę rozmowę.
+      placeholder: "@login"
+    validations:
+      required: true
   - type: textarea
     id: problem
     attributes:
       label: Problem
-      description: Jaki konkretny problem regulaminowy wymaga rozstrzygnięcia?
+      description: Opisz problem krótko i własnymi słowami.
     validations:
       required: true
-  - type: textarea
-    id: context
+  - type: dropdown
+    id: priority
     attributes:
-      label: Kontekst
-      description: Jakie fakty, przepisy lub doświadczenia sezonu mają znaczenie?
-    validations:
-      required: true
-  - type: textarea
-    id: variants
+      label: Priorytet
+      options: [Nie określono, Niski, Średni, Wysoki]
+  - type: dropdown
+    id: area
     attributes:
-      label: Rozważane warianty
-      description: Wymień możliwe rozwiązania wraz z ich skutkami.
-    validations:
-      required: true
+      label: Obszar
+      options: [Nie określono, Ranking, Powołania indywidualne, Drużyna, Zawody, Punktacja, Terminy, Redakcja regulaminu, Inne]
   - type: textarea
-    id: recommendation
+    id: proposal
     attributes:
-      label: Proponowane rozstrzygnięcie
-      description: Podaj proponowane brzmienie albo jednoznaczny kierunek zmiany.
-    validations:
-      required: true
+      label: Proponowane rozwiązanie
+      description: Jeśli masz pomysł, opisz go. To pole można pozostawić puste.
   - type: textarea
-    id: evaluation
+    id: alternatives
     attributes:
-      label: Sposób oceny po sezonie
-      description: Po czym poznamy, że rozwiązanie spełniło oczekiwania?
-    validations:
-      required: true
+      label: Inne rozważane podejścia
+  - type: textarea
+    id: materials
+    attributes:
+      label: Materiały lub przykłady
+      description: Linki, dokumenty lub konkretne sytuacje.
+  - type: input
+    id: related
+    attributes:
+      label: Powiązane decyzje
+      description: Na przykład DR-015. Pozostaw puste, jeśli nie wiesz.

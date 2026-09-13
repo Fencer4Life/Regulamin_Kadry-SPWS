@@ -1,0 +1,41 @@
+from __future__ import annotations
+
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class CommissionGuideTests(unittest.TestCase):
+    def test_decision_cards_and_discussion_form_have_public_return_links(self):
+        decision = (ROOT / "_layouts/decision.html").read_text(encoding="utf-8")
+        discussion_form = (ROOT / ".github/DISCUSSION_TEMPLATE/propozycje-zmian-regulaminu.yml").read_text(encoding="utf-8")
+        self.assertIn("/?strona=1&amp;na_stronie=20", decision)
+        self.assertIn("Powrót do Rejestru Decyzji", decision)
+        self.assertIn("https://fencer4life.github.io/Regulamin_Kadry-SPWS/dyskusje/", discussion_form)
+
+    def test_discussion_form_has_only_two_required_fields(self):
+        text = (ROOT / ".github/DISCUSSION_TEMPLATE/propozycje-zmian-regulaminu.yml").read_text(encoding="utf-8")
+        self.assertEqual(text.count("required: true"), 2)
+        for value in ("Koordynator dyskusji", "Problem", "Priorytet", "Obszar", "Proponowane rozwiązanie", "Powiązane decyzje"):
+            self.assertIn(value, text)
+        self.assertNotIn("Dlaczego warto", text)
+        self.assertNotIn("Czy temat dotyczy obecnego sezonu", text)
+
+    def test_public_guide_explains_roles_sync_and_full_process(self):
+        guide = ROOT / "przewodnik.html"
+        self.assertTrue(guide.is_file())
+        text = guide.read_text(encoding="utf-8")
+        for value in ("Koordynator dyskusji", "Redaktor regulaminu", "co 15 minut", "Rozstrzygnięta", "FORMULARZ-ROZSTRZYGNIECIA", "swimlane", "Tak / Nie?", "DOKUMENTACJA DECYZJI"):
+            self.assertIn(value, text)
+        self.assertNotIn("Redaktor prowadzący", text)
+
+    def test_resolution_template_exists_and_is_linked_from_guide(self):
+        template = ROOT / "szablony/formularz-rozstrzygniecia.md"
+        guide = (ROOT / "przewodnik.html").read_text(encoding="utf-8") if (ROOT / "przewodnik.html").exists() else ""
+        self.assertTrue(template.is_file())
+        self.assertIn("formularz-rozstrzygniecia.md", guide)
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
