@@ -7,15 +7,39 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class CommissionGuideTests(unittest.TestCase):
-    def test_decision_cards_and_prefilled_discussion_form_have_public_return_links(self):
+    def test_decision_cards_and_discussion_form_have_public_return_links(self):
         decision = (ROOT / "_layouts/decision.html").read_text(encoding="utf-8")
         links = "\n".join((ROOT / path).read_text(encoding="utf-8") for path in ("_layouts/default.html", "dyskusje.html", "przewodnik.html"))
         self.assertEqual(decision.count("/?strona=1&amp;na_stronie=20"), 2)
         self.assertEqual(decision.count("Powrót do Rejestru Decyzji"), 2)
-        self.assertEqual(links.count("discussions/new?category=propozycje-zmian-regulaminu&amp;title="), 3)
-        for value in ("%23%23%20Koordynator%20dyskusji", "%23%23%20Problem", "%23%23%23%20Opcjonalnie", "%5B%E2%86%90%20Powr%C3%B3t%20do%20publicznej%20listy%20dyskusji%5D"):
-            self.assertIn(value, links)
-        self.assertFalse((ROOT / ".github/DISCUSSION_TEMPLATE/propozycje-zmian-regulaminu.yml").exists())
+        self.assertEqual(links.count("discussions/new?category=propozycje-zmian-regulaminu\""), 3)
+        self.assertNotIn("&amp;title=", links)
+        self.assertNotIn("&amp;body=", links)
+
+    def test_native_discussion_category_form_uses_supported_schema(self):
+        form = ROOT / ".github/DISCUSSION_TEMPLATE/propozycje-zmian-regulaminu.yml"
+        self.assertTrue(form.is_file())
+        text = form.read_text(encoding="utf-8")
+        top_level = {
+            line.split(":", 1)[0]
+            for line in text.splitlines()
+            if line and not line.startswith((" ", "#")) and ":" in line
+        }
+        self.assertLessEqual(top_level, {"title", "labels", "body"})
+        self.assertNotIn("name", top_level)
+        self.assertNotIn("description", top_level)
+        for value in (
+            "title:",
+            "body:",
+            "id: coordinator",
+            "label: Koordynator dyskusji",
+            "id: problem",
+            "label: Problem",
+            "id: priority",
+            "type: dropdown",
+            "id: area",
+        ):
+            self.assertIn(value, text)
 
     def test_new_discussion_receives_persistent_return_link(self):
         workflow = ROOT / ".github/workflows/welcome-discussion.yml"
