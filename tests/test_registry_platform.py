@@ -107,8 +107,9 @@ class RegistryPlatformTests(unittest.TestCase):
         workflow = ROOT / ".github" / "workflows" / "create-decision.yml"
         self.assertTrue(workflow.is_file())
         text = workflow.read_text(encoding="utf-8")
-        for fragment in ("rozstrzygnięta", "FORMULARZ-ROZSTRZYGNIECIA", "concurrency:", "discussion_url", "author{login}", "--draft", "decyzja"):
+        for fragment in ("rozstrzygnięta", "concurrency:", "discussion_url", "--draft", "decyzja"):
             self.assertIn(fragment, text)
+        self.assertNotIn("FORMULARZ-ROZSTRZYGNIECIA", text)
 
     def test_merged_decision_closes_its_discussion_as_resolved(self):
         workflow = ROOT / ".github" / "workflows" / "resolve-discussion.yml"

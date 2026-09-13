@@ -61,10 +61,10 @@ permalink: /przewodnik/
 <section class="guide-card">
   <h2>Jak zamknięta dyskusja staje się decyzją</h2>
   <ol>
-    <li>Po uzgodnieniu wyniku Koordynator dyskusji kopiuje <a href="{{ '/szablony/formularz-rozstrzygniecia.md' | relative_url }}"><code>formularz-rozstrzygniecia.md</code></a>, wypełnia wynik, treść decyzji, uzasadnienie i odrzucone alternatywy, a następnie publikuje go jako końcowy komentarz. Dane podane przy otwarciu dyskusji automat przenosi do karty DR. Znacznik <code>FORMULARZ-ROZSTRZYGNIECIA</code> pozwala odnaleźć właściwe podsumowanie.</li>
-    <li>Koordynator dodaje etykietę <b>rozstrzygnięta</b>. Automatyzacja sprawdza pola obowiązkowe; przy brakach nie tworzy karty i wskazuje, co uzupełnić.</li>
-    <li>Z kompletnego formularza powstaje kolejna karta DR oraz roboczy pull request. DR zachowuje wynik, treść, uzasadnienie, alternatywy i powiązanie z dyskusją.</li>
-    <li>Jeżeli formularz wskazuje „Zmiana regulaminu: tak”, Redaktor regulaminu dołącza odpowiednią zmianę DOCX do tego samego pull requestu. Dzięki temu nie publikujemy decyzji bez wymaganej zmiany regulaminu.</li>
+    <li>Po uzgodnieniu wyniku Koordynator dodaje etykietę <b>rozstrzygnięta</b>. Nie trzeba niczego przepisywać do komentarza.</li>
+    <li>Automatyzacja tworzy kolejną kartę DR oraz roboczy pull request. Z dyskusji przenosi problem, koordynatora, priorytet, obszar, materiały, powiązania, proponowane rozwiązanie jako treść decyzji oraz rozważane podejścia jako odrzucone alternatywy.</li>
+    <li>W roboczej karcie osoba przygotowująca decyzję dopisuje <b>Uzasadnienie</b> i wybiera <b>Tak</b> albo <b>Nie</b> przy pytaniu o zmianę Regulaminu.</li>
+    <li>Jeżeli zostanie wybrane „Tak”, Redaktor regulaminu dołącza odpowiednią zmianę DOCX do tego samego pull requestu. Dzięki temu nie publikujemy decyzji bez wymaganej zmiany regulaminu.</li>
     <li>Komisja przegląda kartę i dokument. Po akceptacji i scaleniu publikowane są DR oraz regulamin, a dyskusja jest technicznie zamykana jako <b>RESOLVED</b>. Dla użytkownika pozostaje <b>Rozstrzygnięta</b>.</li>
   </ol>
 </section>

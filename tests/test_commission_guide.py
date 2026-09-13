@@ -58,7 +58,7 @@ class CommissionGuideTests(unittest.TestCase):
         guide = ROOT / "przewodnik.html"
         self.assertTrue(guide.is_file())
         text = guide.read_text(encoding="utf-8") + (ROOT / "_includes/process-diagrams.html").read_text(encoding="utf-8")
-        for value in ("Koordynator dyskusji", "Redaktor regulaminu", "co 15 minut", "Rozstrzygnięta", "FORMULARZ-ROZSTRZYGNIECIA", "swimlane", "Tak / Nie?", "DOKUMENTACJA<br>DECYZJI"):
+        for value in ("Koordynator dyskusji", "Redaktor regulaminu", "co 15 minut", "Rozstrzygnięta", "Uzasadnienie", "swimlane", "Tak / Nie?", "DOKUMENTACJA<br>DECYZJI"):
             self.assertIn(value, text)
         self.assertNotIn("Redaktor prowadzący", text)
 
@@ -78,11 +78,12 @@ class CommissionGuideTests(unittest.TestCase):
         ):
             self.assertIn(value, text)
 
-    def test_resolution_template_exists_and_is_linked_from_guide(self):
+    def test_guide_uses_direct_card_creation_without_resolution_template(self):
         template = ROOT / "szablony/formularz-rozstrzygniecia.md"
         guide = (ROOT / "przewodnik.html").read_text(encoding="utf-8") if (ROOT / "przewodnik.html").exists() else ""
-        self.assertTrue(template.is_file())
-        self.assertIn("formularz-rozstrzygniecia.md", guide)
+        self.assertFalse(template.exists())
+        self.assertNotIn("formularz-rozstrzygniecia.md", guide)
+        self.assertIn("Nie trzeba niczego przepisywać do komentarza.", guide)
 
 
 if __name__ == "__main__":
