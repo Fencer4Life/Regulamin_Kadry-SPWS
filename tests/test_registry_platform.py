@@ -14,7 +14,6 @@ REQUIRED_PLATFORM_FILES = (
     "_includes/decision-card.html",
     "assets/rejestr.css",
     "assets/rejestr.js",
-    ".github/DISCUSSION_TEMPLATE/propozycje-zmian-regulaminu.yml",
     ".github/workflows/validate.yml",
     ".github/workflows/pages.yml",
 )
