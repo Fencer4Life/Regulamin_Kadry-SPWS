@@ -5,7 +5,7 @@ version = "0.1"
 status = "projekt do konsultacji"
 project_date = "[data]"
 subject = "Prototyp struktury i formatowania — sezon 2026/2027"
-comments = "Projekt do konsultacji. Zatwierdzono i wprowadzono § 1–§ 6 oraz załącznik nr 1. Cel Regulaminu w § 2 ust. 1 podlega zmianie wyłącznie po akceptacji autora projektu."
+comments = "Projekt do konsultacji. Zatwierdzono i wprowadzono § 1–§ 6 oraz załącznik nr 1. Cel Regulaminu w § 3 ust. 1 podlega zmianie wyłącznie po akceptacji autora projektu."
 outline_intro = "Poniższy układ odzwierciedla strukturę dokumentu. Treść normatywna zostanie dodana po zatwierdzeniu kolejnych decyzji."
 toc_note = "W Wordzie wybierz spis treści i polecenie „Aktualizuj tabelę”, jeżeli nie odświeży się automatycznie."
 history_scope = "Pierwszy prototyp struktury i formatowania"
@@ -18,16 +18,6 @@ prototype_note = "Dokument służy wyłącznie do oceny struktury i formatowania
 ### [section:przedmiot] Przedmiot regulaminu
 
 1. Regulamin określa zasady kwalifikowania i powoływania zawodników do reprezentacji Polski weteranów w szermierce na indywidualne i drużynowe zawody międzynarodowe rangi mistrzowskiej, w których liczba zawodników reprezentujących państwo podlega ograniczeniom określonym przez organizatora zawodów.
-
-### [section:cel] Cel regulaminu
-
-1. Celem Regulaminu jest wyłonienie możliwie najsilniejszej reprezentacji Polski weteranów w szermierce. Równe traktowanie zawodników oraz przejrzystość zasad stanowią podstawę przyjętego procesu wyłaniania reprezentacji.
-
-2. Proces wyłaniania reprezentacji opiera się na następujących zasadach:
-
-1) **szerokiego wyboru zawodów** – w rankingu indywidualnym uwzględnia się wyniki uzyskane w zawodach ujętych w kalendarzach SPWS, PZSz, EVF i FIE, na zasadach określonych w § 5;
-
-2) **powołania do startów indywidualnych wyłącznie na podstawie rankingu** – do startu indywidualnego powołuje się czterech najwyżej sklasyfikowanych zawodników w rankingu właściwym dla danej broni, płci i kategorii wiekowej. Zawodnik z zerowym dorobkiem punktowym nie może zostać powołany do reprezentacji. Wyjątek stanowi powołanie uzupełniające, o którym mowa w § 4 ust. 5.
 
 ### [section:definicje] Definicje
 
@@ -50,6 +40,16 @@ Ilekroć w Regulaminie jest mowa o:
 8. **limitowanych zawodach międzynarodowych** – należy przez to rozumieć indywidualne lub drużynowe zawody międzynarodowe rangi mistrzowskiej, w których liczba zawodników reprezentujących dane państwo jest ograniczona przepisami organizatora zawodów;
 
 9. **powołaniu uzupełniającym** – należy przez to rozumieć wyjątkowe powołanie do startu drużynowego zawodnika nieposiadającego dodatniego dorobku punktowego, dokonywane wyłącznie w celu uzupełnienia braków uniemożliwiających wystawienie kompletnej i zgodnej z przepisami drużyny.
+
+### [section:cel] Cel i zasady wyłaniania reprezentacji
+
+1. Celem Regulaminu jest wyłonienie możliwie najsilniejszej reprezentacji Polski weteranów w szermierce. Równe traktowanie zawodników oraz przejrzystość zasad stanowią podstawę przyjętego procesu wyłaniania reprezentacji.
+
+2. Proces wyłaniania reprezentacji opiera się na następujących zasadach:
+
+1) **szerokiego wyboru zawodów** – w rankingu indywidualnym uwzględnia się wyniki uzyskane w zawodach ujętych w kalendarzach SPWS, PZSz, EVF i FIE, na zasadach określonych w § 5;
+
+2) **powołania do startów indywidualnych wyłącznie na podstawie rankingu** – do startu indywidualnego powołuje się czterech najwyżej sklasyfikowanych zawodników w rankingu właściwym dla danej broni, płci i kategorii wiekowej. Zawodnik z zerowym dorobkiem punktowym nie może zostać powołany do reprezentacji. Wyjątek stanowi powołanie uzupełniające, o którym mowa w § 4 ust. 5.
 
 ## [chapter:ranking-indywidualny] Ranking indywidualny
 <!-- scope: wyniki, punktacja, klasyfikacja i publikacja -->

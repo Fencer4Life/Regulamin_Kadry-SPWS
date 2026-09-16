@@ -6,7 +6,7 @@ status: przyjęta
 data_inicjacji: 2026-09-10
 data_decyzji: 2026-09-11
 sezon: 2026/2027
-dotyczy: § 2 ust. 2 pkt 2 oraz § 4 ust. 4–5
+dotyczy: § 3 ust. 2 pkt 2 oraz § 4 ust. 4–5
 decydenci: Komisja regulaminowa SPWS — na etapie inicjalnym autor projektu
 discussion_url: ""
 pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/4

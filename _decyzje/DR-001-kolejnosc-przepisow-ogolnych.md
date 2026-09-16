@@ -8,7 +8,7 @@ data_decyzji: 2026-09-12
 sezon: 2026/2027
 dotyczy: Rozdział I
 decydenci: Komisja regulaminowa SPWS — na etapie inicjalnym autor projektu
-discussion_url: ""
+discussion_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/19
 pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/4
 stan_obowiązywania: obowiązuje
 zmienia: []
@@ -84,3 +84,4 @@ Nie dotyczy bezpośrednio skutków sportowych. Ewentualne uwagi interpretacyjne 
 ## Historia zmian
 
 - 2026-09-12 — decyzja przyjęta i wskazana jako pierwszy rekord Rejestru Decyzji.
+- 2026-09-16 — wdrożono zmianę kolejności paragrafów w PR #22 na podstawie dyskusji #19.

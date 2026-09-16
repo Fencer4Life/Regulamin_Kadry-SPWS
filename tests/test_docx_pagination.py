@@ -6,7 +6,6 @@ from pathlib import Path
 
 from docx import Document
 from docx.oxml.ns import qn
-from docx.shared import Pt
 
 
 DEFAULT_DOCUMENT = Path(__file__).resolve().parents[1] / "regulamin" / (
@@ -43,7 +42,7 @@ class PaginationTests(unittest.TestCase):
             if paragraph.text.startswith("ROZDZIAŁ "):
                 section_seen_in_chapter = False
             elif paragraph.text.startswith("§ "):
-                if section_seen_in_chapter and paragraph.text != "§ 2. Cel regulaminu":
+                if section_seen_in_chapter:
                     later_sections.append(paragraph)
                 section_seen_in_chapter = True
 
@@ -56,25 +55,16 @@ class PaginationTests(unittest.TestCase):
                     f"{section.text} nie ma wymuszonego początku nowej strony",
                 )
 
-    def test_sections_1_and_2_form_one_page_block_with_24_point_gap(self):
+    def test_definitions_and_purpose_each_start_on_a_new_page(self):
         paragraphs = self.document.paragraphs
-        section_1_index = next(i for i, p in enumerate(paragraphs) if p.text == "§ 1. Przedmiot regulaminu")
-        section_2_index = next(i for i, p in enumerate(paragraphs) if p.text == "§ 2. Cel regulaminu")
-        section_3_index = next(i for i, p in enumerate(paragraphs) if p.text == "§ 3. Definicje")
-
-        section_2 = paragraphs[section_2_index]
-        self.assertIs(section_2.paragraph_format.page_break_before, False)
-        self.assertEqual(section_2.paragraph_format.space_before, Pt(24))
-
-        for paragraph in paragraphs[section_1_index : section_3_index - 1]:
-            with self.subTest(paragraph=paragraph.text):
-                self.assertIs(
-                    paragraph.paragraph_format.keep_with_next,
-                    True,
-                    "Blok § 1–§ 2 może zostać rozdzielony pomiędzy strony",
-                )
-
-        self.assertIs(paragraphs[section_3_index].paragraph_format.page_break_before, True)
+        headings = (
+            "§ 2. Definicje",
+            "§ 3. Cel i zasady wyłaniania reprezentacji",
+        )
+        for heading in headings:
+            paragraph = next(p for p in paragraphs if p.text == heading)
+            with self.subTest(heading=heading):
+                self.assertIs(paragraph.paragraph_format.page_break_before, True)
 
     def test_each_table_is_small_enough_to_fit_on_one_page(self):
         for index, table in enumerate(self.document.tables, start=1):

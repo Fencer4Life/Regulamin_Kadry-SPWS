@@ -456,19 +456,6 @@ def _add_chapters(document: Document, model: RegulationDocument) -> None:
         if chapter_index >= 2:
             document.add_page_break()
 
-    paragraphs = document.paragraphs
-    section_1 = next(p for p in paragraphs if p.text == "§ 1. Przedmiot regulaminu")
-    section_2 = next(p for p in paragraphs if p.text == "§ 2. Cel regulaminu")
-    section_3 = next(p for p in paragraphs if p.text == "§ 3. Definicje")
-    section_2.paragraph_format.page_break_before = False
-    section_2.paragraph_format.space_before = Pt(24)
-    section_1_index = paragraphs.index(section_1)
-    section_3_index = paragraphs.index(section_3)
-    for paragraph in paragraphs[section_1_index : section_3_index - 1]:
-        paragraph.paragraph_format.keep_with_next = True
-    paragraphs[section_3_index - 1].paragraph_format.keep_with_next = False
-
-
 def _is_power_of_two(value: int) -> bool:
     return value > 0 and (value & (value - 1)) == 0
 

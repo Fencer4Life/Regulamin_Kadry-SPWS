@@ -17,8 +17,8 @@ APPROVED_PURPOSE = (
     "przyjętego procesu wyłaniania reprezentacji."
 )
 
-APPROVED_SECTION_2 = [
-    "§ 2. Cel regulaminu",
+APPROVED_SECTION_3 = [
+    "§ 3. Cel i zasady wyłaniania reprezentacji",
     APPROVED_PURPOSE,
     "2. Proces wyłaniania reprezentacji opiera się na następujących zasadach:",
     "1) szerokiego wyboru zawodów – w rankingu indywidualnym uwzględnia się wyniki uzyskane w "
@@ -30,8 +30,8 @@ APPROVED_SECTION_2 = [
     "w § 4 ust. 5.",
 ]
 
-APPROVED_SECTION_3 = [
-    "§ 3. Definicje",
+APPROVED_SECTION_2 = [
+    "§ 2. Definicje",
     "Ilekroć w Regulaminie jest mowa o:",
     "1. SPWS – należy przez to rozumieć Stowarzyszenie Polskich Weteranów Szermierki;",
     "2. PZSz – należy przez to rozumieć Polski Związek Szermierczy;",
@@ -78,11 +78,25 @@ class ApprovedContentTests(unittest.TestCase):
         matches = [p for p in self.document.paragraphs if p.text == APPROVED_PURPOSE]
         self.assertEqual(len(matches), 1, "Cel Regulaminu został zmieniony bez aktualizacji testu akceptacyjnego")
 
-    def test_section_2_matches_approved_wording(self):
-        self.assertEqual(section(self.document, "§ 2. Cel regulaminu", "§ 3. Definicje"), APPROVED_SECTION_2)
+    def test_section_2_defines_all_abbreviations_and_terms(self):
+        self.assertEqual(
+            section(
+                self.document,
+                "§ 2. Definicje",
+                "§ 3. Cel i zasady wyłaniania reprezentacji",
+            ),
+            APPROVED_SECTION_2,
+        )
 
-    def test_section_3_defines_all_abbreviations_and_terms(self):
-        self.assertEqual(section(self.document, "§ 3. Definicje", "ROZDZIAŁ II"), APPROVED_SECTION_3)
+    def test_section_3_matches_approved_purpose_and_principles(self):
+        self.assertEqual(
+            section(
+                self.document,
+                "§ 3. Cel i zasady wyłaniania reprezentacji",
+                "ROZDZIAŁ II",
+            ),
+            APPROVED_SECTION_3,
+        )
 
 
 if __name__ == "__main__":
