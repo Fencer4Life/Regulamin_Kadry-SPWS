@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Przekazanie pracy — Regulamin Kadry SPWS</title>
+  <style>
+    body{margin:0;background:#e8ecf3;color:#101722;font:17px/1.6 system-ui,sans-serif}
+    main{max-width:980px;margin:auto;padding:48px 24px 88px}
+    h1,h2{font-family:Georgia,serif;line-height:1.15} h1{font-size:46px}
+    h2{margin-top:38px}.tag{font:700 13px ui-monospace,monospace;letter-spacing:.1em;color:#12467e}
+    .box{background:#fff;border-left:5px solid #145a96;border-radius:10px;padding:18px 22px;margin:22px 0}
+    .warning{border-left-color:#c98516;background:#fff8e8}.ok{border-left-color:#268451;background:#edf9f1}
+    code{background:#dce5ef;padding:.12em .35em;border-radius:4px} a{color:#075da8}
+    li{margin:.45em 0} table{width:100%;border-collapse:collapse;background:#fff} th,td{border:1px solid #c7d0dc;padding:10px;text-align:left;vertical-align:top} th{background:#dce5ef}
+    pre{white-space:pre-wrap;background:#182333;color:#eef4fb;border-radius:9px;padding:18px;overflow:auto}
+  </style>
+</head>
+<body><main>
+  <p class="tag">REGULAMIN KADRY SPWS · HANDOVER · 16.09.2026</p>
+  <h1>Przekazanie pracy do następnej sesji</h1>
+
+  <div class="box ok"><b>Repozytorium:</b> <a href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS">Fencer4Life/Regulamin_Kadry-SPWS</a><br>
+  <b>Strona publiczna:</b> <a href="https://fencer4life.github.io/Regulamin_Kadry-SPWS/?strona=1&amp;na_stronie=20">Rejestr Decyzji</a></div>
+
+  <h2>Stan na zakończenie sesji</h2>
+  <ul>
+    <li>PR #20 wdrożył bezpośrednie tworzenie roboczej karty po dodaniu etykiety <code>rozstrzygnięta</code>. Nie ma już końcowego formularza komentarza.</li>
+    <li>PR #21 dodał obsługę częściowo wykonanej gałęzi, gdy karta powstała, lecz Actions nie zdołał wcześniej utworzyć PR.</li>
+    <li>W ustawieniach repozytorium włączono <code>default_workflow_permissions: write</code> oraz <code>can_approve_pull_request_reviews: true</code>, ponieważ bez tego Actions nie może utworzyć PR.</li>
+    <li>Dyskusja #19 została ponownie oznaczona jako <code>rozstrzygnięta</code>. Automat zakończył się sukcesem i utworzył draft PR #22 z kartą <code>DR-017</code>.</li>
+    <li>PR #22 jest roboczy. Karta wymaga wpisania uzasadnienia oraz zaznaczenia <code>Tak</code> albo <code>Nie</code> przy pytaniu o zmianę Regulaminu.</li>
+  </ul>
+
+  <h2>Najważniejsze linki</h2>
+  <table><tr><th>Element</th><th>Link</th></tr>
+    <tr><td>Draft DR-017</td><td><a href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/22">PR #22</a></td></tr>
+    <tr><td>Dyskusja źródłowa</td><td><a href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/19">Discussion #19</a></td></tr>
+    <tr><td>Rejestr decyzji</td><td><a href="https://html-preview.github.io/?url=https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/index.html">widok HTML</a></td></tr>
+    <tr><td>Przewodnik komisji</td><td><a href="https://html-preview.github.io/?url=https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/przewodnik.html">przewodnik</a></td></tr>
+  </table>
+
+  <h2>Jak działa obecny przepływ</h2>
+  <ol>
+    <li>Członek komisji otwiera dyskusję w kategorii <code>propozycje-zmian-regulaminu</code>, korzystając z natywnego formularza GitHub.</li>
+    <li>Po merytorycznym uzgodnieniu Koordynator dodaje etykietę <code>rozstrzygnięta</code>. To oznacza przyjęcie rozwiązania; nie wypełnia się osobnego komentarza.</li>
+    <li>Actions tworzy kartę <code>DR-NNN</code> z danymi z formularza: problemem, koordynatorem, proponowanym rozwiązaniem jako decyzją oraz innymi podejściami jako odrzuconymi alternatywami.</li>
+    <li>W draft PR człowiek uzupełnia <b>Uzasadnienie</b> i zaznacza jedną z dwóch pozycji przy zmianie Regulaminu. Jeżeli wybierze „Tak”, dołącza odpowiednią zmianę DOCX.</li>
+    <li>Po przeglądzie komisja scala PR. Dopiero wtedy karta trafia do <code>main</code> i staje się widoczna w GitHub Pages.</li>
+  </ol>
+
+  <div class="box warning"><b>Ważne ograniczenie:</b> draft PR nie jest publikowany w rejestrze. To zamierzone: karta musi zostać uzupełniona i zaakceptowana przed publikacją. Jeżeli etykieta była już użyta przed naprawą automatu, należy ją zdjąć i dodać ponownie.</div>
+
+  <h2>Zadania na następną sesję</h2>
+  <ol>
+    <li>Otworzyć PR #22 i uzupełnić DR-017: uzasadnienie oraz wybór „Tak” / „Nie”.</li>
+    <li>Sprawdzić, czy treść decyzji i odrzucone alternatywy odpowiadają rzeczywistemu rozstrzygnięciu komisji.</li>
+    <li>Po akceptacji scalić PR #22 i sprawdzić, czy DR-017 pojawi się na stronie publicznej.</li>
+    <li>Przejrzeć README: opis przebiegu nadal zawiera starszą wzmiankę o formularzu końcowego komentarza i może wymagać ujednolicenia.</li>
+    <li>Przed kolejnymi zmianami regulaminu utrzymywać testy TDD oraz obserwować CI i Release.</li>
+  </ol>
+
+  <h2>Gotowy prompt do nowej sesji</h2>
+  <pre>Kontynuujemy pracę nad publicznym repozytorium Regulaminu Kadry SPWS:
+https://github.com/Fencer4Life/Regulamin_Kadry-SPWS
+
+Przeczytaj najpierw handover:
+https://html-preview.github.io/?url=https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/plany/2026-09-16-handover-nowa-sesja.html
+
+Stan początkowy:
+- draft PR #22 zawiera kartę DR-017 utworzoną z dyskusji #19;
+- karta wymaga uzupełnienia uzasadnienia i zaznaczenia Tak/Nie przy zmianie Regulaminu;
+- po akceptacji PR #22 należy go scalić i sprawdzić publikację DR-017;
+- nie przywracaj formularza końcowego komentarza — dane mają być mapowane automatycznie z formularza nowej dyskusji;
+- zachowaj istniejące diagramy, testy i workflow CI/Release.
+
+Zacznij od sprawdzenia stanu PR #22 i repozytorium. Nie zmieniaj celu regulaminu bez mojej zgody. Pracuj punkt po punkcie, po polsku, z testami TDD i konkretnymi linkami do wyników.</pre>
+</main></body></html>
