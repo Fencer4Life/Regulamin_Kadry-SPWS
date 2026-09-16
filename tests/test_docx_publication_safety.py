@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import unittest
 from pathlib import Path
 from zipfile import ZipFile
@@ -8,9 +9,10 @@ from lxml import etree
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCUMENT = ROOT / "regulamin" / (
+DEFAULT_DOCUMENT = ROOT / "regulamin" / (
     "Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx"
 )
+DOCUMENT = Path(os.environ.get("REGULAMIN_DOCX_PATH", DEFAULT_DOCUMENT))
 ALLOWED_EDITOR = "Komisja regulaminowa SPWS"
 
 CORE_NS = {
