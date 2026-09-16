@@ -29,6 +29,14 @@ Zmiana normatywna powinna obejmować łącznie:
 
 Wspólna redakcja Word odbywa się przez OneDrive. Do Git trafia uzgodniona migawka, nie każda automatyczna wersja pliku.
 
+### Planowane przejście na Markdown → DOCX
+
+Po wdrożeniu automatu źródłem kanonicznym będzie kontrolowany Markdown. Pull Request treściowy będzie zawierał Markdown i wygenerowany z niego DOCX. CI utworzy dodatkowy kandydacki DOCX, uruchomi na nim testy oraz porównanie parytetu, a wynik udostępni jako artefakt.
+
+Recenzja dokumentu ma miejsce w Pull Requeście: Redaktor pobiera kandydat z Actions lub otwiera DOCX z PR w Microsoft Word, następnie wybiera `Approve` albo `Request changes`. Dopiero po `Merge` Release publikuje zaakceptowaną wersję. Release nie jest bramką do odrzucania pliku, ponieważ po scaleniu zmiana już znajduje się w `main`.
+
+Po dodaniu etykiety `redakcja-bez-zmiany-sensu` automat utworzy draft PR tylko dla jednoznacznej, kontrolowanej zamiany: wskazany fragment Markdown musi wystąpić dokładnie raz. Nieudana walidacja, build albo test nie może zastąpić DOCX w `main`.
+
 ## Kontrola przed wysłaniem
 
 ```bash

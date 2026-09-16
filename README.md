@@ -22,6 +22,7 @@ Publiczne repozytorium prac nad **Regulaminem powoływania reprezentacji Polski 
 - [Kalkulator punktów SPWS](https://fencer4life.github.io/spws-automated-ranklist/kalkulator-punktow.html?lang=pl)
 - [Zasady prowadzenia Rejestru Decyzji](https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/ZASADY_REJESTRU.md)
 - [Przewodnik: jak pracujemy nad regulaminem](https://html-preview.github.io/?url=https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/przewodnik.html)
+- [Projekt automatu Markdown → DOCX](https://html-preview.github.io/?url=https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/plany/2026-09-16-wdrozenie-automatu-md-docx-design.html)
 - [Zasady współpracy](https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/CONTRIBUTING.md)
 
 ## Role SPWS i PZSz
@@ -30,11 +31,11 @@ Publiczne repozytorium prac nad **Regulaminem powoływania reprezentacji Polski 
 
 **Polski Związek Szermierczy (PZSz)** jest podmiotem, któremu projekt ma zostać przedstawiony do formalnego zatwierdzenia przez właściwy organ. Samo opublikowanie projektu przez SPWS ani połączenie zmian z gałęzią `main` nie oznacza zatwierdzenia regulaminu przez PZSz.
 
-## Źródło aktualnej treści
+## Źródło aktualnej treści i plan automatyzacji
 
 Wspólna redakcja treści odbywa się w programie Microsoft Word z wykorzystaniem OneDrive. Łącza i uprawnienia do dokumentu współdzielonego są przekazywane członkom zespołu poza publicznym repozytorium.
 
-Plik w katalogu `regulamin/` jest zaakceptowaną migawką aktualnej wersji roboczej. GitHub przechowuje historię uzgodnionych migawek, kod i testy. Po zmianie dokonanej w Wordzie osoba przygotowująca Pull Request:
+Do czasu uruchomienia opisanego niżej automatu plik DOCX w katalogu `regulamin/` jest zaakceptowaną migawką aktualnej wersji roboczej. GitHub przechowuje historię uzgodnionych migawek, kod i testy. Po zmianie dokonanej w Wordzie osoba przygotowująca Pull Request:
 
 1. przyjmuje albo świadomie pozostawia śledzone zmiany;
 2. usuwa komentarze i metadane nieprzeznaczone do publikacji;
@@ -44,11 +45,19 @@ Plik w katalogu `regulamin/` jest zaakceptowaną migawką aktualnej wersji roboc
 
 Plik DOCX jest binarny i GitHub nie pokazuje jego zmian równie czytelnie jak zmian tekstowych. Dlatego każde rozstrzygnięcie dotyczące treści powinno mieć odpowiadającą mu kartę w Rejestrze Decyzji.
 
+### Planowana ścieżka Markdown → DOCX
+
+Po wdrożeniu i opublikowaniu automatu kontrolowany Markdown stanie się źródłem kanonicznym aktualnej treści, a generator utworzy DOCX od początku. Każdy Pull Request zmieniający treść będzie zawierał razem Markdown oraz rzeczywiście wygenerowany DOCX. CI utworzy drugi, niezależny kandydat, uruchomi na nim testy treści, struktury i bezpieczeństwa, porówna go z DOCX z PR oraz udostępni plik jako artefakt runu.
+
+**Akceptacja następuje przed Release:** Redaktor pobiera artefakt `regulamin-candidate.docx` z runu CI albo otwiera DOCX dołączony do PR w Microsoft Word. Następnie wybiera `Approve` i scala PR albo wybiera `Request changes`/zamyka PR. Dopóki PR nie zostanie scalony, `main` i jego DOCX nie zmieniają się. Release uruchamia się dopiero po scaleniu i publikuje już zaakceptowaną wersję; nie jest osobnym miejscem akceptacji albo odrzucenia dokumentu.
+
+Szybka ścieżka `redakcja-bez-zmiany-sensu` będzie tworzyła draft PR automatycznie po dodaniu etykiety przez Koordynatora. Dyskusja będzie zawierać dokładny fragment Markdown do zastąpienia i nowe brzmienie. Automat odrzuci niejednoznaczną zamianę, a nieudany build nie zmieni żadnego DOCX na `main`.
+
 ## Struktura repozytorium
 
 | Ścieżka | Przeznaczenie |
 |---|---|
-| `regulamin/` | aktualna uzgodniona migawka projektu DOCX |
+| `regulamin/` | aktualna uzgodniona migawka projektu DOCX; po wdrożeniu także kanoniczny Markdown |
 | `wydania/` | formalnie zatwierdzone, niezmienne wersje sezonowe |
 | `_decyzje/` | źródłowe karty decyzji w Markdown |
 | `zalaczniki/` | publiczne załączniki i materiały stanowiące część projektu |

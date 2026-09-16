@@ -65,6 +65,21 @@
   </section>
 
   <section>
+    <h2>Dwie ścieżki pracy komisji</h2>
+    <p>Obie ścieżki kończą się tym samym bezpiecznym punktem: jednym PR zawierającym kartę decyzji, Markdown, wygenerowany DOCX i zielone bramki CI. Różnią się wyłącznie zakresem uzasadnienia potrzebnego przed przygotowaniem PR.</p>
+    <table><thead><tr><th>Element</th><th>Pełna ścieżka decyzji</th><th>Szybka ścieżka redakcyjna</th></tr></thead><tbody>
+      <tr><td>Wyzwalacz</td><td>Koordynator dodaje etykietę <code>rozstrzygnięta</code> po dyskusji komisji.</td><td>Koordynator dodaje etykietę <code>redakcja-bez-zmiany-sensu</code> dla oczywistej korekty bez zmiany sensu.</td></tr>
+      <tr><td>Dane wejściowe</td><td>Problem, proponowane rozwiązanie, rozważane warianty oraz materiały z dyskusji.</td><td>Problem oraz dokładny fragment Markdown do zastąpienia i jego nowe brzmienie.</td></tr>
+      <tr><td>Karta decyzji</td><td>Automat mapuje dane dyskusji; Redaktor uzupełnia uzasadnienie i wybiera wymagany skutek.</td><td>Decyzja i jej skutek pozostają widoczne i identyfikowalne; można pominąć rozbudowane uzasadnienie oraz warianty.</td></tr>
+      <tr><td>Przygotowanie treści</td><td>PR zawiera zmianę Markdown wynikającą z przyjętej decyzji oraz DOCX wygenerowany z tej zmiany.</td><td>Automat stosuje wyłącznie jednoznaczną zamianę; brak lub wielokrotne wystąpienie fragmentu zatrzymuje proces.</td></tr>
+      <tr><td>Recenzja człowieka</td><td>Redaktor sprawdza decyzję, Markdown i DOCX w Wordzie.</td><td>Redaktor sprawdza proponowaną korektę oraz DOCX w Wordzie; może poprawić PR przed recenzją.</td></tr>
+      <tr><td>Finał</td><td><b>Approve</b> → <b>Merge</b> → Release publikuje uprzednio zaakceptowaną wersję.</td><td><b>Approve</b> → <b>Merge</b> → Release publikuje uprzednio zaakceptowaną wersję.</td></tr>
+      <tr><td>Odrzucenie</td><td><b>Request changes</b> albo zamknięcie PR: <code>main</code> i DOCX pozostają bez zmian.</td><td><b>Request changes</b> albo zamknięcie PR: <code>main</code> i DOCX pozostają bez zmian.</td></tr>
+    </tbody></table>
+    <div class="box warn"><b>Granica szybkiej ścieżki:</b> gdy korekta może zmienić znaczenie przepisu, nie używa się etykiety redakcyjnej. Sprawa przechodzi pełną ścieżką decyzji.</div>
+  </section>
+
+  <section>
     <h2>Uprawnienia, pętle i role</h2>
     <table><thead><tr><th>Element</th><th>Decyzja</th></tr></thead><tbody>
       <tr><td>Wyzwalacz automatu</td><td>Tylko zdarzenie <code>discussion:labeled</code> i dokładnie etykieta szybkiej ścieżki.</td></tr>
@@ -73,6 +88,12 @@
       <tr><td>Koordynator</td><td>Dodaje etykietę. Może być równocześnie Redaktorem.</td></tr>
       <tr><td>Redaktor</td><td>Otwiera przygotowany PR, opcjonalnie koryguje propozycję, klika <b>Approve</b>, a następnie <b>Merge</b>.</td></tr>
     </tbody></table>
+  </section>
+
+  <section>
+    <h2>Gdzie zapada decyzja o DOCX</h2>
+    <div class="box ok"><b>PR jest bramką człowieka.</b> CI udostępnia artefakt <code>regulamin-candidate.docx</code> i DOCX śledzony w PR. Redaktor otwiera plik w Wordzie, następnie wybiera <b>Approve</b> i <b>Merge</b>, albo <b>Request changes</b>/zamyka PR. W drugim przypadku <code>main</code> i jego aktualny DOCX nie zmieniają się.</div>
+    <p>Release nie otrzymuje osobnego przycisku „Approve/Odrzuć”. Jest wyzwalany po scaleniu i publikuje wersję już zaakceptowaną w PR. Bramka środowiska w Release byłaby pozorna: mogłaby zatrzymać publikację Pages, ale nie cofnęłaby dokumentu, który po scaleniu już znajduje się w <code>main</code>.</p>
   </section>
 
   <section>

@@ -70,12 +70,25 @@ permalink: /przewodnik/
 </section>
 
 <section class="guide-card">
+  <h2>Planowana szybka ścieżka redakcyjna: od propozycji do akceptacji DOCX</h2>
+  <p><b>Status:</b> opisuje automat przygotowany do wdrożenia; zacznie obowiązywać dopiero po opublikowaniu odpowiedniego workflow. Nie zmienia bieżącego sposobu pracy nad otwartymi PR.</p>
+  <ol>
+    <li>Koordynator wpisuje w dyskusji dokładny fragment Markdown do zastąpienia i jego nowe brzmienie, po czym dodaje etykietę <b>redakcja-bez-zmiany-sensu</b>.</li>
+    <li>Automat sprawdza, czy wskazany fragment występuje dokładnie raz. Gdy warunek nie jest spełniony, zatrzymuje się i pozostawia czytelną informację; nie tworzy niejednoznacznej zmiany.</li>
+    <li>Po poprawnej walidacji automat tworzy jeden draft PR z kartą decyzji, proponowaną zmianą Markdown, wygenerowanym DOCX oraz wynikami testów.</li>
+    <li>CI buduje niezależny plik <b>regulamin-candidate.docx</b>, testuje go i udostępnia jako artefakt runu. Redaktor może go pobrać z zakładki Actions albo otworzyć DOCX dołączony do PR w Microsoft Word.</li>
+    <li>Redaktor poprawia propozycję, jeśli trzeba, a po kontroli Worda wybiera <b>Approve</b> i następnie <b>Merge</b>. Może też wybrać <b>Request changes</b> albo zamknąć PR — wtedy aktualny dokument na <code>main</code> pozostaje bez zmian.</li>
+  </ol>
+  <p><b>Release nie jest dodatkowym krokiem akceptacji.</b> Uruchamia się po scaleniu i publikuje wersję wcześniej zaakceptowaną w PR. Zatrzymanie Release po scaleniu nie cofnęłoby już dokumentu w <code>main</code>, dlatego decyzja należy do PR, a nie do Release.</p>
+</section>
+
+<section class="guide-card">
   <h2>Co dzieje się automatycznie</h2>
   <ul>
     <li>Lista otwartych dyskusji synchronizuje się natychmiast po obsługiwanych zdarzeniach GitHub: utworzeniu, edycji oraz zmianie kategorii lub etykiety.</li>
     <li>Awaryjna synchronizacja działa <b>co 15 minut</b>. GitHub może uruchomić zadanie okresowe z opóźnieniem.</li>
     <li>Zamknięcie lub ponowne otwarcie wątku pojawi się na stronie po synchronizacji okresowej, ponieważ to zdarzenie nie jest objęte użytym wyzwalaczem GitHub Actions.</li>
-    <li>Automatyzacja waliduje formularz, numeruje DR, zakłada draft PR, uruchamia testy i po scaleniu publikuje stronę.</li>
+    <li>Obecna automatyzacja waliduje formularz, numeruje DR, zakłada draft PR, uruchamia testy i po scaleniu publikuje stronę. Planowany automat redakcyjny doda do PR Markdown, wygenerowany DOCX i artefakt kandydata.</li>
   </ul>
   <p>Jeżeli nowa dyskusja nie jest jeszcze widoczna, sprawdź jej kategorię i poczekaj na najbliższą synchronizację. Wątek musi należeć do kategorii propozycji zmian regulaminu.</p>
 </section>
