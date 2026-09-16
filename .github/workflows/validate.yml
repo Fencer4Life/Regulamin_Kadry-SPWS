@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
@@ -21,6 +23,31 @@ jobs:
           cache-dependency-path: narzedzia/requirements-docx.txt
       - run: python -m pip install -r narzedzia/requirements-docx.txt
       - run: python -m unittest discover -s tests -v
+      - name: Powiązanie zmiany Regulaminu z DOCX i decyzją
+        if: github.event_name != 'workflow_dispatch'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: python narzedzia/validate_regulation_change.py "$BASE_SHA"
+      - name: Zbudowanie i kontrola kandydackiego DOCX
+        run: |
+          mkdir -p .artifacts
+          python -m narzedzia.build_regulamin_docx \
+            regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
+            .artifacts/regulamin-candidate.docx
+          python tests/test_approved_sections_02_03.py .artifacts/regulamin-candidate.docx
+          python tests/test_docx_pagination.py .artifacts/regulamin-candidate.docx
+          REGULAMIN_DOCX_PATH=.artifacts/regulamin-candidate.docx \
+            python -m unittest tests.test_docx_publication_safety -v
+          python -m narzedzia.docx_parity \
+            regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx \
+            .artifacts/regulamin-candidate.docx
+      - name: Kandydacki DOCX do kontroli w Wordzie
+        uses: actions/upload-artifact@v4
+        with:
+          name: regulamin-candidate
+          path: .artifacts/regulamin-candidate.docx
+          if-no-files-found: error
+          retention-days: 14
   build:
     runs-on: ubuntu-latest
     steps:

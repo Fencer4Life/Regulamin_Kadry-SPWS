@@ -1,0 +1,80 @@
+<meta charset="utf-8">
+<title>Wynik próby technicznej: Markdown → DOCX</title>
+<style>
+  :root{--bg:#e8ecf3;--surface:#fff;--surface-2:#dce2ec;--ink:#0f1319;--muted:#414b59;--faint:#6b7482;--line:#c9d1dc;--line-strong:#b3bdcc;--accent:#12467e;--good:#0f5f37;--good-soft:#d8eede;--warn:#7a4d02;--warn-soft:#f4e6c8;--serif:"Iowan Old Style","Charter","Palatino Linotype",Palatino,Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,"Cascadia Code",Consolas,monospace}
+  @media(prefers-color-scheme:dark){:root{--bg:#12151b;--surface:#1b2029;--surface-2:#232935;--ink:#f1f4f8;--muted:#aeb8c6;--faint:#7c8797;--line:#2c333f;--line-strong:#3c4552;--accent:#8cbdec;--good:#6cdc98;--good-soft:#15271b;--warn:#e6bd6f;--warn-soft:#282011}}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:20px/1.62 var(--sans);-webkit-font-smoothing:antialiased}.wrap{max-width:56rem;margin:auto;padding:60px 30px 110px}code,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}code{background:var(--surface-2);padding:.1em .4em;border:1px solid var(--line);border-radius:5px;font-size:.82em;font-weight:600}.eyebrow,.kicker{font:700 14px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}.eyebrow{margin:0 0 16px}.kicker{margin:0 0 10px}h1,h2{font-family:var(--serif);line-height:1.1;letter-spacing:-.012em;text-wrap:balance}h1{font-size:clamp(38px,6vw,56px);margin:0 0 20px;max-width:20ch}h2{font-size:33px;margin:0 0 18px}p{margin:0 0 16px;max-width:64ch}.dek{font-size:23px;line-height:1.5;color:var(--muted);max-width:57ch}ul,ol{margin:0 0 16px;padding-left:1.4em;max-width:64ch}li{margin:9px 0}li::marker{color:var(--accent)}section{margin-top:52px}.rule{height:2px;background:var(--line);border:0;margin:48px 0}.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}.pill{font:600 14px var(--mono);padding:7px 13px;border:1px solid var(--line-strong);border-radius:7px;background:var(--surface);color:var(--muted)}.note{border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;background:var(--surface);padding:18px 22px;margin:20px 0}.note>:last-child{margin-bottom:0}.note .lede{font-weight:800;margin-bottom:8px}.note.good{border-left-color:var(--good);background:var(--good-soft)}.note.warn{border-left-color:var(--warn);background:var(--warn-soft)}.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:18px 0}table{border-collapse:collapse;width:100%;font-size:17px;min-width:620px}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--line)}tr:last-child td{border-bottom:0}th{background:var(--surface-2);font:700 13px var(--mono);text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}pre{overflow:auto;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:16px 20px;font:15px/1.7 var(--mono)}.foot{margin-top:60px;padding-top:24px;border-top:2px solid var(--line);font:15px var(--mono);color:var(--faint)}
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Regulamin Kadry SPWS · wynik próby technicznej · 16.09.2026</p>
+  <h1>Markdown odtwarza aktualny DOCX</h1>
+  <p class="dek">Próba zakończyła się wynikiem pozytywnym. Pełna treść Regulaminu została zapisana w kontrolowanym Markdown, a nowy renderer buduje z niej kandydacki DOCX zgodny z bieżącym dokumentem w testach treści, struktury, formatowania i lokalnego renderowania.</p>
+  <div class="meta">
+    <span class="pill">Status: próba zaliczona</span>
+    <span class="pill">Metoda: TDD · RED → GREEN</span>
+    <span class="pill">Produkcyjny DOCX: nietknięty</span>
+  </div>
+
+  <hr class="rule">
+
+  <section>
+    <p class="kicker">Wynik</p>
+    <h2>Jeden renderer całego dokumentu działa</h2>
+    <div class="note good">
+      <p class="lede">Parytet osiągnięty</p>
+      <p>Raport automatyczny zwraca <code>content_match: true</code>, <code>layout_match: true</code> i <code>passed: true</code>. Znormalizowany podgląd Quick Look wykazał identyczne 1351 akapitów renderowanych oraz 12 tabel.</p>
+    </div>
+    <p>Źródło Markdown zawiera pełny aktualny tekst, stabilne identyfikatory rozdziałów i paragrafów, pogrubienia, tabelę współczynników oraz dyrektywę generującą załącznik z tabelą punktacji. Generator odtwarza nagłówki, stopki, spis treści, zakładki, pola stron, style Worda, podziały stron i metadane.</p>
+  </section>
+
+  <section>
+    <p class="kicker">Dowody</p>
+    <h2>Sprawdzone warstwy</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Warstwa</th><th>Wynik</th><th>Zakres kontroli</th></tr></thead>
+      <tbody>
+        <tr><td>Treść</td><td>zgodna</td><td>129 akapitów dokumentu, 12 tabel, kolejność bloków i pełny skrót kontraktu treści.</td></tr>
+        <tr><td>Struktura OOXML</td><td>zgodna</td><td>Style, pola TOC/PAGEREF, zakładki, nagłówki, stopki, właściwości sekcji i metadane.</td></tr>
+        <tr><td>Formatowanie</td><td>zgodne</td><td>Pogrubienia, kursywa, odstępy, wcięcia, szerokości siatki tabel, kolory i fonty.</td></tr>
+        <tr><td>Stronicowanie</td><td>testy zielone</td><td>Podziały przed rozdziałami i paragrafami, niedzielenie wierszy oraz utrzymywanie tabel razem.</td></tr>
+        <tr><td>Bezpieczeństwo</td><td>testy zielone</td><td>Brak komentarzy i śledzonych zmian; metadane komisji; brak niejawnego nadpisania wzorca.</td></tr>
+        <tr><td>Powtarzalność</td><td>test zielony</td><td>Dwa buildy mają taki sam SHA-256 po normalizacji zmiennych znaczników czasu.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <p class="kicker">Artefakty</p>
+    <h2>Co powstało</h2>
+    <ul>
+      <li><code>regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md</code> — kompletna warstwa treści.</li>
+      <li><code>narzedzia/docx_model.py</code> — parser ograniczonego Markdown.</li>
+      <li><code>narzedzia/build_regulamin_docx.py</code> — renderer pełnego DOCX.</li>
+      <li><code>narzedzia/docx_parity.py</code> — kontrakt porównawczy i raport parytetu.</li>
+      <li><code>tests/test_docx_current_contract.py</code> oraz <code>tests/test_docx_generation.py</code> — testy bazowe, parytetu, bezpieczeństwa i deterministyczności.</li>
+    </ul>
+    <pre>python -m narzedzia.build_regulamin_docx \
+  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
+  /private/tmp/regulamin-candidate.docx</pre>
+    <p>Kandydat pozostaje plikiem tymczasowym. Aktualny plik <code>regulamin/..._2026.docx</code> nie został zastąpiony.</p>
+  </section>
+
+  <section>
+    <p class="kicker">Granice dowodu</p>
+    <h2>Co jest udowodnione, a co wymaga następnej decyzji</h2>
+    <p>Udowodniono, że obecny Regulamin można odtworzyć z Markdown bez używania łańcucha historycznych skryptów modyfikujących binarny DOCX. Nie oznacza to jeszcze, że Markdown jest produkcyjnym źródłem kanonicznym ani że workflow decyzji ma automatycznie zastępować dokument.</p>
+    <div class="note warn">
+      <p class="lede">Przed wdrożeniem produkcyjnym</p>
+      <p>Potrzebna jest osobna akceptacja architektury workflow, kontrolne otwarcie kandydata w Microsoft Word oraz test pierwszej rzeczywistej zmiany treści. Dopiero potem można podłączyć automatyczny build do scalenia decyzji.</p>
+    </div>
+    <ul>
+      <li>Aktualny dokument nie zawiera przypisów dolnych, dlatego ogólna składnia przypisów nie została jeszcze wdrożona.</li>
+      <li>Załącznik nr 1 jest wskazywany w Markdown dyrektywą <code>{{annex:points}}</code> i generowany programowo.</li>
+      <li>Kolejne typy załączników lub przypisy należy dodawać metodą TDD przed pierwszym użyciem.</li>
+      <li>Workflow CI/Release i mechanizm szybkiej ścieżki nie zostały w tej próbie zmienione.</li>
+    </ul>
+  </section>
+
+  <p class="foot">wynik próby · warstwa treści Markdown → DOCX · kandydat nie zastępuje jeszcze wersji produkcyjnej</p>
+</div>

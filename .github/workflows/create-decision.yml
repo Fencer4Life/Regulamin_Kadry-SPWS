@@ -14,36 +14,91 @@ concurrency:
 
 jobs:
   create:
-    if: github.event.label.name == 'rozstrzygnięta' && github.event.discussion.category.slug == 'propozycje-zmian-regulaminu'
+    if: (github.event.label.name == 'rozstrzygnięta' || github.event.label.name == 'redakcja-bez-zmiany-sensu') && github.event.discussion.category.slug == 'propozycje-zmian-regulaminu'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: narzedzia/requirements-docx.txt
+      - run: python -m pip install -r narzedzia/requirements-docx.txt
       - name: Utworzenie karty i draft PR
         env:
           GH_TOKEN: ${{ github.token }}
           DISCUSSION_NUMBER: ${{ github.event.discussion.number }}
           DISCUSSION_URL: ${{ github.event.discussion.html_url }}
           DISCUSSION_ID: ${{ github.event.discussion.node_id }}
+          TRIGGER_LABEL: ${{ github.event.label.name }}
         run: |
           branch="decision/discussion-${DISCUSSION_NUMBER}"
-          if git ls-remote --exit-code --heads origin "$branch"; then exit 0; fi
-          if grep -R --fixed-strings "discussion_url: ${DISCUSSION_URL}" _decyzje; then exit 0; fi
-          if ! path=$(python narzedzia/create_decision_from_discussion.py "$GITHUB_EVENT_PATH" _decyzje 2>/tmp/decision-error.txt); then
-            error=$(cat /tmp/decision-error.txt)
-            gh api graphql -f query='mutation($discussionId:ID!,$body:String!){addDiscussionComment(input:{discussionId:$discussionId,body:$body}){comment{id}}}' \
-              -F discussionId="$DISCUSSION_ID" \
-              -f body="Nie utworzono roboczej karty decyzji. ${error}"
-            exit 1
-          fi
+          source_path="regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md"
+          docx_path="regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx"
+          candidate_path="/tmp/regulamin-candidate.docx"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git switch -c "$branch"
-          git add -- "$path"
-          git commit -m "docs: initiate decision from discussion ${DISCUSSION_NUMBER}"
-          git push origin "$branch"
-          pr_url=$(gh pr create --draft --label decyzja --title "Decyzja z dyskusji #${DISCUSSION_NUMBER}" --body "Robocza karta utworzona z dyskusji ${DISCUSSION_URL}. Uzupełnij uzasadnienie, wybierz Tak albo Nie przy zmianie Regulaminu, sprawdź relacje między decyzjami oraz — jeżeli wybierzesz Tak — dołącz zmianę DOCX przed scaleniem.")
+          if grep -R --fixed-strings "discussion_url: ${DISCUSSION_URL}" _decyzje; then exit 0; fi
+          if git ls-remote --exit-code --heads origin "$branch"; then
+            existing_pr=$(gh pr list --head "$branch" --state open --json url --jq '.[0].url')
+            if [ -n "$existing_pr" ]; then exit 0; fi
+            git fetch origin "$branch"
+            git switch --track -c "$branch" "origin/$branch"
+            path=$(grep -R -l --fixed-strings "discussion_url: ${DISCUSSION_URL}" _decyzje || true)
+            if [ -z "$path" ]; then
+              echo "Nie znaleziono karty na istniejącej roboczej gałęzi." >&2
+              exit 1
+            fi
+          else
+            if [ "$TRIGGER_LABEL" = "redakcja-bez-zmiany-sensu" ]; then
+              if ! python narzedzia/apply_editorial_change.py "$GITHUB_EVENT_PATH" _decyzje "$source_path" >/tmp/editorial-paths.txt 2>/tmp/decision-error.txt; then
+                error=$(cat /tmp/decision-error.txt)
+                gh api graphql -f query='mutation($discussionId:ID!,$body:String!){addDiscussionComment(input:{discussionId:$discussionId,body:$body}){comment{id}}}' \
+                  -F discussionId="$DISCUSSION_ID" \
+                  -f body="Nie utworzono szybkiej korekty. ${error}"
+                exit 1
+              fi
+              path=$(sed -n '1p' /tmp/editorial-paths.txt)
+            elif ! path=$(python narzedzia/create_decision_from_discussion.py "$GITHUB_EVENT_PATH" _decyzje 2>/tmp/decision-error.txt); then
+              error=$(cat /tmp/decision-error.txt)
+              gh api graphql -f query='mutation($discussionId:ID!,$body:String!){addDiscussionComment(input:{discussionId:$discussionId,body:$body}){comment{id}}}' \
+                -F discussionId="$DISCUSSION_ID" \
+                -f body="Nie utworzono roboczej karty decyzji. ${error}"
+              exit 1
+            fi
+            git switch -c "$branch"
+          fi
+          if [ "$TRIGGER_LABEL" = "redakcja-bez-zmiany-sensu" ]; then
+            python -m narzedzia.build_regulamin_docx "$source_path" "$candidate_path"
+            python tests/test_approved_sections_02_03.py "$candidate_path"
+            python tests/test_docx_pagination.py "$candidate_path"
+            REGULAMIN_DOCX_PATH="$candidate_path" python -m unittest tests.test_docx_publication_safety -v
+            cp "$candidate_path" "$docx_path"
+            python -m narzedzia.docx_parity "$docx_path" "$candidate_path" >/tmp/docx-parity.json
+            python -m unittest discover -s tests -v
+            git add -- "$path" "$source_path" "$docx_path"
+            commit_message="docs: prepare editorial decision ${DISCUSSION_NUMBER}"
+            pr_body="Szybka korekta utworzona z dyskusji ${DISCUSSION_URL}. Automat zmienił Markdown, wygenerował DOCX i uruchomił testy. Pobierz artefakt regulamin-candidate z runu ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}, otwórz go w Wordzie, a następnie wybierz Approve albo Request changes."
+          else
+            git add -- "$path"
+            commit_message="docs: initiate decision from discussion ${DISCUSSION_NUMBER}"
+            pr_body="Robocza karta utworzona z dyskusji ${DISCUSSION_URL}. Uzupełnij uzasadnienie, wybierz Tak albo Nie przy zmianie Regulaminu i opracuj brzmienie Markdown wynikające z decyzji."
+          fi
+          if ! git diff --cached --quiet; then
+            git commit -m "$commit_message"
+            git push origin "$branch"
+          fi
+          pr_url=$(gh pr create --draft --label decyzja --title "Decyzja z dyskusji #${DISCUSSION_NUMBER}" --body "$pr_body")
           sed -i "s|pr_url: \"\"|pr_url: ${pr_url}|" "$path"
           git add -- "$path"
           git commit -m "docs: link decision draft pull request"
           git push origin "$branch"
           gh api graphql -f query='mutation($discussionId:ID!,$body:String!){addDiscussionComment(input:{discussionId:$discussionId,body:$body}){comment{id}}}' -F discussionId="$DISCUSSION_ID" -f body="Utworzono roboczą kartę decyzji: ${pr_url}"
+      - name: Kandydacki DOCX szybkiej korekty
+        if: github.event.label.name == 'redakcja-bez-zmiany-sensu'
+        uses: actions/upload-artifact@v4
+        with:
+          name: regulamin-candidate
+          path: /tmp/regulamin-candidate.docx
+          if-no-files-found: error
+          retention-days: 14

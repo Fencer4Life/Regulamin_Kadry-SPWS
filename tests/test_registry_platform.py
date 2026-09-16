@@ -110,6 +110,46 @@ class RegistryPlatformTests(unittest.TestCase):
         for fragment in ("rozstrzygnięta", "concurrency:", "discussion_url", "--draft", "decyzja"):
             self.assertIn(fragment, text)
         self.assertNotIn("FORMULARZ-ROZSTRZYGNIECIA", text)
+        for fragment in ("gh pr list", "git switch --track", "istniejącej roboczej gałęzi"):
+            self.assertIn(fragment, text)
+
+    def test_fast_editorial_path_builds_tests_and_commits_markdown_with_docx(self):
+        workflow = (ROOT / ".github" / "workflows" / "create-decision.yml").read_text(
+            encoding="utf-8"
+        )
+        for fragment in (
+            "redakcja-bez-zmiany-sensu",
+            "apply_editorial_change.py",
+            "build_regulamin_docx",
+            "REGULAMIN_DOCX_PATH",
+            "docx_parity",
+            "actions/upload-artifact",
+            "regulamin-candidate",
+        ):
+            self.assertIn(fragment, workflow)
+
+    def test_ci_builds_and_exposes_the_candidate_docx_for_pr_review(self):
+        workflow = (ROOT / ".github" / "workflows" / "validate.yml").read_text(
+            encoding="utf-8"
+        )
+        for fragment in (
+            "build_regulamin_docx",
+            "REGULAMIN_DOCX_PATH",
+            "docx_parity",
+            "validate_regulation_change.py",
+            "actions/upload-artifact",
+            "regulamin-candidate",
+        ):
+            self.assertIn(fragment, workflow)
+
+    def test_documentation_treats_markdown_automation_as_current(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        contributing = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
+        self.assertIn("Źródłem kanonicznym jest kontrolowany Markdown", contributing)
+        self.assertIn("sekcji `Artifacts`", contributing)
+        self.assertIn("kanoniczny Markdown", readme)
+        self.assertNotIn("Planowana ścieżka Markdown", readme)
+        self.assertNotIn("Planowane przejście na Markdown", contributing)
 
     def test_merged_decision_closes_its_discussion_as_resolved(self):
         workflow = ROOT / ".github" / "workflows" / "resolve-discussion.yml"
