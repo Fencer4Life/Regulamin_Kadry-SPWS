@@ -101,6 +101,57 @@
 </div>
 
 <div class="section">
+  <h3>Jak decyzja wybiera ścieżkę dokumentu</h3>
+  <p><b>Różnica dotyczy odpowiedzialności za treść Markdown.</b> Z etykietą automat wykonuje dokładnie wskazaną korektę bez zmiany sensu. Bez etykiety Redaktor musi sam opracować brzmienie przepisu na podstawie pełnej decyzji komisji.</p>
+  <div style="overflow-x:auto;background:#fff;border:1px solid #d7dee8;border-radius:12px;padding:12px;text-align:center">
+  <svg viewBox="0 0 1200 720" role="img" aria-label="Diagram wyboru pełnej lub szybkiej ścieżki decyzji" style="display:block;width:min(100%,960px);height:auto;margin:0 auto;font-family:system-ui,-apple-system,Segoe UI,sans-serif">
+    <defs>
+      <marker id="decision-arrow-blue" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#477cab"/></marker>
+      <marker id="decision-arrow-green" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#278652"/></marker>
+      <marker id="decision-arrow-purple" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#8c63b5"/></marker>
+      <marker id="decision-arrow-gray" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#7a8492"/></marker>
+      <filter id="decision-shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity=".14"/></filter>
+    </defs>
+
+    <rect x="450" y="20" width="300" height="72" rx="18" fill="#dbeafe" stroke="#477cab" stroke-width="3" filter="url(#decision-shadow)"/>
+    <text x="600" y="51" text-anchor="middle" font-size="19" font-weight="900" fill="#174a7e">DECYZJA KOMISJI</text>
+    <text x="600" y="76" text-anchor="middle" font-size="13" fill="#48637d">ustalone brzmienie lub kierunek zmiany</text>
+
+    <path d="M600 92 V132" fill="none" stroke="#477cab" stroke-width="5" marker-end="url(#decision-arrow-blue)"/>
+    <polygon points="600,132 760,212 600,292 440,212" fill="#fff1ce" stroke="#d09a23" stroke-width="3" filter="url(#decision-shadow)"/>
+    <text x="600" y="196" text-anchor="middle" font-size="16" font-weight="900" fill="#684600">Czy ma etykietę</text>
+    <text x="600" y="221" text-anchor="middle" font-size="14" font-weight="800" fill="#684600">redakcja-bez-zmiany-sensu?</text>
+
+    <path d="M440 212 H300 V330" fill="none" stroke="#8c63b5" stroke-width="5" marker-end="url(#decision-arrow-purple)"/>
+    <rect x="323" y="188" width="58" height="27" rx="13" fill="#fff" stroke="#8c63b5"/>
+    <text x="352" y="207" text-anchor="middle" font-size="12" font-weight="900" fill="#593976">TAK</text>
+    <rect x="70" y="340" width="460" height="170" rx="18" fill="#f4e9ff" stroke="#8c63b5" stroke-width="3" filter="url(#decision-shadow)"/>
+    <text x="300" y="375" text-anchor="middle" font-size="20" font-weight="900" fill="#593976">SZYBKA ŚCIEŻKA</text>
+    <text x="300" y="403" text-anchor="middle" font-size="14" font-weight="800" fill="#593976">Zakres: korekta bez zmiany sensu</text>
+    <text x="300" y="430" text-anchor="middle" font-size="14" fill="#593976">Wejście: dokładny stary fragment + nowe brzmienie</text>
+    <text x="300" y="457" text-anchor="middle" font-size="14" fill="#593976">Automat sam zmienia Markdown i buduje DOCX</text>
+    <text x="300" y="484" text-anchor="middle" font-size="14" fill="#593976">Redaktor tylko sprawdza gotową korektę</text>
+
+    <path d="M760 212 H900 V330" fill="none" stroke="#278652" stroke-width="5" marker-end="url(#decision-arrow-green)"/>
+    <rect x="820" y="188" width="58" height="27" rx="13" fill="#fff" stroke="#278652"/>
+    <text x="849" y="207" text-anchor="middle" font-size="12" font-weight="900" fill="#17633a">NIE</text>
+    <rect x="670" y="340" width="460" height="170" rx="18" fill="#e8f6ef" stroke="#42a06c" stroke-width="3" filter="url(#decision-shadow)"/>
+    <text x="900" y="375" text-anchor="middle" font-size="20" font-weight="900" fill="#17633a">PEŁNA ŚCIEŻKA</text>
+    <text x="900" y="403" text-anchor="middle" font-size="14" font-weight="800" fill="#356a4c">Zakres: zmiana sensu lub potrzeba oceny</text>
+    <text x="900" y="430" text-anchor="middle" font-size="14" fill="#356a4c">Wejście: decyzja, uzasadnienie i rozważane warianty</text>
+    <text x="900" y="457" text-anchor="middle" font-size="14" fill="#356a4c">Redaktor opracowuje brzmienie Markdown</text>
+    <text x="900" y="484" text-anchor="middle" font-size="14" fill="#356a4c">Generator buduje DOCX dopiero z tej redakcji</text>
+
+    <path d="M300 510 V550 H600 M900 510 V550 H600 V574" fill="none" stroke="#477cab" stroke-width="5" marker-end="url(#decision-arrow-blue)"/>
+    <rect x="380" y="584" width="440" height="92" rx="18" fill="#dbeafe" stroke="#477cab" stroke-width="3" filter="url(#decision-shadow)"/>
+    <text x="600" y="614" text-anchor="middle" font-size="18" font-weight="900" fill="#174a7e">WSPÓLNA BRAMKA PR</text>
+    <text x="600" y="642" text-anchor="middle" font-size="13" fill="#48637d">CI → Artefakt DOCX → Word → Approve albo Request changes</text>
+    <text x="600" y="663" text-anchor="middle" font-size="13" fill="#48637d">Approve → Merge → Release · Request changes → main bez zmian</text>
+  </svg>
+  </div>
+</div>
+
+<div class="section">
   <h3>Artefakty, które powstają</h3>
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
     <span style="padding:10px 14px;background:#dbeafe;border-radius:8px">💬 Dyskusja</span><b>→</b>

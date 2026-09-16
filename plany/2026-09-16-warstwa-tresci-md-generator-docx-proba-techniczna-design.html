@@ -1,0 +1,167 @@
+<meta charset="utf-8">
+<title>Próba techniczna: warstwa treści Markdown i generator DOCX</title>
+<style>
+  :root{
+    --bg:#e8ecf3;--surface:#fff;--surface-2:#dce2ec;--ink:#0f1319;
+    --muted:#414b59;--faint:#6b7482;--line:#c9d1dc;--line-strong:#b3bdcc;
+    --accent:#12467e;--accent-ink:#0d3763;--accent-soft:#dbe7f5;
+    --danger:#9e2418;--danger-soft:#f7ddd9;--good:#0f5f37;--good-soft:#d8eede;
+    --warn:#7a4d02;--warn-soft:#f4e6c8;
+    --serif:"Iowan Old Style","Charter","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,"Cascadia Code",Consolas,monospace;
+  }
+  @media(prefers-color-scheme:dark){:root{--bg:#12151b;--surface:#1b2029;--surface-2:#232935;--ink:#f1f4f8;--muted:#aeb8c6;--faint:#7c8797;--line:#2c333f;--line-strong:#3c4552;--accent:#8cbdec;--accent-ink:#a9d0f5;--accent-soft:#1a2a3c;--danger:#f59a90;--danger-soft:#331d1a;--good:#6cdc98;--good-soft:#15271b;--warn:#e6bd6f;--warn-soft:#282011}}
+  *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font:20px/1.62 var(--sans);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:56rem;margin:auto;padding:60px 30px 110px}
+  code,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  code{background:var(--surface-2);padding:.1em .4em;border:1px solid var(--line);border-radius:5px;font-size:.82em;font-weight:600}
+  .eyebrow,.kicker{font:700 14px/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  .eyebrow{margin:0 0 16px}.kicker{margin:0 0 10px}
+  h1,h2{font-family:var(--serif);line-height:1.1;letter-spacing:-.012em;text-wrap:balance}
+  h1{font-size:clamp(38px,6vw,56px);margin:0 0 20px;max-width:20ch}
+  h2{font-size:33px;margin:0 0 18px}h3{font-size:20px;margin:26px 0 10px}
+  p{margin:0 0 16px;max-width:64ch}.dek{font-size:23px;line-height:1.5;color:var(--muted);max-width:57ch}
+  ul,ol{margin:0 0 16px;padding-left:1.4em;max-width:64ch}li{margin:9px 0}li::marker{color:var(--accent)}
+  section{margin-top:52px}.rule{height:2px;background:var(--line);border:0;margin:48px 0}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}.pill{font:600 14px var(--mono);padding:7px 13px;border:1px solid var(--line-strong);border-radius:7px;background:var(--surface);color:var(--muted)}
+  .note{border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;background:var(--surface);padding:18px 22px;margin:20px 0}
+  .note>:last-child{margin-bottom:0}.note .lede{font-weight:800;margin-bottom:8px}.note.good{border-left-color:var(--good);background:var(--good-soft)}.note.warn{border-left-color:var(--warn);background:var(--warn-soft)}.note.danger{border-left-color:var(--danger);background:var(--danger-soft)}
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:18px 0}table{border-collapse:collapse;width:100%;font-size:17px;min-width:620px}th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--line)}tr:last-child td{border-bottom:0}th{background:var(--surface-2);font:700 13px var(--mono);text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+  pre{overflow:auto;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:16px 20px;font:15px/1.7 var(--mono)}
+  .foot{margin-top:60px;padding-top:24px;border-top:2px solid var(--line);font:15px var(--mono);color:var(--faint)}
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Regulamin Kadry SPWS · projekt próby technicznej · 16.09.2026</p>
+  <h1>Warstwa treści Markdown → automatyczny DOCX</h1>
+  <p class="dek">Najpierw zamrażamy obecny DOCX jako wzorzec, potem opisujemy jego kontrakt testami, przenosimy treść do kontrolowanego Markdown i dopiero na końcu budujemy generator. Próba nie zastępuje dokumentu produkcyjnego.</p>
+  <div class="meta">
+    <span class="pill">Status: do zatwierdzenia</span>
+    <span class="pill">Zakres: proof of capability</span>
+    <span class="pill">Metoda: TDD · RED → GREEN</span>
+  </div>
+
+  <hr class="rule">
+
+  <section>
+    <p class="kicker">Werdykt po inspekcji</p>
+    <h2>Technicznie wykonalne, ale obecny generator nie jest źródłem aktualnego dokumentu</h2>
+    <p>Aktualny DOCX ma 129 akapitów, 12 tabel i 10&nbsp;154 znaki treści akapitowej. Uruchomiony od początku <code>generate_regulamin_docx.py</code> tworzy prototyp mający 63 akapity, 3 tabele i 1&nbsp;677 znaków. Aktualny dokument powstał przez kolejne skrypty <code>apply_approved_*.py</code>, które modyfikowały poprzedni plik binarny.</p>
+    <div class="note warn">
+      <p class="lede">Wniosek architektoniczny</p>
+      <p>Nie składamy automatu z historycznych migracji. Zachowujemy z nich sprawdzone funkcje formatowania, tabel, stronicowania i sanitacji, ale budujemy jeden powtarzalny renderer całego dokumentu.</p>
+    </div>
+    <p>Pełny obecny zestaw 42 testów przechodzi po zainstalowaniu zależności repozytorium. To jest punkt startowy i nie wolno go osłabić.</p>
+  </section>
+
+  <section>
+    <p class="kicker">Cel i granica próby</p>
+    <h2>Wygenerować kandydacki DOCX bez nadpisywania wzorca</h2>
+    <p>Próba ma odpowiedzieć na jedno pytanie: czy kontrolowany plik Markdown może być pełnym źródłem treści, z którego obecne narzędzia odtworzą aktualny dokument Worda wystarczająco wiernie, aby później oprzeć na tym automatyczne decyzje redakcyjne.</p>
+    <ul>
+      <li>Obecny DOCX pozostaje niezmienionym wzorcem odniesienia.</li>
+      <li>Generator zapisuje wynik wyłącznie do katalogu tymczasowego lub jawnie wskazanej ścieżki.</li>
+      <li>Próba nie zmienia workflow decyzji, etykiet, PR #22 ani treści Regulaminu.</li>
+      <li>Dopiero osobna decyzja po raporcie porównawczym może ustanowić Markdown źródłem kanonicznym.</li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="kicker">Co znaczy „jeden do jednego”</p>
+    <h2>Cztery mierzalne poziomy zgodności</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Poziom</th><th>Warunek zaliczenia</th><th>Metoda</th></tr></thead>
+      <tbody>
+        <tr><td>Treść</td><td>Identyczna kolejność i tekst wszystkich akapitów oraz wszystkich komórek tabel.</td><td>Porównanie znormalizowanego modelu bloków dokumentu.</td></tr>
+        <tr><td>Struktura</td><td>Identyczne rozdziały, paragrafy, style akapitów, liczba i wymiary tabel, nagłówki, stopki, pola TOC i załącznik.</td><td>Testy OOXML i <code>python-docx</code>.</td></tr>
+        <tr><td>Reguły składu</td><td>Te same marginesy, podziały stron, <code>keep-with-next</code>, niedzielenie wierszy i szerokości tabel.</td><td>Istniejące testy plus nowe asercje parytetu.</td></tr>
+        <tr><td>Bezpieczeństwo</td><td>Brak komentarzy i śledzonych zmian; publiczne metadane; dwa kolejne buildy dają ten sam znormalizowany pakiet.</td><td>Istniejące testy publikacyjne i test deterministyczności.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note">
+      <p class="lede">Nie wymagamy identyczności surowych bajtów przed normalizacją</p>
+      <p>DOCX jest archiwum ZIP zawierającym znaczniki czasu, identyfikatory relacji i inne szczegóły techniczne. Równość bajtów nie dowodzi równości dokumentów. Wymagamy identyczności treści i kontraktu OOXML oraz deterministycznego wyniku po normalizacji.</p>
+    </div>
+    <p>Ostateczna zgodność wizualna musi zostać potwierdzona przez otwarcie obu plików w Wordzie. Automatyczne testy nie posiadają silnika składu stron programu Word.</p>
+  </section>
+
+  <section>
+    <p class="kicker">Warstwa treści</p>
+    <h2>Ograniczony Markdown, nie dowolny konwerter</h2>
+    <p>Źródło <code>regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md</code> przechowuje treść, kolejność i stabilne identyfikatory. Renderer odpowiada za Worda.</p>
+    <pre>+++
+wersja = "0.1"
+sezon = "2026/2027"
+status = "projekt do konsultacji"
++++
+
+## [rozdzial:postanowienia-ogolne] Postanowienia ogólne
+
+### [paragraf:przedmiot] Przedmiot regulaminu
+
+1. Regulamin określa ...
+
+{{tabela:wspolczynniki-rangi}}
+{{zalacznik:tabela-punktacji}}</pre>
+    <ul>
+      <li>Metadane używają TOML z biblioteki standardowej Pythona — bez nowej zależności produkcyjnej.</li>
+      <li>Numery paragrafów wynikają z kolejności stabilnych identyfikatorów.</li>
+      <li>Specjalne dyrektywy wywołują kontrolowane renderery tabel i załączników.</li>
+      <li>Treść tabeli punktacji nadal wynika z obecnego algorytmu, a nie z ręcznie skopiowanych 1400 komórek.</li>
+      <li>Prawdziwe przypisy dolne nie występują w aktualnym DOCX, więc nie są warunkiem parytetu tej próby; dostaną osobny test techniczny przed pierwszym użyciem.</li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="kicker">TDD</p>
+    <h2>Kolejność prac i bramki zatrzymania</h2>
+    <ol>
+      <li><strong>BASELINE:</strong> uruchomić pełne 42 testy na niezmienionym dokumencie i zapisać komendy oraz wynik.</li>
+      <li><strong>RED 1:</strong> dodać test opisujący aktualną liczbę i kolejność bloków, pełny tekst akapitów, zawartość tabel, style, pola i właściwości dokumentu.</li>
+      <li><strong>RED 2:</strong> dodać test oczekujący zbudowania kandydackiego DOCX z nieistniejącej jeszcze warstwy Markdown oraz zerowego raportu różnic względem wzorca.</li>
+      <li><strong>GREEN — źródło:</strong> ręcznie przenieść aktualną treść do kontrolowanego Markdown bez zmiany ani jednego zdania.</li>
+      <li><strong>GREEN — renderer:</strong> zbudować dokument od zera, wykorzystując wydzielone funkcje stylów, tabel, załącznika, nagłówków, stopek i stronicowania.</li>
+      <li><strong>REFINE:</strong> uruchamiać raport różnic po każdym obsłużonym typie bloku i usuwać rozbieżności warstwa po warstwie.</li>
+      <li><strong>GATE:</strong> uruchomić pełne testy na wygenerowanym pliku, test deterministyczności oraz <code>git diff --check</code>.</li>
+      <li><strong>REVIEW:</strong> przekazać oba DOCX i raport parytetu do wizualnego porównania w Wordzie.</li>
+    </ol>
+    <div class="note danger">
+      <p class="lede">Warunek przerwania</p>
+      <p>Jeżeli nie uzyskamy pełnej zgodności treści i struktury albo kandydat nie przejdzie wszystkich obecnych testów, próba kończy się raportem. Nie zastępujemy dokumentu i nie uruchamiamy szybkiej ścieżki.</p>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">Planowane pliki próby</p>
+    <h2>Mały, izolowany zakres</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Plik</th><th>Odpowiedzialność</th></tr></thead>
+      <tbody>
+        <tr><td><code>regulamin/..._2026.md</code></td><td>Pełna kanoniczna treść aktualnego DOCX na potrzeby próby.</td></tr>
+        <tr><td><code>narzedzia/docx_model.py</code></td><td>Parser ograniczonego Markdown i model rozdziałów, paragrafów, tabel oraz załączników.</td></tr>
+        <tr><td><code>narzedzia/build_regulamin_docx.py</code></td><td>Powtarzalny renderer modelu do jawnie wskazanego DOCX.</td></tr>
+        <tr><td><code>narzedzia/docx_parity.py</code></td><td>Normalizacja i raport różnic wzorzec–kandydat.</td></tr>
+        <tr><td><code>tests/test_docx_current_contract.py</code></td><td>Asercje opisujące obecny dokument przed powstaniem generatora.</td></tr>
+        <tr><td><code>tests/test_docx_generation.py</code></td><td>RED/GREEN: build, parytet, deterministyczność i bezpieczna ścieżka wyjściowa.</td></tr>
+      </tbody>
+    </table></div>
+    <p>Historyczne skrypty <code>apply_approved_*.py</code> pozostają nietknięte w czasie próby. Nie zmieniamy również workflow CI/Release przed pozytywnym wynikiem parytetu.</p>
+  </section>
+
+  <section>
+    <p class="kicker">Poza zakresem tej próby</p>
+    <h2>Najpierw udowadniamy renderer</h2>
+    <ul>
+      <li>Etykieta <code>redakcja-bez-zmiany-sensu</code> i automatyczne tworzenie PR.</li>
+      <li>Automatyczne proponowanie zmiany Markdown z tekstu dyskusji.</li>
+      <li>Zmiana DR-017 lub aktualnej treści Regulaminu.</li>
+      <li>Automatyczne scalanie i Release.</li>
+      <li>Obsługa przypisów dolnych, których nie ma w aktualnym wzorcu.</li>
+    </ul>
+    <p>Te elementy mają sens dopiero wtedy, gdy próba wykaże, że źródło Markdown odtwarza dokument. W przeciwnym razie automatyzowalibyśmy niewiarygodny renderer.</p>
+  </section>
+
+  <p class="foot">design · warstwa treści Markdown → DOCX · próba techniczna przed automatyzacją decyzji redakcyjnych</p>
+</div>

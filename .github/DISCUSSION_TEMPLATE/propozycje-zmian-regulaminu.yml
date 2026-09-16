@@ -64,6 +64,18 @@ body:
       description: Jeżeli masz już propozycję, opisz ją tutaj.
 
   - type: textarea
+    id: current_markdown
+    attributes:
+      label: Fragment Markdown do zastąpienia
+      description: Dla szybkiej korekty wklej dokładny fragment źródła Markdown. Pozostaw puste dla pełnej ścieżki decyzji.
+
+  - type: textarea
+    id: replacement_markdown
+    attributes:
+      label: Nowe brzmienie Markdown
+      description: Dla szybkiej korekty wklej pełne nowe brzmienie fragmentu. Pozostaw puste dla pełnej ścieżki decyzji.
+
+  - type: textarea
     id: alternatives
     attributes:
       label: Inne rozważane podejścia
@@ -84,6 +96,6 @@ body:
   - type: markdown
     attributes:
       value: |
-        Po uzgodnieniu wyniku Koordynator publikuje **Formularz rozstrzygnięcia dyskusji** zgodnie z [przewodnikiem komisji](https://fencer4life.github.io/Regulamin_Kadry-SPWS/przewodnik/).
+        Po uzgodnieniu wyniku Koordynator dodaje etykietę **rozstrzygnięta**. Dla oczywistej korekty bez zmiany sensu zamiast tego dodaje etykietę **redakcja-bez-zmiany-sensu** po podaniu obu fragmentów Markdown.
 
         [← Powrót do publicznej listy dyskusji](https://fencer4life.github.io/Regulamin_Kadry-SPWS/dyskusje/)

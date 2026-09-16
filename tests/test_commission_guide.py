@@ -38,6 +38,10 @@ class CommissionGuideTests(unittest.TestCase):
             "id: priority",
             "type: dropdown",
             "id: area",
+            "id: current_markdown",
+            "label: Fragment Markdown do zastąpienia",
+            "id: replacement_markdown",
+            "label: Nowe brzmienie Markdown",
         ):
             self.assertIn(value, text)
 
@@ -62,6 +66,19 @@ class CommissionGuideTests(unittest.TestCase):
             self.assertIn(value, text)
         self.assertNotIn("Redaktor prowadzący", text)
 
+    def test_public_guide_documents_the_operational_docx_review(self):
+        text = (ROOT / "przewodnik.html").read_text(encoding="utf-8")
+        for value in (
+            "Dwie ścieżki dokumentu: pełna i szybka",
+            "Redaktor uzupełnia kartę, sam opracowuje zmianę Markdown",
+            "sekcji <b>Artifacts</b>",
+            "regulamin-candidate",
+            "Request changes",
+            "Release nie jest dodatkowym krokiem akceptacji",
+        ):
+            self.assertIn(value, text)
+        self.assertNotIn("Planowana szybka ścieżka", text)
+
     def test_public_guide_preserves_both_approved_diagrams_and_legend(self):
         guide = (ROOT / "przewodnik.html").read_text(encoding="utf-8")
         self.assertIn("{% include process-diagrams.html %}", guide)
@@ -77,6 +94,38 @@ class CommissionGuideTests(unittest.TestCase):
             "Notacja",
         ):
             self.assertIn(value, text)
+
+    def test_status_diagram_is_unchanged_and_decision_diagram_shows_both_docx_paths(self):
+        text = (ROOT / "_includes/process-diagrams.html").read_text(encoding="utf-8")
+        status = text.split('<h3>Status dyskusji</h3>', 1)[1].split(
+            '<h3>Jak decyzja wybiera ścieżkę dokumentu</h3>', 1
+        )[0]
+        self.assertIn("OTWARTA", status)
+        self.assertIn("DYSKUSJA", status)
+        self.assertIn("ROZSTRZYGNIĘTA", status)
+        self.assertIn("PORZUCONA", status)
+        self.assertIn("DUPLIKAT", status)
+        self.assertNotIn("redakcja-bez-zmiany-sensu", status)
+
+        decision = text.split(
+            '<h3>Jak decyzja wybiera ścieżkę dokumentu</h3>', 1
+        )[1].split('<h3>Artefakty, które powstają</h3>', 1)[0]
+        for value in (
+            'aria-label="Diagram wyboru pełnej lub szybkiej ścieżki decyzji"',
+            "Czy ma etykietę",
+            "redakcja-bez-zmiany-sensu",
+            "SZYBKA ŚCIEŻKA",
+            "PEŁNA ŚCIEŻKA",
+            "korekta bez zmiany sensu",
+            "zmiana sensu lub potrzeba oceny",
+            "Automat sam zmienia Markdown",
+            "Redaktor opracowuje brzmienie Markdown",
+            "Artefakt DOCX",
+            "Approve",
+            "Request changes",
+            "Release",
+        ):
+            self.assertIn(value, decision)
 
     def test_guide_uses_direct_card_creation_without_resolution_template(self):
         template = ROOT / "szablony/formularz-rozstrzygniecia.md"

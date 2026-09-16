@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projekt wdrożenia automatu Markdown → DOCX</title>
+  <style>
+    :root{--bg:#e8ecf3;--surface:#fff;--surface-2:#dce2ec;--ink:#101722;--muted:#485462;--line:#c4cfdb;--accent:#12467e;--good:#16643d;--warn:#8b5a09;--danger:#a1362a;--mono:ui-monospace,"SF Mono",Menlo,monospace}
+    @media(prefers-color-scheme:dark){:root{--bg:#12151b;--surface:#1b2029;--surface-2:#252c38;--ink:#edf2f7;--muted:#bac4d0;--line:#3a4554;--accent:#94c3ef;--good:#74d59a;--warn:#e9bd6e;--danger:#ef9d95}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{max-width:1000px;margin:auto;padding:52px 25px 90px}h1,h2{font-family:Georgia,serif;line-height:1.15}h1{font-size:clamp(36px,6vw,54px);max-width:20ch;margin:0 0 18px}h2{margin-top:46px;font-size:30px}.tag{font:700 13px var(--mono);letter-spacing:.11em;color:var(--accent)}.lede{font-size:22px;color:var(--muted);max-width:50rem}.box{background:var(--surface);border-left:5px solid var(--accent);border-radius:10px;padding:18px 22px;margin:22px 0}.ok{border-left-color:var(--good)}.warn{border-left-color:var(--warn)}.danger{border-left-color:var(--danger)}code{font-family:var(--mono);background:var(--surface-2);padding:.12em .35em;border-radius:4px;font-size:.88em}table{width:100%;border-collapse:collapse;background:var(--surface);margin:18px 0}th,td{border:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{background:var(--surface-2);font:700 13px var(--mono);letter-spacing:.04em;text-transform:uppercase}li{margin:.48em 0}.flow{font:700 14px var(--mono);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:16px;overflow:auto;white-space:pre-wrap}.foot{margin-top:60px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:14px}
+  </style>
+</head>
+<body><main class="wrap">
+  <p class="tag">REGULAMIN KADRY SPWS · PROJEKT ZATWIERDZONY I WDROŻONY NA GAŁĘZI · 16.09.2026</p>
+  <h1>Bezpieczny automat Markdown → DOCX</h1>
+  <p class="lede">Wdrożenie ustanawia kontrolowany Markdown jako źródło aktualnej treści, zachowuje zatwierdzony DOCX w każdym PR oraz daje Redaktorowi gotową propozycję zmiany bez ręcznego tworzenia dodatkowej migawki.</p>
+
+  <section>
+    <h2>Granice i niezmienne zasady</h2>
+    <div class="box ok"><b>Potwierdzone:</b> kandydat <code>/Users/aleks/coding/regulamin-candidate.docx</code> został ręcznie sprawdzony w Microsoft Word. Próba parytetu pozostaje dowodem technicznym, a kontrola Worda domyka wymaganą bramkę wizualną.</div>
+    <ul>
+      <li>Nie zmieniamy celu Regulaminu ani zatwierdzonego brzmienia bez odrębnej decyzji.</li>
+      <li>Nie usuwamy historycznych skryptów <code>apply_approved_*.py</code>.</li>
+      <li>Automat nigdy nie scala PR ani nie nadpisuje aktualnego DOCX po nieudanym buildzie.</li>
+      <li>Każda zmiana treści ma wspólny PR: karta decyzji, Markdown i rzeczywiście wygenerowany DOCX.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Wybrana architektura</h2>
+    <div class="flow">Dyskusja → etykieta redakcja-bez-zmiany-sensu
+        → walidacja dokładnej zamiany Markdown
+        → jedna gałąź i draft PR
+        → Markdown + DOCX + raport builda
+        → przegląd Redaktora → Approve → Merge
+        → main zawiera już zatwierdzony DOCX; nie powstaje drugi PR</div>
+    <table><thead><tr><th>Warstwa</th><th>Odpowiedzialność</th><th>Trwały wynik</th></tr></thead><tbody>
+      <tr><td>Źródło</td><td><code>regulamin/..._2026.md</code> jest kanonicznym zapisem treści.</td><td>Tekstowy, recenzowalny diff.</td></tr>
+      <tr><td>Generator</td><td>Buduje DOCX wyłącznie pod jawną ścieżką kandydata.</td><td>Nie modyfikuje wzorca pośrednio.</td></tr>
+      <tr><td>CI</td><td>Buduje niezależny kandydat, testuje go, porównuje z DOCX PR i udostępnia artefakt.</td><td>Wynik kontrolny dla recenzji.</td></tr>
+      <tr><td>PR</td><td>Zawiera wygenerowany DOCX, zatem scalony commit jest kompletną migawką.</td><td>Brak kolejnego ręcznego PR wydawniczego.</td></tr>
+    </tbody></table>
+  </section>
+
+  <section>
+    <h2>Etap 1 — ustanowienie źródła i bramki CI</h2>
+    <ol>
+      <li>Dodać asercje akceptacyjne dla builda do jawnej ścieżki CI, testów kandydata, raportu parytetu i artefaktu.</li>
+      <li>Pokazać RED, następnie dodać najmniejszy workflow oraz skrypt pomocniczy, jeśli będzie potrzebny.</li>
+      <li>Wygenerować kandydat z Markdown; dopiero po wszystkich zielonych bramkach zastąpić wersję roboczą <code>regulamin/..._2026.docx</code> w tym samym PR.</li>
+      <li>CI porównuje znormalizowaną treść i układ niezależnego kandydata z DOCX śledzonym w PR. Każdy przyszły PR musi więc aktualizować Markdown i wygenerowany DOCX razem.</li>
+    </ol>
+    <div class="box warn"><b>Ochrona poprzedniej wersji:</b> przed scaleniem poprzedni poprawny DOCX pozostaje na <code>main</code>. Nieudany workflow nie może wypchnąć ani zastąpić pliku; kandydat istnieje tylko w przestrzeni roboczej i jako artefakt runu.</div>
+  </section>
+
+  <section>
+    <h2>Etap 2 — szybka ścieżka redakcyjna</h2>
+    <p>Etykieta <code>redakcja-bez-zmiany-sensu</code> jest sygnałem Koordynatora. Aby automat był deterministyczny i nie zgadywał normatywnego brzmienia, formularz dyskusji zawiera dokładnie dwa pola: <b>fragment Markdown do zastąpienia</b> oraz <b>nowe brzmienie Markdown</b>.</p>
+    <ul>
+      <li>Skrypt przyjmuje wyłącznie fragment występujący dokładnie raz; brak albo wielokrotne wystąpienie zatrzymuje automat z czytelną informacją w dyskusji.</li>
+      <li>Workflow tworzy albo bezpiecznie aktualizuje gałąź przypisaną do numeru dyskusji, tworzy kartę DR i draft PR.</li>
+      <li>Przed pushnięciem uruchamia generator, testy, parytet i kontrolę bezpieczeństwa; do PR trafiają Markdown i wygenerowany DOCX, a opis PR linkuje run i jego artefakt.</li>
+      <li>W decyzji pozostaje identyfikowalna decyzja i skutek. Szybka ścieżka nie wymaga rozbudowanego uzasadnienia ani listy wariantów.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Dwie ścieżki pracy komisji</h2>
+    <p>Obie ścieżki kończą się tym samym bezpiecznym punktem: jednym PR zawierającym kartę decyzji, Markdown, wygenerowany DOCX i zielone bramki CI. Kluczowa różnica dotyczy odpowiedzialności za treść: w pełnej ścieżce Redaktor opracowuje brzmienie przepisu na podstawie decyzji komisji, a w szybkiej automat wykonuje dokładnie wskazaną korektę, która nie może zmienić sensu.</p>
+    <table><thead><tr><th>Element</th><th>Pełna ścieżka decyzji</th><th>Szybka ścieżka redakcyjna</th></tr></thead><tbody>
+      <tr><td>Wyzwalacz</td><td>Decyzja nie ma etykiety szybkiej ścieżki; po rozstrzygnięciu wymaga redakcji człowieka.</td><td>Koordynator dodaje dodatkową etykietę <code>redakcja-bez-zmiany-sensu</code> dla oczywistej korekty bez zmiany sensu.</td></tr>
+      <tr><td>Dane wejściowe</td><td>Problem, proponowane rozwiązanie, rozważane warianty oraz materiały z dyskusji.</td><td>Problem oraz dokładny fragment Markdown do zastąpienia i jego nowe brzmienie.</td></tr>
+      <tr><td>Karta decyzji</td><td>Automat mapuje dane dyskusji; Redaktor uzupełnia uzasadnienie i wybiera wymagany skutek.</td><td>Decyzja i jej skutek pozostają widoczne i identyfikowalne; można pominąć rozbudowane uzasadnienie oraz warianty.</td></tr>
+      <tr><td>Przygotowanie treści</td><td>Redaktor interpretuje przyjętą decyzję i sam opracowuje właściwe brzmienie Markdown. Generator tworzy DOCX dopiero z tej redakcji.</td><td>Automat stosuje wskazaną zamianę Markdown bez redagowania przepisu od nowa. Brak lub wielokrotne wystąpienie fragmentu zatrzymuje proces.</td></tr>
+      <tr><td>Recenzja człowieka</td><td>Redaktor odpowiada za prawidłowe przełożenie decyzji na przepis oraz sprawdza DOCX w Wordzie.</td><td>Redaktor nie tworzy brzmienia od zera; sprawdza, czy automat wykonał dokładnie zatwierdzoną korektę, oraz otwiera DOCX w Wordzie.</td></tr>
+      <tr><td>Finał</td><td><b>Approve</b> → <b>Merge</b> → Release publikuje uprzednio zaakceptowaną wersję.</td><td><b>Approve</b> → <b>Merge</b> → Release publikuje uprzednio zaakceptowaną wersję.</td></tr>
+      <tr><td>Odrzucenie</td><td><b>Request changes</b> albo zamknięcie PR: <code>main</code> i DOCX pozostają bez zmian.</td><td><b>Request changes</b> albo zamknięcie PR: <code>main</code> i DOCX pozostają bez zmian.</td></tr>
+    </tbody></table>
+    <div class="box warn"><b>Granica szybkiej ścieżki:</b> gdy korekta może zmienić znaczenie przepisu, nie używa się etykiety redakcyjnej. Sprawa przechodzi pełną ścieżką decyzji.</div>
+  </section>
+
+  <section>
+    <h2>Uprawnienia, pętle i role</h2>
+    <table><thead><tr><th>Element</th><th>Decyzja</th></tr></thead><tbody>
+      <tr><td>Wyzwalacz automatu</td><td>Tylko zdarzenie <code>discussion:labeled</code> i dokładnie etykieta szybkiej ścieżki.</td></tr>
+      <tr><td>Pętla workflow</td><td>Commit automatu nie wyzwala workflow tworzącego PR; workflow nie reaguje na <code>push</code>.</td></tr>
+      <tr><td>Najmniejsze uprawnienia automatu</td><td><code>contents: write</code>, <code>pull-requests: write</code>, <code>discussions: write</code>. Zwykłe CI zachowuje <code>contents: read</code>.</td></tr>
+      <tr><td>Koordynator</td><td>Dodaje etykietę. Może być równocześnie Redaktorem.</td></tr>
+      <tr><td>Redaktor</td><td>Otwiera przygotowany PR, opcjonalnie koryguje propozycję, klika <b>Approve</b>, a następnie <b>Merge</b>.</td></tr>
+    </tbody></table>
+  </section>
+
+  <section>
+    <h2>Gdzie zapada decyzja o DOCX</h2>
+    <div class="box ok"><b>PR jest bramką człowieka.</b> CI udostępnia artefakt <code>regulamin-candidate.docx</code> i DOCX śledzony w PR. Redaktor otwiera plik w Wordzie, następnie wybiera <b>Approve</b> i <b>Merge</b>, albo <b>Request changes</b>/zamyka PR. W drugim przypadku <code>main</code> i jego aktualny DOCX nie zmieniają się.</div>
+    <p>Release nie otrzymuje osobnego przycisku „Approve/Odrzuć”. Jest wyzwalany po scaleniu i publikuje wersję już zaakceptowaną w PR. Bramka środowiska w Release byłaby pozorna: mogłaby zatrzymać publikację Pages, ale nie cofnęłaby dokumentu, który po scaleniu już znajduje się w <code>main</code>.</p>
+  </section>
+
+  <section>
+    <h2>Testy i kryteria przyjęcia</h2>
+    <ul>
+      <li>TDD: testy workflow/parsera przed implementacją, z udokumentowanym wynikiem RED i GREEN.</li>
+      <li>Pełne testy repozytorium oraz testy bezpośrednio na nowo wygenerowanym DOCX.</li>
+      <li><code>docx_parity.py</code>, <code>compileall</code> i <code>git diff --check</code>.</li>
+      <li>Testy idempotencji: ponowne oznaczenie tej samej dyskusji nie tworzy drugiej gałęzi, karty ani PR.</li>
+      <li>Testy odmowy: niejednoznaczna zamiana Markdown i nieudany build nie zmieniają śledzonego DOCX.</li>
+    </ul>
+  </section>
+
+  <p class="foot">Zakres: automatyzacja bez automatycznego scalania · przyjęty przez użytkownika 16.09.2026</p>
+</main></body></html>

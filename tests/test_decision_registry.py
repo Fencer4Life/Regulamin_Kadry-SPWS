@@ -48,9 +48,10 @@ class DecisionRegistryTests(unittest.TestCase):
     def setUpClass(cls):
         cls.paths = sorted(DECISIONS.glob("DR-*.md"))
 
-    def test_registry_contains_exactly_the_migrated_decisions(self):
-        expected = [f"DR-{number:03d}" for number in range(1, 17)]
+    def test_registry_preserves_migrated_decisions_and_has_no_number_gaps(self):
         actual = [path.name[:6] for path in self.paths]
+        self.assertGreaterEqual(len(actual), 16)
+        expected = [f"DR-{number:03d}" for number in range(1, len(actual) + 1)]
         self.assertEqual(actual, expected)
 
     def test_every_record_has_valid_metadata_and_sections(self):
