@@ -78,6 +78,19 @@ class CommissionGuideTests(unittest.TestCase):
         ):
             self.assertIn(value, text)
 
+    def test_each_existing_process_diagram_explains_both_docx_paths(self):
+        text = (ROOT / "_includes/process-diagrams.html").read_text(encoding="utf-8")
+        diagrams = (
+            text.split('<h3>Status dyskusji</h3>', 1)[0],
+            text.split('<h3>Status dyskusji</h3>', 1)[1].split('<h3>Artefakty, które powstają</h3>', 1)[0],
+            text.split('<h3>Artefakty, które powstają</h3>', 1)[1].split('<h3>Notacja</h3>', 1)[0],
+        )
+        for diagram in diagrams:
+            self.assertIn("rozstrzygnięta", diagram)
+            self.assertIn("redakcja-bez-zmiany-sensu", diagram)
+        for value in ("Artefakt DOCX", "Approve", "Request changes", "Release"):
+            self.assertIn(value, text)
+
     def test_guide_uses_direct_card_creation_without_resolution_template(self):
         template = ROOT / "szablony/formularz-rozstrzygniecia.md"
         guide = (ROOT / "przewodnik.html").read_text(encoding="utf-8") if (ROOT / "przewodnik.html").exists() else ""
