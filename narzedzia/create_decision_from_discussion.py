@@ -30,6 +30,8 @@ def parse_discussion_form(body: str) -> dict[str, str]:
         "priorytet": _discussion_field(body, "Priorytet"),
         "obszar": _discussion_field(body, "Obszar"),
         "propozycja": _discussion_field(body, "Proponowane rozwiązanie"),
+        "fragment_markdown": _discussion_field(body, "Fragment Markdown do zastąpienia"),
+        "nowe_brzmienie_markdown": _discussion_field(body, "Nowe brzmienie Markdown"),
         "alternatywy": _discussion_field(body, "Inne rozważane podejścia"),
         "materialy": _discussion_field(body, "Materiały lub przykłady"),
         "powiazane": _discussion_field(body, "Powiązane decyzje"),
@@ -99,6 +101,10 @@ Zobacz dyskusję źródłową: [{url}]({url}).
 **Koordynator dyskusji:** {coordinator}
 
 **Uczestnicy:** {people}
+
+## Rozważane warianty
+
+{rejected}
 
 ## Decyzja
 

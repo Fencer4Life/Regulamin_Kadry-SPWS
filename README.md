@@ -45,19 +45,19 @@ Do czasu uruchomienia opisanego niżej automatu plik DOCX w katalogu `regulamin/
 
 Plik DOCX jest binarny i GitHub nie pokazuje jego zmian równie czytelnie jak zmian tekstowych. Dlatego każde rozstrzygnięcie dotyczące treści powinno mieć odpowiadającą mu kartę w Rejestrze Decyzji.
 
-### Planowana ścieżka Markdown → DOCX
+### Ścieżka Markdown → DOCX
 
-Po wdrożeniu i opublikowaniu automatu kontrolowany Markdown stanie się źródłem kanonicznym aktualnej treści, a generator utworzy DOCX od początku. Każdy Pull Request zmieniający treść będzie zawierał razem Markdown oraz rzeczywiście wygenerowany DOCX. CI utworzy drugi, niezależny kandydat, uruchomi na nim testy treści, struktury i bezpieczeństwa, porówna go z DOCX z PR oraz udostępni plik jako artefakt runu.
+Kontrolowany Markdown w `regulamin/` jest źródłem kanonicznym aktualnej treści, a generator tworzy z niego DOCX od początku. Każdy Pull Request zmieniający treść zawiera razem Markdown, kartę decyzji i rzeczywiście wygenerowany DOCX. CI tworzy drugi, niezależny kandydat, uruchamia na nim testy treści, struktury i bezpieczeństwa, porównuje go z DOCX z PR oraz udostępnia plik jako artefakt runu.
 
 **Akceptacja następuje przed Release:** Redaktor pobiera artefakt `regulamin-candidate.docx` z runu CI albo otwiera DOCX dołączony do PR w Microsoft Word. Następnie wybiera `Approve` i scala PR albo wybiera `Request changes`/zamyka PR. Dopóki PR nie zostanie scalony, `main` i jego DOCX nie zmieniają się. Release uruchamia się dopiero po scaleniu i publikuje już zaakceptowaną wersję; nie jest osobnym miejscem akceptacji albo odrzucenia dokumentu.
 
-Szybka ścieżka `redakcja-bez-zmiany-sensu` będzie tworzyła draft PR automatycznie po dodaniu etykiety przez Koordynatora. Dyskusja będzie zawierać dokładny fragment Markdown do zastąpienia i nowe brzmienie. Automat odrzuci niejednoznaczną zamianę, a nieudany build nie zmieni żadnego DOCX na `main`.
+W pełnej ścieżce Redaktor sam opracowuje brzmienie Markdown na podstawie decyzji komisji, ponieważ zmiana może wymagać oceny i zmieniać sens przepisu. Szybka ścieżka `redakcja-bez-zmiany-sensu` służy wyłącznie korekcie, której dokładne stare i nowe brzmienie podano w dyskusji. Po dodaniu tej etykiety automat sam stosuje jednoznaczną zamianę i tworzy draft PR. Automat odrzuci brak albo wielokrotne wystąpienie fragmentu, a nieudany build nie zmieni żadnego DOCX na `main`.
 
 ## Struktura repozytorium
 
 | Ścieżka | Przeznaczenie |
 |---|---|
-| `regulamin/` | aktualna uzgodniona migawka projektu DOCX; po wdrożeniu także kanoniczny Markdown |
+| `regulamin/` | kanoniczny Markdown oraz aktualna, wygenerowana z niego migawka DOCX |
 | `wydania/` | formalnie zatwierdzone, niezmienne wersje sezonowe |
 | `_decyzje/` | źródłowe karty decyzji w Markdown |
 | `zalaczniki/` | publiczne załączniki i materiały stanowiące część projektu |
@@ -70,17 +70,18 @@ Automatyczne kopie DOCX, pliki blokady Worda, wynik `_site/` oraz środowisko `.
 
 ## Jak współpracować
 
-Zmianę rozpoczyna dyskusja ze wskazanym Koordynatorem dyskusji i opisem problemu. Po uzgodnieniu wyniku koordynator publikuje formularz rozstrzygnięcia. Automatyzacja waliduje formularz, nadaje trwały numer `DR-NNN` i tworzy roboczy Pull Request. Karta decyzji oraz — jeżeli decyzja tego wymaga — zmiana dokumentu Word są przeglądane razem.
+Zmianę rozpoczyna dyskusja ze wskazanym Koordynatorem dyskusji i opisem problemu. Po uzgodnieniu wyniku Koordynator wybiera jedną z dwóch ścieżek etykietą. `rozstrzygnięta` uruchamia pełną ścieżkę, w której Redaktor przekłada decyzję na Markdown. `redakcja-bez-zmiany-sensu` uruchamia szybką ścieżkę i automat stosuje dokładną zamianę podaną w dyskusji. W obu przypadkach powstaje roboczy Pull Request, a CI udostępnia kandydacki DOCX do kontroli w Wordzie.
 
 Skrócony przebieg:
 
 1. zgłoszenie problemu w GitHub Discussions;
 2. dyskusja komisji nad wariantami i konsekwencjami;
-3. formularz rozstrzygnięcia opublikowany przez koordynatora;
+3. wybór pełnej albo szybkiej ścieżki przez Koordynatora;
 4. automatyczne przygotowanie karty decyzji i draft Pull Requestu;
-5. wprowadzenie zmiany DOCX przez Redaktora regulaminu, jeżeli jest wymagana;
-6. przegląd i scalenie dokumentacji oraz treści;
-7. publikacja i ocena skutków po zakończeniu sezonu.
+5. opracowanie Markdown przez Redaktora w pełnej ścieżce albo automatyczna dokładna zamiana w szybkiej;
+6. automatyczne zbudowanie i przetestowanie DOCX oraz kontrola pliku w Wordzie;
+7. przegląd i scalenie dokumentacji oraz treści;
+8. publikacja i ocena skutków po zakończeniu sezonu.
 
 Pełny proces opisuje [przewodnik dla komisji](https://html-preview.github.io/?url=https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/przewodnik.html), reguły dokumentowania zawierają [Zasady prowadzenia Rejestru Decyzji](https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/ZASADY_REJESTRU.md), a instrukcję techniczną przygotowania zmian — [CONTRIBUTING.md](https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/CONTRIBUTING.md).
 

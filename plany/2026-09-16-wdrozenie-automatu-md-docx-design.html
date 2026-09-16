@@ -11,7 +11,7 @@
   </style>
 </head>
 <body><main class="wrap">
-  <p class="tag">REGULAMIN KADRY SPWS · PROJEKT ZATWIERDZONY · 16.09.2026</p>
+  <p class="tag">REGULAMIN KADRY SPWS · PROJEKT ZATWIERDZONY I WDROŻONY NA GAŁĘZI · 16.09.2026</p>
   <h1>Bezpieczny automat Markdown → DOCX</h1>
   <p class="lede">Wdrożenie ustanawia kontrolowany Markdown jako źródło aktualnej treści, zachowuje zatwierdzony DOCX w każdym PR oraz daje Redaktorowi gotową propozycję zmiany bez ręcznego tworzenia dodatkowej migawki.</p>
 
@@ -66,13 +66,13 @@
 
   <section>
     <h2>Dwie ścieżki pracy komisji</h2>
-    <p>Obie ścieżki kończą się tym samym bezpiecznym punktem: jednym PR zawierającym kartę decyzji, Markdown, wygenerowany DOCX i zielone bramki CI. Różnią się wyłącznie zakresem uzasadnienia potrzebnego przed przygotowaniem PR.</p>
+    <p>Obie ścieżki kończą się tym samym bezpiecznym punktem: jednym PR zawierającym kartę decyzji, Markdown, wygenerowany DOCX i zielone bramki CI. Kluczowa różnica dotyczy odpowiedzialności za treść: w pełnej ścieżce Redaktor opracowuje brzmienie przepisu na podstawie decyzji komisji, a w szybkiej automat wykonuje dokładnie wskazaną korektę, która nie może zmienić sensu.</p>
     <table><thead><tr><th>Element</th><th>Pełna ścieżka decyzji</th><th>Szybka ścieżka redakcyjna</th></tr></thead><tbody>
-      <tr><td>Wyzwalacz</td><td>Koordynator dodaje etykietę <code>rozstrzygnięta</code> po dyskusji komisji.</td><td>Koordynator dodaje etykietę <code>redakcja-bez-zmiany-sensu</code> dla oczywistej korekty bez zmiany sensu.</td></tr>
+      <tr><td>Wyzwalacz</td><td>Decyzja nie ma etykiety szybkiej ścieżki; po rozstrzygnięciu wymaga redakcji człowieka.</td><td>Koordynator dodaje dodatkową etykietę <code>redakcja-bez-zmiany-sensu</code> dla oczywistej korekty bez zmiany sensu.</td></tr>
       <tr><td>Dane wejściowe</td><td>Problem, proponowane rozwiązanie, rozważane warianty oraz materiały z dyskusji.</td><td>Problem oraz dokładny fragment Markdown do zastąpienia i jego nowe brzmienie.</td></tr>
       <tr><td>Karta decyzji</td><td>Automat mapuje dane dyskusji; Redaktor uzupełnia uzasadnienie i wybiera wymagany skutek.</td><td>Decyzja i jej skutek pozostają widoczne i identyfikowalne; można pominąć rozbudowane uzasadnienie oraz warianty.</td></tr>
-      <tr><td>Przygotowanie treści</td><td>PR zawiera zmianę Markdown wynikającą z przyjętej decyzji oraz DOCX wygenerowany z tej zmiany.</td><td>Automat stosuje wyłącznie jednoznaczną zamianę; brak lub wielokrotne wystąpienie fragmentu zatrzymuje proces.</td></tr>
-      <tr><td>Recenzja człowieka</td><td>Redaktor sprawdza decyzję, Markdown i DOCX w Wordzie.</td><td>Redaktor sprawdza proponowaną korektę oraz DOCX w Wordzie; może poprawić PR przed recenzją.</td></tr>
+      <tr><td>Przygotowanie treści</td><td>Redaktor interpretuje przyjętą decyzję i sam opracowuje właściwe brzmienie Markdown. Generator tworzy DOCX dopiero z tej redakcji.</td><td>Automat stosuje wskazaną zamianę Markdown bez redagowania przepisu od nowa. Brak lub wielokrotne wystąpienie fragmentu zatrzymuje proces.</td></tr>
+      <tr><td>Recenzja człowieka</td><td>Redaktor odpowiada za prawidłowe przełożenie decyzji na przepis oraz sprawdza DOCX w Wordzie.</td><td>Redaktor nie tworzy brzmienia od zera; sprawdza, czy automat wykonał dokładnie zatwierdzoną korektę, oraz otwiera DOCX w Wordzie.</td></tr>
       <tr><td>Finał</td><td><b>Approve</b> → <b>Merge</b> → Release publikuje uprzednio zaakceptowaną wersję.</td><td><b>Approve</b> → <b>Merge</b> → Release publikuje uprzednio zaakceptowaną wersję.</td></tr>
       <tr><td>Odrzucenie</td><td><b>Request changes</b> albo zamknięcie PR: <code>main</code> i DOCX pozostają bez zmian.</td><td><b>Request changes</b> albo zamknięcie PR: <code>main</code> i DOCX pozostają bez zmian.</td></tr>
     </tbody></table>

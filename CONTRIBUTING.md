@@ -29,13 +29,23 @@ Zmiana normatywna powinna obejmować łącznie:
 
 Wspólna redakcja Word odbywa się przez OneDrive. Do Git trafia uzgodniona migawka, nie każda automatyczna wersja pliku.
 
-### Planowane przejście na Markdown → DOCX
+### Markdown → DOCX
 
-Po wdrożeniu automatu źródłem kanonicznym będzie kontrolowany Markdown. Pull Request treściowy będzie zawierał Markdown i wygenerowany z niego DOCX. CI utworzy dodatkowy kandydacki DOCX, uruchomi na nim testy oraz porównanie parytetu, a wynik udostępni jako artefakt.
+Źródłem kanonicznym jest kontrolowany Markdown. Pull Request treściowy zawiera Markdown, kartę decyzji i wygenerowany z niego DOCX. CI tworzy dodatkowy kandydacki DOCX, uruchamia na nim testy oraz porównanie parytetu, a wynik udostępnia jako artefakt.
 
 Recenzja dokumentu ma miejsce w Pull Requeście: Redaktor pobiera kandydat z Actions lub otwiera DOCX z PR w Microsoft Word, następnie wybiera `Approve` albo `Request changes`. Dopiero po `Merge` Release publikuje zaakceptowaną wersję. Release nie jest bramką do odrzucania pliku, ponieważ po scaleniu zmiana już znajduje się w `main`.
 
-Po dodaniu etykiety `redakcja-bez-zmiany-sensu` automat utworzy draft PR tylko dla jednoznacznej, kontrolowanej zamiany: wskazany fragment Markdown musi wystąpić dokładnie raz. Nieudana walidacja, build albo test nie może zastąpić DOCX w `main`.
+Pełna ścieżka zaczyna się od etykiety `rozstrzygnięta`. Automat tworzy kartę DR i draft PR, a Redaktor uzupełnia uzasadnienie, zaznacza `Tak` albo `Nie` i — gdy Regulamin ma się zmienić — opracowuje nowe brzmienie Markdown. Następnie uruchamia generator:
+
+```bash
+python -m narzedzia.build_regulamin_docx \
+  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
+  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx
+```
+
+Szybka ścieżka zaczyna się od etykiety `redakcja-bez-zmiany-sensu`. W dyskusji muszą być wypełnione pola `Fragment Markdown do zastąpienia` i `Nowe brzmienie Markdown`. Automat wymaga dokładnie jednego wystąpienia starego fragmentu, sam zmienia Markdown, buduje i testuje DOCX, tworzy kartę DR oraz draft PR. Brak, wielokrotne wystąpienie, nieudany build albo test zatrzymują proces przed pushnięciem zmiany.
+
+W obu ścieżkach Redaktor otwiera run `CI` przypisany do PR, pobiera `regulamin-candidate` z sekcji `Artifacts`, otwiera DOCX w Microsoft Word i sprawdza treść oraz układ. `Approve` i `Merge` przyjmują wersję; `Request changes` albo zamknięcie PR pozostawiają `main` bez zmian.
 
 ## Kontrola przed wysłaniem
 

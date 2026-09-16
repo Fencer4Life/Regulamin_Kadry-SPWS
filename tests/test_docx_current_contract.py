@@ -1,17 +1,20 @@
 from __future__ import annotations
 
-import hashlib
-import json
+import tempfile
 import unittest
 from pathlib import Path
 
 from docx import Document
+from narzedzia.build_regulamin_docx import build_document
 from narzedzia.docx_parity import document_content_contract
 
 
 ROOT = Path(__file__).resolve().parents[1]
 CURRENT_DOCUMENT = ROOT / "regulamin" / (
     "Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx"
+)
+CANONICAL_SOURCE = ROOT / "regulamin" / (
+    "Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md"
 )
 EXPECTED_HEADINGS = [
     "Spis treści",
@@ -49,16 +52,6 @@ EXPECTED_HEADINGS = [
 ]
 
 
-def contract_sha256(contract: dict[str, object]) -> str:
-    payload = json.dumps(
-        contract,
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
-    return hashlib.sha256(payload).hexdigest()
-
-
 class CurrentDocxContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -79,11 +72,15 @@ class CurrentDocxContractTests(unittest.TestCase):
         ]
         self.assertEqual(headings, EXPECTED_HEADINGS)
 
-    def test_current_document_full_content_contract_is_frozen(self):
-        self.assertEqual(
-            contract_sha256(self.contract),
-            "4d2a26722638fb6c21ee17d35a6db6451f691a95691248f5dbc1d88d56056b9a",
-        )
+    def test_current_document_matches_the_canonical_markdown_source(self):
+        with tempfile.TemporaryDirectory() as directory:
+            candidate = Path(directory) / "candidate.docx"
+            build_document(CANONICAL_SOURCE, candidate)
+            self.assertEqual(
+                self.contract,
+                document_content_contract(candidate),
+                "Śledzony DOCX nie odpowiada kanonicznemu źródłu Markdown",
+            )
 
 
 if __name__ == "__main__":
