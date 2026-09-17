@@ -14,11 +14,14 @@ permalink: /dyskusje/
   <p class="result-count">Ostatnia synchronizacja: {{ snapshot.generated_at | default: 'oczekuje na pierwszą synchronizację' }}. Po edycji na GitHubie poczekaj na zakończenie Release.</p>
   <button class="action" type="button" data-discussion-refresh>Odśwież dane</button>
 </div>
+<div class="discussion-page-layout">
+<div class="discussion-open-column">
 <section class="discussion-list discussion-grid">
 {% for discussion in snapshot.open_items %}
   <article class="discussion-card">
     <aside class="discussion-rail discussion-age-fresh" data-created-at="{{ discussion.created_at }}">
       <span class="discussion-number">#{{ discussion.number }}</span>
+      {% if discussion.priority %}<span class="discussion-priority discussion-priority-{{ discussion.priority | downcase }}"><span>Priorytet</span><strong>{{ discussion.priority | escape }}</strong></span>{% endif %}
       <span class="discussion-age"><strong data-discussion-age>—</strong><span data-discussion-age-unit>dni</span></span>
       <span class="discussion-coordinator" title="{% if discussion.coordinator %}Koordynator: {{ discussion.coordinator | escape }}{% else %}Koordynator nie wskazany{% endif %}">
         {% if discussion.coordinator_avatar_url %}<img src="{{ discussion.coordinator_avatar_url | escape }}" alt="Avatar {{ discussion.coordinator | escape }}">{% else %}<span class="discussion-coordinator-missing">?</span>{% endif %}
@@ -38,13 +41,14 @@ permalink: /dyskusje/
   <p class="notice">Brak otwartych dyskusji w snapshotcie. <a href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions">Sprawdź aktualną listę na GitHub.</a></p>
 {% endfor %}
 </section>
+</div>
 
-<section class="hero">
+<aside class="discussion-archive-panel">
+<button class="discussion-archive-toggle" type="button" aria-expanded="false" aria-controls="discussion-archive-content" data-discussion-archive-toggle>Zamknięte dyskusje ({{ snapshot.closed_items.size }})</button>
+<div class="discussion-archive-content" id="discussion-archive-content">
   <p class="eyebrow">Archiwum prac komisji</p>
-  <h1>Zamknięte dyskusje i decyzje</h1>
-  <p class="lead">Zakończone rozmowy wraz z ich wynikiem i — gdy powstała — opublikowaną kartą decyzji.</p>
-</section>
-<section class="discussion-list">
+  <h2>Zamknięte dyskusje i decyzje ({{ snapshot.closed_items.size }})</h2>
+  <div class="discussion-archive-list">
 {% for discussion in snapshot.closed_items %}
   {% assign discussion_status = 'Zamknięta' %}
   {% if discussion.labels contains 'PORZUCONA' %}
@@ -62,13 +66,21 @@ permalink: /dyskusje/
       {% assign linked_decision_id = decision.slug | slice: 0, 6 | upcase %}
     {% endif %}
   {% endfor %}
-  <article class="decision-card">
-    <p class="eyebrow">Dyskusja #{{ discussion.number }} · <span class="status">{{ discussion_status }}</span></p>
-    <h2><a href="{{ discussion.url }}">{{ discussion.title | escape }}</a></h2>
-    <p class="card-meta">{{ discussion.author | escape }} · zamknięta: {{ discussion.closed_at }} · wypowiedzi: {{ discussion.comments }}</p>
-    {% if linked_decision_url != '' %}<p><a class="action" href="{{ linked_decision_url | relative_url }}">Zobacz decyzję {{ linked_decision_id }}</a></p>{% endif %}
+  <article class="discussion-archive-card" data-discussion-archive-item>
+    <p class="discussion-archive-kicker">#{{ discussion.number }} · <span class="status">{{ discussion_status }}</span></p>
+    <h3><a href="{{ discussion.url }}">{{ discussion.title | remove_first: '[Dyskusja]' | strip | escape }}</a></h3>
+    <p class="card-meta">Zamknięta: {{ discussion.closed_at | date: '%d.%m.%Y' }} · 💬 {{ discussion.comments }}</p>
+    {% if linked_decision_url != '' %}<p class="discussion-archive-decision"><a href="{{ linked_decision_url | relative_url }}">Zobacz decyzję {{ linked_decision_id }}</a></p>{% endif %}
   </article>
 {% else %}
   <p class="notice">Brak zamkniętych dyskusji w snapshotcie.</p>
 {% endfor %}
-</section>
+  </div>
+  <nav class="discussion-archive-pagination" aria-label="Strony zamkniętych dyskusji">
+    <button type="button" data-discussion-archive-previous>Poprzednia</button>
+    <span data-discussion-archive-page>1 / 1</span>
+    <button type="button" data-discussion-archive-next>Następna</button>
+  </nav>
+</div>
+</aside>
+</div>

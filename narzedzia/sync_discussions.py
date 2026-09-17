@@ -13,6 +13,7 @@ except ModuleNotFoundError:
 
 CATEGORY = "propozycje-zmian-regulaminu"
 GITHUB_LOGIN = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$")
+PRIORITIES = {value.casefold(): value for value in ("Niski", "Średni", "Wysoki")}
 
 
 def _discussion_nodes(payload: dict | list[dict]):
@@ -30,6 +31,7 @@ def normalize_discussions(payload: dict | list[dict], generated_at: str) -> dict
         source = parse_discussion_form(node.get("body") or "")
         coordinator = source["koordynator"].lstrip("@").strip() or None
         avatar_login = coordinator if coordinator and GITHUB_LOGIN.fullmatch(coordinator) else None
+        priority = PRIORITIES.get(source["priorytet"].strip().casefold())
         item = {
             "number": node["number"], "title": node["title"], "url": node["url"],
             "created_at": node["createdAt"], "author": (node.get("author") or {}).get("login", "konto usunięte"),
@@ -37,6 +39,7 @@ def normalize_discussions(payload: dict | list[dict], generated_at: str) -> dict
             "labels": [label["name"] for label in node.get("labels", {}).get("nodes", [])],
             "coordinator": coordinator,
             "coordinator_avatar_url": f"https://github.com/{avatar_login}.png?size=80" if avatar_login else None,
+            "priority": priority,
             "depends_on": source["zalezy_od"],
             "closed_at": node.get("closedAt"),
         }
