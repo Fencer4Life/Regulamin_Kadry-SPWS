@@ -15,6 +15,7 @@ REQUIRED_PLATFORM_FILES = (
     "_includes/decision-card.html",
     "assets/rejestr.css",
     "assets/rejestr.js",
+    "assets/dyskusje.js",
     "_data/discussions.json",
     ".github/workflows/validate.yml",
     ".github/workflows/pages.yml",
@@ -73,6 +74,39 @@ class RegistryPlatformTests(unittest.TestCase):
             self.assertIn(fragment, page)
         self.assertFalse((ROOT / "_data" / "open_discussions.json").exists())
 
+    def test_open_discussion_cards_have_the_approved_ux_contract(self):
+        page = (ROOT / "dyskusje.html").read_text(encoding="utf-8")
+        css = (ROOT / "assets/rejestr.css").read_text(encoding="utf-8")
+        script = (ROOT / "assets/dyskusje.js").read_text(encoding="utf-8")
+        layout = (ROOT / "_layouts/default.html").read_text(encoding="utf-8")
+        for fragment in (
+            'class="discussion-list discussion-grid"',
+            'class="discussion-rail discussion-age-fresh"',
+            'class="discussion-number"',
+            'data-created-at="{{ discussion.created_at }}"',
+            'class="discussion-coordinator"',
+            'class="discussion-pills"',
+            'class="discussion-comments"',
+            "remove_first: '[Dyskusja]'",
+            "discussion.depends_on",
+            "discussion.labels",
+            "Odśwież dane",
+        ):
+            self.assertIn(fragment, page)
+        for fragment in (
+            ".discussion-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));",
+            ".discussion-rail",
+            ".discussion-age-fresh",
+            ".discussion-age-medium",
+            ".discussion-age-long",
+        ):
+            self.assertIn(fragment, css)
+        self.assertRegex(css, r"\.discussion-pills\s*\{[^}]*margin-top:\s*auto;")
+        self.assertRegex(css, r"\.discussion-comments\s*\{[^}]*margin-top:\s*12px;")
+        for fragment in ("calendarDayAge", "discussion-age-fresh", "odswiez", "Date.now()"):
+            self.assertIn(fragment, script)
+        self.assertIn("assets/dyskusje.js", layout)
+
     def test_config_publishes_decision_collection(self):
         config = (ROOT / "_config.yml").read_text(encoding="utf-8")
         for fragment in ("decyzje:", "output: true", "permalink: /decyzje/:name/", "- .DS_Store"):
@@ -126,6 +160,7 @@ class RegistryPlatformTests(unittest.TestCase):
             "sync_discussions.py",
             "states:[OPEN,CLOSED]",
             "closedAt",
+            "body",
             "pageInfo",
             "endCursor",
             "--paginate --slurp",

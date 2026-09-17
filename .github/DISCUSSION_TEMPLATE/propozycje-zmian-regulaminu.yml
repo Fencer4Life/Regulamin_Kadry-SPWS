@@ -11,7 +11,7 @@ body:
     id: coordinator
     attributes:
       label: Koordynator dyskusji
-      description: Podaj login GitHub lub pseudonim osoby porządkującej rozmowę.
+      description: Podaj login GitHub osoby porządkującej rozmowę — dzięki temu lista pokaże jej avatar.
       placeholder: "@login"
     validations:
       required: true
@@ -90,8 +90,8 @@ body:
   - type: input
     id: related
     attributes:
-      label: Powiązane decyzje
-      description: Podaj numery istniejących decyzji, na przykład DR-015.
+      label: Zależy od
+      description: Podaj identyfikator dyskusji, decyzji lub elementu regulaminu, na przykład #29, DR-015 albo D-29.
 
   - type: markdown
     attributes:

@@ -42,6 +42,8 @@ class CommissionGuideTests(unittest.TestCase):
             "label: Fragment Markdown do zastąpienia",
             "id: replacement_markdown",
             "label: Nowe brzmienie Markdown",
+            "id: related",
+            "label: Zależy od",
         ):
             self.assertIn(value, text)
 
@@ -62,7 +64,7 @@ class CommissionGuideTests(unittest.TestCase):
         guide = ROOT / "przewodnik.html"
         self.assertTrue(guide.is_file())
         text = guide.read_text(encoding="utf-8") + (ROOT / "_includes/process-diagrams.html").read_text(encoding="utf-8")
-        for value in ("Koordynator dyskusji", "Redaktor regulaminu", "co 15 minut", "Rozstrzygnięta", "Uzasadnienie", "swimlane", "Tak / Nie?", "DOKUMENTACJA<br>DECYZJI", "Zamknięte dyskusje i decyzje", "uruchamia Release jeszcze raz"):
+        for value in ("Koordynator dyskusji", "Redaktor regulaminu", "co 15 minut", "Rozstrzygnięta", "Uzasadnienie", "swimlane", "Tak / Nie?", "DOKUMENTACJA<br>DECYZJI", "Zamknięte dyskusje i decyzje", "uruchamia Release jeszcze raz", "Odśwież dane", "cache GitHub Pages"):
             self.assertIn(value, text)
         self.assertNotIn("Redaktor prowadzący", text)
 

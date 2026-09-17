@@ -51,6 +51,28 @@ input, select { width: 100%; margin-top: .3rem; padding: .7rem .75rem; border: 1
 .pagination label { display: flex; align-items: center; gap: .5rem; }
 .pagination select { width: auto; margin: 0; }
 .discussion-list { display: grid; gap: 1rem; }
+.discussion-sync { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin: 1.25rem 0; }
+.discussion-sync .result-count { margin: 0; }
+.discussion-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.discussion-card { display: grid; grid-template-columns: 5.75rem minmax(0, 1fr); min-height: 17.8rem; overflow: hidden; border: 1px solid var(--line); border-radius: .6rem; background: var(--surface); box-shadow: var(--shadow); }
+.discussion-rail { display: flex; flex-direction: column; align-items: center; padding: .7rem .42rem .5rem; text-align: center; color: var(--discussion-age-ink); background: var(--discussion-age-background); }
+.discussion-number { align-self: flex-start; font-family: ui-monospace, monospace; font-size: .78rem; font-weight: 800; }
+.discussion-age { display: flex; flex: 1; align-items: center; justify-content: center; flex-direction: column; line-height: 1; }
+.discussion-age strong { display: block; font-size: 2.35rem; }
+.discussion-age span { margin-top: .25rem; font-size: .72rem; font-weight: 800; text-transform: uppercase; }
+.discussion-age-fresh { --discussion-age-ink: #17663c; --discussion-age-background: #e4f3e9; }
+.discussion-age-medium { --discussion-age-ink: #815300; --discussion-age-background: #fff0c7; }
+.discussion-age-long { --discussion-age-ink: #8c2732; --discussion-age-background: #fde7e8; }
+.discussion-coordinator { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: .2rem; width: 100%; min-height: 3.6rem; padding: .35rem; border: 1px solid color-mix(in srgb, var(--line) 75%, transparent); border-radius: .5rem; background: color-mix(in srgb, var(--surface) 90%, transparent); color: var(--ink); font: 800 .6rem/1 ui-monospace, monospace; }
+.discussion-coordinator img, .discussion-coordinator-missing { display: grid; width: 1.7rem; height: 1.7rem; place-items: center; border-radius: 50%; background: var(--line); object-fit: cover; }
+.discussion-coordinator > span:last-child { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.discussion-content { display: flex; min-width: 0; flex-direction: column; padding: 1.1rem; }
+.discussion-title { margin: 0; font-size: 1.28rem; overflow-wrap: anywhere; }
+.discussion-pills { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: auto; padding-top: 1rem; }
+.discussion-pill { display: inline-flex; align-items: center; border-radius: 999rem; padding: .28rem .5rem; font-size: .72rem; font-weight: 800; }
+.discussion-dependency { color: #65429a; background: #f0eafa; }
+.discussion-label { color: var(--good); background: color-mix(in srgb, var(--good) 14%, transparent); }
+.discussion-comments { margin-top: 12px; margin-bottom: 0; padding-top: .7rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .84rem; font-weight: 800; text-align: right; }
 .card-meta { color: var(--muted); font-size: .88rem; }
 .metadata { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .6rem; padding: 1rem; border: 1px solid var(--line); background: var(--surface); }
 .metadata div { min-width: 0; }
@@ -61,6 +83,6 @@ input, select { width: 100%; margin-top: .3rem; padding: .7rem .75rem; border: 1
 .record-links { padding-top: 1.2rem; border-top: 1px solid var(--line); }
 .site-footer { padding-block: 1.5rem; border-top: 1px solid var(--line); color: var(--muted); background: var(--surface); font-size: .85rem; }
 .hidden { display: none !important; }
-@media (max-width: 58rem) { .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 38rem) { .header-inner { align-items: flex-start; flex-direction: column; } .filters { grid-template-columns: 1fr; } }
+@media (max-width: 58rem) { .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); } .discussion-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 38rem) { .header-inner { align-items: flex-start; flex-direction: column; } .filters { grid-template-columns: 1fr; } .discussion-sync { align-items: stretch; flex-direction: column; } .discussion-grid { grid-template-columns: 1fr; } }
 @media print { .site-header, .site-footer, .filters, .result-count { display: none; } body { background: #fff; color: #000; } .decision-card { break-inside: avoid; box-shadow: none; } }

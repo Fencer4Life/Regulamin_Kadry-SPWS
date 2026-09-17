@@ -2,10 +2,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
+from narzedzia.create_decision_from_discussion import parse_discussion_form
+
 CATEGORY = "propozycje-zmian-regulaminu"
+GITHUB_LOGIN = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$")
 
 
 def _discussion_nodes(payload: dict | list[dict]):
@@ -20,15 +24,21 @@ def normalize_discussions(payload: dict | list[dict], generated_at: str) -> dict
     for node in _discussion_nodes(payload):
         if node.get("category", {}).get("slug") != CATEGORY:
             continue
+        source = parse_discussion_form(node.get("body") or "")
+        coordinator = source["koordynator"].lstrip("@").strip() or None
+        avatar_login = coordinator if coordinator and GITHUB_LOGIN.fullmatch(coordinator) else None
         item = {
             "number": node["number"], "title": node["title"], "url": node["url"],
             "created_at": node["createdAt"], "author": (node.get("author") or {}).get("login", "konto usunięte"),
             "comments": node.get("comments", {}).get("totalCount", 0),
             "labels": [label["name"] for label in node.get("labels", {}).get("nodes", [])],
+            "coordinator": coordinator,
+            "coordinator_avatar_url": f"https://github.com/{avatar_login}.png?size=80" if avatar_login else None,
+            "depends_on": source["zalezy_od"],
             "closed_at": node.get("closedAt"),
         }
         (closed_items if item["closed_at"] else open_items).append(item)
-    open_items.sort(key=lambda item: item["created_at"], reverse=True)
+    open_items.sort(key=lambda item: item["created_at"])
     closed_items.sort(key=lambda item: item["closed_at"], reverse=True)
     return {
         "generated_at": generated_at,

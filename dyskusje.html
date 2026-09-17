@@ -10,10 +10,30 @@ permalink: /dyskusje/
   <p><a class="action" href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/new?category=propozycje-zmian-regulaminu">Otwórz nową dyskusję</a></p>
 </section>
 {% assign snapshot = site.data.discussions %}
-<p class="result-count">Ostatnia synchronizacja: {{ snapshot.generated_at | default: 'oczekuje na pierwszą synchronizację' }}</p>
-<section class="discussion-list">
+<div class="discussion-sync">
+  <p class="result-count">Ostatnia synchronizacja: {{ snapshot.generated_at | default: 'oczekuje na pierwszą synchronizację' }}. Po edycji na GitHubie poczekaj na zakończenie Release.</p>
+  <button class="action" type="button" data-discussion-refresh>Odśwież dane</button>
+</div>
+<section class="discussion-list discussion-grid">
 {% for discussion in snapshot.open_items %}
-  <article class="decision-card"><p class="eyebrow">Dyskusja #{{ discussion.number }}</p><h2><a href="{{ discussion.url }}">{{ discussion.title | escape }}</a></h2><p class="card-meta">{{ discussion.author | escape }} · {{ discussion.created_at }} · wypowiedzi: {{ discussion.comments }}</p></article>
+  <article class="discussion-card">
+    <aside class="discussion-rail discussion-age-fresh" data-created-at="{{ discussion.created_at }}">
+      <span class="discussion-number">#{{ discussion.number }}</span>
+      <span class="discussion-age"><strong data-discussion-age>—</strong><span data-discussion-age-unit>dni</span></span>
+      <span class="discussion-coordinator" title="{% if discussion.coordinator %}Koordynator: {{ discussion.coordinator | escape }}{% else %}Koordynator nie wskazany{% endif %}">
+        {% if discussion.coordinator_avatar_url %}<img src="{{ discussion.coordinator_avatar_url | escape }}" alt="Avatar {{ discussion.coordinator | escape }}">{% else %}<span class="discussion-coordinator-missing">?</span>{% endif %}
+        <span>{% if discussion.coordinator %}{{ discussion.coordinator | escape }}{% else %}brak{% endif %}</span>
+      </span>
+    </aside>
+    <div class="discussion-content">
+      <h2 class="discussion-title"><a href="{{ discussion.url }}">{{ discussion.title | remove_first: '[Dyskusja]' | strip | escape }}</a></h2>
+      <div class="discussion-pills">
+        {% if discussion.depends_on and discussion.depends_on != '' %}<span class="discussion-pill discussion-dependency">Zależy od: {{ discussion.depends_on | escape }}</span>{% endif %}
+        {% for label in discussion.labels %}<span class="discussion-pill discussion-label">{{ label | escape }}</span>{% endfor %}
+      </div>
+      <p class="discussion-comments">💬 {{ discussion.comments }} {% if discussion.comments == 1 %}komentarz{% else %}komentarze{% endif %}</p>
+    </div>
+  </article>
 {% else %}
   <p class="notice">Brak otwartych dyskusji w snapshotcie. <a href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions">Sprawdź aktualną listę na GitHub.</a></p>
 {% endfor %}
