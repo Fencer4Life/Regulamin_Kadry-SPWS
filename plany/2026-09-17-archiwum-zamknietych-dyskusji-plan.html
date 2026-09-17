@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Plan wdrożenia archiwum zamkniętych dyskusji</title>
+  <style>
+    :root{--bg:#e8ecf3;--surface:#fff;--surface-2:#dce5ef;--ink:#101722;--muted:#445064;--line:#c7d0dc;--accent:#12467e;--good:#26784a;--good-bg:#edf9f1;--warn:#98620c;--warn-bg:#fff8e8;--danger:#a33227;--danger-bg:#fff0ee;--mono:ui-monospace,"SF Mono",Menlo,monospace}
+    @media(prefers-color-scheme:dark){:root{--bg:#121722;--surface:#1c2430;--surface-2:#283342;--ink:#eef4fb;--muted:#b6c0cf;--line:#3a4656;--accent:#8fc5f4;--good:#79dda3;--good-bg:#162c20;--warn:#efc878;--warn-bg:#302714;--danger:#f49b91;--danger-bg:#351e1c}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{max-width:1020px;margin:auto;padding:52px 24px 92px}h1,h2,h3{font-family:Georgia,serif;line-height:1.15}h1{font-size:clamp(38px,6vw,54px);max-width:20ch;margin:.2em 0}.lead{font-size:22px;color:var(--muted);max-width:64ch}.tag{font:700 13px var(--mono);letter-spacing:.11em;color:var(--accent)}h2{font-size:32px;margin-top:46px}h3{font-size:22px;margin-top:28px}p,li{max-width:74ch}li{margin:.48em 0}code{background:var(--surface-2);padding:.12em .35em;border-radius:4px;font:700 .86em var(--mono)}a{color:var(--accent)}.meta{display:flex;flex-wrap:wrap;gap:9px;margin:22px 0}.pill{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 11px;font:700 14px var(--mono)}.pill.warn{background:var(--warn-bg);color:var(--warn)}.box{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:18px 22px;margin:22px 0}.ok{border-left-color:var(--good);background:var(--good-bg)}.warn{border-left-color:var(--warn);background:var(--warn-bg)}.danger{border-left-color:var(--danger);background:var(--danger-bg)}table{width:100%;border-collapse:collapse;background:var(--surface);margin:18px 0}th,td{border:1px solid var(--line);padding:11px;text-align:left;vertical-align:top}th{background:var(--surface-2);font:700 13px var(--mono);text-transform:uppercase;letter-spacing:.05em}.task{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 24px;margin:24px 0}.task h3{margin-top:0}.command{white-space:pre-wrap;overflow:auto;background:#172132;color:#eef4fb;border-radius:8px;padding:15px 18px;font:15px/1.55 var(--mono)}.foot{margin-top:58px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:14px}
+  </style>
+</head>
+<body><main class="wrap">
+  <p class="tag">REGULAMIN KADRY SPWS · PLAN IMPLEMENTACJI · 17.09.2026</p>
+  <h1>Wdrożenie archiwum zamkniętych dyskusji</h1>
+  <p class="lead">Plan realizuje <a href="../dokumentacja/adr/ADR-001-archiwum-zamknietych-dyskusji.html">ADR-001</a>: usuwa zamknięte wątki z listy otwartej, publikuje kompletne archiwum i zapewnia natychmiastową synchronizację po zamknięciu dyskusji.</p>
+  <div class="meta"><span class="pill warn">STATUS: DO WDROŻENIA</span><span class="pill">GAŁĄŹ: codex/closed-discussions-archive</span><span class="pill">METODA: TDD</span></div>
+
+  <div class="box ok"><b>Kryterium końcowe:</b> dyskusja #19 występuje wyłącznie w sekcji „Zamknięte dyskusje i decyzje”, ma status „Przyjęta” i działający link do DR-001. Lista „Otwarte dyskusje” nie zawiera #19.</div>
+
+  <h2>Zakres zmiany</h2>
+  <table>
+    <thead><tr><th>Plik</th><th>Planowana odpowiedzialność</th></tr></thead>
+    <tbody>
+      <tr><td><code>tests/test_discussions.py</code></td><td>Kontrakt normalizacji wielu stron GraphQL oraz rozdziału otwartych i zamkniętych.</td></tr>
+      <tr><td><code>tests/test_registry_platform.py</code></td><td>Kontrakt strony, nawigacji, zapytania Release i dispatchu po zamknięciu.</td></tr>
+      <tr><td><code>narzedzia/sync_discussions.py</code></td><td>Scalanie stron odpowiedzi, filtr kategorii, podział i sortowanie.</td></tr>
+      <tr><td><code>_data/discussions.json</code></td><td>Bezpieczny pusty snapshot dla lokalnego Jekyll.</td></tr>
+      <tr><td><code>_data/open_discussions.json</code></td><td>Usunięcie po migracji wszystkich odwołań.</td></tr>
+      <tr><td><code>dyskusje.html</code></td><td>Dwie listy, status zamknięcia i link do karty decyzji.</td></tr>
+      <tr><td><code>_layouts/default.html</code></td><td>Licznik nawigacji oparty wyłącznie na <code>open_items</code>.</td></tr>
+      <tr><td><code>.github/workflows/pages.yml</code></td><td>Paginowane pobranie stanów <code>OPEN</code> i <code>CLOSED</code>.</td></tr>
+      <tr><td><code>.github/workflows/resolve-discussion.yml</code></td><td>Jawny dispatch Release po skutecznym zamknięciu.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Kolejność wdrożenia</h2>
+
+  <section class="task">
+    <h3>1. Testy RED — kontrakt danych</h3>
+    <ol>
+      <li>Rozszerzyć fixture o otwarte i zamknięte dyskusje, różne kategorie, etykiety oraz dwie strony odpowiedzi GraphQL.</li>
+      <li>Oczekiwać jednego wyniku z <code>generated_at</code>, <code>open_items</code> i <code>closed_items</code>.</li>
+      <li>Wymagać sortowania otwartych po <code>created_at</code> malejąco, a zamkniętych po <code>closed_at</code> malejąco.</li>
+      <li>Uruchomić test i zachować wynik RED wynikający z braku nowego kontraktu.</li>
+    </ol>
+    <pre class="command">python3 -m unittest tests.test_discussions -v</pre>
+  </section>
+
+  <section class="task">
+    <h3>2. Testy RED — strona i workflow</h3>
+    <ol>
+      <li>Wymagać w <code>dyskusje.html</code> nagłówków obu sekcji, użycia <code>site.data.discussions</code>, stanów „Przyjęta”, „Porzucona”, „Duplikat”, „Zamknięta” oraz dopasowania <code>discussion_url</code>.</li>
+      <li>Wymagać, aby nawigacja liczyła <code>open_items</code>, a nie stary snapshot.</li>
+      <li>Wymagać w Release parametrów <code>states:[OPEN,CLOSED]</code>, pola <code>closedAt</code>, <code>pageInfo</code>, zmiennej <code>endCursor</code>, opcji <code>--paginate --slurp</code> i nowej ścieżki danych.</li>
+      <li>Wymagać w workflow zamykającym <code>actions: write</code> oraz <code>gh workflow run pages.yml --ref main</code> umieszczonego po <code>closeDiscussion</code>.</li>
+      <li>Uruchomić testy i potwierdzić RED.</li>
+    </ol>
+    <pre class="command">python3 -m unittest tests.test_registry_platform -v</pre>
+  </section>
+
+  <section class="task">
+    <h3>3. Implementacja normalizatora i migracja snapshotu</h3>
+    <ol>
+      <li>Przyjąć zarówno pojedynczy obiekt GraphQL, jak i tablicę stron zwróconą przez <code>gh api --slurp</code>.</li>
+      <li>Iterować po wszystkich <code>nodes</code>, zachować wyłącznie kategorię <code>propozycje-zmian-regulaminu</code> i zbudować wspólny rekord z <code>closed_at</code>.</li>
+      <li>Podzielić rekordy wyłącznie według obecności <code>closedAt</code>. Etykiety nie sterują przynależnością do listy.</li>
+      <li>Zapisać pusty kontrakt w <code>_data/discussions.json</code> i usunąć stary plik dopiero po usunięciu wszystkich odwołań.</li>
+      <li>Uruchomić test danych do GREEN.</li>
+    </ol>
+  </section>
+
+  <section class="task">
+    <h3>4. Widok dwóch sekcji</h3>
+    <ol>
+      <li>Zachować hero i przycisk otwarcia dyskusji.</li>
+      <li>Wyrenderować <code>open_items</code> w sekcji „Otwarte dyskusje”.</li>
+      <li>Wyrenderować <code>closed_items</code> w sekcji „Zamknięte dyskusje i decyzje”.</li>
+      <li>Dla każdego zamkniętego wpisu wyznaczyć publiczny status z etykiet zgodnie z ADR-001.</li>
+      <li>Przeszukać <code>site.decyzje</code> i pokazać „Zobacz decyzję DR-NNN” tylko przy dokładnej zgodności <code>discussion_url</code>. Brak karty nie ukrywa dyskusji.</li>
+      <li>Zaktualizować licznik nawigacji do <code>site.data.discussions.open_items.size</code>.</li>
+    </ol>
+  </section>
+
+  <section class="task">
+    <h3>5. Paginowane pobieranie w Release</h3>
+    <p>Zapytanie GraphQL użyje <code>first:100</code>, <code>after:$endCursor</code>, obu stanów oraz <code>pageInfo { hasNextPage endCursor }</code>. <code>gh api graphql --paginate --slurp</code> zapisze wszystkie strony w jednym pliku wejściowym dla normalizatora.</p>
+    <div class="box warn"><b>Warunek bezpieczeństwa:</b> brak paginacji jest błędem kontraktu. Archiwum nie może po cichu tracić starszych dyskusji po przekroczeniu 100 rekordów.</div>
+  </section>
+
+  <section class="task">
+    <h3>6. Natychmiastowy Release po zamknięciu</h3>
+    <ol>
+      <li>Dodać tylko <code>actions: write</code> do <code>resolve-discussion.yml</code>.</li>
+      <li>Po udanym <code>closeDiscussion</code> wykonać <code>gh workflow run pages.yml --ref main</code>.</li>
+      <li>Nie dispatchować Release przed zamknięciem, aby nie powtórzyć wyścigu z #19.</li>
+      <li>Zachować harmonogram jako mechanizm okresowego uzgadniania stanu.</li>
+    </ol>
+  </section>
+
+  <section class="task">
+    <h3>7. Walidacja lokalna</h3>
+    <ol>
+      <li>Uruchomić najpierw dwa zmienione moduły testowe, potem pełny zestaw.</li>
+      <li>Uruchomić kompilację Python i sprawdzenie białych znaków.</li>
+      <li>Zbudować Jekyll z rygorystyczną kontrolą front matter. Jeżeli lokalny Bundler nadal jest niedostępny, nie instalować zależności bez zgody; odnotować brak i oprzeć końcową bramkę na CI.</li>
+      <li>Sprawdzić pełny diff oraz upewnić się, że nie zmieniono treści regulaminu ani DOCX.</li>
+    </ol>
+    <pre class="command">python3 -m unittest tests.test_discussions tests.test_registry_platform -v
+python3 -m unittest discover -s tests -v
+python3 -m compileall -q narzedzia tests
+git diff --check
+bundle exec jekyll build --strict_front_matter</pre>
+  </section>
+
+  <section class="task">
+    <h3>8. PR, CI i publikacja</h3>
+    <ol>
+      <li>Zacommitować implementację na istniejącej gałęzi <code>codex/closed-discussions-archive</code> i wypchnąć ją dopiero po przeglądzie kompletnego diffu.</li>
+      <li>Utworzyć PR obejmujący trzy commity dokumentacyjne i implementację.</li>
+      <li>Obserwować CI do końca; w razie błędu pobrać log właściwego kroku i naprawić przyczynę.</li>
+      <li>Po scaleniu obserwować Release do sukcesu.</li>
+      <li>Otworzyć publiczne <code>/dyskusje/</code> i potwierdzić trzy fakty: #19 nie ma w otwartych, #19 jest w zamkniętych, link prowadzi do DR-001.</li>
+      <li>Otworzyć publiczny katalog <code>/dokumentacja/adr/</code> i potwierdzić dostępność ADR-001.</li>
+    </ol>
+  </section>
+
+  <h2>Ryzyka i cofnięcie</h2>
+  <ul>
+    <li><b>Niepoprawna składnia GraphQL:</b> zatrzyma Release przed deployem; poprzednia strona pozostanie aktywna.</li>
+    <li><b>Brak decyzji dla zamkniętego wpisu:</b> archiwum pokaże dyskusję bez linku zamiast ją ukrywać.</li>
+    <li><b>Błąd dispatchu:</b> workflow zamykający będzie czerwony, a harmonogram pozostanie drogą samonaprawy.</li>
+    <li><b>Cofnięcie:</b> revert commita implementacyjnego przywróci poprzedni snapshot i widok; commity ADR pozostaną historią przyjętej decyzji, chyba że decyzja zostanie zastąpiona nowym ADR.</li>
+  </ul>
+
+  <h2>Definicja ukończenia</h2>
+  <ul>
+    <li>Wszystkie testy lokalne i CI są zielone albo jawnie odnotowano wyłącznie brak lokalnego Bundlera, przy zielonym buildzie CI.</li>
+    <li>Release zakończył się sukcesem.</li>
+    <li>#19 jest publicznie widoczna tylko jako zamknięta i prowadzi do DR-001.</li>
+    <li>Nowe zamknięcie dyskusji uruchamia Release po zmianie stanu.</li>
+    <li>ADR-001 i jego indeks są dostępne w GitHub Pages, a najnowszy ADR pozostaje na górze listy.</li>
+  </ul>
+
+  <p class="foot">Plan wykonawczy do ADR-001 · bez zmian treści regulaminu i DOCX · przygotowany 17.09.2026</p>
+</main></body>
+</html>
