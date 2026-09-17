@@ -83,6 +83,8 @@ class RegistryPlatformTests(unittest.TestCase):
             'class="discussion-list discussion-grid"',
             'class="discussion-rail discussion-age-fresh"',
             'class="discussion-number"',
+            'class="discussion-priority discussion-priority-{{ discussion.priority | downcase }}"',
+            '<span>Priorytet</span><strong>{{ discussion.priority | escape }}</strong>',
             'data-created-at="{{ discussion.created_at }}"',
             'class="discussion-coordinator"',
             'class="discussion-pills"',
@@ -106,6 +108,38 @@ class RegistryPlatformTests(unittest.TestCase):
         for fragment in ("calendarDayAge", "discussion-age-fresh", "odswiez", "Date.now()"):
             self.assertIn(fragment, script)
         self.assertIn("assets/dyskusje.js", layout)
+
+    def test_closed_discussions_use_compact_paginated_sidebar(self):
+        page = (ROOT / "dyskusje.html").read_text(encoding="utf-8")
+        css = (ROOT / "assets/rejestr.css").read_text(encoding="utf-8")
+        script = (ROOT / "assets/dyskusje.js").read_text(encoding="utf-8")
+        for fragment in (
+            'class="discussion-page-layout"',
+            'class="discussion-archive-panel"',
+            'data-discussion-archive-toggle',
+            'Zamknięte dyskusje ({{ snapshot.closed_items.size }})',
+            'class="discussion-archive-card"',
+            'data-discussion-archive-item',
+            'data-discussion-archive-previous',
+            'data-discussion-archive-next',
+            'data-discussion-archive-page',
+        ):
+            self.assertIn(fragment, page)
+        for fragment in (
+            ".discussion-page-layout",
+            ".discussion-archive-panel",
+            ".discussion-archive-card",
+            ".discussion-archive-toggle",
+        ):
+            self.assertIn(fragment, css)
+        for fragment in (
+            "archivePageSize = 20",
+            "data-discussion-archive-item",
+            "data-discussion-archive-toggle",
+            "data-discussion-archive-previous",
+            "data-discussion-archive-next",
+        ):
+            self.assertIn(fragment, script)
 
     def test_config_publishes_decision_collection(self):
         config = (ROOT / "_config.yml").read_text(encoding="utf-8")

@@ -1,5 +1,6 @@
 (() => {
   const dayMs = 24 * 60 * 60 * 1000;
+  const archivePageSize = 20;
 
   function calendarDayAge(value, now = new Date()) {
     const created = new Date(value);
@@ -27,4 +28,40 @@
     url.searchParams.set("odswiez", String(Date.now()));
     window.location.assign(url);
   });
+
+  const archivePanel = document.querySelector(".discussion-archive-panel");
+  const archiveToggle = document.querySelector("[data-discussion-archive-toggle]");
+  archiveToggle?.addEventListener("click", () => {
+    const isOpen = archivePanel.classList.toggle("is-open");
+    archiveToggle.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  const archiveItems = Array.from(document.querySelectorAll("[data-discussion-archive-item]"));
+  const archivePrevious = document.querySelector("[data-discussion-archive-previous]");
+  const archiveNext = document.querySelector("[data-discussion-archive-next]");
+  const archivePage = document.querySelector("[data-discussion-archive-page]");
+  const archivePagination = document.querySelector(".discussion-archive-pagination");
+  const archivePageCount = Math.max(1, Math.ceil(archiveItems.length / archivePageSize));
+  let currentArchivePage = 0;
+
+  function renderArchivePage() {
+    const first = currentArchivePage * archivePageSize;
+    archiveItems.forEach((item, index) => {
+      item.hidden = index < first || index >= first + archivePageSize;
+    });
+    if (archivePage) archivePage.textContent = `${currentArchivePage + 1} / ${archivePageCount}`;
+    if (archivePrevious) archivePrevious.disabled = currentArchivePage === 0;
+    if (archiveNext) archiveNext.disabled = currentArchivePage >= archivePageCount - 1;
+    if (archivePagination) archivePagination.hidden = archiveItems.length <= archivePageSize;
+  }
+
+  archivePrevious?.addEventListener("click", () => {
+    currentArchivePage = Math.max(0, currentArchivePage - 1);
+    renderArchivePage();
+  });
+  archiveNext?.addEventListener("click", () => {
+    currentArchivePage = Math.min(archivePageCount - 1, currentArchivePage + 1);
+    renderArchivePage();
+  });
+  renderArchivePage();
 })();
