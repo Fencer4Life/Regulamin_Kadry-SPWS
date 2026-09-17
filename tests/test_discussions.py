@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import unittest
 import json
+import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -107,6 +109,21 @@ DR-002
         item = normalize_discussions(payload, "2026-09-12T12:00:00Z")["open_items"][0]
         self.assertEqual(item["coordinator"], "Komisja 2026")
         self.assertIsNone(item["coordinator_avatar_url"])
+
+    def test_sync_script_runs_the_same_way_as_release(self):
+        payload = {"data": {"repository": {"discussions": {"nodes": []}}}}
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "source.json"
+            destination = Path(directory) / "snapshot.json"
+            source.write_text(json.dumps(payload), encoding="utf-8")
+            result = subprocess.run(
+                [sys.executable, "narzedzia/sync_discussions.py", str(source), str(destination)],
+                cwd=Path(__file__).resolve().parents[1],
+                text=True,
+                capture_output=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertTrue(destination.is_file())
 
 
 if __name__ == "__main__":
