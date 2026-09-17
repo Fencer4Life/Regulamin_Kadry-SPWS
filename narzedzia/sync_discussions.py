@@ -8,20 +8,33 @@ from pathlib import Path
 CATEGORY = "propozycje-zmian-regulaminu"
 
 
-def normalize_discussions(payload: dict, generated_at: str) -> dict:
-    nodes = payload.get("data", {}).get("repository", {}).get("discussions", {}).get("nodes", [])
-    items = []
-    for node in nodes:
+def _discussion_nodes(payload: dict | list[dict]):
+    pages = payload if isinstance(payload, list) else [payload]
+    for page in pages:
+        yield from page.get("data", {}).get("repository", {}).get("discussions", {}).get("nodes", [])
+
+
+def normalize_discussions(payload: dict | list[dict], generated_at: str) -> dict:
+    open_items = []
+    closed_items = []
+    for node in _discussion_nodes(payload):
         if node.get("category", {}).get("slug") != CATEGORY:
             continue
-        items.append({
+        item = {
             "number": node["number"], "title": node["title"], "url": node["url"],
             "created_at": node["createdAt"], "author": (node.get("author") or {}).get("login", "konto usunięte"),
             "comments": node.get("comments", {}).get("totalCount", 0),
             "labels": [label["name"] for label in node.get("labels", {}).get("nodes", [])],
-        })
-    items.sort(key=lambda item: item["created_at"], reverse=True)
-    return {"generated_at": generated_at, "items": items}
+            "closed_at": node.get("closedAt"),
+        }
+        (closed_items if item["closed_at"] else open_items).append(item)
+    open_items.sort(key=lambda item: item["created_at"], reverse=True)
+    closed_items.sort(key=lambda item: item["closed_at"], reverse=True)
+    return {
+        "generated_at": generated_at,
+        "open_items": open_items,
+        "closed_items": closed_items,
+    }
 
 
 def main() -> None:

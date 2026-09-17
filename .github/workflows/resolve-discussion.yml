@@ -4,6 +4,7 @@ on:
     types: [closed]
 
 permissions:
+  actions: write
   contents: read
   pull-requests: read
   discussions: write
@@ -28,3 +29,4 @@ jobs:
           card_url="https://fencer4life.github.io/Regulamin_Kadry-SPWS/decyzje/${slug}/"
           gh api graphql -f query='mutation($discussionId:ID!,$body:String!){addDiscussionComment(input:{discussionId:$discussionId,body:$body}){comment{id}}}' -F discussionId="$discussion_id" -f body="Opublikowano kartę decyzji: ${card_url}"
           gh api graphql -f query='mutation($discussionId:ID!){closeDiscussion(input:{discussionId:$discussionId,reason:RESOLVED}){discussion{id}}}' -F discussionId="$discussion_id"
+          gh workflow run pages.yml --ref main
