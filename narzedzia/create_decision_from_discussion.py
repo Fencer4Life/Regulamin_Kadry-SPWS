@@ -20,10 +20,12 @@ def slugify(value: str) -> str:
 def _discussion_field(body: str, label: str) -> str:
     pattern = rf"^###\s+{re.escape(label)}\s*\n+(.*?)(?=^###\s|\Z)"
     match = re.search(pattern, body, flags=re.MULTILINE | re.DOTALL)
-    return match.group(1).strip() if match else ""
+    value = match.group(1).strip() if match else ""
+    return "" if value in {"", "_No response_"} else value
 
 
 def parse_discussion_form(body: str) -> dict[str, str]:
+    zalezy_od = _discussion_field(body, "Zależy od") or _discussion_field(body, "Powiązane decyzje")
     return {
         "koordynator": _discussion_field(body, "Koordynator dyskusji"),
         "problem": _discussion_field(body, "Problem"),
@@ -34,7 +36,8 @@ def parse_discussion_form(body: str) -> dict[str, str]:
         "nowe_brzmienie_markdown": _discussion_field(body, "Nowe brzmienie Markdown"),
         "alternatywy": _discussion_field(body, "Inne rozważane podejścia"),
         "materialy": _discussion_field(body, "Materiały lub przykłady"),
-        "powiazane": _discussion_field(body, "Powiązane decyzje"),
+        "powiazane": zalezy_od,
+        "zalezy_od": zalezy_od,
     }
 
 

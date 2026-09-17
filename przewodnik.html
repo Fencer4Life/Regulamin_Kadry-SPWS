@@ -38,7 +38,7 @@ permalink: /przewodnik/
     <thead><tr><th>Rola</th><th>Odpowiedzialność</th><th>Czego ta rola nie oznacza</th></tr></thead>
     <tbody>
       <tr><td><b>Komisja regulaminowa</b></td><td>Rozważa warianty, uzgadnia wynik oraz akceptuje kartę decyzji i brzmienie regulaminu.</td><td>Decyzji nie zastępuje samo zamknięcie wątku.</td></tr>
-      <tr><td><b>Koordynator dyskusji</b></td><td>Jest wskazywany przy otwarciu każdej dyskusji przez login GitHub lub pseudonim. Porządkuje rozmowę i zapisuje uzgodniony wynik w formularzu.</td><td>Nie podejmuje decyzji samodzielnie. Dla każdej dyskusji może to być inna osoba.</td></tr>
+      <tr><td><b>Koordynator dyskusji</b></td><td>Jest wskazywany przy otwarciu każdej dyskusji przez login GitHub. Porządkuje rozmowę i zapisuje uzgodniony wynik w formularzu; jego avatar jest widoczny na karcie dyskusji.</td><td>Nie podejmuje decyzji samodzielnie. Dla każdej dyskusji może to być inna osoba.</td></tr>
       <tr><td><b>Redaktor regulaminu</b></td><td>Przenosi przyjętą decyzję do DOCX i pilnuje spójności całego regulaminu. Początkowo funkcję może pełnić jedna osoba; później komisja może wskazać kolejne.</td><td>Nie zmienia sensu decyzji komisji.</td></tr>
     </tbody>
   </table>
@@ -53,7 +53,7 @@ permalink: /przewodnik/
   <ol>
     <li>Zaloguj się lub utwórz bezpłatne konto na GitHubie.</li>
     <li>Wybierz „Otwórz nową dyskusję”. Wymagane są tylko dwa pola: <b>Koordynator dyskusji</b> i <b>Problem</b>.</li>
-    <li>Opcjonalnie wybierz priorytet i obszar oraz dopisz rozwiązanie, alternatywy, materiały i powiązane decyzje.</li>
+    <li>Opcjonalnie wybierz priorytet i obszar oraz dopisz rozwiązanie, alternatywy, materiały i element, od którego dyskusja zależy.</li>
     <li>Odpowiadaj komentarzami. Dla krótkiej, oczywistej sprawy dyskusja może od razu przejść do rozstrzygnięcia — nie obowiązuje minimalny czas ani liczba komentarzy.</li>
   </ol>
 </section>
@@ -88,7 +88,7 @@ permalink: /przewodnik/
   <h2>Co dzieje się automatycznie</h2>
   <ul>
     <li>Strona dyskusji rozdziela <b>Otwarte dyskusje</b> od sekcji <b>Zamknięte dyskusje i decyzje</b>. Przyjęte sprawy prowadzą z archiwum bezpośrednio do opublikowanej karty DR.</li>
-    <li>Lista synchronizuje się natychmiast po obsługiwanych zdarzeniach GitHub: utworzeniu, edycji oraz zmianie kategorii lub etykiety.</li>
+    <li>Utworzenie, edycja oraz zmiana kategorii lub etykiety uruchamiają Release. Po jego zakończeniu lista ma nowe dane, ale cache GitHub Pages może przez kilka minut pokazywać starszą wersję. Wtedy wybierz <b>Odśwież dane</b> na stronie dyskusji.</li>
     <li>Po scaleniu decyzji automat zamyka jej dyskusję, a następnie uruchamia Release jeszcze raz, aby przenieść wątek do archiwum dopiero po rzeczywistej zmianie stanu.</li>
     <li>Awaryjna synchronizacja działa <b>co 15 minut</b>. GitHub może uruchomić zadanie okresowe z opóźnieniem; harmonogram naprawia ewentualny rozjazd, ale nie jest podstawową drogą publikacji zamknięcia.</li>
     <li>Automatyzacja numeruje DR, zakłada draft PR, uruchamia testy i po scaleniu publikuje stronę. W szybkiej ścieżce dodaje do PR Markdown i wygenerowany DOCX; w obu ścieżkach CI udostępnia niezależny artefakt kandydata.</li>
