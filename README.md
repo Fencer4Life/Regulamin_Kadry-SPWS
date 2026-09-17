@@ -22,6 +22,7 @@ Publiczne repozytorium prac nad **Regulaminem powoływania reprezentacji Polski 
 - [Kalkulator punktów SPWS](https://fencer4life.github.io/spws-automated-ranklist/kalkulator-punktow.html?lang=pl)
 - [Zasady prowadzenia Rejestru Decyzji](https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/ZASADY_REJESTRU.md)
 - [Przewodnik: jak pracujemy nad regulaminem](https://html-preview.github.io/?url=https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/przewodnik.html)
+- [Decyzje architektoniczne projektu](https://fencer4life.github.io/Regulamin_Kadry-SPWS/dokumentacja/adr/)
 - [Projekt automatu Markdown → DOCX](https://html-preview.github.io/?url=https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/plany/2026-09-16-wdrozenie-automatu-md-docx-design.html)
 - [Zasady współpracy](https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/blob/main/CONTRIBUTING.md)
 
@@ -60,6 +61,7 @@ W pełnej ścieżce Redaktor sam opracowuje brzmienie Markdown na podstawie decy
 | `regulamin/` | kanoniczny Markdown oraz aktualna, wygenerowana z niego migawka DOCX |
 | `wydania/` | formalnie zatwierdzone, niezmienne wersje sezonowe |
 | `_decyzje/` | źródłowe karty decyzji w Markdown |
+| `dokumentacja/adr/` | trwałe decyzje architektoniczne dotyczące automatyzacji i publikacji projektu |
 | `zalaczniki/` | publiczne załączniki i materiały stanowiące część projektu |
 | `narzedzia/` | kod Python do tworzenia i kontrolowanych zmian DOCX |
 | `tests/` | testy treści, stronicowania, bezpieczeństwa DOCX i kompletności rejestru |

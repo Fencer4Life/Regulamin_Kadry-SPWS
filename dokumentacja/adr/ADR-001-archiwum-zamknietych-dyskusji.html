@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ADR-001 · Archiwum zamkniętych dyskusji i decyzji</title>
+  <style>
+    :root{--bg:#e8ecf3;--surface:#fff;--surface-2:#dce5ef;--ink:#101722;--muted:#445064;--line:#c7d0dc;--accent:#12467e;--good:#26784a;--good-bg:#edf9f1;--warn:#98620c;--warn-bg:#fff8e8}
+    @media(prefers-color-scheme:dark){:root{--bg:#121722;--surface:#1c2430;--surface-2:#283342;--ink:#eef4fb;--muted:#b6c0cf;--line:#3a4656;--accent:#8fc5f4;--good:#79dda3;--good-bg:#162c20;--warn:#efc878;--warn-bg:#302714}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:980px;margin:auto;padding:52px 24px 92px}h1,h2,h3{font-family:Georgia,serif;line-height:1.15}h1{font-size:clamp(38px,6vw,54px);max-width:20ch;margin:.2em 0}.lead{font-size:22px;color:var(--muted);max-width:64ch}.tag{font:700 13px ui-monospace,monospace;letter-spacing:.11em;color:var(--accent)}h2{font-size:32px;margin-top:46px}h3{font-size:22px;margin-top:28px}p,li{max-width:72ch}li{margin:.48em 0}code{background:var(--surface-2);padding:.12em .35em;border-radius:4px;font-size:.88em}a{color:var(--accent)}.meta{display:flex;flex-wrap:wrap;gap:9px;margin:22px 0}.pill{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 11px;font:700 14px ui-monospace,monospace}.pill.good{background:var(--good-bg);color:var(--good)}.box{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:18px 22px;margin:22px 0}.ok{border-left-color:var(--good);background:var(--good-bg)}.warn{border-left-color:var(--warn);background:var(--warn-bg)}table{width:100%;border-collapse:collapse;background:var(--surface);margin:18px 0}th,td{border:1px solid var(--line);padding:11px;text-align:left;vertical-align:top}th{background:var(--surface-2);font-size:14px;text-transform:uppercase;letter-spacing:.05em}.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}.step{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:15px}.step b{display:block;color:var(--accent);margin-bottom:6px}@media(max-width:760px){.flow{grid-template-columns:1fr}table{font-size:15px}}
+  </style>
+</head>
+<body><main>
+  <p class="tag">ADR-001 · DECYZJA ARCHITEKTONICZNA</p>
+  <h1>Archiwum zamkniętych dyskusji i decyzji</h1>
+  <p class="lead">Strona <code>/dyskusje/</code> rozdziela rozmowy wymagające pracy od zakończonych spraw. Każda zamknięta dyskusja pozostaje w publicznym archiwum, a przyjęte rozstrzygnięcie prowadzi do właściwej karty decyzji regulaminowej.</p>
+  <div class="meta"><span class="pill good">STATUS: PRZYJĘTA</span><span class="pill">DATA: 17.09.2026</span><span class="pill">OBSZAR: GITHUB PAGES I ACTIONS</span></div>
+  <p><a href="index.html">← Katalog decyzji architektonicznych</a></p>
+
+  <h2>Kontekst</h2>
+  <p>Publiczna strona posiadała wyłącznie listę „Otwarte dyskusje”. Workflow Release pobierał z GitHub GraphQL tylko stan <code>OPEN</code>, a generator zapisywał jeden snapshot <code>_data/open_discussions.json</code>. Nie istniał model danych ani widok dla spraw zamkniętych.</p>
+  <p>Problem ujawniła dyskusja #19. Publiczny snapshot został utworzony 16.09.2026 o 19:45:12Z, a dyskusja została zamknięta trzy sekundy później, o 19:45:15Z. Release uruchomiony po scaleniu PR pobrał jeszcze otwarty stan. Samo wywołanie GraphQL <code>closeDiscussion</code> nie spowodowało kolejnej publikacji, a cykliczny harmonogram nie zapewnił natychmiastowej korekty strony.</p>
+
+  <h2>Decyzja</h2>
+  <div class="box ok"><b>Przechowujemy i publikujemy wszystkie zamknięte dyskusje.</b> Rozstrzygnięte pokazują powiązaną decyzję regulaminową. Porzucone, duplikaty oraz zamknięte bez karty pozostają widoczne z właściwym statusem.</div>
+  <ol>
+    <li>Release pobiera dyskusje kategorii zmian regulaminu w stanach otwartym i zamkniętym.</li>
+    <li>Jeden snapshot <code>_data/discussions.json</code> zawiera wspólny czas synchronizacji oraz osobne kolekcje <code>open_items</code> i <code>closed_items</code>.</li>
+    <li>Jedynym kryterium sekcji otwartej jest brak <code>closedAt</code>. Etykieta nie może utrzymać zamkniętej dyskusji na liście otwartej.</li>
+    <li>Jekyll łączy zamkniętą dyskusję z kartą w <code>_decyzje</code> przez dokładną zgodność adresu <code>discussion_url</code>.</li>
+    <li>Workflow zamykający dyskusję jawnie uruchamia Release po skutecznym <code>closeDiscussion</code>. Harmonogram pozostaje zabezpieczeniem, ale nie jest podstawowym mechanizmem aktualizacji.</li>
+  </ol>
+
+  <h2>Przepływ danych</h2>
+  <div class="flow">
+    <div class="step"><b>1. GitHub Discussions</b>GraphQL zwraca oba stany, <code>closedAt</code>, etykiety i metadane kart.</div>
+    <div class="step"><b>2. Normalizacja</b><code>sync_discussions.py</code> filtruje kategorię i rozdziela wpisy według stanu.</div>
+    <div class="step"><b>3. Powiązanie</b>Jekyll porównuje URL dyskusji z <code>discussion_url</code> decyzji.</div>
+    <div class="step"><b>4. Publikacja</b><code>/dyskusje/</code> pokazuje dwie sekcje z jednym czasem synchronizacji.</div>
+  </div>
+
+  <h2>Kontrakt danych</h2>
+  <p>Każdy wpis zachowuje numer, tytuł, URL, autora, datę utworzenia, liczbę wypowiedzi i etykiety oraz otrzymuje <code>closed_at</code>. Snapshot zawiera:</p>
+  <ul>
+    <li><code>generated_at</code> — wspólny czas synchronizacji;</li>
+    <li><code>open_items</code> — wpisy bez <code>closedAt</code>, od najnowszych;</li>
+    <li><code>closed_items</code> — wpisy z <code>closedAt</code>, od ostatnio zamkniętych.</li>
+  </ul>
+  <p>Synchronizacja pobiera całą dostępną listę przez paginację GraphQL. Nie wolno bez ostrzeżenia ograniczyć archiwum do pierwszych 100 wpisów.</p>
+
+  <h2>Prezentacja stanów zamkniętych</h2>
+  <table>
+    <thead><tr><th>Etykieta / stan</th><th>Status publiczny</th><th>Powiązanie</th></tr></thead>
+    <tbody>
+      <tr><td><code>rozstrzygnięta</code> lub <code>redakcja-bez-zmiany-sensu</code></td><td>Przyjęta</td><td>Link „Zobacz decyzję DR-NNN”, jeżeli istnieje karta o tym samym <code>discussion_url</code>.</td></tr>
+      <tr><td><code>PORZUCONA</code></td><td>Porzucona</td><td>Karta decyzji nie jest wymagana.</td></tr>
+      <tr><td><code>DUPLIKAT</code></td><td>Duplikat</td><td>Karta decyzji nie jest wymagana.</td></tr>
+      <tr><td>Brak rozpoznanej etykiety</td><td>Zamknięta</td><td>System nie zgaduje wyniku.</td></tr>
+    </tbody>
+  </table>
+  <p>Dyskusja #19 stanowi przypadek regresyjny: występuje wyłącznie w sekcji zamkniętej, ma status „Przyjęta” i prowadzi do DR-001.</p>
+
+  <h2>Publikacja i uprawnienia</h2>
+  <p>Po dodaniu komentarza z linkiem do opublikowanej decyzji oraz skutecznym zamknięciu wątku <code>resolve-discussion.yml</code> uruchamia <code>pages.yml</code> na gałęzi <code>main</code>. Workflow zamykający otrzymuje ograniczone uprawnienie <code>actions: write</code>; pozostałe uprawnienia nie są rozszerzane.</p>
+  <div class="box warn"><b>Harmonogram nie daje gwarancji czasu:</b> GitHub może opóźniać cykliczne uruchomienia. Harmonogram służy do samonaprawy ewentualnego rozjazdu, a jawny dispatch zapewnia aktualizację po decyzji.</div>
+
+  <h2>Obsługa błędów</h2>
+  <ul>
+    <li>Błąd pobrania albo normalizacji przerywa build. Poprzednia poprawna wersja GitHub Pages pozostaje opublikowana.</li>
+    <li>Zamknięta dyskusja bez karty nadal pojawia się w archiwum; widok nie tworzy fałszywego linku.</li>
+    <li>Nierozpoznana etykieta daje neutralny status „Zamknięta”.</li>
+    <li>Błąd jawnego uruchomienia Release powoduje widoczny błąd workflow zamykającego. Harmonogram może później naprawić publikację.</li>
+  </ul>
+
+  <h2>Weryfikacja</h2>
+  <ol>
+    <li>Test normalizatora rozdziela mieszany payload, zachowuje etykiety i sortuje zamknięte po <code>closed_at</code>.</li>
+    <li>Test workflow wymaga obu stanów, pola <code>closedAt</code>, paginacji oraz dispatchu Release po zamknięciu.</li>
+    <li>Test szablonu wymaga obu sekcji, statusów i powiązania przez <code>discussion_url</code>.</li>
+    <li>Pełne testy Python i <code>bundle exec jekyll build --strict_front_matter</code> muszą przejść przed scaleniem.</li>
+    <li>Kontrola produkcyjna potwierdza, że #19 jest wyłącznie w archiwum i prowadzi do DR-001.</li>
+  </ol>
+
+  <h2>Konsekwencje</h2>
+  <h3>Pozytywne</h3>
+  <ul><li>Lista otwartych pokazuje wyłącznie sprawy wymagające działania.</li><li>Historia dyskusji nie znika po zamknięciu.</li><li>Użytkownik przechodzi bezpośrednio od dyskusji do formalnej decyzji.</li><li>Publikacja nie zależy wyłącznie od opóźnianego harmonogramu.</li></ul>
+  <h3>Koszty i ograniczenia</h3>
+  <ul><li>Release wykonuje większe zapytanie GraphQL i musi obsłużyć paginację.</li><li>Workflow zamykający potrzebuje uprawnienia <code>actions: write</code>.</li><li>Dokładne powiązanie wymaga poprawnego <code>discussion_url</code> w karcie decyzji.</li></ul>
+
+  <h2>Odrzucone warianty</h2>
+  <table>
+    <thead><tr><th>Wariant</th><th>Powód odrzucenia</th></tr></thead>
+    <tbody>
+      <tr><td>Dwa niezależne snapshoty otwartych i zamkniętych</td><td>Powiela zapytania i obsługę błędów oraz pozwala na różne czasy synchronizacji.</td></tr>
+      <tr><td>Archiwum wyłącznie z kolekcji <code>_decyzje</code></td><td>Ukrywa porzucone, duplikaty i zamknięte dyskusje bez decyzji.</td></tr>
+      <tr><td>Pozostawienie wyłącznie harmonogramu</td><td>Nie gwarantuje szybkiej aktualizacji i nie usuwa wyścigu zaobserwowanego przy #19.</td></tr>
+      <tr><td>Umieszczenie ADR w <code>_decyzje</code></td><td>Miesza decyzje techniczne z merytorycznymi decyzjami dotyczącymi regulaminu.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Ślady decyzji</h2>
+  <ul>
+    <li><a href="../../plany/2026-09-17-archiwum-zamknietych-dyskusji-design.html">Projekt implementacji archiwum</a></li>
+    <li><a href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/19">Dyskusja #19</a></li>
+    <li><a href="../../decyzje/dr-001-kolejnosc-przepisow-ogolnych/">Decyzja regulaminowa DR-001</a></li>
+  </ul>
+</main></body>
+</html>
