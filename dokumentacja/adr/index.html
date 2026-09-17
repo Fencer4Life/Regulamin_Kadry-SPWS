@@ -7,13 +7,14 @@
   <style>
     :root{--bg:#e8ecf3;--surface:#fff;--ink:#101722;--muted:#445064;--line:#c7d0dc;--accent:#12467e;--good:#26784a;--good-bg:#edf9f1}
     @media(prefers-color-scheme:dark){:root{--bg:#121722;--surface:#1c2430;--ink:#eef4fb;--muted:#b6c0cf;--line:#3a4656;--accent:#8fc5f4;--good:#79dda3;--good-bg:#162c20}}
-    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:920px;margin:auto;padding:52px 24px 92px}h1,h2{font-family:Georgia,serif;line-height:1.15}h1{font-size:clamp(38px,6vw,54px);margin:.2em 0}.lead{font-size:22px;color:var(--muted);max-width:64ch}.tag{font:700 13px ui-monospace,monospace;letter-spacing:.11em;color:var(--accent)}a{color:var(--accent)}.card{display:block;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--good);border-radius:10px;padding:20px 24px;margin:26px 0;text-decoration:none;color:var(--ink)}.card:hover{border-color:var(--accent)}.card h2{margin:0 0 8px;font-size:27px}.meta{color:var(--muted);font-size:15px}.status{display:inline-block;background:var(--good-bg);color:var(--good);font:700 13px ui-monospace,monospace;padding:4px 9px;border-radius:5px;margin-right:8px}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:920px;margin:auto;padding:52px 24px 92px}h1,h2{font-family:Georgia,serif;line-height:1.15}h1{font-size:clamp(38px,6vw,54px);margin:.2em 0}.lead{font-size:22px;color:var(--muted);max-width:64ch}.tag{font:700 13px ui-monospace,monospace;letter-spacing:.11em;color:var(--accent)}a{color:var(--accent)}.rule{color:var(--muted);border-left:4px solid var(--accent);padding-left:14px;margin:24px 0}.card{display:block;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--good);border-radius:10px;padding:20px 24px;margin:26px 0;text-decoration:none;color:var(--ink)}.card:hover{border-color:var(--accent)}.card h2{margin:0 0 8px;font-size:27px}.meta{color:var(--muted);font-size:15px}.status{display:inline-block;background:var(--good-bg);color:var(--good);font:700 13px ui-monospace,monospace;padding:4px 9px;border-radius:5px;margin-right:8px}
   </style>
 </head>
 <body><main>
   <p class="tag">REGULAMIN KADRY SPWS · DOKUMENTACJA TECHNICZNA</p>
   <h1>Decyzje architektoniczne</h1>
   <p class="lead">Trwały rejestr decyzji dotyczących automatyzacji, publikacji i utrzymania projektu. Nie zastępuje Rejestru Decyzji Regulaminowych w katalogu <code>_decyzje</code>.</p>
+  <p class="rule"><b>Zasada kolejności:</b> najnowszy ADR znajduje się zawsze na samej górze listy. Kolejne decyzje dodaje się nad wcześniejszymi, w kolejności malejącej według numeru ADR.</p>
 
   <a class="card" href="ADR-001-archiwum-zamknietych-dyskusji.html">
     <h2>ADR-001 · Archiwum zamkniętych dyskusji i decyzji</h2>
