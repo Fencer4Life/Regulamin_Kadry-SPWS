@@ -59,9 +59,10 @@ input, select { width: 100%; margin-top: .3rem; padding: .7rem .75rem; border: 1
 .discussion-card { display: grid; grid-template-columns: 5.75rem minmax(0, 1fr); min-height: 17.8rem; overflow: hidden; border: 1px solid var(--line); border-radius: .6rem; background: var(--surface); box-shadow: var(--shadow); }
 .discussion-rail { display: flex; flex-direction: column; align-items: center; padding: .7rem .42rem .5rem; text-align: center; color: var(--discussion-age-ink); background: var(--discussion-age-background); }
 .discussion-number { align-self: flex-start; font-family: ui-monospace, monospace; font-size: .78rem; font-weight: 800; }
-.discussion-priority { display: flex; align-items: center; justify-content: center; flex-direction: column; width: 100%; margin-top: .55rem; padding: .38rem .2rem; border-radius: .5rem; line-height: 1; }
-.discussion-priority span { font: 800 .5rem/1 ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; }
-.discussion-priority strong { margin-top: .2rem; font-size: .68rem; text-transform: uppercase; }
+.discussion-priority { display: flex; align-items: center; justify-content: center; flex-direction: column; width: 100%; max-width: 100%; margin-top: .55rem; padding: .38rem .2rem; overflow: hidden; border-radius: .5rem; line-height: 1; }
+.discussion-priority span, .discussion-priority strong { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.discussion-priority span { font: 800 .5rem/1 ui-monospace, monospace; letter-spacing: .04em; }
+.discussion-priority strong { margin-top: .2rem; font-size: .68rem; }
 .discussion-priority-wysoki { color: #8c2732; background: #fde7e8; }
 .discussion-priority-średni { color: #815300; background: #fff0c7; }
 .discussion-priority-niski { color: #17663c; background: #e4f3e9; }

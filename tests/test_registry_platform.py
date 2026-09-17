@@ -84,7 +84,7 @@ class RegistryPlatformTests(unittest.TestCase):
             'class="discussion-rail discussion-age-fresh"',
             'class="discussion-number"',
             'class="discussion-priority discussion-priority-{{ discussion.priority | downcase }}"',
-            '<span>Priorytet</span><strong>{{ discussion.priority | escape }}</strong>',
+            '<span>priorytet</span><strong>{{ discussion.priority | escape }}</strong>',
             'data-created-at="{{ discussion.created_at }}"',
             'class="discussion-coordinator"',
             'class="discussion-pills"',
@@ -105,9 +105,16 @@ class RegistryPlatformTests(unittest.TestCase):
             self.assertIn(fragment, css)
         self.assertRegex(css, r"\.discussion-pills\s*\{[^}]*margin-top:\s*auto;")
         self.assertRegex(css, r"\.discussion-comments\s*\{[^}]*margin-top:\s*12px;")
+        self.assertRegex(css, r"\.discussion-priority\s*\{[^}]*width:\s*100%;[^}]*max-width:\s*100%;[^}]*overflow:\s*hidden;")
         for fragment in ("calendarDayAge", "discussion-age-fresh", "odswiez", "Date.now()"):
             self.assertIn(fragment, script)
         self.assertIn("assets/dyskusje.js", layout)
+
+    def test_layout_cache_busts_css_and_javascript_after_each_release(self):
+        layout = (ROOT / "_layouts" / "default.html").read_text(encoding="utf-8")
+        version = "?v={{ site.time | date: '%s' }}"
+        self.assertIn("rejestr.css' | relative_url }}" + version, layout)
+        self.assertIn("dyskusje.js' | relative_url }}" + version, layout)
 
     def test_closed_discussions_use_compact_paginated_sidebar(self):
         page = (ROOT / "dyskusje.html").read_text(encoding="utf-8")
