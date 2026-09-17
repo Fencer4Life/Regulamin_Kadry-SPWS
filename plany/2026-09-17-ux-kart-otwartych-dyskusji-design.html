@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Projekt UX kart otwartych dyskusji</title>
+  <style>
+    :root{--bg:#e8ecf3;--surface:#fff;--surface2:#dce2ec;--ink:#0f1319;--muted:#414b59;--line:#c9d1dc;--accent:#12467e;--good:#0f5f37;--goodbg:#d8eede;--warn:#7a4d02;--warnbg:#f4e6c8;--danger:#8b2933;--dangerbg:#f4dadd;--violet:#65429a;--violetbg:#eee7f8;--serif:"Iowan Old Style",Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,"SF Mono",monospace}
+    @media(prefers-color-scheme:dark){:root{--bg:#12151b;--surface:#1b2029;--surface2:#232935;--ink:#f1f4f8;--muted:#aeb8c6;--line:#3c4552;--accent:#8cbdec;--good:#6cdc98;--goodbg:#15271b;--warn:#e6bd6f;--warnbg:#282011;--danger:#ff9299;--dangerbg:#30191d;--violet:#c7a8f1;--violetbg:#271d35}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.62 var(--sans)}main{max-width:70rem;margin:auto;padding:56px 28px 100px}h1,h2{font-family:var(--serif);line-height:1.1}h1{max-width:21ch;font-size:clamp(38px,6vw,58px)}h2{margin-top:52px;font-size:32px}h3{margin:28px 0 8px}p,li{max-width:78ch}.dek{font-size:22px;color:var(--muted)}.eyebrow{font:700 13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}code{font-family:var(--mono);font-size:.84em;background:var(--surface2);border:1px solid var(--line);padding:.1em .4em;border-radius:5px}.meta{display:flex;gap:9px;flex-wrap:wrap}.chip{padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font:700 13px var(--mono)}.note{margin:20px 0;padding:17px 21px;border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;background:var(--surface)}.good{border-left-color:var(--good);background:var(--goodbg)}.warn{border-left-color:var(--warn);background:var(--warnbg)}table{width:100%;border-collapse:collapse;background:var(--surface)}th,td{padding:10px 12px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:var(--surface2)}.tablewrap{overflow:auto}.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:stretch}.flow div{display:grid;place-items:center;min-height:90px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);text-align:center;font-size:14px}.flow .arrow{border:0;background:transparent;color:var(--accent);font-size:25px}.wire{display:grid;grid-template-columns:92px 1fr;max-width:560px;min-height:280px;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:0 12px 30px rgb(20 32 51 / 10%)}.rail{display:flex;flex-direction:column;align-items:center;padding:12px 8px;background:var(--goodbg);color:var(--good);font-weight:800}.rail .number{font:800 13px var(--mono)}.rail .age{display:grid;flex:1;place-items:center;text-align:center}.rail .age strong{display:block;font-size:42px;line-height:1}.avatar{display:grid;width:54px;height:58px;place-items:center;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--ink);font:700 10px var(--mono)}.body{display:flex;flex-direction:column;padding:18px}.body h3{margin:0;font:700 24px/1.2 var(--serif)}.pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto}.pill{padding:5px 9px;border-radius:999px;font:800 11px var(--sans)}.relation{background:var(--violetbg);color:var(--violet)}.label{background:var(--goodbg);color:var(--good)}.comments{margin-top:13px;padding-top:11px;border-top:1px solid var(--line);text-align:right;font-size:13px;font-weight:800}.foot{margin-top:60px;padding-top:18px;border-top:2px solid var(--line);color:var(--muted);font:14px var(--mono)}
+    @media(max-width:760px){.flow{grid-template-columns:1fr}.flow .arrow{min-height:auto;transform:rotate(90deg)}}
+  </style>
+</head>
+<body><main>
+  <p class="eyebrow">Regulamin Kadry SPWS · zatwierdzony projekt UX</p>
+  <h1>Karty otwartych dyskusji: wiek, odpowiedzialność i kontekst</h1>
+  <p class="dek">Trzykolumnowa lista ma pozwalać w kilka sekund rozpoznać najstarsze dyskusje, ich koordynatorów, aktywność, etykiety oraz jawnie podane zależności — bez udawania danych, których nie ma na GitHubie.</p>
+  <div class="meta"><span class="chip">wersja 1.0</span><span class="chip">17.09.2026</span><span class="chip">TDD</span><span class="chip">GitHub Pages</span><span class="chip">bez nowej zależności</span></div>
+
+  <div class="note good"><strong>Zatwierdzony kierunek:</strong> wariant B z makiety — szeroki tytuł po prawej oraz pionowy pasek po lewej: numer u góry, wiek pośrodku, avatar i login koordynatora na dole. Piguły i komentarze trzymają się dołu treści karty.</div>
+
+  <h2>1. Cel i granice</h2>
+  <ul>
+    <li>Otwarte dyskusje układają się w trzy kolumny na dużym ekranie, dwie na tablecie i jedną na telefonie.</li>
+    <li>Najważniejszy jest pełny tytuł; numer ma postać samego <code>#29</code> i pozostaje informacją pomocniczą.</li>
+    <li>Nie grupujemy kart wspólnymi tłami i nie przypisujemy koordynatorom kolorów.</li>
+    <li>Nie zmieniamy w tym zadaniu układu kart zamkniętych dyskusji ani rejestru decyzji.</li>
+    <li>Nie dodajemy frameworka JavaScript, biblioteki dat ani tokenu GitHub do publicznej strony.</li>
+    <li>Nie wyświetlamy przykładowych etykiet lub zależności na prawdziwych kartach.</li>
+  </ul>
+
+  <h2>2. Kontrakt pojedynczej karty</h2>
+  <div class="wire" aria-label="Schemat zatwierdzonej karty">
+    <div class="rail"><span class="number">#29</span><span class="age"><span><strong>1</strong>dzień</span></span><span class="avatar">avatar<br>PKT-101</span></div>
+    <div class="body"><h3>Kto prowadzi ranking</h3><div class="pills"><span class="pill relation">Zależy od: D-29</span><span class="pill label">etykieta GitHub</span></div><div class="comments">💬 2 komentarze</div></div>
+  </div>
+  <ul>
+    <li><strong>Lewy pasek:</strong> numer na górze, liczba dni w centrum, avatar GitHub i sam login koordynatora w dwóch wierszach na dole. Przy braku koordynatora pojawia się neutralny znak zapytania i tekst „brak”.</li>
+    <li><strong>Prawa część:</strong> duży tytuł bez redundantnego prefiksu <code>[Dyskusja]</code>.</li>
+    <li><strong>Dolna strefa:</strong> najpierw opcjonalne piguły zależności i etykiet, potem zawsze najniżej liczba komentarzy.</li>
+    <li><strong>Etykiety:</strong> pokazujemy wyłącznie etykiety faktycznie zwrócone przez GitHub.</li>
+    <li><strong>Zależność:</strong> pokazujemy wyłącznie wartość jawnie wpisaną w polu formularza „Zależy od”; nie zgadujemy jej z tytułu ani opisu.</li>
+  </ul>
+
+  <h2>3. Wiek i kolejność</h2>
+  <div class="tablewrap"><table><thead><tr><th>Wiek kalendarzowy</th><th>Kolor paska</th><th>Znaczenie</th></tr></thead><tbody>
+    <tr><td>0–3 dni</td><td>zielony</td><td>świeża dyskusja</td></tr>
+    <tr><td>4–13 dni</td><td>bursztynowy</td><td>dyskusja trwająca średnio długo</td></tr>
+    <tr><td>14 dni i więcej</td><td>czerwony</td><td>bardzo długo trwająca dyskusja</td></tr>
+  </tbody></table></div>
+  <p>Liczba dni jest liczona w przeglądarce jako różnica dat kalendarzowych, dzięki czemu zmienia się bez nowego wdrożenia strony. Lista otwartych dyskusji jest sortowana od najstarszej do najnowszej, aby najdłużej trwające sprawy trafiały na początek.</p>
+
+  <h2>4. Źródła danych</h2>
+  <div class="flow">
+    <div>GitHub Discussion<br><small>tytuł, body, komentarze, etykiety</small></div><div class="arrow">→</div><div>Release workflow<br><small>GraphQL</small></div><div class="arrow">→</div><div><code>sync_discussions.py</code><br><small>bezpieczny snapshot</small></div>
+  </div>
+  <p>Workflow rozszerza zapytanie o <code>body</code>. Normalizator wykorzystuje istniejący parser formularza, usuwa z koordynatora początkowe <code>@</code>, odrzuca wartości puste i <code>_No response_</code>, a dla poprawnego loginu buduje publiczny adres avatara <code>https://github.com/&lt;login&gt;.png?size=80</code>.</p>
+  <p>Opcjonalne pole formularza o technicznym identyfikatorze <code>related</code> zmienia czytelną etykietę z „Powiązane decyzje” na „Zależy od”. Przyjmuje identyfikator dyskusji, decyzji lub elementu regulaminu, np. <code>#29</code>, <code>DR-017</code> albo <code>D-29</code>. Parser rozpoznaje nowy i stary nagłówek, aby nie zepsuć istniejących dyskusji; piguła kierunkowa powstaje jednak tylko z jawnej wartości pola, nigdy z samego tytułu.</p>
+  <p>Snapshot przechowuje: numer, pełny tytuł, URL, datę utworzenia, liczbę komentarzy, etykiety, koordynatora, URL avatara, pole powiązanych decyzji oraz dotychczasowe dane archiwum. Surowa treść dyskusji nie jest publikowana jako osobne pole.</p>
+
+  <h2>5. Aktualizacja zmienionego tytułu</h2>
+  <div class="note warn"><strong>Diagnoza:</strong> zdarzenie <code>discussion.edited</code> już uruchamia workflow Release i snapshot zawiera zmieniony tytuł. Opóźnienie widoczne dla użytkownika wynika z czasu wykonania workflow oraz cache GitHub Pages, którego odpowiedź może mieć <code>max-age=600</code>.</div>
+  <p>Strona nadal pokazuje czas ostatniej synchronizacji. Przycisk „Odśwież dane” przeładowuje bieżący adres z unikalnym parametrem czasu, np. <code>?odswiez=1789627000</code>. Omija to starszą odpowiedź CDN po zakończeniu publikacji, bez wystawiania tokenu i bez pobierania GraphQL bezpośrednio z przeglądarki.</p>
+  <p>Przycisk nie obiecuje danych, których workflow jeszcze nie opublikował. Tekst obok czasu synchronizacji wyjaśnia, że po edycji na GitHubie należy poczekać na zakończenie Release, zwykle około minuty.</p>
+
+  <h2>6. Zachowanie responsywne i dostępność</h2>
+  <ul>
+    <li>Siatka: trzy kolumny od 58 rem, dwie od 38 do 58 rem, jedna poniżej 38 rem.</li>
+    <li>Tytuły nie są ucinane; bardzo długi tytuł może zwiększyć wysokość karty.</li>
+    <li>Kolor wieku nie jest jedynym sygnałem — zawsze towarzyszy mu liczba i jednostka.</li>
+    <li>Avatar ma tekst alternatywny, a login jest widoczny również bez obrazu.</li>
+    <li>Piguły mogą przechodzić do następnego wiersza. Brak etykiet nie pozostawia sztucznego pustego komunikatu.</li>
+    <li>Cały tytuł pozostaje zwykłym linkiem prowadzącym do dyskusji GitHub.</li>
+  </ul>
+
+  <h2>7. Strategia TDD</h2>
+  <ol>
+    <li><strong>RED — dane:</strong> test fikstury wymaga koordynatora, avatara, powiązanych decyzji, etykiet, komentarzy i kolejności od najstarszej otwartej dyskusji.</li>
+    <li><strong>GREEN — dane:</strong> rozszerzenie GraphQL oraz minimalna normalizacja z użyciem parsera formularza.</li>
+    <li><strong>RED — widok:</strong> test kontraktowy wymaga trzech kolumn, paska numer/wiek/avatar, dużego tytułu bez prefiksu, opcjonalnych piguł i komentarzy na dole.</li>
+    <li><strong>GREEN — widok:</strong> minimalne zmiany w <code>dyskusje.html</code>, <code>assets/rejestr.css</code> i osobnym małym skrypcie strony dyskusji.</li>
+    <li><strong>RED/GREEN — świeżość:</strong> test wymaga obsługi <code>discussion.edited</code>, widocznego czasu synchronizacji i odświeżenia z parametrem cache-busting.</li>
+    <li><strong>Regresja:</strong> archiwum zamkniętych dyskusji, rejestr decyzji i pozostałe testy zachowują dotychczasowe działanie.</li>
+  </ol>
+
+  <h2>8. Pliki w zakresie</h2>
+  <div class="tablewrap"><table><thead><tr><th>Plik</th><th>Zmiana</th></tr></thead><tbody>
+    <tr><td><code>tests/test_discussions.py</code></td><td>Kontrakt normalizacji, sortowania, koordynatora i zależności.</td></tr>
+    <tr><td><code>tests/test_registry_platform.py</code></td><td>Kontrakt workflow, HTML, CSS i obsługi odświeżenia.</td></tr>
+    <tr><td><code>.github/workflows/pages.yml</code></td><td>Pobranie <code>body</code>.</td></tr>
+    <tr><td><code>.github/DISCUSSION_TEMPLATE/propozycje-zmian-regulaminu.yml</code></td><td>Jednoznaczna etykieta pola „Zależy od”.</td></tr>
+    <tr><td><code>narzedzia/create_decision_from_discussion.py</code></td><td>Zgodne wstecz odczytanie nowego i starego nagłówka zależności.</td></tr>
+    <tr><td><code>narzedzia/sync_discussions.py</code></td><td>Nowe pola snapshotu i kolejność najstarsze–najnowsze.</td></tr>
+    <tr><td><code>dyskusje.html</code></td><td>Nowa semantyczna karta otwartych dyskusji; archiwum bez redesignu.</td></tr>
+    <tr><td><code>assets/rejestr.css</code></td><td>Siatka 3/2/1, trzy klasy wieku, pasek i piguły.</td></tr>
+    <tr><td><code>assets/dyskusje.js</code></td><td>Wiek kalendarzowy, klasy wieku i cache-busting.</td></tr>
+  </tbody></table></div>
+
+  <h2>9. Kryteria akceptacji</h2>
+  <ul>
+    <li>Na desktopie siedem otwartych dyskusji tworzy siatkę trzech kolumn.</li>
+    <li>Każda karta pokazuje numer u góry lewego pasa, dynamiczny wiek pośrodku i koordynatora na dole.</li>
+    <li>Tytuł nie zawiera prezentacyjnego prefiksu <code>[Dyskusja]</code>.</li>
+    <li>Komentarze pozostają przy dolnej krawędzi każdej karty, także bez piguł.</li>
+    <li>Etykiety i zależności pojawiają się tylko wtedy, gdy istnieją w źródle GitHub.</li>
+    <li>Zmiana tytułu trafia do snapshotu przez <code>discussion.edited</code>; po zakończeniu Release przycisk odświeżenia omija stary cache Pages.</li>
+    <li>Testy najpierw wykazują RED, a następnie przechodzą po minimalnej implementacji.</li>
+  </ul>
+
+  <p class="foot">Projekt zatwierdzony na podstawie makiety: /private/tmp/Regulamin-Kadry-SPWS-dyskusje-UX-wariant-B-v5.html</p>
+</main></body></html>
