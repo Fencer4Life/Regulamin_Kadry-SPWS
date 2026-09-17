@@ -21,7 +21,7 @@ permalink: /dyskusje/
   <article class="discussion-card">
     <aside class="discussion-rail discussion-age-fresh" data-created-at="{{ discussion.created_at }}">
       <span class="discussion-number">#{{ discussion.number }}</span>
-      {% if discussion.priority %}<span class="discussion-priority discussion-priority-{{ discussion.priority | downcase }}"><span>Priorytet</span><strong>{{ discussion.priority | escape }}</strong></span>{% endif %}
+      {% if discussion.priority %}<span class="discussion-priority discussion-priority-{{ discussion.priority | downcase }}"><span>priorytet</span><strong>{{ discussion.priority | escape }}</strong></span>{% endif %}
       <span class="discussion-age"><strong data-discussion-age>—</strong><span data-discussion-age-unit>dni</span></span>
       <span class="discussion-coordinator" title="{% if discussion.coordinator %}Koordynator: {{ discussion.coordinator | escape }}{% else %}Koordynator nie wskazany{% endif %}">
         {% if discussion.coordinator_avatar_url %}<img src="{{ discussion.coordinator_avatar_url | escape }}" alt="Avatar {{ discussion.coordinator | escape }}">{% else %}<span class="discussion-coordinator-missing">?</span>{% endif %}
