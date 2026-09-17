@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Otwarte dyskusje
+title: Dyskusje
 permalink: /dyskusje/
 ---
 <section class="hero">
@@ -9,12 +9,46 @@ permalink: /dyskusje/
   <p class="lead">Rozmowy, które mogą prowadzić do przyjęcia albo odrzucenia decyzji regulaminowej.</p>
   <p><a class="action" href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/new?category=propozycje-zmian-regulaminu">Otwórz nową dyskusję</a></p>
 </section>
-{% assign snapshot = site.data.open_discussions %}
+{% assign snapshot = site.data.discussions %}
 <p class="result-count">Ostatnia synchronizacja: {{ snapshot.generated_at | default: 'oczekuje na pierwszą synchronizację' }}</p>
 <section class="discussion-list">
-{% for discussion in snapshot.items %}
+{% for discussion in snapshot.open_items %}
   <article class="decision-card"><p class="eyebrow">Dyskusja #{{ discussion.number }}</p><h2><a href="{{ discussion.url }}">{{ discussion.title | escape }}</a></h2><p class="card-meta">{{ discussion.author | escape }} · {{ discussion.created_at }} · wypowiedzi: {{ discussion.comments }}</p></article>
 {% else %}
   <p class="notice">Brak otwartych dyskusji w snapshotcie. <a href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions">Sprawdź aktualną listę na GitHub.</a></p>
+{% endfor %}
+</section>
+
+<section class="hero">
+  <p class="eyebrow">Archiwum prac komisji</p>
+  <h1>Zamknięte dyskusje i decyzje</h1>
+  <p class="lead">Zakończone rozmowy wraz z ich wynikiem i — gdy powstała — opublikowaną kartą decyzji.</p>
+</section>
+<section class="discussion-list">
+{% for discussion in snapshot.closed_items %}
+  {% assign discussion_status = 'Zamknięta' %}
+  {% if discussion.labels contains 'PORZUCONA' %}
+    {% assign discussion_status = 'Porzucona' %}
+  {% elsif discussion.labels contains 'DUPLIKAT' %}
+    {% assign discussion_status = 'Duplikat' %}
+  {% elsif discussion.labels contains 'rozstrzygnięta' or discussion.labels contains 'redakcja-bez-zmiany-sensu' %}
+    {% assign discussion_status = 'Przyjęta' %}
+  {% endif %}
+  {% assign linked_decision_url = '' %}
+  {% assign linked_decision_id = '' %}
+  {% for decision in site.decyzje %}
+    {% if decision.discussion_url == discussion.url %}
+      {% assign linked_decision_url = decision.url %}
+      {% assign linked_decision_id = decision.slug | slice: 0, 6 | upcase %}
+    {% endif %}
+  {% endfor %}
+  <article class="decision-card">
+    <p class="eyebrow">Dyskusja #{{ discussion.number }} · <span class="status">{{ discussion_status }}</span></p>
+    <h2><a href="{{ discussion.url }}">{{ discussion.title | escape }}</a></h2>
+    <p class="card-meta">{{ discussion.author | escape }} · zamknięta: {{ discussion.closed_at }} · wypowiedzi: {{ discussion.comments }}</p>
+    {% if linked_decision_url != '' %}<p><a class="action" href="{{ linked_decision_url | relative_url }}">Zobacz decyzję {{ linked_decision_id }}</a></p>{% endif %}
+  </article>
+{% else %}
+  <p class="notice">Brak zamkniętych dyskusji w snapshotcie.</p>
 {% endfor %}
 </section>

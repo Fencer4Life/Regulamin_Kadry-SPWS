@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import unittest
 from pathlib import Path
 
@@ -14,6 +15,7 @@ REQUIRED_PLATFORM_FILES = (
     "_includes/decision-card.html",
     "assets/rejestr.css",
     "assets/rejestr.js",
+    "_data/discussions.json",
     ".github/workflows/validate.yml",
     ".github/workflows/pages.yml",
 )
@@ -49,8 +51,27 @@ class RegistryPlatformTests(unittest.TestCase):
     def test_header_links_to_discussions_and_new_proposal(self):
         layout = (ROOT / "_layouts" / "default.html").read_text(encoding="utf-8")
         self.assertIn("Otwarte dyskusje", layout)
+        self.assertIn("site.data.discussions.open_items.size", layout)
         self.assertIn("Otwórz nową dyskusję", layout)
         self.assertTrue((ROOT / "dyskusje.html").is_file())
+
+    def test_discussion_page_separates_open_and_closed_and_links_decisions(self):
+        page = (ROOT / "dyskusje.html").read_text(encoding="utf-8")
+        for fragment in (
+            "site.data.discussions",
+            "snapshot.open_items",
+            "snapshot.closed_items",
+            "Otwarte dyskusje",
+            "Zamknięte dyskusje i decyzje",
+            "discussion_url",
+            "Przyjęta",
+            "Porzucona",
+            "Duplikat",
+            "Zamknięta",
+            "Zobacz decyzję",
+        ):
+            self.assertIn(fragment, page)
+        self.assertFalse((ROOT / "_data" / "open_discussions.json").exists())
 
     def test_config_publishes_decision_collection(self):
         config = (ROOT / "_config.yml").read_text(encoding="utf-8")
@@ -97,11 +118,20 @@ class RegistryPlatformTests(unittest.TestCase):
 
     def test_pages_refreshes_discussions_safely(self):
         pages = (ROOT / ".github/workflows/pages.yml").read_text(encoding="utf-8")
-        self.assertIn("schedule:", pages)
-        self.assertIn("*/15", pages)
-        self.assertIn("discussion:", pages)
-        self.assertIn("discussions: read", pages)
-        self.assertIn("sync_discussions.py", pages)
+        for fragment in (
+            "schedule:",
+            "*/15",
+            "discussion:",
+            "discussions: read",
+            "sync_discussions.py",
+            "states:[OPEN,CLOSED]",
+            "closedAt",
+            "pageInfo",
+            "endCursor",
+            "--paginate --slurp",
+            "_data/discussions.json",
+        ):
+            self.assertIn(fragment, pages)
 
     def test_decision_creation_workflow_is_idempotent_and_serialized(self):
         workflow = ROOT / ".github" / "workflows" / "create-decision.yml"
@@ -155,8 +185,15 @@ class RegistryPlatformTests(unittest.TestCase):
         workflow = ROOT / ".github" / "workflows" / "resolve-discussion.yml"
         self.assertTrue(workflow.is_file())
         text = workflow.read_text(encoding="utf-8")
-        for fragment in ("pull_request:", "closed", "merged", "discussion_url", "RESOLVED", "closeDiscussion"):
+        for fragment in ("pull_request:", "closed", "merged", "discussion_url", "RESOLVED", "closeDiscussion", "actions: write", "gh workflow run pages.yml --ref main"):
             self.assertIn(fragment, text)
+        self.assertLess(text.index("closeDiscussion"), text.index("gh workflow run pages.yml --ref main"))
+
+    def test_architecture_decision_index_keeps_newest_entries_first(self):
+        index = (ROOT / "dokumentacja" / "adr" / "index.html").read_text(encoding="utf-8")
+        self.assertIn("najnowszy ADR znajduje się zawsze na samej górze", index)
+        numbers = [int(value) for value in re.findall(r"<h2>ADR-(\d+)", index)]
+        self.assertEqual(numbers, sorted(numbers, reverse=True))
 
 
 if __name__ == "__main__":

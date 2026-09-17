@@ -87,9 +87,10 @@ permalink: /przewodnik/
 <section class="guide-card">
   <h2>Co dzieje się automatycznie</h2>
   <ul>
-    <li>Lista otwartych dyskusji synchronizuje się natychmiast po obsługiwanych zdarzeniach GitHub: utworzeniu, edycji oraz zmianie kategorii lub etykiety.</li>
-    <li>Awaryjna synchronizacja działa <b>co 15 minut</b>. GitHub może uruchomić zadanie okresowe z opóźnieniem.</li>
-    <li>Zamknięcie lub ponowne otwarcie wątku pojawi się na stronie po synchronizacji okresowej, ponieważ to zdarzenie nie jest objęte użytym wyzwalaczem GitHub Actions.</li>
+    <li>Strona dyskusji rozdziela <b>Otwarte dyskusje</b> od sekcji <b>Zamknięte dyskusje i decyzje</b>. Przyjęte sprawy prowadzą z archiwum bezpośrednio do opublikowanej karty DR.</li>
+    <li>Lista synchronizuje się natychmiast po obsługiwanych zdarzeniach GitHub: utworzeniu, edycji oraz zmianie kategorii lub etykiety.</li>
+    <li>Po scaleniu decyzji automat zamyka jej dyskusję, a następnie uruchamia Release jeszcze raz, aby przenieść wątek do archiwum dopiero po rzeczywistej zmianie stanu.</li>
+    <li>Awaryjna synchronizacja działa <b>co 15 minut</b>. GitHub może uruchomić zadanie okresowe z opóźnieniem; harmonogram naprawia ewentualny rozjazd, ale nie jest podstawową drogą publikacji zamknięcia.</li>
     <li>Automatyzacja numeruje DR, zakłada draft PR, uruchamia testy i po scaleniu publikuje stronę. W szybkiej ścieżce dodaje do PR Markdown i wygenerowany DOCX; w obu ścieżkach CI udostępnia niezależny artefakt kandydata.</li>
   </ul>
   <p>Jeżeli nowa dyskusja nie jest jeszcze widoczna, sprawdź jej kategorię i poczekaj na najbliższą synchronizację. Wątek musi należeć do kategorii propozycji zmian regulaminu.</p>

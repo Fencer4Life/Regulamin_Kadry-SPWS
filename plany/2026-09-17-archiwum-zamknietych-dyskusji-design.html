@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Archiwum zamkniętych dyskusji i decyzji — projekt</title>
+  <style>
+    :root{--bg:#e8ecf3;--surface:#fff;--surface-2:#dce5ef;--ink:#101722;--muted:#445064;--line:#c7d0dc;--accent:#12467e;--good:#26784a;--good-bg:#edf9f1;--warn:#98620c;--warn-bg:#fff8e8;--danger:#a33227;--danger-bg:#fff0ee}
+    @media(prefers-color-scheme:dark){:root{--bg:#121722;--surface:#1c2430;--surface-2:#283342;--ink:#eef4fb;--muted:#b6c0cf;--line:#3a4656;--accent:#8fc5f4;--good:#79dda3;--good-bg:#162c20;--warn:#efc878;--warn-bg:#302714;--danger:#f49b91;--danger-bg:#351e1c}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:980px;margin:auto;padding:52px 24px 92px}
+    h1,h2,h3{font-family:Georgia,serif;line-height:1.15}h1{font-size:clamp(38px,6vw,54px);max-width:19ch;margin:.2em 0}.lead{font-size:22px;color:var(--muted);max-width:64ch}.tag{font:700 13px ui-monospace,monospace;letter-spacing:.11em;color:var(--accent)}
+    h2{font-size:32px;margin-top:46px}h3{font-size:22px;margin-top:28px}p,li{max-width:72ch}li{margin:.48em 0}code{background:var(--surface-2);padding:.12em .35em;border-radius:4px;font-size:.88em}a{color:var(--accent)}
+    .box{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:18px 22px;margin:22px 0}.ok{border-left-color:var(--good);background:var(--good-bg)}.warn{border-left-color:var(--warn);background:var(--warn-bg)}.danger{border-left-color:var(--danger);background:var(--danger-bg)}
+    table{width:100%;border-collapse:collapse;background:var(--surface);margin:18px 0}th,td{border:1px solid var(--line);padding:11px;text-align:left;vertical-align:top}th{background:var(--surface-2);font-size:14px;text-transform:uppercase;letter-spacing:.05em}.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}.step{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:15px}.step b{display:block;color:var(--accent);margin-bottom:6px}
+    @media(max-width:760px){.flow{grid-template-columns:1fr}table{font-size:15px}}
+  </style>
+</head>
+<body><main>
+  <p class="tag">REGULAMIN KADRY SPWS · PROJEKT · 17.09.2026</p>
+  <h1>Archiwum zamkniętych dyskusji i decyzji</h1>
+  <p class="lead">Strona <code>/dyskusje/</code> ma rozdzielać rozmowy wymagające pracy od zakończonych spraw. Każda zamknięta dyskusja pozostaje w publicznym archiwum, a przyjęte rozstrzygnięcie prowadzi bezpośrednio do właściwej karty decyzji.</p>
+
+  <div class="box ok"><b>Zatwierdzona zasada:</b> archiwum obejmuje wszystkie zamknięte dyskusje. Rozstrzygnięte pokazują powiązaną decyzję; porzucone i duplikaty pozostają widoczne bez wymogu tworzenia decyzji.</div>
+  <div class="box"><b>Trwały zapis decyzji:</b> treść projektu utrwalono jako <a href="../dokumentacja/adr/ADR-001-archiwum-zamknietych-dyskusji.html">ADR-001 — Archiwum zamkniętych dyskusji i decyzji</a>.</div>
+
+  <h2>Problem potwierdzony na dyskusji #19</h2>
+  <p>Publiczny snapshot został utworzony 16.09.2026 o 19:45:12Z, a dyskusja #19 została zamknięta o 19:45:15Z. Release rozpoczęty po scaleniu PR zdążył więc pobrać jeszcze otwarty stan. Zdarzenie zamknięcia nie uruchomiło kolejnej publikacji, a harmonogram GitHub Actions nie wykonał następnej synchronizacji w deklarowanym odstępie.</p>
+  <p>Obecna implementacja dodatkowo pobiera wyłącznie dyskusje <code>OPEN</code> i generuje jedną listę <code>open_discussions</code>. Nie posiada modelu danych ani widoku dla spraw zamkniętych.</p>
+
+  <h2>Rozważane podejścia</h2>
+  <table>
+    <thead><tr><th>Podejście</th><th>Zalety</th><th>Wady i decyzja</th></tr></thead>
+    <tbody>
+      <tr><td><b>Jeden snapshot wszystkich dyskusji</b><br><code>open_items</code> + <code>closed_items</code></td><td>Jedna chwila synchronizacji, jeden format, proste rozdzielenie widoku, brak duplikacji.</td><td><b>Wybrane.</b> Najmniejszy spójny zakres zmiany.</td></tr>
+      <tr><td>Dwa niezależne snapshoty: otwarte i zamknięte</td><td>Proste szablony list.</td><td>Dwa zapytania i dwa miejsca obsługi błędów; ryzyko różnych czasów synchronizacji. Odrzucone.</td></tr>
+      <tr><td>Archiwum budowane tylko z kart <code>_decyzje</code></td><td>Nie wymaga pobierania zamkniętych dyskusji.</td><td>Ukrywa sprawy <code>PORZUCONA</code>, <code>DUPLIKAT</code> oraz zamknięte bez karty. Odrzucone.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Architektura i przepływ danych</h2>
+  <div class="flow">
+    <div class="step"><b>1. GitHub Discussions</b>Release pobiera dyskusje kategorii zmian regulaminu w stanach otwartym i zamkniętym, wraz z <code>closedAt</code> i etykietami.</div>
+    <div class="step"><b>2. Normalizacja</b><code>sync_discussions.py</code> filtruje kategorię oraz tworzy <code>open_items</code> i <code>closed_items</code>.</div>
+    <div class="step"><b>3. Powiązanie</b>Jekyll zestawia URL zamkniętej dyskusji z polem <code>discussion_url</code> w kolekcji <code>_decyzje</code>.</div>
+    <div class="step"><b>4. Publikacja</b><code>/dyskusje/</code> pokazuje dwie osobne sekcje i aktualny czas synchronizacji.</div>
+  </div>
+
+  <h3>Kontrakt snapshotu</h3>
+  <p>Plik danych otrzyma neutralną nazwę <code>_data/discussions.json</code>. Zachowa pola obecnych kart i doda <code>closed_at</code>. Najwyższy poziom będzie zawierał:</p>
+  <ul>
+    <li><code>generated_at</code> — wspólny czas wykonania synchronizacji;</li>
+    <li><code>open_items</code> — tylko wpisy bez <code>closedAt</code>, od najnowszych;</li>
+    <li><code>closed_items</code> — tylko wpisy z <code>closedAt</code>, od ostatnio zamkniętych.</li>
+  </ul>
+  <p>Synchronizacja obejmie całą dostępną listę, a nie tylko przypadkowy pierwszy fragment danych. Dzięki temu archiwum nie zacznie po cichu gubić najstarszych wpisów po przekroczeniu limitu pojedynczej strony GraphQL.</p>
+
+  <h2>Widok strony</h2>
+  <h3>Otwarte dyskusje</h3>
+  <p>Pierwsza sekcja zachowa dzisiejszą formę i przycisk otwarcia nowej dyskusji. Dyskusja z ustawionym <code>closedAt</code> nie może zostać wyrenderowana w tej sekcji, niezależnie od etykiety.</p>
+
+  <h3>Zamknięte dyskusje i decyzje</h3>
+  <p>Druga sekcja pokaże numer, tytuł, autora, datę zamknięcia, liczbę wypowiedzi oraz status. Reguły statusu:</p>
+  <table>
+    <thead><tr><th>Etykieta / stan</th><th>Tekst publiczny</th><th>Powiązanie</th></tr></thead>
+    <tbody>
+      <tr><td><code>rozstrzygnięta</code> lub <code>redakcja-bez-zmiany-sensu</code></td><td>Przyjęta</td><td>Link „Zobacz decyzję DR-NNN”, jeśli istnieje karta o tym samym <code>discussion_url</code>.</td></tr>
+      <tr><td><code>PORZUCONA</code></td><td>Porzucona</td><td>Bez wymaganej karty decyzji.</td></tr>
+      <tr><td><code>DUPLIKAT</code></td><td>Duplikat</td><td>Bez wymaganej karty decyzji.</td></tr>
+      <tr><td>Brak rozpoznanej etykiety</td><td>Zamknięta</td><td>Bez domyślania wyniku.</td></tr>
+    </tbody>
+  </table>
+  <p>Dyskusja #19 ma zniknąć z „Otwartych dyskusji” i pojawić się w archiwum jako „Przyjęta” z linkiem do DR-001.</p>
+
+  <h2>Natychmiastowa synchronizacja po decyzji</h2>
+  <p>Workflow <code>resolve-discussion.yml</code>, po dodaniu komentarza i skutecznym wywołaniu <code>closeDiscussion</code>, jawnie uruchomi workflow <code>pages.yml</code> na gałęzi <code>main</code>. Wymaga to ograniczonego uprawnienia <code>actions: write</code> tylko w workflow zamykającym.</p>
+  <div class="box warn"><b>Dlaczego nie wystarcza harmonogram:</b> GitHub Actions może opóźniać lub pomijać uruchomienia cykliczne przy obciążeniu. Harmonogram pozostaje mechanizmem naprawczym, ale nie będzie jedynym sposobem usunięcia zamkniętej dyskusji z listy otwartych.</div>
+
+  <h2>Obsługa błędów</h2>
+  <ul>
+    <li>Jeżeli pobranie dyskusji lub normalizacja nie powiedzie się, build Release kończy się błędem, a poprzednia poprawna wersja GitHub Pages pozostaje opublikowana.</li>
+    <li>Zamknięta dyskusja bez pasującej karty nadal pojawia się w archiwum. Widok nie tworzy fałszywego linku ani nie ukrywa wpisu.</li>
+    <li>Nierozpoznana etykieta daje neutralny status „Zamknięta”; automat nie zgaduje wyniku merytorycznego.</li>
+    <li>Nieudane jawne uruchomienie Release powoduje błąd workflow zamykającego, dzięki czemu problem jest widoczny w Actions; cykliczna synchronizacja pozostaje zabezpieczeniem.</li>
+  </ul>
+
+  <h2>Testy i kryteria odbioru</h2>
+  <ol>
+    <li>Test normalizatora najpierw na czerwono: mieszany payload trafia do dwóch list, zachowuje etykiety, a zamknięte sortują się po <code>closed_at</code>.</li>
+    <li>Test kontraktu workflow: zapytanie pobiera oba stany i pole <code>closedAt</code>; workflow zamykający uruchamia Release dopiero po zamknięciu.</li>
+    <li>Test szablonu: strona zawiera obie sekcje, statusy i powiązanie przez <code>discussion_url</code>.</li>
+    <li>Pełny zestaw testów Python oraz <code>bundle exec jekyll build --strict_front_matter</code> przechodzą lokalnie i w CI.</li>
+    <li>Po wdrożeniu strona publiczna pokazuje #19 wyłącznie w „Zamkniętych dyskusjach i decyzjach”, ze statusem „Przyjęta” i działającym linkiem do DR-001.</li>
+  </ol>
+
+  <h2>Zakres plików implementacji</h2>
+  <ul>
+    <li><code>narzedzia/sync_discussions.py</code> — wspólny model otwartych i zamkniętych;</li>
+    <li><code>_data/discussions.json</code> — pusty bezpieczny snapshot repozytorium;</li>
+    <li><code>dyskusje.html</code> — dwie sekcje i linkowanie decyzji;</li>
+    <li><code>.github/workflows/pages.yml</code> — pobranie obu stanów i generacja snapshotu;</li>
+    <li><code>.github/workflows/resolve-discussion.yml</code> — jawne uruchomienie Release po zamknięciu;</li>
+    <li><code>tests/test_discussions.py</code> i testy kontraktowe strony/workflow — TDD i regresja #19.</li>
+  </ul>
+
+  <div class="box"><b>Poza zakresem:</b> zmiana treści decyzji, przebudowa rejestru decyzji, zmiana procesu zatwierdzania PR oraz paginacja samego interfejsu strony. Projekt dotyczy wyłącznie poprawnego podziału i publikowania stanów dyskusji.</div>
+</main></body>
+</html>

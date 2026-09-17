@@ -14,7 +14,7 @@
       <a class="brand" href="{{ '/' | relative_url }}">Regulamin Kadry SPWS</a>
       <nav aria-label="Nawigacja główna">
         <a href="{{ '/' | relative_url }}">Rejestr decyzji</a>
-        <a href="{{ '/dyskusje/' | relative_url }}">Otwarte dyskusje{% if site.data.open_discussions %} · {{ site.data.open_discussions.items.size }}{% endif %}</a>
+        <a href="{{ '/dyskusje/' | relative_url }}">Otwarte dyskusje{% if site.data.discussions %} · {{ site.data.discussions.open_items.size }}{% endif %}</a>
         <a href="{{ '/przewodnik/' | relative_url }}">Jak pracujemy</a>
         <a href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/new?category=propozycje-zmian-regulaminu">Otwórz nową dyskusję</a>
         <a href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS#readme">O projekcie</a>
