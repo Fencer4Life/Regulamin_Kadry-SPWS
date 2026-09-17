@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Priorytet na karcie dyskusji — projekt</title>
+  <style>
+    :root{--bg:#e8ecf3;--surface:#fff;--surface2:#dce2ec;--ink:#0f1319;--muted:#414b59;--line:#c9d1dc;--accent:#12467e;--high:#8b2933;--highbg:#f4dadd;--mid:#7a4d02;--midbg:#f4e6c8;--low:#0f5f37;--lowbg:#d8eede;--serif:Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,"SF Mono",monospace}
+    @media(prefers-color-scheme:dark){:root{--bg:#12151b;--surface:#1b2029;--surface2:#232935;--ink:#f1f4f8;--muted:#aeb8c6;--line:#3c4552;--accent:#8cbdec;--high:#ff9299;--highbg:#30191d;--mid:#e6bd6f;--midbg:#282011;--low:#6cdc98;--lowbg:#15271b}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.6 var(--sans)}main{max-width:70rem;margin:auto;padding:56px 28px 90px}h1,h2{font-family:var(--serif);line-height:1.12}h1{font-size:clamp(38px,6vw,56px);max-width:20ch}h2{margin-top:48px;font-size:31px}.eyebrow,.chip{font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase}.eyebrow{color:var(--accent)}.lede{max-width:48rem;font-size:22px;color:var(--muted)}.note{margin:22px 0;padding:17px 21px;border-left:5px solid var(--accent);border-radius:10px;background:var(--surface)}.chip{display:inline-block;margin-right:7px;padding:6px 10px;border:1px solid var(--line);border-radius:99px;background:var(--surface)}code{font-family:var(--mono);background:var(--surface2);padding:.1em .35em;border-radius:4px}.card{display:grid;grid-template-columns:94px 1fr;max-width:600px;min-height:290px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}.rail{display:flex;flex-direction:column;align-items:center;padding:12px 8px;background:var(--lowbg);color:var(--low);font-weight:800}.number{font:700 13px var(--mono)}.age{display:grid;flex:1;place-items:center;text-align:center}.age strong{display:block;font-size:40px;line-height:1}.priority{width:100%;margin:8px 0 10px;padding:6px 4px;border-radius:9px;background:var(--highbg);color:var(--high);text-align:center;line-height:1.05}.priority small{display:block;font:800 9px var(--mono);letter-spacing:.07em}.priority b{display:block;margin-top:3px;font-size:12px;text-transform:uppercase}.avatar{display:grid;width:54px;height:58px;place-items:center;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--ink);font:700 10px var(--mono);text-align:center}.body{padding:18px}.body h3{margin:0;font:700 25px/1.2 var(--serif)}table{width:100%;border-collapse:collapse;background:var(--surface)}th,td{padding:11px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:var(--surface2)}.foot{margin-top:55px;padding-top:16px;border-top:1px solid var(--line);font:14px var(--mono);color:var(--muted)}
+  </style>
+</head>
+<body><main>
+  <p class="eyebrow">Regulamin Kadry SPWS · zatwierdzony projekt</p>
+  <h1>Priorytet nad koordynatorem na karcie dyskusji</h1>
+  <p class="lede">Karta pokaże tylko priorytet wybrany w GitHub Discussion. Nie dopisuje go ręcznie i nie zgaduje z treści ani z etykiet.</p>
+  <span class="chip">17.09.2026</span><span class="chip">TDD</span><span class="chip">bez nowej zależności</span>
+
+  <h2>Ustalony wygląd</h2>
+  <div class="note"><strong>Piguła jest dwuwierszowa</strong>, znajduje się w lewym pasku bezpośrednio nad avatarem koordynatora. Pierwszy wiersz mówi, co oznacza wartość; drugi przekazuje wartość.</div>
+  <div class="card" aria-label="Karta z priorytetem wysokim">
+    <aside class="rail"><span class="number">#7</span><span class="age"><span><strong>12</strong>dni</span></span><span class="priority"><small>PRIORYTET</small><b>WYSOKI</b></span><span class="avatar">avatar<br>Fencer4Life</span></aside>
+    <section class="body"><h3>Współczynniki zawodów we wprowadzanej gradacji</h3></section>
+  </div>
+
+  <h2>Źródło i reguły</h2>
+  <table><thead><tr><th>Element</th><th>Ustalenie</th></tr></thead><tbody>
+    <tr><td>Źródło prawdy</td><td>Pole <code>Priorytet</code> formularza GitHub Discussion: <code>Niski</code>, <code>Średni</code>, <code>Wysoki</code> lub <code>Nie określono</code>.</td></tr>
+    <tr><td>Wyświetlenie</td><td><code>Wysoki</code>, <code>Średni</code> i <code>Niski</code> tworzą pigułę. Brak pola, odpowiedź <code>_No response_</code> oraz <code>Nie określono</code> nie tworzą piguły.</td></tr>
+    <tr><td>Kolor</td><td>Wysoki — czerwony, Średni — bursztynowy, Niski — zielony. Kolor jest wsparciem dla tekstu, nie jedynym nośnikiem informacji.</td></tr>
+    <tr><td>Aktualizacja</td><td>Edycja dyskusji uruchamia Release, który pobiera świeżą treść formularza, odtwarza snapshot i publikuje Pages.</td></tr>
+    <tr><td>Zakres</td><td>Nie zmieniamy kart zamkniętych dyskusji, decyzji ani znaczenia istniejących etykiet GitHub.</td></tr>
+  </tbody></table>
+
+  <h2>Zmiany i testy</h2>
+  <ol>
+    <li><strong>RED:</strong> test normalizacji oczekuje pola priorytetu; test widoku oczekuje piguły nad koordynatorem oraz jej braku dla wartości nieokreślonej.</li>
+    <li><strong>GREEN:</strong> normalizator przenosi już parsowane pole do danych strony, a szablon i CSS tworzą pigułę.</li>
+    <li><strong>Regresja:</strong> testy istniejącego parsera, kart, archiwum i budowy Pages nadal przechodzą.</li>
+    <li>W tym samym wdrożeniu dyskusje <code>#7</code> i <code>#8</code> dostają w GitHub wartość <code>Wysoki</code>, aby dane źródłowe i widok były zgodne.</li>
+  </ol>
+
+  <p class="foot">Projekt zatwierdzony przez użytkownika 17.09.2026.</p>
+</main></body></html>
