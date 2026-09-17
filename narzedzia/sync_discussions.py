@@ -6,7 +6,10 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
-from narzedzia.create_decision_from_discussion import parse_discussion_form
+try:
+    from narzedzia.create_decision_from_discussion import parse_discussion_form
+except ModuleNotFoundError:
+    from create_decision_from_discussion import parse_discussion_form
 
 CATEGORY = "propozycje-zmian-regulaminu"
 GITHUB_LOGIN = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$")
