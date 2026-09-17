@@ -7,21 +7,31 @@
   <style>
     :root{--bg:#e8ecf3;--surface:#fff;--surface2:#dce2ec;--ink:#0f1319;--muted:#414b59;--line:#c9d1dc;--accent:#12467e;--high:#8b2933;--highbg:#f4dadd;--mid:#7a4d02;--midbg:#f4e6c8;--low:#0f5f37;--lowbg:#d8eede;--serif:Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,"SF Mono",monospace}
     @media(prefers-color-scheme:dark){:root{--bg:#12151b;--surface:#1b2029;--surface2:#232935;--ink:#f1f4f8;--muted:#aeb8c6;--line:#3c4552;--accent:#8cbdec;--high:#ff9299;--highbg:#30191d;--mid:#e6bd6f;--midbg:#282011;--low:#6cdc98;--lowbg:#15271b}}
-    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.6 var(--sans)}main{max-width:70rem;margin:auto;padding:56px 28px 90px}h1,h2{font-family:var(--serif);line-height:1.12}h1{font-size:clamp(38px,6vw,56px);max-width:20ch}h2{margin-top:48px;font-size:31px}.eyebrow,.chip{font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase}.eyebrow{color:var(--accent)}.lede{max-width:48rem;font-size:22px;color:var(--muted)}.note{margin:22px 0;padding:17px 21px;border-left:5px solid var(--accent);border-radius:10px;background:var(--surface)}.chip{display:inline-block;margin-right:7px;padding:6px 10px;border:1px solid var(--line);border-radius:99px;background:var(--surface)}code{font-family:var(--mono);background:var(--surface2);padding:.1em .35em;border-radius:4px}.card{display:grid;grid-template-columns:94px 1fr;max-width:600px;min-height:290px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}.rail{display:flex;flex-direction:column;align-items:center;padding:12px 8px;background:var(--lowbg);color:var(--low);font-weight:800}.number{font:700 13px var(--mono)}.age{display:grid;flex:1;place-items:center;text-align:center}.age strong{display:block;font-size:40px;line-height:1}.priority{width:100%;margin:8px 0 10px;padding:6px 4px;border-radius:9px;background:var(--highbg);color:var(--high);text-align:center;line-height:1.05}.priority small{display:block;font:800 9px var(--mono);letter-spacing:.07em}.priority b{display:block;margin-top:3px;font-size:12px;text-transform:uppercase}.avatar{display:grid;width:54px;height:58px;place-items:center;border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--ink);font:700 10px var(--mono);text-align:center}.body{padding:18px}.body h3{margin:0;font:700 25px/1.2 var(--serif)}table{width:100%;border-collapse:collapse;background:var(--surface)}th,td{padding:11px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:var(--surface2)}.foot{margin-top:55px;padding-top:16px;border-top:1px solid var(--line);font:14px var(--mono);color:var(--muted)}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.6 var(--sans)}main{max-width:70rem;margin:auto;padding:56px 28px 90px}h1,h2{font-family:var(--serif);line-height:1.12}h1{font-size:clamp(38px,6vw,56px);max-width:20ch}h2{margin-top:48px;font-size:31px}.eyebrow,.chip{font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase}.eyebrow{color:var(--accent)}.lede{max-width:48rem;font-size:22px;color:var(--muted)}.note{margin:22px 0;padding:17px 21px;border-left:5px solid var(--accent);border-radius:10px;background:var(--surface)}.chip{display:inline-block;margin-right:7px;padding:6px 10px;border:1px solid var(--line);border-radius:99px;background:var(--surface)}code{font-family:var(--mono);background:var(--surface2);padding:.1em .35em;border-radius:4px}.discussion-card{display:grid;grid-template-columns:5.75rem minmax(0,1fr);max-width:360px;min-height:17.8rem;overflow:hidden;border:1px solid var(--line);border-radius:.6rem;background:var(--surface);box-shadow:0 14px 40px rgb(20 32 51 / 10%)}.discussion-rail{display:flex;flex-direction:column;align-items:center;padding:.7rem .42rem .5rem;text-align:center;color:#815300;background:#fff0c7}.discussion-number{align-self:flex-start;font:800 .78rem var(--mono)}.discussion-priority{width:100%;margin-top:.6rem;padding:.42rem .2rem;border-radius:.5rem;background:var(--highbg);color:var(--high);text-align:center;line-height:1.05}.discussion-priority small{display:block;font:800 .52rem var(--mono);letter-spacing:.06em}.discussion-priority strong{display:block;margin-top:.2rem;font-size:.68rem;text-transform:uppercase}.discussion-age{display:flex;flex:1;align-items:center;justify-content:center;flex-direction:column;line-height:1}.discussion-age strong{display:block;font-size:2.35rem}.discussion-age span{margin-top:.25rem;font-size:.72rem;font-weight:800;text-transform:uppercase}.discussion-coordinator{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.2rem;width:100%;min-height:3.6rem;padding:.35rem;border:1px solid var(--line);border-radius:.5rem;background:var(--surface);color:var(--ink);font:800 .6rem/1 var(--mono)}.discussion-coordinator img{width:1.7rem;height:1.7rem;border-radius:50%;object-fit:cover}.discussion-content{display:flex;min-width:0;flex-direction:column;padding:1.1rem}.discussion-title{margin:0;font:700 1.28rem/1.15 Georgia,serif;overflow-wrap:anywhere}.discussion-title a{color:var(--accent)}.discussion-pills{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:auto;padding-top:1rem}.discussion-comments{margin:12px 0 0;padding-top:.7rem;border-top:1px solid var(--line);color:var(--muted);font-size:.84rem;font-weight:800;text-align:right}table{width:100%;border-collapse:collapse;background:var(--surface)}th,td{padding:11px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:var(--surface2)}.foot{margin-top:55px;padding-top:16px;border-top:1px solid var(--line);font:14px var(--mono);color:var(--muted)}
   </style>
 </head>
 <body><main>
   <p class="eyebrow">Regulamin Kadry SPWS · zatwierdzony projekt</p>
-  <h1>Priorytet nad koordynatorem na karcie dyskusji</h1>
+  <h1>Priorytet nad liczbą dni na karcie dyskusji</h1>
   <p class="lede">Karta pokaże tylko priorytet wybrany w GitHub Discussion. Nie dopisuje go ręcznie i nie zgaduje z treści ani z etykiet.</p>
   <span class="chip">17.09.2026</span><span class="chip">TDD</span><span class="chip">bez nowej zależności</span>
 
   <h2>Ustalony wygląd</h2>
-  <div class="note"><strong>Piguła jest dwuwierszowa</strong>, znajduje się w lewym pasku bezpośrednio nad avatarem koordynatora. Pierwszy wiersz mówi, co oznacza wartość; drugi przekazuje wartość.</div>
-  <div class="card" aria-label="Karta z priorytetem wysokim">
-    <aside class="rail"><span class="number">#7</span><span class="age"><span><strong>12</strong>dni</span></span><span class="priority"><small>PRIORYTET</small><b>WYSOKI</b></span><span class="avatar">avatar<br>Fencer4Life</span></aside>
-    <section class="body"><h3>Współczynniki zawodów we wprowadzanej gradacji</h3></section>
-  </div>
+  <div class="note"><strong>Piguła jest dwuwierszowa</strong>, znajduje się w lewym pasku bezpośrednio pod numerem dyskusji i nad liczbą dni. Pierwszy wiersz mówi, co oznacza wartość; drugi przekazuje wartość.</div>
+  <article class="discussion-card" aria-label="Prawdziwa karta dyskusji numer 7 z projektowanym priorytetem">
+    <aside class="discussion-rail">
+      <span class="discussion-number">#7</span>
+      <span class="discussion-priority"><small>PRIORYTET</small><strong>WYSOKI</strong></span>
+      <span class="discussion-age"><strong>4</strong><span>dni</span></span>
+      <span class="discussion-coordinator"><img src="https://github.com/Fencer4Life.png?size=80" alt="Avatar Fencer4Life"><span>Fencer4Life</span></span>
+    </aside>
+    <div class="discussion-content">
+      <h2 class="discussion-title"><a href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/7">Współczynniki zawodów we wprowadzanej gradacji.</a></h2>
+      <div class="discussion-pills"></div>
+      <p class="discussion-comments">💬 0 komentarzy</p>
+    </div>
+  </article>
+  <p>Przykład odwzorowuje aktualną kartę #7: prawdziwy numer, tytuł, wiek na 17.09.2026, koordynator, avatar, brak etykiet oraz zero komentarzy. Jedynym projektowanym elementem jest piguła priorytetu.</p>
 
   <h2>Źródło i reguły</h2>
   <table><thead><tr><th>Element</th><th>Ustalenie</th></tr></thead><tbody>
@@ -34,7 +44,7 @@
 
   <h2>Zmiany i testy</h2>
   <ol>
-    <li><strong>RED:</strong> test normalizacji oczekuje pola priorytetu; test widoku oczekuje piguły nad koordynatorem oraz jej braku dla wartości nieokreślonej.</li>
+    <li><strong>RED:</strong> test normalizacji oczekuje pola priorytetu; test widoku oczekuje piguły między numerem dyskusji a liczbą dni oraz jej braku dla wartości nieokreślonej.</li>
     <li><strong>GREEN:</strong> normalizator przenosi już parsowane pole do danych strony, a szablon i CSS tworzą pigułę.</li>
     <li><strong>Regresja:</strong> testy istniejącego parsera, kart, archiwum i budowy Pages nadal przechodzą.</li>
     <li>W tym samym wdrożeniu dyskusje <code>#7</code> i <code>#8</code> dostają w GitHub wartość <code>Wysoki</code>, aby dane źródłowe i widok były zgodne.</li>

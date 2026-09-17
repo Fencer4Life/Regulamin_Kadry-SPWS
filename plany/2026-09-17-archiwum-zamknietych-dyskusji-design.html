@@ -20,7 +20,7 @@
   <h1>Archiwum zamkniętych dyskusji i decyzji</h1>
   <p class="lead">Strona <code>/dyskusje/</code> ma rozdzielać rozmowy wymagające pracy od zakończonych spraw. Każda zamknięta dyskusja pozostaje w publicznym archiwum, a przyjęte rozstrzygnięcie prowadzi bezpośrednio do właściwej karty decyzji.</p>
 
-  <div class="box ok"><b>Zatwierdzona zasada:</b> archiwum obejmuje wszystkie zamknięte dyskusje. Rozstrzygnięte pokazują powiązaną decyzję; porzucone i duplikaty pozostają widoczne bez wymogu tworzenia decyzji.</div>
+  <div class="box ok"><b>Zatwierdzona zasada:</b> archiwum obejmuje wszystkie zamknięte dyskusje. Na dużym ekranie jest kompaktowym prawym panelem o innym tle; na węższym ekranie zwija się pod przyciskiem „Zamknięte dyskusje (n)”.</div>
   <div class="box"><b>Trwały zapis decyzji:</b> treść projektu utrwalono jako <a href="../dokumentacja/adr/ADR-001-archiwum-zamknietych-dyskusji.html">ADR-001 — Archiwum zamkniętych dyskusji i decyzji</a>.</div>
 
   <h2>Problem potwierdzony na dyskusji #19</h2>
@@ -59,7 +59,14 @@
   <p>Pierwsza sekcja zachowa dzisiejszą formę i przycisk otwarcia nowej dyskusji. Dyskusja z ustawionym <code>closedAt</code> nie może zostać wyrenderowana w tej sekcji, niezależnie od etykiety.</p>
 
   <h3>Zamknięte dyskusje i decyzje</h3>
-  <p>Druga sekcja pokaże numer, tytuł, autora, datę zamknięcia, liczbę wypowiedzi oraz status. Reguły statusu:</p>
+  <p>Na dużym ekranie archiwum zajmuje węższy prawy panel o odmiennym, spokojnym tle. Małe karty układają się po jednej w wierszu. Panel nie konkuruje wizualnie z dużymi kartami otwartych dyskusji.</p>
+  <ul>
+    <li>Karty są sortowane malejąco po <code>closed_at</code>: ostatnio zamknięta znajduje się najwyżej.</li>
+    <li>Jedna strona panelu pokazuje 20 kart. Przy większej liczbie wpisów panel dostaje przyciski „Poprzednia” i „Następna” oraz informację o bieżącej stronie.</li>
+    <li>Na tabletach i telefonach panel nie ściska siatki otwartych dyskusji. Zastępuje go przycisk <b>„Zamknięte dyskusje (n)”</b>; kliknięcie rozwija tę samą listę pod otwartymi dyskusjami.</li>
+    <li>Stan rozwinięcia i numer strony są zachowaniem przeglądarki; dane nadal pochodzą ze wspólnego snapshotu.</li>
+  </ul>
+  <p>Każda mała karta pokaże numer, skrócony tytuł, status, datę zamknięcia, liczbę wypowiedzi i — jeśli istnieje — link do decyzji. Prawdziwy przykład to #19: status „Przyjęta”, zamknięta 16.09.2026, 5 wypowiedzi i link do DR-001. Reguły statusu:</p>
   <table>
     <thead><tr><th>Etykieta / stan</th><th>Tekst publiczny</th><th>Powiązanie</th></tr></thead>
     <tbody>
@@ -87,7 +94,8 @@
   <ol>
     <li>Test normalizatora najpierw na czerwono: mieszany payload trafia do dwóch list, zachowuje etykiety, a zamknięte sortują się po <code>closed_at</code>.</li>
     <li>Test kontraktu workflow: zapytanie pobiera oba stany i pole <code>closedAt</code>; workflow zamykający uruchamia Release dopiero po zamknięciu.</li>
-    <li>Test szablonu: strona zawiera obie sekcje, statusy i powiązanie przez <code>discussion_url</code>.</li>
+    <li>Test szablonu: strona zawiera siatkę otwartych dyskusji, prawy panel archiwum, statusy i powiązanie przez <code>discussion_url</code>.</li>
+    <li>Test interakcji: panel pokazuje maksymalnie 20 wpisów na stronie, przechodzi między stronami oraz zwija i rozwija archiwum na węższych ekranach.</li>
     <li>Pełny zestaw testów Python oraz <code>bundle exec jekyll build --strict_front_matter</code> przechodzą lokalnie i w CI.</li>
     <li>Po wdrożeniu strona publiczna pokazuje #19 wyłącznie w „Zamkniętych dyskusjach i decyzjach”, ze statusem „Przyjęta” i działającym linkiem do DR-001.</li>
   </ol>
@@ -96,12 +104,14 @@
   <ul>
     <li><code>narzedzia/sync_discussions.py</code> — wspólny model otwartych i zamkniętych;</li>
     <li><code>_data/discussions.json</code> — pusty bezpieczny snapshot repozytorium;</li>
-    <li><code>dyskusje.html</code> — dwie sekcje i linkowanie decyzji;</li>
+    <li><code>dyskusje.html</code> — główny układ z prawym panelem, małe karty i linkowanie decyzji;</li>
+    <li><code>assets/dyskusje.js</code> — zwijanie panelu oraz paginacja po 20 wpisów;</li>
+    <li><code>assets/rejestr.css</code> — odrębne tło panelu, kompaktowe karty i układ responsywny;</li>
     <li><code>.github/workflows/pages.yml</code> — pobranie obu stanów i generacja snapshotu;</li>
     <li><code>.github/workflows/resolve-discussion.yml</code> — jawne uruchomienie Release po zamknięciu;</li>
     <li><code>tests/test_discussions.py</code> i testy kontraktowe strony/workflow — TDD i regresja #19.</li>
   </ul>
 
-  <div class="box"><b>Poza zakresem:</b> zmiana treści decyzji, przebudowa rejestru decyzji, zmiana procesu zatwierdzania PR oraz paginacja samego interfejsu strony. Projekt dotyczy wyłącznie poprawnego podziału i publikowania stanów dyskusji.</div>
+  <div class="box"><b>Poza zakresem:</b> zmiana treści decyzji, przebudowa rejestru decyzji i zmiana procesu zatwierdzania PR.</div>
 </main></body>
 </html>
