@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projekt: ZTP i migracja treści źródłowej do Regulaminu</title>
+  <style>
+    :root{
+      --bg:#e8ecf3;--surface:#fff;--surface-2:#dce2ec;--ink:#101722;
+      --muted:#485462;--line:#c4cfdb;--accent:#12467e;--accent-soft:#dbe7f5;
+      --good:#16643d;--good-soft:#d8eede;--warn:#7a4d02;--warn-soft:#f4e6c8;
+      --danger:#9e2418;--danger-soft:#f7ddd9;--draft:#595959;
+      --serif:"Iowan Old Style",Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;
+      --mono:ui-monospace,"SF Mono",Menlo,monospace
+    }
+    @media(prefers-color-scheme:dark){:root{
+      --bg:#12151b;--surface:#1b2029;--surface-2:#252c38;--ink:#edf2f7;
+      --muted:#bac4d0;--line:#3a4554;--accent:#94c3ef;--accent-soft:#1a2a3c;
+      --good:#74d59a;--good-soft:#15271b;--warn:#e9bd6e;--warn-soft:#282011;
+      --danger:#ef9d95;--danger-soft:#331d1a;--draft:#a6a6a6
+    }}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.62 var(--sans)}
+    main{max-width:1100px;margin:auto;padding:56px 28px 96px}h1,h2{font-family:var(--serif);line-height:1.13}
+    h1{font-size:clamp(38px,6vw,58px);max-width:18ch;margin:0 0 18px}h2{font-size:31px;margin:48px 0 16px}
+    h3{font-size:20px;margin:28px 0 10px}.eyebrow{font:700 13px var(--mono);letter-spacing:.13em;color:var(--accent);text-transform:uppercase}
+    .lede{font-size:22px;color:var(--muted);max-width:54rem}.meta{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 42px}
+    .pill{font:700 13px var(--mono);border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:7px 12px}
+    .box{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:18px 22px;margin:20px 0}
+    .box.good{border-left-color:var(--good);background:var(--good-soft)}.box.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+    .box.danger{border-left-color:var(--danger);background:var(--danger-soft)}.box>:last-child{margin-bottom:0}
+    code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);border:1px solid var(--line);border-radius:4px;padding:.1em .35em}
+    pre{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:17px 20px;overflow:auto;font:14px/1.65 var(--mono)}
+    table{width:100%;border-collapse:collapse;background:var(--surface);font-size:16px;margin:18px 0}th,td{border:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}
+    th{background:var(--surface-2);font:700 13px var(--mono);text-transform:uppercase;letter-spacing:.04em}ul,ol{padding-left:1.45em}li{margin:.45em 0}
+    .flow{font:700 14px/1.7 var(--mono);white-space:pre-wrap;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;overflow:auto}
+    .status{font:700 12px var(--mono);padding:3px 8px;border-radius:5px;white-space:nowrap}.accepted{color:var(--good);background:var(--good-soft)}
+    .draft{color:var(--draft);background:var(--surface-2)}.replaced{color:var(--danger);background:var(--danger-soft)}.discussion{color:var(--warn);background:var(--warn-soft)}
+    .foot{margin-top:60px;padding-top:20px;border-top:2px solid var(--line);color:var(--muted);font:14px var(--mono)}
+  </style>
+</head>
+<body><main>
+  <p class="eyebrow">Regulamin Kadry SPWS · zatwierdzony projekt rozwiązania · 19.09.2026</p>
+  <h1>ZTP i jednorazowa migracja treści źródłowej</h1>
+  <p class="lede">Przebudowujemy cały Regulamin do semantycznej hierarchii Zasad Techniki Prawodawczej, a następnie mapujemy za jednym razem pozostałą treść starego DOCX. Treść przyjęta i brudnopis pozostają jednoznacznie rozróżnione.</p>
+  <div class="meta">
+    <span class="pill">Status: projekt zatwierdzony w rozmowie</span>
+    <span class="pill">Zakres: Markdown + DOCX + automat</span>
+    <span class="pill">Tryb: TDD</span>
+    <span class="pill">Bez MarkItDown</span>
+  </div>
+
+  <section>
+    <h2>1. Cel i granice</h2>
+    <div class="box good"><strong>Cel:</strong> przyspieszyć prace nad treścią Regulaminu bez utraty kontroli nad tym, które przepisy są już przyjęte, a które pochodzą ze starego brudnopisu i wymagają dalszej pracy.</div>
+    <ul>
+      <li>Stosujemy aktualną strukturę ZTP 2026 odpowiednią dla regulaminu: <code>rozdział → § → ust. → pkt → lit. → tiret → podwójne tiret</code>.</li>
+      <li>Rozdziały numerujemy cyframi arabskimi. Tytuł rozdziału zapisujemy w osobnym wierszu.</li>
+      <li>Możliwa jest redakcja legislacyjna bez zmiany normy: dzielenie zdań, porządkowanie jednostek, poprawa odesłań i interpunkcji.</li>
+      <li>Tytuły obecnych paragrafów pozostają jako czytelne śródtytuły informacyjne. Nie są jednostką używaną w odesłaniach.</li>
+      <li>Paragraf zawierający jedną samodzielną myśl nie otrzymuje sztucznego ustępu <code>1.</code>.</li>
+      <li>Dopuszczona jest pełna renumeracja dokumentu. Tożsamość przepisów zachowują stabilne identyfikatory techniczne.</li>
+      <li>Automat nie może samodzielnie parafrazować przepisów ani zmieniać ich znaczenia.</li>
+    </ul>
+    <p>Podstawa redakcyjna: aktualny tekst „Zasad techniki prawodawczej” opublikowany przez <a href="https://rcl.gov.pl/edukacja/zasady-technik-prawodawczej/">Rządowe Centrum Legislacji</a> oraz <a href="https://eli.gov.pl/eli/DU/2026/300/ogl">tekst jednolity ogłoszony w 2026 r.</a></p>
+  </section>
+
+  <section>
+    <h2>2. Źródła i ich pierwszeństwo</h2>
+    <p>Źródłem kanonicznym nowej edycji jest kontrolowany Markdown w repozytorium. Treść przyjęta wynika z kart decyzji i obecnego Regulaminu. Materiał pomocniczy pochodzi z lokalnego pliku:</p>
+    <pre>/Users/aleks/coding/Regulamin-reprezentacji-2026/materialy-zrodlowe/Regulamin powołania zawodnikow do kadry nardowowej weteranow w szermierce (1).docx</pre>
+    <div class="box warn">
+      <strong>Źródłowy DOCX pozostaje lokalny.</strong> Nie kopiujemy go do publicznego repozytorium. Jego SHA-256 to <code>8b971d22f44a87874131e400e75409be8a5a350a60697416664dd9d069f02c83</code>. Mapa migracji zapisze nazwę i tę sumę, ale nie opublikuje oryginału ani surowego komentarza autora.
+    </div>
+    <ol>
+      <li>Przyjęta karta decyzji i obecna, przyjęta treść mają pierwszeństwo.</li>
+      <li>Niesprzeczna i jeszcze nieopracowana treść źródłowa może wejść jako brudnopis.</li>
+      <li>Treść zastąpiona albo sprzeczna nie trafia do korpusu dokumentu.</li>
+      <li>Komentarz i pytania autora nie trafiają do Regulaminu; są przekształcane w propozycje dyskusji Markdown.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>3. Status każdego fragmentu źródłowego</h2>
+    <table>
+      <thead><tr><th>Status</th><th>Znaczenie</th><th>Wynik</th></tr></thead>
+      <tbody>
+        <tr><td><span class="status accepted">przyjęta</span></td><td>Treść wynika z przyjętej decyzji albo już zatwierdzonego przepisu.</td><td>Czarny tekst normatywny.</td></tr>
+        <tr><td><span class="status draft">source-draft</span></td><td>Niesprzeczna treść starego źródła, która nie została jeszcze merytorycznie opracowana.</td><td>Ciemnoszary tekst z etykietą „BRUDNOPIS ZE ŹRÓDŁA — DO OPRACOWANIA”.</td></tr>
+        <tr><td><span class="status replaced">zastąpiona</span></td><td>Stara reguła została odrzucona albo zastąpiona nowszą decyzją.</td><td>Poza korpusem; pozostaje wyłącznie w mapie migracji.</td></tr>
+        <tr><td><span class="status discussion">do dyskusji</span></td><td>Notatka, wątpliwość lub pytanie autora, a nie przepis.</td><td>Poza Regulaminem; osobny Markdown gotowy do utworzenia dyskusji.</td></tr>
+        <tr><td><span class="status draft">placeholder</span></td><td>Wiemy, że dana regulacja jest potrzebna, ale żadne źródło nie zawiera jeszcze jej uzgodnionej treści.</td><td>Jawne miejsce do uzupełnienia; nie udaje brudnopisu pochodzącego ze starego DOCX.</td></tr>
+      </tbody>
+    </table>
+    <p>Nie polegamy wyłącznie na kolorze. Każdy ciągły blok brudnopisu otrzymuje widoczną etykietę tekstową. Dzięki temu status pozostaje czytelny po wydruku i dla osób słabiej rozróżniających kolory.</p>
+  </section>
+
+  <section>
+    <h2>4. Semantyczny Markdown ZTP</h2>
+    <p>Markdown opisuje znaczenie jednostek, a nie wyłącznie ich wygląd. Widoczne numery są wynikiem normalizacji, natomiast stabilne identyfikatory nie zmieniają się po przeniesieniu przepisu.</p>
+    <pre>## [chapter:postanowienia-ogolne] Postanowienia ogólne
+
+### [paragraph:przedmiot] Przedmiot regulaminu
+
+Regulamin określa zasady...
+
+### [paragraph:cel] Cel i zasady wyłaniania reprezentacji
+
+1. Celem Regulaminu jest...
+
+2. Proces wyłaniania reprezentacji opiera się na następujących zasadach:
+
+   1) szerokiego wyboru zawodów;
+
+   2) powoływania do startów indywidualnych...</pre>
+    <p>Brudnopis jest stanem treści, nie ręcznie nadanym formatowaniem:</p>
+    <pre>### [paragraph:powolania-dme status=source-draft]
+Powołania na Drużynowe Mistrzostwa Europy</pre>
+    <p>Odesłania wskazują stabilne identyfikatory. Normalizator rozwija je do aktualnego brzmienia, np. <code>§ 5 ust. 2 pkt 1</code>, już po każdej zmianie kolejności.</p>
+  </section>
+
+  <section>
+    <h2>5. Przepływ automatu</h2>
+    <div class="flow">roboczy Markdown
+  → parser i semantyczny model ZTP
+  → normalizacja numeracji, poziomów, interpunkcji i odesłań
+  → zapis kanonicznego Markdown
+  → generator DOCX
+  → kontrola zgodności Markdown ↔ DOCX
+  → draft PR do kontroli człowieka</div>
+    <h3>Model ZTP</h3>
+    <p>Model zawiera rozdziały, paragrafy oraz zagnieżdżone jednostki: ustępy, punkty, litery, tiret i podwójne tiret. Każda jednostka może posiadać stabilny identyfikator i status treści.</p>
+    <h3>Normalizator</h3>
+    <ul>
+      <li>nadaje ciągłą numerację i usuwa zbędne oznaczenie pojedynczego ustępu;</li>
+      <li>porządkuje wcięcia i poziomy wyliczeń;</li>
+      <li>stosuje techniczną interpunkcję wyliczeń ZTP;</li>
+      <li>aktualizuje odesłania na podstawie identyfikatorów;</li>
+      <li>zapisuje poprawiony Markdown;</li>
+      <li>nie redaguje samodzielnie sensu zdań.</li>
+    </ul>
+    <h3>Generator DOCX</h3>
+    <ul>
+      <li>renderuje całą hierarchię ZTP i śródtytuły paragrafów;</li>
+      <li>nadaje brudnopisowi ciemnoszary styl i dodaje jedną etykietę przed ciągłym blokiem;</li>
+      <li>zachowuje spis treści, tabelę współczynników i algorytmiczny załącznik punktowy;</li>
+      <li>nie zastępuje poprzedniego poprawnego DOCX po błędzie.</li>
+    </ul>
+    <h3>Dwa tryby pracy</h3>
+    <table>
+      <thead><tr><th>Tryb</th><th>Zachowanie</th></tr></thead>
+      <tbody>
+        <tr><td><code>normalize-and-build</code></td><td>Poprawia Markdown, zapisuje wersję kanoniczną i generuje DOCX. Używa go automat przygotowujący lub aktualizujący PR.</td></tr>
+        <tr><td><code>verify</code></td><td>W CI odtwarza wynik w przestrzeni tymczasowej i porównuje go z plikami PR. Nie zmienia po cichu <code>main</code>.</td></tr>
+      </tbody>
+    </table>
+    <div class="box danger"><strong>Granica automatyzacji:</strong> gdy błąd wymaga rozstrzygnięcia znaczenia przepisu, automat nie zgaduje. Wskazuje dokładne miejsce, nie publikuje nowego DOCX i pozostawia poprzednią poprawną wersję.</div>
+  </section>
+
+  <section>
+    <h2>6. Docelowa mapa rozdziałów</h2>
+    <table>
+      <thead><tr><th>Rozdział</th><th>Treść przyjęta</th><th>Brudnopis lub brak</th></tr></thead>
+      <tbody>
+        <tr><td>1. Postanowienia ogólne</td><td>Przedmiot, definicje, cel i zasady procesu.</td><td>Brak importowanego brudnopisu.</td></tr>
+        <tr><td>2. Ranking indywidualny</td><td>Rola rankingu, katalog zawodów, warunki zewnętrznego PPW, trzy wyniki PPW/MPW, punktacja, współczynniki, tabela i kalkulator.</td><td>Publikowanie rankingu; połączone kategorie; obywatelstwo, karta pobytu i reprezentowanie Polski.</td></tr>
+        <tr><td>3. Powołania indywidualne</td><td>Czterech najwyżej sklasyfikowanych zawodników i przyjęte warunki punktowe.</td><td>Rezygnacja i przejście miejsca na kolejnego zawodnika.</td></tr>
+        <tr><td>4. Dobór składu drużyny</td><td>Przyjęta zasada, że miejsce w rankingu nie przesądza samoistnie o składzie drużyny; powołanie uzupełniające.</td><td>Kategorie Weteran/Grand Weteran; DME; DMŚ; piąty zawodnik; brak porozumienia; akceptacja PZSz.</td></tr>
+        <tr><td>5. Terminarz procesu</td><td>Brak kompletnego przepisu.</td><td>Jawny placeholder bez wymyślania treści.</td></tr>
+        <tr><td>6. Ocena Regulaminu</td><td>DR-005: ocena po każdym sezonie i wskazanie usprawnień.</td><td>Brak.</td></tr>
+        <tr><td>7. Postanowienia końcowe</td><td>Brak kompletnego przepisu.</td><td>Wejście w życie i wyjątek dotyczący MŚW Tbilisi 2026 wymagają oceny aktualności.</td></tr>
+        <tr><td>Załącznik nr 1</td><td>Generowana tabela punktowa.</td><td>Nie podlega ręcznemu importowi.</td></tr>
+      </tbody>
+    </table>
+    <div class="box warn"><strong>Treść zastąpiona:</strong> ranking rolowany przez 12 miesięcy, osiem wyników, obowiązkowe starty, stare współczynniki <code>1,0</code> i powiązane reguły nie pojawią się nawet jako szary tekst. Mapa wskaże zastępujące je decyzje.</div>
+  </section>
+
+  <section>
+    <h2>7. Materiały wynikowe migracji</h2>
+    <ol>
+      <li><strong>Kanoniczny Markdown</strong> całego Regulaminu po normalizacji ZTP.</li>
+      <li><strong>Wygenerowany DOCX</strong> z widocznym rozróżnieniem treści przyjętej i brudnopisu.</li>
+      <li><strong>Mapa migracji HTML</strong>: fragment źródłowy, status, nowe miejsce, podstawa decyzji albo przyczyna wyłączenia.</li>
+      <li><strong>Propozycje dyskusji Markdown</strong> z pytań autora dotyczących deklaracji startu drużynowego, odmów, kosztów pobytu oraz pierwszeństwa startu indywidualnego lub drużyny.</li>
+      <li><strong>Dwie karty decyzji</strong>: przyjęcie struktury ZTP i jednorazowa migracja starego źródła.</li>
+      <li><strong>Dokumentacja automatu</strong> opisująca składnię, normalizację, style brudnopisu i bezpieczny proces PR.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>8. Testy akceptacyjne przed implementacją</h2>
+    <p>Implementacja przebiega obowiązkowo metodą TDD: najpierw asercje i rzeczywisty RED, potem najmniejsza zmiana prowadząca do GREEN.</p>
+    <ul>
+      <li>pełna hierarchia <code>§ → ust. → pkt → lit. → tiret → podwójne tiret</code>;</li>
+      <li>rozdziały numerowane cyframi arabskimi;</li>
+      <li>automatyczna renumeracja wszystkich jednostek;</li>
+      <li>brak <code>ust. 1</code> w niepodzielonym paragrafie;</li>
+      <li>prawidłowa interpunkcja wyliczeń;</li>
+      <li>aktualizacja odesłań po przesunięciu jednostki;</li>
+      <li>idempotencja: druga normalizacja nie zmienia pliku;</li>
+      <li>dokładnie jedna etykieta przed ciągłym blokiem brudnopisu;</li>
+      <li>ciemnoszary kolor brudnopisu potwierdzony w XML DOCX;</li>
+      <li>brak komentarza autora w korpusie Regulaminu;</li>
+      <li>100% fragmentów starego źródła rozliczonych w mapie migracji;</li>
+      <li>zgodność śledzonego DOCX z wynikiem kanonicznego Markdown;</li>
+      <li>brak nadpisania poprzedniego DOCX przy nieudanym buildzie;</li>
+      <li>deterministyczny wynik dwóch kolejnych buildów.</li>
+    </ul>
+    <p>Po testach automatycznych kandydat musi zostać otwarty i sprawdzony w Microsoft Word. Kontrola XML ani Quick Look nie zastępują kontroli składu Worda.</p>
+  </section>
+
+  <section>
+    <h2>9. Wybrana i odrzucone architektury</h2>
+    <table>
+      <thead><tr><th>Wariant</th><th>Ocena</th><th>Powód</th></tr></thead>
+      <tbody>
+        <tr><td>Semantyczny Markdown ZTP</td><td><span class="status accepted">wybrany</span></td><td>Jedno źródło, czytelne diffy, deterministyczna normalizacja i stabilne odwołania.</td></tr>
+        <tr><td>Odgadywanie struktury ze zwykłego Markdown</td><td><span class="status replaced">odrzucony</span></td><td>Zbyt duże ryzyko zmiany znaczenia przez błędne wcięcie lub niejednoznaczną listę.</td></tr>
+        <tr><td>Pośredni model JSON jako źródło</td><td><span class="status replaced">odrzucony</span></td><td>Gorsza czytelność dla komisji i ryzyko utrzymywania dwóch źródeł.</td></tr>
+        <tr><td>MarkItDown / MarkItDown MCP</td><td><span class="status replaced">odrzucony</span></td><td>Może wspomagać ekstrakcję do analizy, ale nie zapewnia modelu ZTP ani wysokiej wierności i nie rozwiązuje generowania DOCX.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>10. Kryterium zakończenia</h2>
+    <div class="box good">
+      Praca jest zakończona dopiero wtedy, gdy cały dokument ma strukturę ZTP, każda treść starego źródła jest rozliczona, szary brudnopis jest widoczny w Wordzie, Markdown i DOCX są zgodne, wszystkie testy są zielone, a PR zawiera gotowy dokument do kontroli przed scaleniem.
+    </div>
+  </section>
+
+  <p class="foot">Projekt uzgodniony z użytkownikiem 19.09.2026 · implementacja wymaga osobnego planu wykonawczego i kolejnej zgody po przeglądzie tego dokumentu.</p>
+</main></body>
+</html>
