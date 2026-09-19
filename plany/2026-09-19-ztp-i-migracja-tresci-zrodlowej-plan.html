@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plan implementacji: ZTP i migracja treści źródłowej</title>
+  <style>
+    :root{--bg:#e8ecf3;--surface:#fff;--surface-2:#dce2ec;--ink:#101722;--muted:#485462;--line:#c4cfdb;--accent:#12467e;--accent-soft:#dbe7f5;--good:#16643d;--good-soft:#d8eede;--warn:#7a4d02;--warn-soft:#f4e6c8;--danger:#9e2418;--danger-soft:#f7ddd9;--serif:"Iowan Old Style",Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,"SF Mono",Menlo,monospace}
+    @media(prefers-color-scheme:dark){:root{--bg:#12151b;--surface:#1b2029;--surface-2:#252c38;--ink:#edf2f7;--muted:#bac4d0;--line:#3a4554;--accent:#94c3ef;--accent-soft:#1a2a3c;--good:#74d59a;--good-soft:#15271b;--warn:#e9bd6e;--warn-soft:#282011;--danger:#ef9d95;--danger-soft:#331d1a}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.62 var(--sans)}main{max-width:1120px;margin:auto;padding:56px 28px 100px}
+    h1,h2{font-family:var(--serif);line-height:1.12}h1{font-size:clamp(38px,6vw,58px);max-width:19ch;margin:0 0 18px}h2{font-size:31px;margin:50px 0 16px}h3{font-size:20px;margin:28px 0 10px}
+    .eyebrow{font:700 13px var(--mono);letter-spacing:.13em;color:var(--accent);text-transform:uppercase}.lede{font-size:22px;color:var(--muted);max-width:56rem}.meta{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 42px}.pill{font:700 13px var(--mono);border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:7px 12px}
+    .box{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:18px 22px;margin:20px 0}.box.good{border-left-color:var(--good);background:var(--good-soft)}.box.warn{border-left-color:var(--warn);background:var(--warn-soft)}.box.danger{border-left-color:var(--danger);background:var(--danger-soft)}.box>:last-child{margin-bottom:0}
+    code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);border:1px solid var(--line);border-radius:4px;padding:.1em .35em}pre{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:17px 20px;overflow:auto;font:14px/1.65 var(--mono);white-space:pre-wrap}
+    table{width:100%;border-collapse:collapse;background:var(--surface);font-size:16px;margin:18px 0}th,td{border:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{background:var(--surface-2);font:700 13px var(--mono);text-transform:uppercase;letter-spacing:.04em}ul,ol{padding-left:1.45em}li{margin:.45em 0}.flow{font:700 14px/1.75 var(--mono);white-space:pre-wrap;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;overflow:auto}.step{border-top:2px solid var(--line);padding-top:24px;margin-top:34px}.tag{display:inline-block;font:800 12px var(--mono);padding:4px 8px;border-radius:5px;background:var(--accent-soft);color:var(--accent);margin-right:7px}.red{background:var(--danger-soft);color:var(--danger)}.green{background:var(--good-soft);color:var(--good)}.foot{margin-top:60px;padding-top:20px;border-top:2px solid var(--line);color:var(--muted);font:14px var(--mono)}
+  </style>
+</head>
+<body><main>
+  <p class="eyebrow">Regulamin Kadry SPWS · Implementation Plan · 19.09.2026</p>
+  <h1>Wdrożenie ZTP i migracja całego źródła</h1>
+  <p class="lede">Jeden duży Pull Request, osiem kontrolowanych etapów i obowiązkowe TDD. Najpierw powstaje model oraz normalizator ZTP, potem renderer DOCX, a dopiero na stabilnym fundamencie migrujemy przyjętą treść i szary brudnopis.</p>
+  <div class="meta">
+    <span class="pill">Projekt: zatwierdzony</span>
+    <span class="pill">Plan: zatwierdzony</span>
+    <span class="pill">Gałąź docelowa: codex/ztp-source-migration</span>
+    <span class="pill">PR: jeden, bez automatycznego merge</span>
+  </div>
+
+  <section>
+    <h2>1. Rezultat i kolejność zależności</h2>
+    <div class="flow">zamrożony kontrakt obecnego dokumentu
+  → testy modelu ZTP (RED)
+  → semantyczny parser i AST (GREEN)
+  → testy normalizatora (RED)
+  → kanoniczny zapis Markdown (GREEN)
+  → testy renderera ZTP i brudnopisu (RED)
+  → DOCX zgodny ze strukturą (GREEN)
+  → migracja przyjętej treści
+  → migracja pozostałego źródła
+  → integracja z CI i szybkim workflow
+  → pełne testy + kontrola Word
+  → draft PR do recenzji</div>
+    <div class="box warn"><strong>Nie zaczynamy od masowej edycji Markdown.</strong> Najpierw parser, normalizator i renderer muszą przejść testy na małych fixture’ach. W przeciwnym razie nie odróżnimy błędu narzędzia od błędu migracji treści.</div>
+  </section>
+
+  <section>
+    <h2>2. Docelowe komponenty</h2>
+    <table>
+      <thead><tr><th>Plik</th><th>Rola po zmianie</th></tr></thead>
+      <tbody>
+        <tr><td><code>narzedzia/docx_model.py</code></td><td>Semantyczny AST ZTP: rozdział, paragraf, ustęp, punkt, litera, tiret, podwójne tiret, tabela, status i stabilne identyfikatory.</td></tr>
+        <tr><td><code>narzedzia/normalize_regulamin_markdown.py</code></td><td>Nowy parser/serializer kanonicznego Markdown; automatyczna numeracja, interpunkcja, wcięcia i rozwijanie odwołań.</td></tr>
+        <tr><td><code>narzedzia/prepare_regulamin.py</code></td><td>Nowy orkiestrator trybów <code>normalize-and-build</code> oraz <code>verify</code>.</td></tr>
+        <tr><td><code>narzedzia/build_regulamin_docx.py</code></td><td>Renderer AST do DOCX. Nie zgaduje struktury i nie przepisuje Markdown.</td></tr>
+        <tr><td><code>narzedzia/docx_parity.py</code></td><td>Porównanie niezależnego kandydata z DOCX śledzonym w PR, rozszerzone o style brudnopisu i strukturę ZTP.</td></tr>
+        <tr><td><code>regulamin/..._2026.md</code></td><td>Jedno kanoniczne źródło treści po pełnej renumeracji.</td></tr>
+        <tr><td><code>regulamin/..._2026.docx</code></td><td>Wygenerowana migawka do kontroli w Microsoft Word.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>3. Etapy implementacji</h2>
+
+    <div class="step">
+      <h3>Etap 0 — czysta gałąź, baseline i identyfikacja źródła</h3>
+      <p><span class="tag">bez zmian treści</span> Punkt odniesienia przed właściwym TDD.</p>
+      <ol>
+        <li>Utworzyć świeży worktree z aktualnego <code>origin/main</code>; nie implementować na gałęzi samego projektu.</li>
+        <li>Sprawdzić brak równoległych zmian w plikach docelowych i zachować odrębność od checkoutu użytkownika.</li>
+        <li>Uruchomić pełne testy repozytorium i istniejący build kandydata.</li>
+        <li>Potwierdzić SHA-256 lokalnego źródła: <code>8b971d22f44a87874131e400e75409be8a5a350a60697416664dd9d069f02c83</code>.</li>
+        <li>Wyeksportować lokalnie tekst źródła do pliku tymczasowego; nie commitować DOCX ani pełnej surowej ekstrakcji.</li>
+      </ol>
+      <pre>python -m unittest discover -s tests -v
+python -m narzedzia.build_regulamin_docx regulamin/..._2026.md /tmp/regulamin-baseline.docx
+git diff --check</pre>
+    </div>
+
+    <div class="step">
+      <h3>Etap 1 — dwie karty decyzji i relacja z DR-001</h3>
+      <p><span class="tag red">RED</span> Najpierw test rejestru oczekujący dwóch nowych, kompletnych kart.</p>
+      <ul>
+        <li>Dodać dwie karty z kolejnymi wolnymi numerami; na obecnym <code>main</code> byłyby to DR-017 i DR-018, ale numer ustalić ponownie tuż przed zapisem.</li>
+        <li>Karta 1: struktura ZTP, cyfry arabskie rozdziałów, śródtytuły informacyjne, pojedynczy paragraf bez <code>ust. 1</code>, pełna renumeracja i stabilne identyfikatory.</li>
+        <li>Karta 1 zmienia wyłącznie część DR-001 dotyczącą sztywnej numeracji § 1–§ 3; nie unieważnia decyzji o kolejności przepisów ogólnych ani odrzuceniu § 0.</li>
+        <li>Karta 2: jednorazowa migracja starego DOCX, statusy treści, pozostawienie źródła poza GitHubem i wydzielenie komentarza do propozycji dyskusji.</li>
+      </ul>
+      <p><span class="tag green">GREEN</span> <code>tests/test_decision_registry.py</code> potwierdza kompletność, relacje i unikalność identyfikatorów.</p>
+      <p><strong>Commit:</strong> <code>docs: record ZTP and source migration decisions</code></p>
+    </div>
+
+    <div class="step">
+      <h3>Etap 2 — semantyczny model ZTP</h3>
+      <p><span class="tag red">RED</span> Nowy <code>tests/test_ztp_model.py</code>.</p>
+      <ul>
+        <li>Testy wszystkich poziomów: paragraf, ustęp, punkt, litera, tiret i podwójne tiret.</li>
+        <li>Test paragrafu bez numerowanego ustępu, gdy zawiera jedną jednostkę.</li>
+        <li>Testy stabilnych ID, statusów <code>accepted</code>, <code>source-draft</code>, <code>placeholder</code> oraz opcjonalnych kotwic jednostek.</li>
+        <li>Testy odmowy dla duplikatu ID i struktury niemożliwej do rozstrzygnięcia bez zmiany znaczenia.</li>
+      </ul>
+      <p><span class="tag green">GREEN</span> Zastąpić płaski <code>ParagraphBlock</code> drzewem jednostek, zachowując osobne bloki tabel i załącznika.</p>
+      <p><strong>Zmieniane pliki:</strong> <code>narzedzia/docx_model.py</code>, <code>tests/test_ztp_model.py</code>.</p>
+      <p><strong>Commit:</strong> <code>feat: model regulation structure as ZTP units</code></p>
+    </div>
+
+    <div class="step">
+      <h3>Etap 3 — normalizator i kanoniczny Markdown</h3>
+      <p><span class="tag red">RED</span> Nowy <code>tests/test_regulation_normalization.py</code>.</p>
+      <ul>
+        <li>Niepoprawne numery wejściowe są zastępowane ciągłą numeracją.</li>
+        <li>Poziomy wyliczeń otrzymują właściwe oznaczenia i wcięcia.</li>
+        <li>Końcówki punktów, liter i tiret są normalizowane zgodnie z ich pozycją w wyliczeniu.</li>
+        <li>Odesłania <code>{{ref:paragraph-id/unit-id}}</code> są rozwijane do aktualnego numeru.</li>
+        <li>Druga normalizacja zwraca identyczne bajty.</li>
+        <li>Normalizator nie zmienia słów ani szyku zdania; test porównuje tekst po usunięciu oznaczeń strukturalnych.</li>
+      </ul>
+      <p><span class="tag green">GREEN</span> Dodać kanoniczny serializer oraz CLI z trybami <code>--write</code> i <code>--check</code>.</p>
+      <p><strong>Zmieniane pliki:</strong> <code>narzedzia/normalize_regulamin_markdown.py</code>, <code>tests/test_regulation_normalization.py</code>.</p>
+      <p><strong>Commit:</strong> <code>feat: normalize regulation Markdown to ZTP</code></p>
+    </div>
+
+    <div class="step">
+      <h3>Etap 4 — renderer ZTP i styl brudnopisu</h3>
+      <p><span class="tag red">RED</span> Rozszerzyć <code>tests/test_docx_generation.py</code> i dodać fixture małego dokumentu.</p>
+      <ul>
+        <li>Rozdział renderuje się jako <code>Rozdział 1</code>, a jego tytuł w następnym wierszu.</li>
+        <li><code>§ 1</code> oraz śródtytuł paragrafu są osobnymi akapitami i mają osobne style.</li>
+        <li>Jednostki ZTP zachowują właściwe wcięcia oraz oznaczenia.</li>
+        <li>Każdy ciągły blok <code>source-draft</code> ma dokładnie jedną etykietę i kolor czcionki <code>595959</code>.</li>
+        <li>Status nie zmienia tekstu przepisu ani numeracji.</li>
+        <li>Spis treści, zakładki, historia wersji, tabela współczynników i załącznik nadal działają.</li>
+      </ul>
+      <p><span class="tag green">GREEN</span> Usunąć <code>_roman()</code>, renderować drzewo AST rekurencyjnie i dodać dedykowane style Worda.</p>
+      <p><strong>Zmieniane pliki:</strong> <code>narzedzia/build_regulamin_docx.py</code>, <code>narzedzia/docx_parity.py</code>, <code>tests/test_docx_generation.py</code>, <code>tests/test_docx_pagination.py</code>.</p>
+      <p><strong>Commit:</strong> <code>feat: render ZTP hierarchy and source drafts</code></p>
+    </div>
+
+    <div class="step">
+      <h3>Etap 5 — pełna migracja treści</h3>
+      <p><span class="tag red">RED</span> Testy oczekujące nowej kolejności, treści przyjętej i kompletnej mapy migracji.</p>
+      <ol>
+        <li>Przepisać obecną przyjętą treść do semantycznego Markdown, wykonując wyłącznie zatwierdzoną redakcję legislacyjną bez zmiany norm.</li>
+        <li>Wdrożyć DR-005 jako czarny przepis w rozdziale oceny Regulaminu.</li>
+        <li>Wstawić niesprzeczne pozostałości starego źródła jako całe paragrafy <code>source-draft</code>.</li>
+        <li>Nie wstawiać: rankingu 12-miesięcznego, ośmiu wyników, obowiązkowych startów, starych współczynników <code>1,0</code> ani innych zastąpionych norm.</li>
+        <li>Nie wstawiać komentarza zaczynającego się od „to chyba miałoby sens…”.</li>
+        <li>Pozostawić jawne <code>placeholder</code> tylko tam, gdzie źródło nie daje przepisu.</li>
+      </ol>
+      <p><strong>Materiały:</strong></p>
+      <ul>
+        <li><code>dokumentacja/migracja/2026-09-19-mapa-tresci-zrodlowej.json</code> — techniczny manifest statusów i lokalnego hasha, bez surowych komentarzy autora i bez pełnej ekstrakcji źródła;</li>
+        <li><code>dokumentacja/migracja/2026-09-19-mapa-tresci-zrodlowej.html</code> — czytelny raport;</li>
+        <li><code>dokumentacja/dyskusje/2026-09-19-propozycje-z-dokumentu-zrodlowego.md</code> — gotowe propozycje dyskusji.</li>
+      </ul>
+      <div class="box warn"><strong>Pokrycie źródła:</strong> lokalny test porównuje manifest z DOCX o zatwierdzonym SHA-256. CI nie potrzebuje prywatnego pliku; sprawdza, czy każdy wpis manifestu ma dokładnie jeden status, podstawę i miejsce docelowe albo przyczynę wyłączenia.</div>
+      <p><strong>Zmieniane pliki:</strong> kanoniczny Markdown, nowe materiały migracji, <code>tests/test_source_migration.py</code>, <code>tests/test_approved_sections_02_03.py</code>, <code>tests/test_docx_current_contract.py</code>.</p>
+      <p><strong>Commit:</strong> <code>docs: migrate regulation content into ZTP structure</code></p>
+    </div>
+
+    <div class="step">
+      <h3>Etap 6 — bezpieczny orkiestrator i workflow GitHub</h3>
+      <p><span class="tag red">RED</span> Testy transakcyjnego zachowania i asercje workflow.</p>
+      <ul>
+        <li><code>normalize-and-build</code> przygotowuje znormalizowany Markdown i kandydacki DOCX; na błąd nie zastępuje śledzonego DOCX.</li>
+        <li><code>verify</code> generuje pliki w katalogu tymczasowym, porównuje je z wersją PR, nie modyfikuje żadnego śledzonego pliku i kończy się błędem przy każdej różnicy.</li>
+        <li><code>create-decision.yml</code> po dokładnej zamianie szybkiej ścieżki uruchamia normalizację przed buildem i commitowaniem.</li>
+        <li><code>validate.yml</code> uruchamia <code>--check</code>, buduje niezależny DOCX, wykonuje dotychczasowe testy i udostępnia artefakt.</li>
+        <li><code>validate_regulation_change.py</code> nadal wymaga wspólnego PR: karta decyzji, Markdown i DOCX.</li>
+      </ul>
+      <p><strong>Zmieniane pliki:</strong> <code>narzedzia/prepare_regulamin.py</code>, <code>narzedzia/apply_editorial_change.py</code>, <code>narzedzia/validate_regulation_change.py</code>, <code>.github/workflows/create-decision.yml</code>, <code>.github/workflows/validate.yml</code>, właściwe testy.</p>
+      <p><strong>Commit:</strong> <code>ci: normalize ZTP source before DOCX build</code></p>
+    </div>
+
+    <div class="step">
+      <h3>Etap 7 — dokumentacja pracy z nowym formatem</h3>
+      <ul>
+        <li><code>README.md</code>: aktualny stan treści, semantyczny Markdown i znaczenie szarego brudnopisu.</li>
+        <li><code>CONTRIBUTING.md</code>: polecenia <code>normalize-and-build</code>, <code>verify</code>, reguły ID i zakaz ręcznej numeracji.</li>
+        <li><code>przewodnik.html</code>: jak rozpoznać treść przyjętą, brudnopis i placeholder oraz jak przekształcać szary fragment w decyzję.</li>
+        <li>Testy dokumentacji: aktualizacja <code>tests/test_commission_guide.py</code> i <code>tests/test_registry_platform.py</code>.</li>
+      </ul>
+      <p><strong>Commit:</strong> <code>docs: explain ZTP normalization and source drafts</code></p>
+    </div>
+
+    <div class="step">
+      <h3>Etap 8 — pełna walidacja, Word i PR</h3>
+      <ol>
+        <li>Uruchomić testy wąskie po każdym etapie, a następnie cały zestaw.</li>
+        <li>Zbudować kandydat do osobnej ścieżki i uruchomić na nim testy treści, stronicowania oraz bezpieczeństwa publikacji.</li>
+        <li>Uruchomić raport parytetu między śledzonym DOCX i niezależnym kandydatem.</li>
+        <li>Sprawdzić <code>compileall</code>, <code>git diff --check</code> i Jekyll.</li>
+        <li>Otworzyć kandydat w Microsoft Word; sprawdzić numerację, etykiety brudnopisu, spis treści, podziały stron i tabele.</li>
+        <li>Wypchnąć gałąź, utworzyć jeden draft PR i obserwować CI do końca.</li>
+        <li>Nie scalać bez osobnego zatwierdzenia użytkownika po obejrzeniu DOCX.</li>
+      </ol>
+      <pre>python -m unittest discover -s tests -v
+python -m compileall -q narzedzia tests
+python -m narzedzia.prepare_regulamin verify
+git diff --check
+bundle exec jekyll build --strict_front_matter</pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>4. Kryteria odbioru PR</h2>
+    <ul>
+      <li>Markdown jest po ponownej normalizacji bez zmian.</li>
+      <li>Rozdziały mają cyfry arabskie, a cała hierarchia odpowiada ZTP.</li>
+      <li>Żaden pojedynczy paragraf nie ma sztucznego ustępu <code>1.</code>.</li>
+      <li>Odesłania pozostają poprawne po pełnej renumeracji.</li>
+      <li>Treść przyjęta jest czarna; każdy blok źródłowy jest ciemnoszary i opisany etykietą.</li>
+      <li>Stare sprzeczne normy oraz komentarz autora nie występują w korpusie DOCX.</li>
+      <li>Mapa migracji rozlicza 100% zidentyfikowanych fragmentów źródła.</li>
+      <li>Śledzony DOCX odpowiada niezależnemu buildowi z Markdown.</li>
+      <li>Nieudany build nie zmienia dokumentu na <code>main</code>.</li>
+      <li>Użytkownik otworzył kandydat w Wordzie i zaakceptował wygląd przed merge.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5. Ryzyka kontrolowane</h2>
+    <table>
+      <thead><tr><th>Ryzyko</th><th>Kontrola</th></tr></thead>
+      <tbody>
+        <tr><td>Zmiana sensu podczas automatycznej korekty.</td><td>Normalizator zmienia wyłącznie strukturę i interpunkcję techniczną; test zachowania tekstu oraz recenzja człowieka.</td></tr>
+        <tr><td>Zgubienie treści starego DOCX.</td><td>Hash źródła, manifest fragmentów, lokalna kontrola pokrycia i raport HTML.</td></tr>
+        <tr><td>Publikacja sprzecznych starych norm.</td><td>Status <code>replaced</code> pozostaje poza korpusem; testy zakazanych fraz.</td></tr>
+        <tr><td>Nieczytelny brudnopis po wydruku.</td><td>Kolor oraz jawna etykieta, nie sam kolor.</td></tr>
+        <tr><td>Rozjazd Markdown–DOCX.</td><td>Tryb <code>verify</code>, niezależny build i parytet w CI.</td></tr>
+        <tr><td>Nieprawidłowy układ w Wordzie mimo zielonego XML.</td><td>Obowiązkowa ręczna kontrola Microsoft Word przed scaleniem.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <p class="foot">Plan wykonawczy do projektu „ZTP i jednorazowa migracja treści źródłowej” · przygotowany po akceptacji projektu · bez rozpoczęcia implementacji.</p>
+</main></body>
+</html>
