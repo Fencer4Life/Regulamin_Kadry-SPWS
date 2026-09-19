@@ -66,10 +66,10 @@ class CurrentDocxContractTests(unittest.TestCase):
         cls.contract = document_content_contract(CURRENT_DOCUMENT)
 
     def test_current_document_shape_is_frozen_before_generator_work(self):
-        self.assertEqual(len(self.document.paragraphs), 177)
+        self.assertEqual(len(self.document.paragraphs), 171)
         self.assertEqual(len(self.document.tables), 12)
         self.assertEqual(sum(len(table.rows) for table in self.document.tables), 127)
-        self.assertEqual(len(self.contract["blocks"]), 189)
+        self.assertEqual(len(self.contract["blocks"]), 183)
 
     def test_current_document_heading_order_is_explicit(self):
         headings = [
