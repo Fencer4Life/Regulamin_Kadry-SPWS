@@ -27,7 +27,7 @@ Zmiana normatywna powinna obejmować łącznie:
 3. test chroniący dokładne brzmienie lub inną mierzalną właściwość, jeżeli jest to zasadne;
 4. aktualizację załącznika, README albo dokumentacji, jeżeli zmiana wpływa na te materiały.
 
-Wspólna redakcja Word odbywa się przez OneDrive. Do Git trafia uzgodniona migawka, nie każda automatyczna wersja pliku.
+Treść redaguje się wyłącznie w kanonicznym Markdown. DOCX służy do kontroli w Microsoft Word i jest zawsze generowany ponownie.
 
 ### Markdown → DOCX
 
@@ -35,13 +35,31 @@ Wspólna redakcja Word odbywa się przez OneDrive. Do Git trafia uzgodniona miga
 
 Recenzja dokumentu ma miejsce w Pull Requeście: Redaktor pobiera kandydat z Actions lub otwiera DOCX z PR w Microsoft Word, następnie wybiera `Approve` albo `Request changes`. Dopiero po `Merge` Release publikuje zaakceptowaną wersję. Release nie jest bramką do odrzucania pliku, ponieważ po scaleniu zmiana już znajduje się w `main`.
 
-Pełna ścieżka zaczyna się od etykiety `rozstrzygnięta`. Automat tworzy kartę DR i draft PR, a Redaktor uzupełnia uzasadnienie, zaznacza `Tak` albo `Nie` i — gdy Regulamin ma się zmienić — opracowuje nowe brzmienie Markdown. Następnie uruchamia generator:
+Pełna ścieżka zaczyna się od etykiety `rozstrzygnięta`. Automat tworzy kartę DR i draft PR, a Redaktor uzupełnia uzasadnienie, zaznacza `Tak` albo `Nie` i — gdy Regulamin ma się zmienić — opracowuje nowe brzmienie Markdown. Następnie uruchamia normalizację i generator:
 
 ```bash
-python -m narzedzia.build_regulamin_docx \
+python -m narzedzia.prepare_regulamin normalize-and-build \
   regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
   regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx
 ```
+
+Przed commitem należy uruchomić tryb bez zapisu:
+
+```bash
+python -m narzedzia.prepare_regulamin verify \
+  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
+  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx
+```
+
+### Semantyczny Markdown ZTP
+
+- Rozdział zapisuje się jako `## [chapter:stabilny-id] Tytuł`, a paragraf jako `### [section:stabilny-id] Tytuł`.
+- Każda jednostka zawiera `[unit:stabilny-id]`. Widoczne numery są wynikiem normalizacji i nie stanowią tożsamości przepisu.
+- Kolejne poziomy to: ustęp `1.`, punkt `1)`, litera `a)`, tiret `-` oraz podwójne tiret `--`.
+- Paragraf zawierający jedną myśl zapisuje się bez sztucznego `1.`.
+- Odesłanie ma postać `{{ref:id-paragrafu/id-jednostki}}`; generator wyświetla aktualny numer.
+- `accepted` jest statusem domyślnym. `[status:source-draft]` oznacza ciemnoszary brudnopis ze źródła, a `[status:placeholder]` jawne miejsce wymagające decyzji.
+- Automat może poprawiać strukturę, numerację i interpunkcję wyliczeń. Nie wolno używać go do samodzielnej zmiany słów lub sensu przepisu.
 
 Szybka ścieżka zaczyna się od etykiety `redakcja-bez-zmiany-sensu`. W dyskusji muszą być wypełnione pola `Fragment Markdown do zastąpienia` i `Nowe brzmienie Markdown`. Automat wymaga dokładnie jednego wystąpienia starego fragmentu, sam zmienia Markdown, buduje i testuje DOCX, tworzy kartę DR oraz draft PR. Brak, wielokrotne wystąpienie, nieudany build albo test zatrzymują proces przed pushnięciem zmiany.
 
@@ -51,6 +69,9 @@ W obu ścieżkach Redaktor otwiera run `CI` przypisany do PR, pobiera `regulamin
 
 ```bash
 source .venv/bin/activate
+python -m narzedzia.prepare_regulamin verify \
+  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
+  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx
 python narzedzia/sanitize_docx_metadata.py
 python -m unittest discover -s tests -v
 git diff --check

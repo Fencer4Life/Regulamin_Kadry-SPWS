@@ -10,10 +10,10 @@ dotyczy: Rozdział I
 decydenci: Komisja regulaminowa SPWS — na etapie inicjalnym autor projektu
 discussion_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/19
 pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/4
-stan_obowiązywania: obowiązuje
+stan_obowiązywania: częściowo zmieniona
 zmienia: []
-zmieniona_przez: []
-zakres_zmiany: {}
+zmieniona_przez: ["DR-017"]
+zakres_zmiany: {"DR-017":"Widoczne numery paragrafów są nadawane automatycznie po pełnym uporządkowaniu struktury; zachowano kolejność Przedmiot, Definicje, Cel oraz zakaz § 0."}
 zastepuje: []
 zastapiona_przez: []
 termin_oceny: przed przekazaniem projektu do PZSz
@@ -85,3 +85,4 @@ Nie dotyczy bezpośrednio skutków sportowych. Ewentualne uwagi interpretacyjne 
 
 - 2026-09-12 — decyzja przyjęta i wskazana jako pierwszy rekord Rejestru Decyzji.
 - 2026-09-16 — wdrożono zmianę kolejności paragrafów w PR #22 na podstawie dyskusji #19.
+- 2026-09-19 — DR-017 zastąpiła sztywne numery tych paragrafów automatyczną numeracją ZTP, bez zmiany ich kolejności i bez dopuszczenia § 0.

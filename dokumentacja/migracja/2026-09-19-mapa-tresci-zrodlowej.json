@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "migration_date": "2026-09-19",
+  "source_file": "Regulamin powołania zawodnikow do kadry nardowowej weteranow w szermierce (1).docx",
+  "source_sha256": "8b971d22f44a87874131e400e75409be8a5a350a60697416664dd9d069f02c83",
+  "source_committed": false,
+  "fragments": [
+    {"id":"SRC-001","summary":"Cel i zakres regulaminu","status":"accepted","destination":"§ 1; DR-003"},
+    {"id":"SRC-002","summary":"Ranking jako podstawa kwalifikacji","status":"accepted","destination":"§ 4; DR-008"},
+    {"id":"SRC-003","summary":"Ranking rolowany z okresu 12 miesięcy","status":"replaced","reason":"Zastąpiony rankingiem hybrydowym; DR-007"},
+    {"id":"SRC-004","summary":"Osiem wyników i obowiązkowe starty krajowe","status":"replaced","reason":"Zastąpione zasadą trzech najlepszych wyników PPW i MPW oraz swobodą wyboru zawodów; DR-009 i DR-013"},
+    {"id":"SRC-005","summary":"Katalog cykli i zawodów rankingowych","status":"accepted","destination":"§ 5; DR-011 i DR-012"},
+    {"id":"SRC-006","summary":"Czynniki punktacji i kalkulator","status":"accepted","destination":"§ 6 i załącznik nr 1; DR-014–DR-016"},
+    {"id":"SRC-007","summary":"Publikacja rankingu i kalkulatora","status":"source-draft","destination":"§ 7"},
+    {"id":"SRC-008","summary":"Punktacja połączonych kategorii wiekowych","status":"source-draft","destination":"§ 8"},
+    {"id":"SRC-009","summary":"Obywatelstwo, karta pobytu i reprezentowanie Polski","status":"source-draft","destination":"§ 9"},
+    {"id":"SRC-010","summary":"Szczególna kwalifikacja krajowego turnieju EVC","status":"replaced","reason":"Nie przeniesiono wobec przyjętego katalogu i warunków zewnętrznego organizatora; DR-011 i DR-012"},
+    {"id":"SRC-011","summary":"Jednakowy współczynnik 1,0 dla wszystkich zawodów","status":"replaced","reason":"Zastąpiony zróżnicowanymi współczynnikami; DR-015"},
+    {"id":"SRC-012","summary":"Kategorie Weteran i Grand Weteran w drużynie","status":"source-draft","destination":"§ 12"},
+    {"id":"SRC-013","summary":"Procedura wyboru drużyny na DME","status":"source-draft","destination":"§ 13"},
+    {"id":"SRC-014","summary":"Czterech zawodników na indywidualne MŚ i zastępstwo","status":"source-draft","destination":"Zasada czterech w § 10 jest zgodna z DR-004 i DR-010; zastępstwo pozostaje brudnopisem w § 11"},
+    {"id":"SRC-015","summary":"Procedura wyboru drużyny na DMS","status":"source-draft","destination":"§ 14"},
+    {"id":"SRC-016","summary":"Pytania o dobrowolność udziału drużynowego i koszty","status":"discussion-proposal","destination":"dokumentacja/dyskusje/2026-09-19-propozycje-z-dokumentu-zrodlowego.md"},
+    {"id":"SRC-017","summary":"Okresowa ocena regulaminu","status":"accepted","destination":"§ 17; DR-005"},
+    {"id":"SRC-018","summary":"Wejście w życie i wyjątek dla Tbilisi 2026","status":"source-draft","destination":"§ 18"}
+  ]
+}

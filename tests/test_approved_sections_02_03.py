@@ -18,11 +18,12 @@ APPROVED_PURPOSE = (
 )
 
 APPROVED_SECTION_3 = [
-    "§ 3. Cel i zasady wyłaniania reprezentacji",
+    "§ 3",
+    "Cel i zasady wyłaniania reprezentacji",
     APPROVED_PURPOSE,
     "2. Proces wyłaniania reprezentacji opiera się na następujących zasadach:",
     "1) szerokiego wyboru zawodów – w rankingu indywidualnym uwzględnia się wyniki uzyskane w "
-    "zawodach ujętych w kalendarzach SPWS, PZSz, EVF i FIE, na zasadach określonych w § 5;",
+    "zawodach ujętych w kalendarzach SPWS, PZSz, EVF i FIE, na zasadach określonych w § 5 ust. 1;",
     "2) powołania do startów indywidualnych wyłącznie na podstawie rankingu – do startu "
     "indywidualnego powołuje się czterech najwyżej sklasyfikowanych zawodników w rankingu właściwym "
     "dla danej broni, płci i kategorii wiekowej. Zawodnik z zerowym dorobkiem punktowym nie może "
@@ -31,27 +32,28 @@ APPROVED_SECTION_3 = [
 ]
 
 APPROVED_SECTION_2 = [
-    "§ 2. Definicje",
+    "§ 2",
+    "Definicje",
     "Ilekroć w Regulaminie jest mowa o:",
-    "1. SPWS – należy przez to rozumieć Stowarzyszenie Polskich Weteranów Szermierki;",
-    "2. PZSz – należy przez to rozumieć Polski Związek Szermierczy;",
-    "3. EVF – należy przez to rozumieć European Veterans Fencing;",
-    "4. FIE – należy przez to rozumieć Fédération Internationale d’Escrime (Międzynarodową Federację Szermierczą);",
-    "5. rankingu hybrydowym – należy przez to rozumieć ranking indywidualny, w którym wyniki są "
+    "1) SPWS – należy przez to rozumieć Stowarzyszenie Polskich Weteranów Szermierki;",
+    "2) PZSz – należy przez to rozumieć Polski Związek Szermierczy;",
+    "3) EVF – należy przez to rozumieć European Veterans Fencing;",
+    "4) FIE – należy przez to rozumieć Fédération Internationale d’Escrime (Międzynarodową Federację Szermierczą);",
+    "5) rankingu hybrydowym – należy przez to rozumieć ranking indywidualny, w którym wyniki są "
     "aktualizowane z zastosowaniem aktualizacji krokowej albo wygaszania kalendarzowego, zależnie "
     "od organizatora i rodzaju zawodów;",
-    "6. aktualizacji krokowej – należy przez to rozumieć sposób aktualizacji wyników zawodów "
+    "6) aktualizacji krokowej – należy przez to rozumieć sposób aktualizacji wyników zawodów "
     "organizowanych przez SPWS, PZSz lub FIE, zgodnie z którym punkty za zawody z poprzedniego "
     "sezonu pozostają w rankingu do czasu uwzględnienia punktów za odpowiadające im zawody w "
     "sezonie bieżącym, po czym poprzedni wynik przestaje być uwzględniany;",
-    "7. wygaszaniu kalendarzowym – należy przez to rozumieć sposób uwzględniania wyników zawodów "
+    "7) wygaszaniu kalendarzowym – należy przez to rozumieć sposób uwzględniania wyników zawodów "
     "organizowanych przez EVF, zgodnie z którym uzyskane punkty pozostają w rankingu przez okres "
     "właściwy dla danego rodzaju zawodów, liczony od dnia zakończenia zawodów, niezależnie od tego, "
     "czy zawody mają odpowiednik w kolejnym sezonie, a po upływie tego okresu przestają być uwzględniane;",
-    "8. limitowanych zawodach międzynarodowych – należy przez to rozumieć indywidualne lub drużynowe "
+    "8) limitowanych zawodach międzynarodowych – należy przez to rozumieć indywidualne lub drużynowe "
     "zawody międzynarodowe rangi mistrzowskiej, w których liczba zawodników reprezentujących dane "
     "państwo jest ograniczona przepisami organizatora zawodów;",
-    "9. powołaniu uzupełniającym – należy przez to rozumieć wyjątkowe powołanie do startu drużynowego "
+    "9) powołaniu uzupełniającym – należy przez to rozumieć wyjątkowe powołanie do startu drużynowego "
     "zawodnika nieposiadającego dodatniego dorobku punktowego, dokonywane wyłącznie w celu "
     "uzupełnienia braków uniemożliwiających wystawienie kompletnej i zgodnej z przepisami drużyny.",
 ]
@@ -82,8 +84,8 @@ class ApprovedContentTests(unittest.TestCase):
         self.assertEqual(
             section(
                 self.document,
-                "§ 2. Definicje",
-                "§ 3. Cel i zasady wyłaniania reprezentacji",
+                "§ 2",
+                "§ 3",
             ),
             APPROVED_SECTION_2,
         )
@@ -92,8 +94,8 @@ class ApprovedContentTests(unittest.TestCase):
         self.assertEqual(
             section(
                 self.document,
-                "§ 3. Cel i zasady wyłaniania reprezentacji",
-                "ROZDZIAŁ II",
+                "§ 3",
+                "Rozdział 2",
             ),
             APPROVED_SECTION_3,
         )

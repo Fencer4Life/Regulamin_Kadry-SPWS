@@ -69,7 +69,8 @@ jobs:
             git switch -c "$branch"
           fi
           if [ "$TRIGGER_LABEL" = "redakcja-bez-zmiany-sensu" ]; then
-            python -m narzedzia.build_regulamin_docx "$source_path" "$candidate_path"
+            python -m narzedzia.prepare_regulamin normalize-and-build "$source_path" "$candidate_path"
+            python -m narzedzia.normalize_regulamin_markdown "$source_path" --check
             python tests/test_approved_sections_02_03.py "$candidate_path"
             python tests/test_docx_pagination.py "$candidate_path"
             REGULAMIN_DOCX_PATH="$candidate_path" python -m unittest tests.test_docx_publication_safety -v

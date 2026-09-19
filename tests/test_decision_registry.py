@@ -141,6 +141,19 @@ class DecisionRegistryTests(unittest.TestCase):
         missing = [fragment for fragment in required_fragments if fragment not in body]
         self.assertEqual(missing, [], f"DR-001 nie zachowuje przyjętego uzasadnienia: {missing}")
 
+    def test_ztp_and_source_migration_decisions_are_recorded(self):
+        records = {read_record(path)[0]["id"]: read_record(path) for path in self.paths}
+        self.assertIn("DR-017", records)
+        self.assertIn("DR-018", records)
+        ztp_metadata, ztp_body = records["DR-017"]
+        migration_metadata, migration_body = records["DR-018"]
+        self.assertEqual(ztp_metadata["status"], "przyjęta")
+        self.assertEqual(migration_metadata["status"], "przyjęta")
+        self.assertIn("DR-001", structured(ztp_metadata, "zmienia"))
+        self.assertIn("cyframi arabskimi", ztp_body)
+        self.assertIn("ciemnoszary", migration_body)
+        self.assertIn("poza repozytorium", migration_body)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

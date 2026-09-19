@@ -39,7 +39,7 @@ permalink: /przewodnik/
     <tbody>
       <tr><td><b>Komisja regulaminowa</b></td><td>Rozważa warianty, uzgadnia wynik oraz akceptuje kartę decyzji i brzmienie regulaminu.</td><td>Decyzji nie zastępuje samo zamknięcie wątku.</td></tr>
       <tr><td><b>Koordynator dyskusji</b></td><td>Jest wskazywany przy otwarciu każdej dyskusji przez login GitHub. Porządkuje rozmowę i zapisuje uzgodniony wynik w formularzu; jego avatar jest widoczny na karcie dyskusji.</td><td>Nie podejmuje decyzji samodzielnie. Dla każdej dyskusji może to być inna osoba.</td></tr>
-      <tr><td><b>Redaktor regulaminu</b></td><td>Przenosi przyjętą decyzję do DOCX i pilnuje spójności całego regulaminu. Początkowo funkcję może pełnić jedna osoba; później komisja może wskazać kolejne.</td><td>Nie zmienia sensu decyzji komisji.</td></tr>
+      <tr><td><b>Redaktor regulaminu</b></td><td>Przenosi przyjętą decyzję do kanonicznego Markdown i pilnuje spójności całego regulaminu. DOCX tworzy automat. Początkowo funkcję może pełnić jedna osoba; później komisja może wskazać kolejne.</td><td>Nie zmienia sensu decyzji komisji.</td></tr>
     </tbody>
   </table>
 </section>
@@ -82,6 +82,17 @@ permalink: /przewodnik/
     <li>Redaktor poprawia propozycję, jeśli trzeba, a po kontroli Worda wybiera <b>Approve</b> i następnie <b>Merge</b>. Może też wybrać <b>Request changes</b> albo zamknąć PR — wtedy aktualny dokument na <code>main</code> pozostaje bez zmian.</li>
   </ol>
   <p><b>Release nie jest dodatkowym krokiem akceptacji.</b> Uruchamia się po scaleniu i publikuje wersję wcześniej zaakceptowaną w PR. Zatrzymanie Release po scaleniu nie cofnęłoby już dokumentu w <code>main</code>, dlatego decyzja należy do PR, a nie do Release.</p>
+</section>
+
+<section class="guide-card">
+  <h2>Jak automat pilnuje ZTP i statusu treści</h2>
+  <ul>
+    <li>Markdown przechowuje strukturę prawną: rozdział, paragraf, ustęp, punkt, literę, tiret i podwójne tiret. Numery widoczne w DOCX nadaje automat.</li>
+    <li>Każda jednostka ma stabilny identyfikator. Po przeniesieniu przepisu automat aktualizuje numerację oraz odesłania, ale nie zmienia słów ani sensu.</li>
+    <li>Treść przyjęta jest czarna. Fragment oznaczony <code>source-draft</code> jest ciemnoszary i poprzedzony etykietą <b>BRUDNOPIS ZE ŹRÓDŁA — DO OPRACOWANIA</b>. To materiał do kolejnej decyzji, a nie przyjęty przepis.</li>
+    <li><code>placeholder</code> oznacza jawne miejsce, którego źródło nie rozstrzyga i które wymaga nowej decyzji.</li>
+    <li>CI uruchamia tryb <code>verify</code>: niczego nie zapisuje, buduje DOCX w katalogu tymczasowym i zatrzymuje PR, jeżeli Markdown nie jest kanoniczny albo DOCX nie odpowiada źródłu.</li>
+  </ul>
 </section>
 
 <section class="guide-card">

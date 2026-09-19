@@ -20,24 +20,31 @@ EXPECTED_HEADINGS = [
     "Spis treści",
     "Konstrukcja regulaminu",
     "Postanowienia ogólne",
-    "§ 1. Przedmiot regulaminu",
-    "§ 2. Definicje",
-    "§ 3. Cel i zasady wyłaniania reprezentacji",
+    "§ 1", "Przedmiot regulaminu",
+    "§ 2", "Definicje",
+    "§ 3", "Cel i zasady wyłaniania reprezentacji",
     "Ranking indywidualny",
-    "§ 4. Rola rankingu indywidualnego",
-    "§ 5. Zawody uwzględniane w rankingu",
-    "§ 6. Zasady obliczania punktów",
+    "§ 4", "Rola rankingu indywidualnego",
+    "§ 5", "Zawody uwzględniane w rankingu",
+    "§ 6", "Zasady obliczania punktów",
+    "§ 7", "Publikacja rankingu",
+    "§ 8", "Wyniki w połączonych kategoriach wiekowych",
+    "§ 9", "Zawodnicy uwzględniani w rankingu",
     "Powołania do startów indywidualnych",
-    "§ 7",
+    "§ 10", "Zasady powołań indywidualnych",
+    "§ 11", "Rezygnacja i zastępstwo",
     "Dobór składu drużyny",
-    "§ 8",
-    "§ 9",
+    "§ 12", "Pula kandydatów do drużyny",
+    "§ 13", "Kategorie wiekowe w drużynie",
+    "§ 14", "Drużynowe Mistrzostwa Europy",
+    "§ 15", "Drużynowe Mistrzostwa Świata",
+    "§ 16", "Powołanie uzupełniające",
     "Terminarz procesu powoływania",
-    "§ 10",
+    "§ 17", "Terminy procesu",
     "Ocena regulaminu i doskonalenie metody",
-    "§ 11",
+    "§ 18", "Ocena posezonowa",
     "Postanowienia końcowe",
-    "§ 12",
+    "§ 19", "Wejście w życie",
     "Tabela punktacji Pucharu Polski Weteranów w szermierce",
     "Miejsca 1–10 · stawka 4–20 zawodników",
     "Miejsca 1–10 · stawka 21–37 zawodników",
@@ -59,16 +66,16 @@ class CurrentDocxContractTests(unittest.TestCase):
         cls.contract = document_content_contract(CURRENT_DOCUMENT)
 
     def test_current_document_shape_is_frozen_before_generator_work(self):
-        self.assertEqual(len(self.document.paragraphs), 129)
+        self.assertEqual(len(self.document.paragraphs), 177)
         self.assertEqual(len(self.document.tables), 12)
         self.assertEqual(sum(len(table.rows) for table in self.document.tables), 127)
-        self.assertEqual(len(self.contract["blocks"]), 141)
+        self.assertEqual(len(self.contract["blocks"]), 189)
 
     def test_current_document_heading_order_is_explicit(self):
         headings = [
             paragraph.text
             for paragraph in self.document.paragraphs
-            if paragraph.style.name in {"Heading 1", "Heading 2", "Paragraf"}
+            if paragraph.style.name in {"Heading 1", "Heading 2", "Paragraf", "Tytuł paragrafu"}
         ]
         self.assertEqual(headings, EXPECTED_HEADINGS)
 

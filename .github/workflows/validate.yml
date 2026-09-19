@@ -31,6 +31,12 @@ jobs:
       - name: Zbudowanie i kontrola kandydackiego DOCX
         run: |
           mkdir -p .artifacts
+          python -m narzedzia.normalize_regulamin_markdown \
+            regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
+            --check
+          python -m narzedzia.prepare_regulamin verify \
+            regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
+            regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx
           python -m narzedzia.build_regulamin_docx \
             regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
             .artifacts/regulamin-candidate.docx
