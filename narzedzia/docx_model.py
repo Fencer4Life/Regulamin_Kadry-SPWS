@@ -9,6 +9,22 @@ from pathlib import Path
 CHAPTER_RE = re.compile(r"^## \[chapter:([a-z0-9-]+)] (.+)$")
 SECTION_RE = re.compile(r"^### \[section:([a-z0-9-]+)](?: (.*))?$")
 SCOPE_RE = re.compile(r"^<!-- scope: (.+) -->$")
+UNIT_RE = re.compile(
+    r"^(?P<indent> *)(?:(?P<ust>\d+)\.|(?P<pkt>\d+)\)|"
+    r"(?P<lit>[a-z])\)|(?P<tiret>--|-))?\s*"
+    r"\[unit:(?P<identifier>[a-z0-9-]+)]"
+    r"(?: \[status:(?P<status>accepted|source-draft|placeholder)])?"
+    r"\s+(?P<text>.+)$"
+)
+
+UNIT_LEVELS = {
+    "paragraph": 0,
+    "ust": 0,
+    "pkt": 1,
+    "lit": 2,
+    "tiret": 3,
+    "double-tiret": 4,
+}
 
 
 @dataclass(frozen=True)
@@ -17,11 +33,21 @@ class InlineRun:
     bold: bool = False
 
 
-@dataclass(frozen=True)
-class ParagraphBlock:
+@dataclass
+class ZtpUnit:
+    identifier: str
+    kind: str
     text: str
-    draft: bool = False
+    status: str = "accepted"
     runs: tuple[InlineRun, ...] = ()
+    children: list["ZtpUnit"] = field(default_factory=list)
+
+    @property
+    def draft(self) -> bool:
+        return self.status != "accepted"
+
+
+ParagraphBlock = ZtpUnit
 
 
 @dataclass(frozen=True)
@@ -30,7 +56,7 @@ class TableBlock:
     rows: list[list[str]]
 
 
-ContentBlock = ParagraphBlock | TableBlock
+ContentBlock = ZtpUnit | TableBlock
 
 
 def _parse_inline_runs(text: str) -> tuple[str, tuple[InlineRun, ...]]:
@@ -70,6 +96,7 @@ class RegulationDocument:
     metadata: dict[str, str]
     chapters: list[RegulationChapter]
     has_points_annex: bool
+    metadata_source: str = ""
 
 
 def _parse_markdown_table(lines: list[str], start: int) -> tuple[list[list[str]], int]:
@@ -88,6 +115,41 @@ def _parse_markdown_table(lines: list[str], start: int) -> tuple[list[list[str]]
     return rows, index
 
 
+def _unit_kind(match: re.Match[str]) -> str:
+    if match.group("ust") is not None:
+        return "ust"
+    if match.group("pkt") is not None:
+        return "pkt"
+    if match.group("lit") is not None:
+        return "lit"
+    if match.group("tiret") == "-":
+        return "tiret"
+    if match.group("tiret") == "--":
+        return "double-tiret"
+    return "paragraph"
+
+
+def _append_unit(section: RegulationSection, unit: ZtpUnit, stack: dict[int, ZtpUnit]) -> None:
+    level = UNIT_LEVELS[unit.kind]
+    if level == 0:
+        section.blocks.append(unit)
+        stack.clear()
+        stack[0] = unit
+        return
+    parent = stack.get(level - 1)
+    if parent is None:
+        raise ValueError(
+            f"Jednostka {unit.identifier} ({unit.kind}) nie ma jednostki nadrzędnej"
+        )
+    if unit.status == "accepted" and parent.status != "accepted":
+        unit.status = parent.status
+    parent.children.append(unit)
+    for stale_level in tuple(stack):
+        if stale_level >= level:
+            del stack[stale_level]
+    stack[level] = unit
+
+
 def parse_regulation_source(path: Path) -> RegulationDocument:
     text = path.read_text(encoding="utf-8")
     if not text.startswith("+++\n"):
@@ -98,17 +160,8 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
         raise ValueError("Brak zamykającego bloku metadanych TOML") from error
     metadata = tomllib.loads(metadata_text)
     required = {
-        "title",
-        "subtitle",
-        "version",
-        "status",
-        "project_date",
-        "subject",
-        "comments",
-        "outline_intro",
-        "toc_note",
-        "history_scope",
-        "prototype_note",
+        "title", "subtitle", "version", "status", "project_date", "subject",
+        "comments", "outline_intro", "toc_note", "history_scope", "prototype_note",
     }
     missing = sorted(required - metadata.keys())
     if missing:
@@ -118,11 +171,13 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
     chapters: list[RegulationChapter] = []
     current_chapter: RegulationChapter | None = None
     current_section: RegulationSection | None = None
+    unit_stack: dict[int, ZtpUnit] = {}
     has_points_annex = False
     identifiers: set[str] = set()
     index = 0
     while index < len(lines):
-        line = lines[index].strip()
+        raw_line = lines[index].rstrip()
+        line = raw_line.strip()
         index += 1
         if not line:
             continue
@@ -134,6 +189,7 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
             current_chapter = RegulationChapter(identifier=identifier, title=title)
             chapters.append(current_chapter)
             current_section = None
+            unit_stack.clear()
             continue
         if match := SCOPE_RE.fullmatch(line):
             if current_chapter is None or current_section is not None:
@@ -149,6 +205,7 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
             identifiers.add(identifier)
             current_section = RegulationSection(identifier=identifier, title=title or "")
             current_chapter.sections.append(current_section)
+            unit_stack.clear()
             continue
         if line == "{{table:rank-coefficients}}":
             if current_section is None:
@@ -165,17 +222,36 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
             raise ValueError(f"Nieobsługiwana konstrukcja Markdown: {line}")
         if current_section is None:
             raise ValueError(f"Treść poza paragrafem: {line}")
-        draft = line.startswith("~ ")
-        raw_text = line[2:] if draft else line
-        plain_text, runs = _parse_inline_runs(raw_text)
-        current_section.blocks.append(ParagraphBlock(text=plain_text, draft=draft, runs=runs))
+        unit_match = UNIT_RE.fullmatch(raw_line)
+        if unit_match is None:
+            raise ValueError(
+                "Treść jednostki musi zawierać stabilny identyfikator [unit:...]: "
+                f"{line}"
+            )
+        identifier = unit_match.group("identifier")
+        if identifier in identifiers:
+            raise ValueError(f"Powtórzony identyfikator: {identifier}")
+        identifiers.add(identifier)
+        kind = _unit_kind(unit_match)
+        plain_text, runs = _parse_inline_runs(unit_match.group("text"))
+        unit = ZtpUnit(
+            identifier=identifier,
+            kind=kind,
+            text=plain_text,
+            status=unit_match.group("status") or "accepted",
+            runs=runs,
+        )
+        _append_unit(current_section, unit, unit_stack)
 
     if not chapters or any(not chapter.sections for chapter in chapters):
         raise ValueError("Każdy dokument i rozdział musi zawierać co najmniej jeden paragraf")
     if any(not chapter.scope for chapter in chapters):
         raise ValueError("Każdy rozdział musi mieć opis zakresu")
+    if any(not section.blocks for chapter in chapters for section in chapter.sections):
+        raise ValueError("Każdy paragraf musi zawierać co najmniej jedną jednostkę")
     return RegulationDocument(
         metadata={key: str(value) for key, value in metadata.items()},
         chapters=chapters,
         has_points_annex=has_points_annex,
+        metadata_source=metadata_text,
     )

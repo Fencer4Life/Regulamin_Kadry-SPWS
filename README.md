@@ -7,9 +7,9 @@ Publiczne repozytorium prac nad **Regulaminem powoływania reprezentacji Polski 
 | Pole | Wartość |
 |---|---|
 | Sezon | 2026/2027 |
-| Wersja dokumentu | 0.1 |
+| Wersja dokumentu | 0.2 |
 | Status | projekt do konsultacji |
-| Stan treści | zatwierdzono roboczo § 1–§ 6 oraz załącznik nr 1; dalsze postanowienia wymagają uzgodnienia |
+| Stan treści | treść przyjęta oraz jawnie oznaczony brudnopis ze źródła; terminarz wymaga odrębnej decyzji |
 
 > **Ważne:** dokument znajdujący się w tym repozytorium jest projektem. Nie stanowi obowiązującego regulaminu do czasu jego formalnego zatwierdzenia przez właściwy organ Polskiego Związku Szermierczego.
 
@@ -32,23 +32,21 @@ Publiczne repozytorium prac nad **Regulaminem powoływania reprezentacji Polski 
 
 **Polski Związek Szermierczy (PZSz)** jest podmiotem, któremu projekt ma zostać przedstawiony do formalnego zatwierdzenia przez właściwy organ. Samo opublikowanie projektu przez SPWS ani połączenie zmian z gałęzią `main` nie oznacza zatwierdzenia regulaminu przez PZSz.
 
-## Źródło aktualnej treści i plan automatyzacji
+## Źródło aktualnej treści i automatyzacja
 
-Wspólna redakcja treści odbywa się w programie Microsoft Word z wykorzystaniem OneDrive. Łącza i uprawnienia do dokumentu współdzielonego są przekazywane członkom zespołu poza publicznym repozytorium.
+Kontrolowany Markdown w `regulamin/` jest jedynym źródłem kanonicznym. DOCX jest wynikiem generatora i nie służy do ręcznego wprowadzania zmian. Markdown zapisuje semantyczną hierarchię ZTP: rozdział, paragraf, ustęp, punkt, literę, tiret i podwójne tiret. Każda jednostka ma stabilny identyfikator, dlatego automat może przenumerować dokument i poprawić odesłania bez zmiany słów przepisu.
 
-Do czasu uruchomienia opisanego niżej automatu plik DOCX w katalogu `regulamin/` jest zaakceptowaną migawką aktualnej wersji roboczej. GitHub przechowuje historię uzgodnionych migawek, kod i testy. Po zmianie dokonanej w Wordzie osoba przygotowująca Pull Request:
+Automat normalizuje strukturę Markdown przed generowaniem DOCX. Może poprawić numery, oznaczenia wyliczeń, wcięcia, interpunkcję techniczną i odesłania. Nie może samodzielnie parafrazować ani zmieniać znaczenia. Gdy struktura jest niejednoznaczna i wymaga decyzji merytorycznej, build zatrzymuje się, a poprzedni prawidłowy DOCX pozostaje bez zmian.
 
-1. przyjmuje albo świadomie pozostawia śledzone zmiany;
-2. usuwa komentarze i metadane nieprzeznaczone do publikacji;
-3. zastępuje plik w `regulamin/` nową migawką;
-4. aktualizuje właściwą kartę decyzji oraz testy;
-5. opisuje w Pull Requeście zakres i podstawę zmiany.
+W dokumencie obowiązują trzy jawne statusy treści:
 
-Plik DOCX jest binarny i GitHub nie pokazuje jego zmian równie czytelnie jak zmian tekstowych. Dlatego każde rozstrzygnięcie dotyczące treści powinno mieć odpowiadającą mu kartę w Rejestrze Decyzji.
+- `accepted` — treść przyjęta, renderowana czarną czcionką;
+- `source-draft` — nieopracowana treść starego źródła, renderowana ciemnoszaro i poprzedzona etykietą **BRUDNOPIS ZE ŹRÓDŁA — DO OPRACOWANIA**;
+- `placeholder` — jawne miejsce wymagające nowej decyzji.
 
-### Ścieżka Markdown → DOCX
+Prywatny dokument użyty do jednorazowej migracji nie jest przechowywany w GitHubie. Publiczna [mapa migracji](dokumentacja/migracja/2026-09-19-mapa-tresci-zrodlowej.html) zawiera jego nazwę, hash i status każdego rozpoznanego fragmentu, ale nie zawiera surowych komentarzy autora ani pełnej ekstrakcji.
 
-Kontrolowany Markdown w `regulamin/` jest źródłem kanonicznym aktualnej treści, a generator tworzy z niego DOCX od początku. Każdy Pull Request zmieniający treść zawiera razem Markdown, kartę decyzji i rzeczywiście wygenerowany DOCX. CI tworzy drugi, niezależny kandydat, uruchamia na nim testy treści, struktury i bezpieczeństwa, porównuje go z DOCX z PR oraz udostępnia plik jako artefakt runu.
+Każdy Pull Request zmieniający treść zawiera razem Markdown, kartę decyzji i wygenerowany DOCX. CI sprawdza kanoniczną postać Markdown, tworzy drugi kandydat, uruchamia testy treści, ZTP, stronicowania i bezpieczeństwa, porównuje go z DOCX z PR oraz udostępnia plik jako artefakt runu.
 
 **Akceptacja następuje przed Release:** Redaktor pobiera artefakt `regulamin-candidate.docx` z runu CI albo otwiera DOCX dołączony do PR w Microsoft Word. Następnie wybiera `Approve` i scala PR albo wybiera `Request changes`/zamyka PR. Dopóki PR nie zostanie scalony, `main` i jego DOCX nie zmieniają się. Release uruchamia się dopiero po scaleniu i publikuje już zaakceptowaną wersję; nie jest osobnym miejscem akceptacji albo odrzucenia dokumentu.
 
@@ -89,8 +87,8 @@ Pełny proces opisuje [przewodnik dla komisji](https://html-preview.github.io/?u
 
 ## Praca z dokumentem Word
 
-- Nie edytuj równolegle tej samej kopii DOCX poza uzgodnioną sesją OneDrive.
-- Włącz kontrolę zmian, jeżeli dokument ma być przekazany do recenzji językowej lub prawnej.
+- Otwieraj DOCX w Microsoft Word do kontroli treści i układu; zmiany wracają do kanonicznego Markdown, a DOCX jest generowany ponownie.
+- Nie zapisuj ręcznych poprawek w śledzonym DOCX, ponieważ następny build je zastąpi.
 - Przed publikacją uruchom skrypt oczyszczający metadane i komplet testów.
 - Nie commituj plików `~$*.docx` ani `*.backup-*.docx`.
 - Nie uruchamiaj historycznych skryptów `apply_*.py` na aktualnym dokumencie bez sprawdzenia ich warunków wejściowych i wykonania kopii poza repozytorium.
@@ -114,7 +112,7 @@ python -m unittest discover -s tests -v
 
 Testy sprawdzają między innymi zaakceptowane brzmienie chronionych postanowień, reguły stronicowania, niepodzielność tabel, brak komentarzy i śledzonych zmian w publicznym DOCX oraz kompletność Rejestru Decyzji.
 
-`generate_regulamin_docx.py` jest generatorem pierwotnego prototypu, a kolejne skrypty `apply_*.py` dokumentują kontrolowane etapy dotychczasowej pracy. Aktualny DOCX zawiera również późniejsze poprawki wykonane w Wordzie, dlatego nie należy traktować samego generatora jako jedynego źródła całego dokumentu.
+`prepare_regulamin.py` jest bieżącym wejściem do normalizacji i budowania. `generate_regulamin_docx.py` oraz skrypty `apply_*.py` dokumentują historyczne etapy pracy i nie są źródłem aktualnej treści.
 
 ## Wersjonowanie i wydania
 

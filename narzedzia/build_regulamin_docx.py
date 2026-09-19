@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import math
-import re
 from pathlib import Path
 
 from docx import Document
@@ -14,11 +13,12 @@ from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
 
 from narzedzia.docx_model import (
-    ParagraphBlock,
     RegulationDocument,
     TableBlock,
+    ZtpUnit,
     parse_regulation_source,
 )
+from narzedzia.normalize_regulamin_markdown import resolve_references
 from narzedzia.generate_regulamin_docx import (
     BLUE,
     LIGHT,
@@ -327,11 +327,10 @@ def _add_outline(document: Document, model: RegulationDocument) -> None:
         run.font.size = Pt(9)
         run.font.color.rgb = RGBColor(255, 255, 255)
     for index, chapter in enumerate(model.chapters, start=1):
-        numeral = _roman(index)
         cells = table.add_row().cells
         for cell in cells:
             set_cell_margins(cell)
-        for cell, text in zip(cells, (numeral, chapter.title, chapter.scope)):
+        for cell, text in zip(cells, (str(index), chapter.title, chapter.scope)):
             cell.text = text
         cells[0].paragraphs[0].runs[0].bold = True
         cells[0].paragraphs[0].runs[0].font.color.rgb = RGBColor.from_string(BLUE)
@@ -342,14 +341,6 @@ def _add_outline(document: Document, model: RegulationDocument) -> None:
                 run.font.name = "Aptos"
                 run.font.size = Pt(9)
     document.add_page_break()
-
-
-def _roman(value: int) -> str:
-    numerals = ("I", "II", "III", "IV", "V", "VI", "VII")
-    try:
-        return numerals[value - 1]
-    except IndexError as error:
-        raise ValueError("Generator obsługuje obecnie siedem rozdziałów") from error
 
 
 def _set_row_indivisible(row) -> None:
@@ -412,44 +403,104 @@ def _add_rank_coefficients(document: Document, block: TableBlock):
     return table
 
 
+def _ensure_ztp_styles(document: Document) -> None:
+    names = {style.name for style in document.styles}
+    if "Tytuł paragrafu" not in names:
+        style = document.styles.add_style("Tytuł paragrafu", WD_STYLE_TYPE.PARAGRAPH)
+        style.base_style = document.styles["Heading 3"]
+    if "Etykieta brudnopisu" not in names:
+        style = document.styles.add_style("Etykieta brudnopisu", WD_STYLE_TYPE.PARAGRAPH)
+        style.base_style = document.styles["Normal"]
+        style.font.bold = True
+        style.font.size = Pt(8)
+        style.font.color.rgb = RGBColor.from_string("595959")
+
+
+def _unit_prefix(unit: ZtpUnit, index: int) -> str:
+    if unit.kind == "paragraph":
+        return ""
+    if unit.kind == "ust":
+        return f"{index}. "
+    if unit.kind == "pkt":
+        return f"{index}) "
+    if unit.kind == "lit":
+        return f"{chr(96 + index)}) "
+    if unit.kind == "tiret":
+        return "– "
+    if unit.kind == "double-tiret":
+        return "–– "
+    raise ValueError(f"Nieobsługiwany rodzaj jednostki: {unit.kind}")
+
+
+def _add_unit(document: Document, model: RegulationDocument, unit: ZtpUnit, index: int) -> None:
+    content = document.add_paragraph(style="Normal")
+    prefix = _unit_prefix(unit, index)
+    if prefix:
+        content.add_run(prefix)
+    for inline_run in unit.runs:
+        run = content.add_run(resolve_references(model, inline_run.text))
+        if inline_run.bold:
+            run.bold = True
+    indents = {
+        "paragraph": (0.15, 0.0),
+        "ust": (0.55, -0.4),
+        "pkt": (1.05, -0.45),
+        "lit": (1.55, -0.45),
+        "tiret": (2.05, -0.45),
+        "double-tiret": (2.55, -0.55),
+    }
+    left, first = indents[unit.kind]
+    content.paragraph_format.left_indent = Cm(left)
+    if first:
+        content.paragraph_format.first_line_indent = Cm(first)
+    if unit.status != "accepted":
+        for run in content.runs:
+            run.font.color.rgb = RGBColor.from_string("595959")
+    if unit.identifier == "wspolczynniki-wprowadzenie":
+        content.paragraph_format.keep_with_next = True
+    for child_index, child in enumerate(unit.children, start=1):
+        _add_unit(document, model, child, child_index)
+
+
+def _add_status_label(document: Document, status: str) -> None:
+    text = {
+        "source-draft": "BRUDNOPIS ZE ŹRÓDŁA — DO OPRACOWANIA",
+        "placeholder": "MIEJSCE DO UZUPEŁNIENIA — WYMAGA DECYZJI",
+    }[status]
+    label = document.add_paragraph(text, style="Etykieta brudnopisu")
+    label.paragraph_format.keep_with_next = True
+
+
 def _add_chapters(document: Document, model: RegulationDocument) -> None:
+    _ensure_ztp_styles(document)
     section_number = 0
     for chapter_index, chapter in enumerate(model.chapters, start=1):
-        label = document.add_paragraph(f"ROZDZIAŁ {_roman(chapter_index)}", style="Etykieta rozdzialu")
+        label = document.add_paragraph(f"Rozdział {chapter_index}", style="Etykieta rozdzialu")
         label.paragraph_format.page_break_before = True
         heading = document.add_paragraph(chapter.title, style="Heading 1")
         heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
         _add_bookmark(heading, chapter_index + 1)
         for section_index, section in enumerate(chapter.sections):
             section_number += 1
-            title = f"§ {section_number}" + (f". {section.title}" if section.title else "")
-            paragraph = document.add_paragraph(title, style="Paragraf")
+            paragraph = document.add_paragraph(f"§ {section_number}", style="Paragraf")
             if section_index > 0:
                 paragraph.paragraph_format.page_break_before = True
             if section.identifier in {"cel", "definicje"}:
                 paragraph.paragraph_format.left_indent = Cm(0.15)
-            for block_index, block in enumerate(section.blocks):
-                if isinstance(block, ParagraphBlock):
-                    content = document.add_paragraph(
-                        style="Tekst roboczy" if block.draft else "Normal"
-                    )
-                    for inline_run in block.runs:
-                        run = content.add_run(inline_run.text)
-                        if inline_run.bold:
-                            run.bold = True
-                    if block.draft or (
-                        block_index == 0
-                        and section.identifier in {"przedmiot", "rola-rankingu", "zawody-rankingowe"}
-                    ):
-                        content.paragraph_format.left_indent = Cm(0.15)
-                    if re.match(r"^\d+\)", block.text):
-                        content.paragraph_format.left_indent = Cm(0.65)
-                        content.paragraph_format.first_line_indent = Cm(-0.4)
-                    if block.text.startswith(
-                        "2. W sezonie 2026/2027 stosuje się następujące współczynniki"
-                    ):
-                        content.paragraph_format.keep_with_next = True
+            if section.title:
+                title = document.add_paragraph(section.title, style="Tytuł paragrafu")
+                title.paragraph_format.keep_with_next = True
+            active_status = "accepted"
+            unit_index = 0
+            for block in section.blocks:
+                if isinstance(block, ZtpUnit):
+                    unit_index += 1
+                    if block.status != "accepted" and block.status != active_status:
+                        _add_status_label(document, block.status)
+                    active_status = block.status
+                    _add_unit(document, model, block, unit_index)
                 elif block.name == "rank-coefficients":
+                    active_status = "accepted"
                     _add_rank_coefficients(document, block)
                 else:
                     raise ValueError(f"Nieobsługiwana tabela: {block.name}")

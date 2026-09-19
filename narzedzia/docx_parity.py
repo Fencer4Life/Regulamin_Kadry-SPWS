@@ -22,6 +22,8 @@ TRACKED_STYLES = (
     "Etykieta rozdzialu",
     "Paragraf",
     "Tekst roboczy",
+    "Tytuł paragrafu",
+    "Etykieta brudnopisu",
     "toc 1",
     "toc 2",
 )
@@ -34,6 +36,8 @@ RENDER_STYLE_IDS = (
     "TOC1",
     "TOC2",
     "Hyperlink",
+    "Tytułparagrafu",
+    "Etykietabrudnopisu",
 )
 
 

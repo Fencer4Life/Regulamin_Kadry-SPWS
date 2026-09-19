@@ -226,7 +226,8 @@ class RegistryPlatformTests(unittest.TestCase):
         for fragment in (
             "redakcja-bez-zmiany-sensu",
             "apply_editorial_change.py",
-            "build_regulamin_docx",
+            "prepare_regulamin normalize-and-build",
+            "normalize_regulamin_markdown",
             "REGULAMIN_DOCX_PATH",
             "docx_parity",
             "actions/upload-artifact",
@@ -240,6 +241,8 @@ class RegistryPlatformTests(unittest.TestCase):
         )
         for fragment in (
             "build_regulamin_docx",
+            "prepare_regulamin verify",
+            "normalize_regulamin_markdown",
             "REGULAMIN_DOCX_PATH",
             "docx_parity",
             "validate_regulation_change.py",
@@ -253,7 +256,12 @@ class RegistryPlatformTests(unittest.TestCase):
         contributing = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
         self.assertIn("Źródłem kanonicznym jest kontrolowany Markdown", contributing)
         self.assertIn("sekcji `Artifacts`", contributing)
+        self.assertIn("normalize-and-build", contributing)
+        self.assertIn("source-draft", contributing)
         self.assertIn("kanoniczny Markdown", readme)
+        self.assertIn("ZTP", readme)
+        self.assertIn("BRUDNOPIS ZE ŹRÓDŁA — DO OPRACOWANIA", readme)
+        self.assertIn("normalizuje strukturę", readme)
         self.assertNotIn("Planowana ścieżka Markdown", readme)
         self.assertNotIn("Planowane przejście na Markdown", contributing)
 

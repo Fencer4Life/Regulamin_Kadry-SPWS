@@ -25,7 +25,7 @@ class PaginationTests(unittest.TestCase):
         cls.document = Document(path)
 
     def test_each_chapter_starts_on_new_page(self):
-        chapters = [p for p in self.document.paragraphs if p.text.startswith("ROZDZIAŁ ")]
+        chapters = [p for p in self.document.paragraphs if p.text.startswith("Rozdział ")]
         self.assertGreater(len(chapters), 0, "Dokument nie zawiera nagłówków rozdziałów")
         for chapter in chapters:
             with self.subTest(chapter=chapter.text):
@@ -39,7 +39,7 @@ class PaginationTests(unittest.TestCase):
         section_seen_in_chapter = False
         later_sections = []
         for paragraph in self.document.paragraphs:
-            if paragraph.text.startswith("ROZDZIAŁ "):
+            if paragraph.text.startswith("Rozdział "):
                 section_seen_in_chapter = False
             elif paragraph.text.startswith("§ "):
                 if section_seen_in_chapter:
@@ -57,10 +57,7 @@ class PaginationTests(unittest.TestCase):
 
     def test_definitions_and_purpose_each_start_on_a_new_page(self):
         paragraphs = self.document.paragraphs
-        headings = (
-            "§ 2. Definicje",
-            "§ 3. Cel i zasady wyłaniania reprezentacji",
-        )
+        headings = ("§ 2", "§ 3")
         for heading in headings:
             paragraph = next(p for p in paragraphs if p.text == heading)
             with self.subTest(heading=heading):
