@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plan wdrożenia: zwarta paginacja paragrafów DOCX</title>
+  <style>
+    :root{--bg:#e8ecf3;--surface:#fff;--surface-2:#dce2ec;--ink:#101722;--muted:#485462;--line:#c4cfdb;--accent:#12467e;--accent-soft:#dbe7f5;--good:#16643d;--good-soft:#d8eede;--warn:#7a4d02;--warn-soft:#f4e6c8;--danger:#9e2418;--danger-soft:#f7ddd9;--serif:"Iowan Old Style",Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,"SF Mono",Menlo,monospace}
+    @media(prefers-color-scheme:dark){:root{--bg:#12151b;--surface:#1b2029;--surface-2:#252c38;--ink:#edf2f7;--muted:#bac4d0;--line:#3a4554;--accent:#94c3ef;--accent-soft:#1a2a3c;--good:#74d59a;--good-soft:#15271b;--warn:#e9bd6e;--warn-soft:#282011;--danger:#ef9d95;--danger-soft:#331d1a}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.62 var(--sans)}main{max-width:1100px;margin:auto;padding:56px 28px 100px}h1,h2{font-family:var(--serif);line-height:1.12}h1{font-size:clamp(38px,6vw,58px);max-width:19ch;margin:0 0 18px}h2{font-size:31px;margin:50px 0 16px}h3{font-size:20px;margin:28px 0 10px}.eyebrow{font:700 13px var(--mono);letter-spacing:.13em;color:var(--accent);text-transform:uppercase}.lede{font-size:22px;color:var(--muted);max-width:56rem}.meta{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 42px}.pill{font:700 13px var(--mono);border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:7px 12px}.box{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:18px 22px;margin:20px 0}.box.good{border-left-color:var(--good);background:var(--good-soft)}.box.warn{border-left-color:var(--warn);background:var(--warn-soft)}.box.danger{border-left-color:var(--danger);background:var(--danger-soft)}.box>:last-child{margin-bottom:0}code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);border:1px solid var(--line);border-radius:4px;padding:.1em .35em}pre{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:17px 20px;overflow:auto;font:14px/1.65 var(--mono);white-space:pre-wrap}table{width:100%;border-collapse:collapse;background:var(--surface);font-size:16px;margin:18px 0}th,td{border:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{background:var(--surface-2);font:700 13px var(--mono);text-transform:uppercase;letter-spacing:.04em}ul,ol{padding-left:1.45em}li{margin:.45em 0}.flow{font:700 14px/1.75 var(--mono);white-space:pre-wrap;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;overflow:auto}.step{border-top:2px solid var(--line);padding-top:24px;margin-top:34px}.tag{display:inline-block;font:800 12px var(--mono);padding:4px 8px;border-radius:5px;background:var(--accent-soft);color:var(--accent);margin-right:7px}.red{background:var(--danger-soft);color:var(--danger)}.green{background:var(--good-soft);color:var(--good)}.foot{margin-top:60px;padding-top:20px;border-top:2px solid var(--line);color:var(--muted);font:14px var(--mono)}
+  </style>
+</head>
+<body><main>
+  <p class="eyebrow">Regulamin Kadry SPWS · Implementation Plan · 19.09.2026</p>
+  <h1>Zwarta paginacja paragrafów DOCX</h1>
+  <p class="lede">Mała techniczna zmiana wykonana rygorystycznie: najpierw nowy kontrakt testowy, potem minimalna korekta generatora, ponowny build DOCX i kontrola w Microsoft Word.</p>
+  <div class="meta">
+    <span class="pill">Projekt: zatwierdzony</span>
+    <span class="pill">Plan: gotowy do przeglądu</span>
+    <span class="pill">TDD: obowiązkowe RED → GREEN</span>
+    <span class="pill">Bez zmiany Markdown</span>
+    <span class="pill">Jeden techniczny PR</span>
+  </div>
+
+  <section>
+    <h2>1. Rezultat</h2>
+    <div class="flow">obecny DOCX i 88 zielonych testów
+  → nowe testy paginacji (RED)
+  → minimalna zmiana generatora (GREEN)
+  → ponowny build śledzonego DOCX
+  → pełna walidacja i parytet
+  → kontrola dokumentu w Microsoft Word
+  → draft PR bez automatycznego scalenia</div>
+    <div class="box good"><strong>Efekt funkcjonalny:</strong> rozdziały nadal zaczynają nową stronę, natomiast każdy § wykorzystuje dostępne miejsce. Jeżeli jego pakiet otwierający nie mieści się w całości, Word przenosi na następną stronę oznaczenie §, śródtytuł, opcjonalną etykietę oraz cały pierwszy główny ustęp lub akapit.</div>
+  </section>
+
+  <section>
+    <h2>2. Pliki objęte zmianą</h2>
+    <table>
+      <thead><tr><th>Plik</th><th>Zmiana</th></tr></thead>
+      <tbody>
+        <tr><td><code>tests/test_docx_pagination.py</code></td><td>Usunięcie testów wymagających nowej strony przed każdym § i dodanie kontraktu pakietu otwierającego.</td></tr>
+        <tr><td><code>narzedzia/build_regulamin_docx.py</code></td><td>Usunięcie podziałów przed § oraz po rozdziałach; oznaczenie wyłącznie pierwszego głównego bloku § jako nierozdzielnego.</td></tr>
+        <tr><td><code>tests/test_docx_current_contract.py</code></td><td>Świadoma aktualizacja liczby bloków lub akapitów, jeżeli znikną techniczne puste akapity podziału strony.</td></tr>
+        <tr><td><code>regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx</code></td><td>Deterministycznie wygenerowany wynik nowej paginacji.</td></tr>
+      </tbody>
+    </table>
+    <p>Kanoniczny Markdown nie zmienia się. Zmiana nie wymaga nowej karty DR, ponieważ nie rozstrzyga normy, interpretacji ani konstrukcji merytorycznej Regulaminu.</p>
+  </section>
+
+  <section>
+    <h2>3. Etapy TDD</h2>
+
+    <div class="step">
+      <h3>Etap 0 — czysty baseline z aktualnego main</h3>
+      <ol>
+        <li>Utworzyć odizolowany worktree i gałąź <code>codex/docx-section-pagination</code> z aktualnego <code>origin/main</code>.</li>
+        <li>Potwierdzić czysty status oraz brak równoległych zmian w czterech plikach docelowych.</li>
+        <li>Uruchomić pełny zestaw testów, <code>verify</code> oraz kontrolę bieżącego DOCX.</li>
+        <li>Nie używać liczby 28 jako kontraktu; jest to obserwacja problemu, a nie stabilna metryka techniczna.</li>
+      </ol>
+      <pre>python -m unittest discover -s tests -v
+python -m narzedzia.prepare_regulamin verify \
+  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
+  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx</pre>
+    </div>
+
+    <div class="step">
+      <h3>Etap 1 — nowy kontrakt paginacji</h3>
+      <p><span class="tag red">RED</span> Najpierw zmienić wyłącznie <code>tests/test_docx_pagination.py</code>.</p>
+      <ul>
+        <li>Zachować test: każdy akapit <code>Rozdział N</code> ma <code>page_break_before = True</code>.</li>
+        <li>Zastąpić <code>test_each_later_section_in_chapter_starts_on_new_page</code> testem wymagającym, aby żaden akapit <code>§ N</code> nie miał <code>page_break_before = True</code>.</li>
+        <li>Usunąć specjalny test wymuszający nowe strony dla § 2 i § 3; podlegają tej samej regule co pozostałe paragrafy.</li>
+        <li>Dodać helper znajdujący dla każdego §: śródtytuł, opcjonalną etykietę statusu i pierwszy główny akapit stylu <code>Normal</code>.</li>
+        <li>Sprawdzić <code>keep_with_next = True</code> dla oznaczenia §, śródtytułu oraz etykiety statusu, jeżeli występuje.</li>
+        <li>Sprawdzić <code>keep_together = True</code> na pierwszym głównym akapicie każdego §.</li>
+        <li>Na konkretnym § zawierającym wyliczenie potwierdzić, że jego pierwszy punkt nie otrzymuje <code>keep_together = True</code> tylko dlatego, że należy do pierwszego ustępu.</li>
+        <li>Sprawdzić, że bezpośrednio przed kolejnym nagłówkiem rozdziału nie istnieje pusty akapit z ręcznym <code>w:br type="page"</code>.</li>
+      </ul>
+      <p><strong>Oczekiwany RED:</strong> obecny generator łamie test braku podziału przed §, test pierwszego akapitu oraz test redundantnego podziału po rozdziale.</p>
+    </div>
+
+    <div class="step">
+      <h3>Etap 2 — minimalna zmiana generatora</h3>
+      <p><span class="tag green">GREEN</span> Zmienić wyłącznie zachowanie potrzebne do spełnienia nowego kontraktu.</p>
+      <ol>
+        <li>W <code>_add_chapters</code> usunąć ustawianie <code>page_break_before</code> na § dla <code>section_index &gt; 0</code>.</li>
+        <li>Jawnie utrzymać <code>keep_with_next = True</code> na akapicie <code>§ N</code>, niezależnie od dziedziczenia stylu.</li>
+        <li>Rozszerzyć <code>_add_unit</code> o parametr określający, czy renderowana jednostka jest pierwszym głównym blokiem paragrafu.</li>
+        <li>Dla pierwszej jednostki najwyższego poziomu ustawić <code>content.paragraph_format.keep_together = True</code>.</li>
+        <li>Dla jednostek potomnych wywoływać <code>_add_unit</code> bez tego znacznika, dzięki czemu punkty i litery nie zostaną przypadkowo przyklejone.</li>
+        <li>Usunąć końcowe <code>document.add_page_break()</code> wykonywane po rozdziałach. Następny rozdział nadal zacznie stronę dzięki <code>page_break_before</code> na jego etykiecie.</li>
+        <li>Nie zmieniać reguł strony przed załącznikiem, okładki, spisu treści, tabel ani historii wersji.</li>
+      </ol>
+      <p><strong>Refaktor po GREEN:</strong> nazwać parametr semantycznie, np. <code>keep_together</code>, i nie wprowadzać osobnej logiki zależnej od numerów konkretnych paragrafów.</p>
+    </div>
+
+    <div class="step">
+      <h3>Etap 3 — ponowny build i kontrakt bieżącego DOCX</h3>
+      <ol>
+        <li>Uruchomić <code>normalize-and-build</code> na niezmienionym Markdown.</li>
+        <li>Potwierdzić w <code>git diff</code>, że Markdown nie został zmieniony.</li>
+        <li>Zaktualizować oczekiwane liczby w <code>test_docx_current_contract.py</code> tylko wtedy, gdy ich zmiana wynika z usunięcia pustych akapitów podziału strony.</li>
+        <li>Nie zmieniać listy nagłówków ani chronionej treści.</li>
+        <li>Uruchomić <code>verify</code>, aby potwierdzić zgodność śledzonego DOCX z niezależnym buildem.</li>
+      </ol>
+      <pre>python -m narzedzia.prepare_regulamin normalize-and-build SOURCE.md TRACKED.docx
+python -m narzedzia.prepare_regulamin verify SOURCE.md TRACKED.docx</pre>
+    </div>
+
+    <div class="step">
+      <h3>Etap 4 — pełna walidacja i kontrola Word</h3>
+      <ol>
+        <li>Uruchomić ściśle ukierunkowane testy paginacji, a następnie cały zestaw repozytorium.</li>
+        <li>Uruchomić test bezpieczeństwa DOCX, parytet, <code>compileall</code> i <code>git diff --check</code>.</li>
+        <li>Zbudować niezależny kandydat do katalogu tymczasowego.</li>
+        <li>Otworzyć kandydat w Microsoft Word i zaktualizować spis treści.</li>
+        <li>Sprawdzić wzrokowo co najmniej: zwykły §, § z brudnopisem, § z placeholderem, § z wyliczeniem, granicę dwóch rozdziałów oraz początek załącznika.</li>
+        <li>Odnotować rzeczywistą liczbę stron wyłącznie jako wynik obserwacji, nie jako test automatyczny.</li>
+      </ol>
+      <pre>python -m unittest tests.test_docx_pagination -v
+python -m unittest discover -s tests -v
+python -m compileall -q narzedzia tests
+python -m narzedzia.prepare_regulamin verify SOURCE.md TRACKED.docx
+git diff --check</pre>
+    </div>
+
+    <div class="step">
+      <h3>Etap 5 — commit, draft PR i artefakt</h3>
+      <ol>
+        <li>Sprawdzić status przed stagingiem i dodać wyłącznie pliki wymienione w sekcji 2 oraz zatwierdzone dokumenty projektu i planu.</li>
+        <li>Utworzyć jeden techniczny commit implementacyjny bez karty DR.</li>
+        <li>Wypchnąć gałąź i utworzyć draft PR.</li>
+        <li>Obserwować CI do końca; w opisie PR umieścić link do kandydackiego DOCX.</li>
+        <li>Nie scalać bez osobnego zatwierdzenia po kontroli dokumentu w Microsoft Word.</li>
+      </ol>
+      <p><strong>Proponowany commit:</strong> <code>fix: compact DOCX section pagination</code></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>4. Kryteria odbioru</h2>
+    <ul>
+      <li>Każdy rozdział rozpoczyna nową stronę.</li>
+      <li>Żaden § nie wymusza nowej strony.</li>
+      <li>Oznaczenie §, śródtytuł, etykieta statusu i cały pierwszy główny akapit pozostają razem.</li>
+      <li>Punkty pierwszego ustępu mogą płynąć na kolejną stronę.</li>
+      <li>Między rozdziałami nie ma podwójnego ani pustego ręcznego podziału strony.</li>
+      <li>Załącznik nadal rozpoczyna nową stronę, a tabele zachowują dotychczasową niepodzielność.</li>
+      <li>Kanoniczny Markdown i treść normatywna nie zmieniają się.</li>
+      <li>Śledzony DOCX odpowiada niezależnemu buildowi.</li>
+      <li>Pełne testy i CI są zielone.</li>
+      <li>Kandydat został sprawdzony w Microsoft Word przed merge.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5. Ryzyka i zabezpieczenia</h2>
+    <table>
+      <thead><tr><th>Ryzyko</th><th>Zabezpieczenie</th></tr></thead>
+      <tbody>
+        <tr><td>Nagłówek § zostaje samotnie na dole strony.</td><td>Łańcuch <code>keep_with_next</code> sprawdzany dla każdego paragrafu.</td></tr>
+        <tr><td>Pierwszy akapit dzieli się między strony.</td><td><code>keep_together</code> wyłącznie na pierwszym głównym bloku.</td></tr>
+        <tr><td>Całe długie wyliczenie jest niepotrzebnie przenoszone.</td><td>Znacznik nie jest dziedziczony przez punkty, litery i tiret.</td></tr>
+        <tr><td>Rozdział przestaje zaczynać nową stronę.</td><td>Osobny niezmienny test <code>page_break_before</code> na każdym nagłówku rozdziału.</td></tr>
+        <tr><td>Usunięcie podziałów wpływa na treść.</td><td>Testy chronionej treści, lista nagłówków, parytet Markdown–DOCX i przegląd diffu.</td></tr>
+        <tr><td>Automatyczne testy XML nie odzwierciedlają składu Worda.</td><td>Obowiązkowa ręczna kontrola w Microsoft Word przed scaleniem.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <p class="foot">Plan wykonawczy do projektu „Zwarta paginacja paragrafów DOCX” · bez rozpoczęcia implementacji</p>
+</main></body>
+</html>
