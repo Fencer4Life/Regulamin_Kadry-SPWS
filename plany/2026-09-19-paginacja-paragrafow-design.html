@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projekt: zwarta paginacja paragrafów DOCX</title>
+  <style>
+    :root{--bg:#e8ecf3;--surface:#fff;--surface-2:#dce2ec;--ink:#101722;--muted:#485462;--line:#c4cfdb;--accent:#12467e;--accent-soft:#dbe7f5;--good:#16643d;--good-soft:#d8eede;--warn:#7a4d02;--warn-soft:#f4e6c8;--danger:#9e2418;--danger-soft:#f7ddd9;--serif:"Iowan Old Style",Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,"SF Mono",Menlo,monospace}
+    @media(prefers-color-scheme:dark){:root{--bg:#12151b;--surface:#1b2029;--surface-2:#252c38;--ink:#edf2f7;--muted:#bac4d0;--line:#3a4554;--accent:#94c3ef;--accent-soft:#1a2a3c;--good:#74d59a;--good-soft:#15271b;--warn:#e9bd6e;--warn-soft:#282011;--danger:#ef9d95;--danger-soft:#331d1a}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.62 var(--sans)}main{max-width:1080px;margin:auto;padding:56px 28px 96px}h1,h2{font-family:var(--serif);line-height:1.13}h1{font-size:clamp(38px,6vw,58px);max-width:18ch;margin:0 0 18px}h2{font-size:31px;margin:48px 0 16px}h3{font-size:20px;margin:28px 0 10px}.eyebrow{font:700 13px var(--mono);letter-spacing:.13em;color:var(--accent);text-transform:uppercase}.lede{font-size:22px;color:var(--muted);max-width:55rem}.meta{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 42px}.pill{font:700 13px var(--mono);border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:7px 12px}.box{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:18px 22px;margin:20px 0}.box.good{border-left-color:var(--good);background:var(--good-soft)}.box.warn{border-left-color:var(--warn);background:var(--warn-soft)}.box.danger{border-left-color:var(--danger);background:var(--danger-soft)}.box>:last-child{margin-bottom:0}code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);border:1px solid var(--line);border-radius:4px;padding:.1em .35em}table{width:100%;border-collapse:collapse;background:var(--surface);font-size:16px;margin:18px 0}th,td{border:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}th{background:var(--surface-2);font:700 13px var(--mono);text-transform:uppercase;letter-spacing:.04em}ul,ol{padding-left:1.45em}li{margin:.45em 0}.flow{font:700 14px/1.75 var(--mono);white-space:pre-wrap;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;overflow:auto}.foot{margin-top:60px;padding-top:20px;border-top:2px solid var(--line);color:var(--muted);font:14px var(--mono)}
+  </style>
+</head>
+<body><main>
+  <p class="eyebrow">Regulamin Kadry SPWS · zatwierdzony projekt rozwiązania · 19.09.2026</p>
+  <h1>Zwarta paginacja paragrafów DOCX</h1>
+  <p class="lede">Dokument ma rozpoczynać nową stronę przed każdym rozdziałem, ale nie przed każdym paragrafem. Nagłówek § pozostaje zawsze razem z całym pierwszym ustępem albo akapitem.</p>
+  <div class="meta">
+    <span class="pill">Status: zatwierdzony w rozmowie</span>
+    <span class="pill">Zakres: generator DOCX + testy</span>
+    <span class="pill">Tryb: TDD</span>
+    <span class="pill">Bez zmiany treści Regulaminu</span>
+  </div>
+
+  <section>
+    <h2>1. Problem i przyczyna</h2>
+    <p>Po migracji do struktury ZTP każdy kolejny § w rozdziale otrzymuje właściwość Worda <code>page_break_before = True</code>. W rezultacie dokument ma 28 stron i pozostawia dużo niewykorzystanego miejsca.</p>
+    <div class="box danger"><strong>Przyczyna techniczna:</strong> funkcja renderująca rozdziały wymusza nową stronę dla każdego § poza pierwszym w rozdziale. Istniejący test paginacji utrwala dokładnie to niepożądane zachowanie.</div>
+    <p>Zmiana dotyczy wyłącznie składu stron. Nie zmienia Markdown, numeracji ZTP, treści przepisów, statusów brudnopisu ani wyglądu załącznika.</p>
+  </section>
+
+  <section>
+    <h2>2. Wybrane zachowanie</h2>
+    <div class="flow">Rozdział N
+  → zawsze nowa strona
+  → tytuł rozdziału
+  → § N + śródtytuł + opcjonalna etykieta + cały pierwszy ustęp/akapit
+  → dalsze ustępy i punkty płyną naturalnie
+  → następny § zaczyna się w wolnym miejscu albo przechodzi jako cały pakiet na następną stronę</div>
+    <ul>
+      <li><strong>Rozdział</strong> zawsze rozpoczyna nową stronę.</li>
+      <li><strong>Paragraf</strong> nie wymusza nowej strony.</li>
+      <li>Pakiet otwierający paragraf obejmuje: oznaczenie <code>§ N</code>, śródtytuł, ewentualną etykietę <code>source-draft</code> albo <code>placeholder</code> oraz cały pierwszy główny ustęp lub akapit.</li>
+      <li>Jeżeli cały pakiet nie mieści się w pozostałym miejscu, Word przenosi go na następną stronę.</li>
+      <li>Punkty, litery i tiret należące do pierwszego ustępu nie są dołączane do pakietu. Mogą przejść na kolejną stronę.</li>
+      <li>Kolejne ustępy płyną naturalnie i mogą być dzielone zgodnie z regułami Worda.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>3. Mechanika Worda</h2>
+    <table>
+      <thead><tr><th>Element</th><th>Właściwość</th><th>Cel</th></tr></thead>
+      <tbody>
+        <tr><td><code>Rozdział N</code></td><td><code>page_break_before = True</code></td><td>Każdy rozdział zaczyna nową stronę.</td></tr>
+        <tr><td><code>§ N</code></td><td>bez <code>page_break_before</code>, z <code>keep_with_next = True</code></td><td>Paragraf wykorzystuje wolne miejsce i pozostaje ze śródtytułem.</td></tr>
+        <tr><td>Śródtytuł §</td><td><code>keep_with_next = True</code></td><td>Nie zostaje samotnie na dole strony.</td></tr>
+        <tr><td>Etykieta brudnopisu lub placeholdera</td><td><code>keep_with_next = True</code></td><td>Status pozostaje razem z treścią, której dotyczy.</td></tr>
+        <tr><td>Pierwszy główny ustęp lub akapit</td><td><code>keep_together = True</code></td><td>Cały pierwszy akapit mieści się pod nagłówkiem albo przechodzi z nim na następną stronę.</td></tr>
+        <tr><td>Dalsze jednostki</td><td>bez dodatkowego wymuszania strony</td><td>Zwarty, naturalny skład dokumentu.</td></tr>
+      </tbody>
+    </table>
+    <p>Generator usunie również redundantne podziały dodawane po zakończeniu rozdziałów. Jedynym źródłem zasady „nowy rozdział = nowa strona” pozostanie nagłówek następnego rozdziału.</p>
+  </section>
+
+  <section>
+    <h2>4. Granice i przypadki szczególne</h2>
+    <ul>
+      <li>Jeżeli § nie ma śródtytułu, oznaczenie § łączy się bezpośrednio z etykietą statusu albo pierwszym akapitem.</li>
+      <li>Jeżeli § zaczyna się brudnopisem, łańcuch obejmuje etykietę „BRUDNOPIS ZE ŹRÓDŁA — DO OPRACOWANIA”.</li>
+      <li>Jeżeli § zaczyna się placeholderem, łańcuch obejmuje etykietę „MIEJSCE DO UZUPEŁNIENIA — WYMAGA DECYZJI”.</li>
+      <li>Jeżeli pierwszy ustęp wprowadza wyliczenie, razem z nagłówkiem pozostaje tylko zdanie wprowadzające; punkty mogą przejść na następną stronę.</li>
+      <li>Załącznik nadal rozpoczyna nową stronę. Reguły niepodzielności tabel i ich wierszy pozostają bez zmian.</li>
+      <li>Okładka, spis treści, konstrukcja regulaminu oraz historia wersji pozostają bez zmian.</li>
+    </ul>
+    <div class="box warn"><strong>Liczba stron nie jest sztywnym kryterium.</strong> Oczekujemy wyraźnego zmniejszenia obecnych 28 stron, ale wynik zależy od wersji Worda, aktualizacji spisu treści, fontów i drukarki. Kryterium odbioru stanowią właściwości paginacji, nie konkretny numer strony końcowej.</div>
+  </section>
+
+  <section>
+    <h2>5. Odrzucone warianty</h2>
+    <table>
+      <thead><tr><th>Wariant</th><th>Powód odrzucenia</th></tr></thead>
+      <tbody>
+        <tr><td>Tylko usunięcie podziału strony przed §</td><td>Nagłówek mógłby pozostać z jedną linią pierwszego akapitu, podczas gdy reszta akapitu przeszłaby na następną stronę.</td></tr>
+        <tr><td>Cały § zawsze na jednej stronie</td><td>Tworzyłby duże puste obszary, a długie paragrafy nie mogą zmieścić się na jednej stronie.</td></tr>
+        <tr><td>Ręczne podziały stron w Markdown</td><td>Uzależniłyby treść od konkretnego składu Worda i szybko stałyby się nieaktualne po zmianie tekstu.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>6. Strategia TDD i odbiór</h2>
+    <ol>
+      <li>Zmienić testy paginacji tak, aby najpierw otrzymać RED wobec obecnego generatora.</li>
+      <li>Potwierdzić, że wszystkie nagłówki rozdziałów nadal mają wymuszony początek nowej strony.</li>
+      <li>Potwierdzić, że żaden nagłówek § nie ma wymuszonego początku nowej strony.</li>
+      <li>Potwierdzić łańcuch <code>keep_with_next</code> od § przez śródtytuł i opcjonalną etykietę do pierwszego akapitu.</li>
+      <li>Potwierdzić <code>keep_together</code> na pierwszym głównym ustępie lub akapicie każdego §, ale nie na jego punktach.</li>
+      <li>Potwierdzić brak redundantnych jawnych podziałów pomiędzy rozdziałami.</li>
+      <li>Zbudować śledzony DOCX, uruchomić pełne testy, parytet oraz kontrolę bezpieczeństwa.</li>
+      <li>Otworzyć kandydat w Microsoft Word i wzrokowo sprawdzić przejścia stron, szczególnie § z etykietą brudnopisu i § z wyliczeniem.</li>
+    </ol>
+    <div class="box good"><strong>Gotowe, gdy:</strong> rozdziały zaczynają nowe strony, paragrafy wykorzystują dostępne miejsce, a żaden nagłówek §, śródtytuł ani etykieta statusu nie zostaje oddzielona od całego pierwszego akapitu.</div>
+  </section>
+
+  <section>
+    <h2>7. Zakres implementacji</h2>
+    <ul>
+      <li><code>narzedzia/build_regulamin_docx.py</code> — usunięcie wymuszania stron przed §, oznaczenie pierwszego głównego bloku i uproszczenie granic rozdziałów.</li>
+      <li><code>tests/test_docx_pagination.py</code> — zastąpienie starego kontraktu nowymi testami pakietu otwierającego §.</li>
+      <li><code>tests/test_docx_current_contract.py</code> — aktualizacja kontraktu wygenerowanego DOCX po świadomej zmianie układu.</li>
+      <li><code>regulamin/..._2026.docx</code> — ponowne wygenerowanie z niezmienionego Markdown.</li>
+    </ul>
+    <p>Markdown Regulaminu, karty decyzji merytorycznych i mapa migracji nie wymagają zmiany. Jest to techniczna korekta składu dokumentu.</p>
+  </section>
+
+  <p class="foot">Projekt techniczny zwartej paginacji DOCX · zatwierdzony kierunek · implementacja nie została jeszcze rozpoczęta</p>
+</main></body>
+</html>
