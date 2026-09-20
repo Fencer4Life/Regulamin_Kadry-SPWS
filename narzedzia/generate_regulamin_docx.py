@@ -229,10 +229,7 @@ def add_cover(doc):
 
     rule = doc.add_paragraph()
     rule.paragraph_format.space_after = Pt(32)
-    run = rule.add_run("━━━━")
-    run.font.name = "Aptos"
-    run.font.size = Pt(17)
-    run.font.color.rgb = RGBColor.from_string(BLUE)
+    # Keep the existing cover spacing, without a decorative line above the title.
 
     title = doc.add_paragraph(style="Title")
     title.add_run("Regulamin powoływania reprezentacji Polski weteranów w szermierce")
