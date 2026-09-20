@@ -118,15 +118,19 @@ prototype_note = "Dokument jest projektem. Fragmenty oznaczone jako brudnopis ze
 
 ### [section:publikacja-rankingu] Publikacja rankingu
 
-[unit:publikacja-rankingu-zrodlo] [status:source-draft] Ranking indywidualny oraz kalkulator punktów są publikowane na stronie internetowej.
+[unit:publikacja-rankingu-zrodlo] Ranking indywidualny oraz kalkulator punktów są publikowane na stronie internetowej.
 
 ### [section:polaczone-kategorie] Wyniki w połączonych kategoriach wiekowych
 
-[unit:polaczone-kategorie-zrodlo] [status:source-draft] W przypadku zawodów rozgrywanych w połączonych kategoriach wiekowych wyniki przypisuje się zgodnie z zajętym miejscem, bez dodatkowego rozdzielania kategorii w celu obliczenia punktów rankingowych.
+1. [unit:polaczone-kategorie-zrodlo] W przypadku zawodów rozgrywanych w połączonych kategoriach wiekowych wyniki przypisuje się zgodnie z zajętym miejscem, bez dodatkowego rozdzielania kategorii w celu obliczenia punktów rankingowych.
 
 ### [section:uprawnieni-w-rankingu] Zawodnicy uwzględniani w rankingu
 
-[unit:uprawnieni-w-rankingu-zrodlo] [status:source-draft] W rankingu uwzględnia się zawodników posiadających polskie obywatelstwo albo kartę pobytu. Warunkiem zaliczenia punktów z zawodów organizowanych przez EVF albo FIE jest start jako reprezentant Polski.
+1. [unit:ranking-warunek-startu-krajowego] W rankingu indywidualnym uwzględnia się wyłącznie weteranów szermierki, którzy co najmniej raz wystartowali w zawodach Pucharu Polski Weteranów w Szermierce albo Mistrzostwach Polski Weteranów w Szermierce.
+
+2. [unit:ranking-powolanie-obywatelstwo] Przy ustalaniu kolejności zawodników do powołania do reprezentacji Polski uwzględnia się wyłącznie zawodników posiadających polskie obywatelstwo albo kartę pobytu.
+
+3. [unit:ranking-evf-fie-reprezentacja] Punkty uzyskane w zawodach organizowanych przez EVF albo FIE uwzględnia się wyłącznie, jeżeli zawodnik wystąpił w tych zawodach jako reprezentant Polski.
 
 ## [chapter:powolania-indywidualne] Powołania do startów indywidualnych
 <!-- scope: kolejność kandydatów, rezygnacje i zastępstwa -->
