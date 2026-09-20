@@ -12,8 +12,8 @@ discussion_url: ""
 pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/4
 stan_obowiązywania: częściowo zmieniona
 zmienia: []
-zmieniona_przez: ["DR-023"]
-zakres_zmiany: {"DR-023": "Wyłączenie powołania uzupełniającego na Drużynowe Mistrzostwa Europy; zamknięta pula kandydatów."}
+zmieniona_przez: ["DR-023","DR-024"]
+zakres_zmiany: {"DR-023":"Wyłączenie powołania uzupełniającego na Drużynowe Mistrzostwa Europy; zamknięta pula kandydatów.","DR-024":"Usunięcie przesłanek 5 i 6 oraz wyłączenie powołań uzupełniających na MŚ i ME."}
 zastepuje: []
 zastapiona_przez: []
 termin_oceny: po zakończeniu sezonu 2026/2027

@@ -9,7 +9,7 @@ Publiczne repozytorium prac nad **Regulaminem powoływania reprezentacji Polski 
 | Sezon | 2026/2027 |
 | Wersja dokumentu | 0.2 |
 | Status | projekt do konsultacji |
-| Stan treści | treść przyjęta, w tym terminarz powołań, oraz jawnie oznaczony brudnopis pozostałych przepisów |
+| Stan treści | treść przyjęta redakcyjnie do projektu, bez pozostałych brudnopisów; wymaga formalnego zatwierdzenia PZSz |
 
 > **Ważne:** dokument znajdujący się w tym repozytorium jest projektem. Nie stanowi obowiązującego regulaminu do czasu jego formalnego zatwierdzenia przez właściwy organ Polskiego Związku Szermierczego.
 

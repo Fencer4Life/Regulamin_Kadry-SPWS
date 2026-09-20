@@ -36,13 +36,13 @@ EXPECTED_HEADINGS = [
     "Dobór składu drużyny",
     "§ 12", "Pula kandydatów do drużyny",
     "§ 13", "Kategorie wiekowe w drużynie",
-    "§ 14", "Drużynowe Mistrzostwa Europy",
-    "§ 15", "Drużynowe Mistrzostwa Świata",
+    "§ 14", "Drużynowe Mistrzostwa Świata",
+    "§ 15", "Drużynowe Mistrzostwa Europy",
     "§ 16", "Powołanie uzupełniające",
     "Terminarz procesu powoływania",
     "§ 17", "Terminy procesu",
     "Ocena regulaminu i doskonalenie metody",
-    "§ 18", "Ocena posezonowa",
+    "§ 18", "Posezonowa ocena działania regulaminu",
     "Postanowienia końcowe",
     "§ 19", "Wejście w życie",
     "Tabela punktacji Pucharu Polski Weteranów w szermierce",
@@ -68,7 +68,7 @@ class CurrentDocxContractTests(unittest.TestCase):
     def test_current_document_shape_is_frozen_before_generator_work(self):
         self.assertEqual(len(self.document.paragraphs), 205)
         self.assertEqual(len(self.document.tables), 16)
-        self.assertEqual(sum(len(table.rows) for table in self.document.tables), 145)
+        self.assertEqual(sum(len(table.rows) for table in self.document.tables), 146)
         self.assertEqual(len(self.contract["blocks"]), 221)
 
     def test_current_document_heading_order_is_explicit(self):

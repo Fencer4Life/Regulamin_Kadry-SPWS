@@ -10,10 +10,10 @@ dotyczy: § 5 ust. 2
 decydenci: Komisja regulaminowa SPWS — na etapie inicjalnym autor projektu
 discussion_url: ""
 pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/4
-stan_obowiązywania: obowiązuje
+stan_obowiązywania: częściowo zmieniona
 zmienia: []
-zmieniona_przez: []
-zakres_zmiany: {}
+zmieniona_przez: ["DR-024"]
+zakres_zmiany: {"DR-024":"Usunięcie dodatkowego zastrzeżenia o jednakowych wymaganiach komunikatu."}
 zastepuje: []
 zastapiona_przez: []
 termin_oceny: po każdych zawodach zewnętrznego organizatora i po sezonie

@@ -10,10 +10,10 @@ dotyczy: § 4 ust. 5 oraz § 12, § 14 i § 16
 decydenci: Komisja regulaminowa SPWS — na etapie inicjalnym autor projektu
 discussion_url: ""
 pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/41
-stan_obowiązywania: obowiązuje
+stan_obowiązywania: częściowo zmieniona
 zmienia: ["DR-010"]
-zmieniona_przez: []
-zakres_zmiany: {}
+zmieniona_przez: ["DR-024"]
+zakres_zmiany: {"DR-024":"MŚ: pula 8 i drużyna bez rezerwowego; ME: pula 12 oraz 5 zawodników i rezerwowy."}
 zastepuje: []
 zastapiona_przez: []
 termin_oceny: po zakończeniu sezonu 2026/2027

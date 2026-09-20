@@ -10,10 +10,10 @@ dotyczy: § 3 ust. 2 pkt 1 i § 4 ust. 3
 decydenci: Komisja regulaminowa SPWS — na etapie inicjalnym autor projektu
 discussion_url: ""
 pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/4
-stan_obowiązywania: obowiązuje
+stan_obowiązywania: częściowo zmieniona
 zmienia: []
-zmieniona_przez: []
-zakres_zmiany: {}
+zmieniona_przez: ["DR-024"]
+zakres_zmiany: {"DR-024":"Warunek jednego startu PPW lub MPW dla obecności w rankingu."}
 zastepuje: []
 zastapiona_przez: []
 termin_oceny: po zakończeniu sezonu 2026/2027
