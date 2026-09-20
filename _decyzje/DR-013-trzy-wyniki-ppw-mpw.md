@@ -10,12 +10,12 @@ dotyczy: § 5 ust. 3
 decydenci: Komisja regulaminowa SPWS — na etapie inicjalnym autor projektu
 discussion_url: ""
 pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/4
-stan_obowiązywania: obowiązuje
+stan_obowiązywania: zastąpiona
 zmienia: []
 zmieniona_przez: []
 zakres_zmiany: {}
 zastepuje: []
-zastapiona_przez: []
+zastapiona_przez: ["DR-019"]
 termin_oceny: po zakończeniu sezonu 2026/2027
 ---
 
@@ -64,3 +64,4 @@ Do uzupełnienia po sezonie 2026/2027.
 ## Historia zmian
 
 - 2026-09-10 — rozstrzygnięcie utrwalone w commicie `5bbf788`.
+- 2026-09-19 — decyzja zastąpiona przez DR-019, która zachowuje trzy obowiązkowe wyniki krajowe i określa pełny mechanizm ośmiu pozycji wynikowych.
