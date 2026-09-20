@@ -97,6 +97,23 @@ class RegulationDocument:
     chapters: list[RegulationChapter]
     has_points_annex: bool
     metadata_source: str = ""
+    milestones: dict[str, int] = field(default_factory=dict)
+
+
+TERM_RE = re.compile(r"\{\{(term|days):([a-z0-9-]+)}}")
+
+
+def resolve_terms(milestones: dict[str, int], text: str) -> str:
+    def replace(match):
+        key = match.group(2)
+        if key not in milestones:
+            raise ValueError(f"Nieznany termin: {key}")
+        days = milestones[key]
+        return str(days) if match.group(1) == "days" else (f"T−{days}" if days else "T")
+    result = TERM_RE.sub(replace, text)
+    if "{{term:" in result or "{{days:" in result:
+        raise ValueError("Niepoprawny znacznik terminu")
+    return result
 
 
 def _parse_markdown_table(lines: list[str], start: int) -> tuple[list[list[str]], int]:
@@ -159,6 +176,12 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
     except ValueError as error:
         raise ValueError("Brak zamykającego bloku metadanych TOML") from error
     metadata = tomllib.loads(metadata_text)
+    milestones = metadata.pop("milestones", {})
+    if not isinstance(milestones, dict) or any(
+        not re.fullmatch(r"[a-z0-9-]+", key) or type(value) is not int or value < 0
+        for key, value in milestones.items()
+    ):
+        raise ValueError("Terminy muszą być nieujemnymi całkowitymi liczbami dni")
     required = {
         "title", "subtitle", "version", "status", "project_date", "subject",
         "comments", "outline_intro", "toc_note", "history_scope", "prototype_note",
@@ -207,13 +230,31 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
             current_chapter.sections.append(current_section)
             unit_stack.clear()
             continue
-        if line == "{{table:rank-coefficients}}":
+        if table_match := re.fullmatch(r"\{\{table:([a-z0-9-]+)}}", line):
             if current_section is None:
-                raise ValueError("Tabela współczynników musi należeć do paragrafu")
+                raise ValueError("Tabela musi należeć do paragrafu")
             while index < len(lines) and not lines[index].strip():
                 index += 1
             rows, index = _parse_markdown_table(lines, index)
-            current_section.blocks.append(TableBlock(name="rank-coefficients", rows=rows))
+            name = table_match.group(1)
+            if not 2 <= len(rows[0]) <= 4:
+                raise ValueError("Tabela wymaga od 2 do 4 kolumn")
+            for row in rows:
+                for cell in row:
+                    resolve_terms(milestones, cell)
+            if name.startswith("timeline-"):
+                if rows[0] != ["Termin", "Zdarzenie", "Zakres"] or not 2 <= len(rows) - 1 <= 4:
+                    raise ValueError("Oś czasu wymaga kolumn Termin, Zdarzenie, Zakres oraz 2–4 etapów")
+                terms = []
+                for row in rows[1:]:
+                    token = TERM_RE.fullmatch(row[0])
+                    if not token or token.group(1) != "term":
+                        raise ValueError("Etap osi czasu wymaga znacznika terminu")
+                    terms.append(milestones[token.group(2)])
+                if any(a <= b for a, b in zip(terms, terms[1:])):
+                    raise ValueError("Etapy osi czasu muszą być chronologiczne i różne")
+            current_section.blocks.append(TableBlock(name=name, rows=rows))
+            unit_stack.clear()
             continue
         if line == "{{annex:points}}":
             has_points_annex = True
@@ -234,6 +275,7 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
         identifiers.add(identifier)
         kind = _unit_kind(unit_match)
         plain_text, runs = _parse_inline_runs(unit_match.group("text"))
+        resolve_terms(milestones, plain_text)
         unit = ZtpUnit(
             identifier=identifier,
             kind=kind,
@@ -254,4 +296,5 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
         chapters=chapters,
         has_points_annex=has_points_annex,
         metadata_source=metadata_text,
+        milestones=milestones,
     )

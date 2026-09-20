@@ -409,6 +409,40 @@ def _add_rank_coefficients(document: Document, block: TableBlock):
     return table
 
 
+def _add_source_table(document: Document, model: RegulationDocument, block: TableBlock):
+    """Native Word cells: timeline stages are columns, ordinary tables keep rows."""
+    timeline = block.name.startswith("timeline-")
+    rows = list(zip(*block.rows[1:])) if timeline else block.rows
+    width = 16 / len(rows[0])
+    table = document.add_table(rows=0, cols=len(rows[0]))
+    table.style = "Table Grid"
+    table.autofit = False
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    for column in table.columns:
+        column.width = Cm(width)
+    colors = ("173F73", "875600", "176342", "455468")
+    for number, values in enumerate(rows):
+        cells = table.add_row().cells
+        for column, (cell, text) in enumerate(zip(cells, values)):
+            cell.width = Cm(width)
+            cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+            paragraph = cell.paragraphs[0]
+            paragraph.paragraph_format.space_after = Pt(3)
+            if timeline:
+                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            run = paragraph.add_run(resolve_references(model, text))
+            run.font.size = Pt(9)
+            run.bold = number == 0 or (timeline and number == 1)
+            if number == 0:
+                set_cell_shading(cell, colors[column] if timeline else colors[0])
+                run.font.color.rgb = RGBColor(255, 255, 255)
+            elif timeline or number % 2 == 0:
+                set_cell_shading(cell, "EAF2FB")
+    set_repeat_table_header(table.rows[0])
+    _keep_table_together(table)
+    return table
+
+
 def _ensure_ztp_styles(document: Document) -> None:
     names = {style.name for style in document.styles}
     if "Tytuł paragrafu" not in names:
@@ -523,7 +557,8 @@ def _add_chapters(document: Document, model: RegulationDocument) -> None:
                     active_status = "accepted"
                     _add_rank_coefficients(document, block)
                 else:
-                    raise ValueError(f"Nieobsługiwana tabela: {block.name}")
+                    active_status = "accepted"
+                    _add_source_table(document, model, block)
 
 
 def _is_power_of_two(value: int) -> bool:
