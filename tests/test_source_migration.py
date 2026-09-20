@@ -48,7 +48,7 @@ class SourceMigrationTests(unittest.TestCase):
             if isinstance(block, ZtpUnit)
             for unit in walk(block)
         }
-        self.assertEqual(statuses, {"accepted", "source-draft", "placeholder"})
+        self.assertEqual(statuses, {"accepted", "source-draft"})
 
     def test_accepted_ranking_rules_are_not_rendered_as_source_drafts(self):
         source_text = SOURCE.read_text(encoding="utf-8")

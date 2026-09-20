@@ -9,7 +9,7 @@ Publiczne repozytorium prac nad **Regulaminem powoływania reprezentacji Polski 
 | Sezon | 2026/2027 |
 | Wersja dokumentu | 0.2 |
 | Status | projekt do konsultacji |
-| Stan treści | treść przyjęta oraz jawnie oznaczony brudnopis ze źródła; terminarz wymaga odrębnej decyzji |
+| Stan treści | treść przyjęta, w tym terminarz powołań, oraz jawnie oznaczony brudnopis pozostałych przepisów |
 
 > **Ważne:** dokument znajdujący się w tym repozytorium jest projektem. Nie stanowi obowiązującego regulaminu do czasu jego formalnego zatwierdzenia przez właściwy organ Polskiego Związku Szermierczego.
 
@@ -113,6 +113,16 @@ python -m unittest discover -s tests -v
 Testy sprawdzają między innymi zaakceptowane brzmienie chronionych postanowień, reguły stronicowania, niepodzielność tabel, brak komentarzy i śledzonych zmian w publicznym DOCX oraz kompletność Rejestru Decyzji.
 
 `prepare_regulamin.py` jest bieżącym wejściem do normalizacji i budowania. `generate_regulamin_docx.py` oraz skrypty `apply_*.py` dokumentują historyczne etapy pracy i nie są źródłem aktualnej treści.
+
+### Edycja terminarza, osi czasu i tabel
+
+Wszystkie te elementy znajdują się w kanonicznym Markdown w `regulamin/`. Sekcja TOML `[milestones]` definiuje liczbę dni przed początkiem zawodów: `otwarcie = 90`, `karty = 75`, `propozycja = 60`, `zawody = 0`. Znacznik `{{term:karty}}` wyświetla `T−75`, a `{{days:karty}}` wyświetla `75`. Zmiana wartości w jednym miejscu aktualizuje terminy w przepisach i tabelach przy kolejnym generowaniu DOCX. W podglądzie Markdown na GitHubie znaczniki pozostają widoczne jako odwołania do tych definicji.
+
+Blok `{{table:timeline-process}}` poprzedza zwykłą tabelę Markdown z kolumnami `Termin`, `Zdarzenie`, `Zakres`. Każdy wiersz to etap. W DOCX generator obraca tę tabelę w poziomy schemat: etapy są kolumnami, z kolorowymi terminami u góry. To edytowalne komórki Worda, bez obrazu i bez dodatkowego HTML. Schemat pokazuje kolejność etapów, nie odległości w skali czasu. Obsługuje 2–4 etapy, mieszczące się na szerokości strony; terminy muszą występować w kolejności chronologicznej.
+
+Pozostałe bloki `{{table:process}}`, `{{table:responsibilities}}` i `{{table:data-sources}}` są tabelami Markdown renderowanymi jako tabele Worda. Obsługiwane są 2–4 kolumny. Zmiany wprowadza się w Markdown; ręczna edycja DOCX zostanie zastąpiona kolejnym buildem.
+
+Po zmianie uruchom `python -m narzedzia.prepare_regulamin normalize-and-build <źródło.md> <wynik.docx>`. Nieznany termin, niepoprawna liczba dni, nierówne wiersze tabeli albo błędna kolejność etapów zatrzymują generowanie. Poprzedni DOCX pozostaje zachowany. CI wykonuje te same kontrole i publikuje kandydacki dokument do przeglądu.
 
 ## Wersjonowanie i wydania
 

@@ -4,7 +4,7 @@ import argparse
 import re
 from pathlib import Path
 
-from narzedzia.docx_model import RegulationDocument, TableBlock, ZtpUnit, parse_regulation_source
+from narzedzia.docx_model import RegulationDocument, TableBlock, ZtpUnit, parse_regulation_source, resolve_terms
 
 
 REFERENCE_RE = re.compile(r"\{\{ref:([a-z0-9-]+)/([a-z0-9-]+)}}")
@@ -141,7 +141,7 @@ def resolve_references(model: RegulationDocument, text: str) -> str:
         except KeyError as error:
             raise ValueError(f"Nieznane odwołanie: {match.group(0)}") from error
 
-    return REFERENCE_RE.sub(replace, text)
+    return resolve_terms(model.milestones, REFERENCE_RE.sub(replace, text))
 
 
 def main() -> None:

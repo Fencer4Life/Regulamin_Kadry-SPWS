@@ -10,6 +10,11 @@ outline_intro = "Treść dokumentu podzielono następująco:"
 toc_note = "W Wordzie wybierz spis treści i polecenie „Aktualizuj tabelę”, jeżeli nie odświeży się automatycznie."
 history_scope = "Pełna struktura ZTP i jednorazowa migracja treści źródłowej"
 prototype_note = "Dokument jest projektem. Fragmenty oznaczone jako brudnopis ze źródła nie są treścią przyjętą."
+[milestones]
+otwarcie = 90
+karty = 75
+propozycja = 60
+zawody = 0
 +++
 
 ## [chapter:postanowienia-ogolne] Postanowienia ogólne
@@ -181,11 +186,75 @@ prototype_note = "Dokument jest projektem. Fragmenty oznaczone jako brudnopis ze
 [unit:powolanie-uzupelniajace-odeslanie] Powołanie uzupełniające zawodnika bez dodatniego dorobku punktowego jest dopuszczalne wyłącznie na warunkach określonych w {{ref:rola-rankingu/powolanie-uzupelniajace}}.
 
 ## [chapter:terminarz] Terminarz procesu powoływania
-<!-- scope: zamknięcie danych, deklaracje i ogłoszenie nominacji -->
+<!-- scope: terminy, deklaracje, odpowiedzialność, korekty danych i dokumentacja powołań -->
 
 ### [section:zasady-terminarza] Terminy procesu
 
-[unit:terminarz-placeholder] [status:placeholder] Terminy zamknięcia danych rankingowych, składania deklaracji, weryfikacji warunków oraz ogłoszenia nominacji wymagają odrębnej decyzji.
+1. [unit:terminarz-podstawa] Terminy procesu powoływania reprezentacji Polski liczy się w dniach kalendarzowych wstecz od pierwszego dnia zawodów, oznaczonego jako T. SPWS ogłasza na początku sezonu kalendarz procesu, w tym daty zamknięcia danych rankingowych, składania deklaracji gotowości, weryfikacji warunków i ogłoszenia nominacji.
+
+2. [unit:terminarz-t90] Na {{days:otwarcie}} dni przed pierwszym dniem zawodów ({{term:otwarcie}}) SPWS otwiera proces powoływania, zamyka dane wynikowe wykorzystywane w tym cyklu, ogłasza zasady postępowania i wzywa zawodników do składania deklaracji gotowości. Wyniki uzyskane po tym dniu nie wpływają na kolejność kandydatów w tym cyklu, z zastrzeżeniem zasad ustalania ostatecznego składu drużyny na Mistrzostwa Świata.
+
+3. [unit:terminarz-deklaracje] Zawodnik składa deklarację gotowości od {{term:otwarcie}} do {{term:karty}} włącznie.
+
+4. [unit:terminarz-t75] Najpóźniej na {{days:karty}} dni przed pierwszym dniem zawodów ({{term:karty}}) SPWS udostępnia zawodnikom i ich trenerom projekty kart zawodników. Karta przedstawia wyniki przyjęte do oceny oraz podstawę proponowanej kolejności. Od {{term:karty}} do {{term:propozycja}} zawodnik może zgłaszać brakujące wyniki uzyskane nie później niż w {{term:otwarcie}} oraz błędy w swoich danych.
+
+5. [unit:terminarz-t60] Najpóźniej na {{days:propozycja}} dni przed pierwszym dniem zawodów ({{term:propozycja}}) SPWS przekazuje PZSz uszeregowaną propozycję kandydatów do reprezentacji Polski wraz z kartami, pisemnymi uzasadnieniami oraz propozycją obsadzenia każdej kategorii rozgrywanej w danych zawodach. Przed przekazaniem propozycji SPWS weryfikuje warunki uwzględnienia kandydatów i wprowadza zweryfikowane korekty danych.
+
+6. [unit:terminarz-druzyna-ms] Propozycja przekazywana w {{term:propozycja}} obejmuje kandydatów do reprezentacji na Mistrzostwa Świata. Ostateczny skład drużyny ustala się po zakończeniu rywalizacji indywidualnej podczas tych mistrzostw, na podstawie uzyskanych w niej wyników i zgodnie z zasadami doboru drużyny określonymi w Regulaminie.
+
+7. [unit:terminarz-spws] SPWS odpowiada za zebranie i weryfikację wyników, przygotowanie kart zawodników, uszeregowanie kandydatów wraz z pisemnymi uzasadnieniami, rozpatrzenie reklamacji danych oraz przekazanie propozycji PZSz w terminie {{term:propozycja}}.
+
+8. [unit:terminarz-pzsz] PZSz dokonuje wyboru i nominacji zawodników oraz zgłoszenia imiennego. W przypadku odstępstwa od kolejności zaproponowanej przez SPWS PZSz podaje pisemnie przyczynę odstępstwa.
+
+9. [unit:terminarz-reklamacje] Reklamacja danych dotyczy błędów faktycznych, w szczególności pominięcia wyniku, błędnej pisowni nazwiska albo przypisania wyniku niewłaściwemu zawodnikowi. Korekta danych nie oznacza dopuszczenia wyników uzyskanych po {{term:otwarcie}}. Zweryfikowaną korektę wprowadza się do karty przed przekazaniem propozycji PZSz w {{term:propozycja}}.
+
+10. [unit:terminarz-zastrzezenia] Po {{term:propozycja}} zawodnik może zgłosić zastrzeżenie do oceny lub uzasadnienia dotyczącego jego kandydatury. SPWS odpowiada pisemnie. Zgłoszenie zastrzeżenia nie wstrzymuje dalszego procesu powoływania.
+
+11. [unit:terminarz-jawnosc] Reklamacje, zastrzeżenia oraz odpowiedzi udostępnia się zainteresowanemu zawodnikowi i archiwizuje wraz z dokumentacją cyklu.
+
+12. [unit:terminarz-zrodla] SPWS wykorzystuje oficjalne wyniki i protokoły zawodów uwzględnianych w rankingu: PPW i MPW, zawodów PZSz, EVF oraz FIE. Każdy wynik ujęty w karcie zawodnika zawiera odnośnik do publicznego protokołu stanowiącego jego źródło.
+
+13. [unit:terminarz-archiwum] SPWS archiwizuje stan danych z {{term:otwarcie}}, późniejsze korekty wraz z ich uzasadnieniem oraz ostateczną wersję propozycji przekazaną PZSz. Dokumentacja obejmuje karty zawodników, deklaracje gotowości, uzasadnienia, reklamacje, zastrzeżenia i odpowiedzi oraz pozwala odtworzyć podstawę przekazanej propozycji. Dokumentację ostatecznego wyboru drużyny na Mistrzostwa Świata uzupełnia się po zakończeniu rywalizacji indywidualnej.
+
+
+{{table:timeline-process}}
+
+| Termin | Zdarzenie | Zakres |
+| --- | --- | --- |
+| {{term:otwarcie}} | Otwarcie procesu | Zamknięcie danych i otwarcie deklaracji |
+| {{term:karty}} | Karty zawodników | Koniec deklaracji; początek reklamacji |
+| {{term:propozycja}} | Propozycja do PZSz | Kandydaci, poprawione karty i uzasadnienia |
+| {{term:zawody}} | Początek zawodów | Na MŚ skład drużyny ustala się po rywalizacji indywidualnej |
+
+
+{{table:process}}
+
+| Termin | Zdarzenie | Zakres |
+| --- | --- | --- |
+| {{term:otwarcie}} | Otwarcie procesu | SPWS zamyka dane i wzywa do deklaracji. Późniejsze wyniki nie zmieniają kolejności kandydatów; wyjątek dotyczy wyboru drużyny na MŚ po rywalizacji indywidualnej. |
+| {{term:otwarcie}} → {{term:karty}} | Deklaracje | Zawodnik deklaruje gotowość do {{term:karty}} włącznie. |
+| {{term:karty}} → {{term:propozycja}} | Karty i reklamacje | Karty są udostępnione najpóźniej w {{term:karty}}. Zawodnik zgłasza błędy i brakujące wyniki sprzed zamknięcia danych. Zweryfikowane korekty wchodzą przed przekazaniem propozycji. |
+| {{term:propozycja}} | Propozycja do PZSz | SPWS przekazuje kolejność kandydatów, uzasadnienia i propozycję obsadzenia kategorii rozgrywanych w danych zawodach. |
+| Po {{term:propozycja}} | Zastrzeżenia do oceny | SPWS odpowiada pisemnie; zastrzeżenie nie wstrzymuje dalszego procesu. |
+
+
+{{table:responsibilities}}
+
+| Kto | Odpowiedzialność |
+| --- | --- |
+| SPWS | Wyniki, weryfikacja warunków, karty, kolejność kandydatów, uzasadnienia, reklamacje oraz propozycja do {{term:propozycja}}. |
+| PZSz | Wybór, nominacja i zgłoszenie imienne; pisemny powód odstępstwa od zaproponowanej kolejności. |
+| Zawodnik | Deklaracja od {{term:otwarcie}} do {{term:karty}} włącznie oraz zgłoszenie błędów w oknie reklamacji. |
+
+
+{{table:data-sources}}
+
+| Źródło | Dane | Dokumentowanie |
+| --- | --- | --- |
+| SPWS | Wyniki PPW i MPW oraz ranking krajowy | Odnośnik do protokołu źródłowego |
+| PZSz / organizator | Wyniki zawodów PZSz uwzględnianych w rankingu | Odnośnik do protokołu źródłowego |
+| EVF / organizator | Wyniki zawodów EVF | Odnośnik do protokołu źródłowego |
+| FIE / organizator | Wyniki indywidualne i protokoły drużynowe; np. publikowane w FencingTimeLive | Odnośnik do protokołu źródłowego |
 
 ## [chapter:ocena] Ocena regulaminu i doskonalenie metody
 <!-- scope: ewaluacja sezonowa i przygotowanie zmian -->
