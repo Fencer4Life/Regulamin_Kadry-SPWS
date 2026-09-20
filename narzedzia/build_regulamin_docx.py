@@ -692,6 +692,17 @@ def _normalize_cover_run_properties(document: Document) -> None:
         row.cells[1].paragraphs[0].runs[0].bold = None
 
 
+def _ensure_blank_paragraph_after_tables(document: Document) -> None:
+    for table in document.tables:
+        following = table._tbl.getnext()
+        if following is not None and following.tag == qn("w:p"):
+            text = "".join(element.text or "" for element in following.iter(qn("w:t")))
+            if not text:
+                continue
+        separator = document.add_paragraph(style="Normal")
+        table._tbl.addnext(separator._p)
+
+
 def build_document(source: Path, output: Path) -> Path:
     source = source.resolve()
     output = output.resolve()
@@ -713,6 +724,7 @@ def build_document(source: Path, output: Path) -> Path:
     if model.has_points_annex:
         _add_points_annex(document)
     _add_history(document, model)
+    _ensure_blank_paragraph_after_tables(document)
     for table in document.tables:
         _keep_table_together(table)
         _normalize_cell_margins_for_word(table)

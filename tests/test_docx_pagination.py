@@ -138,6 +138,17 @@ class PaginationTests(unittest.TestCase):
                             missing.append((table_index, row_index, cell_index, paragraph_index))
         self.assertEqual(missing, [], f"Brak keep-with-next w tabelach: {missing[:20]}")
 
+    def test_each_table_is_followed_by_an_empty_paragraph(self):
+        missing = []
+        for table_index, table in enumerate(self.document.tables, start=1):
+            following = table._tbl.getnext()
+            text = "" if following is None else "".join(
+                element.text or "" for element in following.iter(qn("w:t"))
+            )
+            if following is None or following.tag != qn("w:p") or text:
+                missing.append(table_index)
+        self.assertEqual(missing, [], f"Brak pustego akapitu po tabelach: {missing}")
+
     def test_annex_still_contains_every_score_from_4_to_40(self):
         annex_tables = [
             table

@@ -20,30 +20,14 @@ EXPECTED_SELECTION_RULES = [
     "według następujących zasad:",
     "1) spośród wszystkich wyników uzyskanych przez zawodnika w tych zawodach wybiera się "
     "trzy wyniki, za które zawodnik otrzymał najwyższą liczbę punktów rankingowych;",
-    "2) wyniki z Pucharu Polski Weteranów w Szermierce oraz Mistrzostw Polski Weteranów "
-    "w Szermierce porównuje się łącznie, wyłącznie na podstawie liczby uzyskanych punktów "
-    "rankingowych;",
-    "3) uwzględnienie wyniku z Mistrzostw Polski Weteranów w Szermierce nie jest obowiązkowe;",
-    "4) jeżeli zawodnik uzyskał mniej niż trzy wyniki w Pucharze Polski Weteranów w Szermierce "
+    "2) jeżeli zawodnik uzyskał mniej niż trzy wyniki w Pucharze Polski Weteranów w Szermierce "
     "lub Mistrzostwach Polski Weteranów w Szermierce, za każdą niewypełnioną obowiązkową "
     "pozycję krajową przyjmuje się zero punktów rankingowych.",
-    "5. Pięć pozycji otwartych wypełnia się pięcioma najwyżej punktowanymi wynikami zawodnika, "
-    "które nie zostały uwzględnione jako obowiązkowe pozycje krajowe. Przy wyborze wyników do "
-    "pozycji otwartych uwzględnia się:",
-    "1) pozostałe wyniki uzyskane w Pucharze Polski Weteranów w Szermierce oraz Mistrzostwach "
-    "Polski Weteranów w Szermierce;",
-    "2) wyniki uzyskane w Pucharach Polski Seniorów w Szermierce oraz Mistrzostwach Polski "
-    "Seniorów w Szermierce;",
-    "3) wyniki uzyskane w Pucharach Europy Weteranów w Szermierce oraz Mistrzostwach Europy "
-    "Weteranów w Szermierce;",
-    "4) wyniki uzyskane w Pucharach Świata Weteranów w Szermierce, jeżeli zawody tego cyklu "
-    "zostaną rozegrane, oraz Mistrzostwach Świata Weteranów w Szermierce.",
-    "6. Jeżeli po wybraniu trzech obowiązkowych pozycji krajowych zawodnik ma mniej niż pięć "
-    "pozostałych wyników podlegających uwzględnieniu w pozycjach otwartych, za każdą "
-    "niewypełnioną pozycję otwartą przyjmuje się zero punktów rankingowych.",
-    "7. Najpierw wybiera się wyniki wypełniające trzy obowiązkowe pozycje krajowe, a następnie "
+    "5. Na pięć pozycji otwartych składa się pięć najwyżej punktowanych spośród pozostałych "
+    "wyników zawodnika uwzględnianych w rankingu.",
+    "6. Najpierw wybiera się wyniki wypełniające trzy obowiązkowe pozycje krajowe, a następnie "
     "wyniki wypełniające pięć pozycji otwartych.",
-    "8. Żaden wynik nie może zostać policzony dwukrotnie.",
+    "7. Żaden wynik nie może zostać policzony dwukrotnie.",
 ]
 
 

@@ -84,21 +84,13 @@ prototype_note = "Dokument jest projektem. Fragmenty oznaczone jako brudnopis ze
 
 4. [unit:obowiazkowe-pozycje-krajowe] Trzy obowiązkowe pozycje krajowe wypełnia się wynikami uzyskanymi w zawodach Pucharu Polski Weteranów w Szermierce oraz Mistrzostwach Polski Weteranów w Szermierce, według następujących zasad:
    1) [unit:krajowe-trzy-najlepsze] spośród wszystkich wyników uzyskanych przez zawodnika w tych zawodach wybiera się trzy wyniki, za które zawodnik otrzymał najwyższą liczbę punktów rankingowych;
-   2) [unit:krajowe-porownanie-laczne] wyniki z Pucharu Polski Weteranów w Szermierce oraz Mistrzostw Polski Weteranów w Szermierce porównuje się łącznie, wyłącznie na podstawie liczby uzyskanych punktów rankingowych;
-   3) [unit:mpw-nieobowiazkowe] uwzględnienie wyniku z Mistrzostw Polski Weteranów w Szermierce nie jest obowiązkowe;
-   4) [unit:krajowe-brak-zero] jeżeli zawodnik uzyskał mniej niż trzy wyniki w Pucharze Polski Weteranów w Szermierce lub Mistrzostwach Polski Weteranów w Szermierce, za każdą niewypełnioną obowiązkową pozycję krajową przyjmuje się zero punktów rankingowych.
+   2) [unit:krajowe-brak-zero] jeżeli zawodnik uzyskał mniej niż trzy wyniki w Pucharze Polski Weteranów w Szermierce lub Mistrzostwach Polski Weteranów w Szermierce, za każdą niewypełnioną obowiązkową pozycję krajową przyjmuje się zero punktów rankingowych.
 
-5. [unit:pozycje-otwarte] Pięć pozycji otwartych wypełnia się pięcioma najwyżej punktowanymi wynikami zawodnika, które nie zostały uwzględnione jako obowiązkowe pozycje krajowe. Przy wyborze wyników do pozycji otwartych uwzględnia się:
-   1) [unit:otwarte-ppw-mpw] pozostałe wyniki uzyskane w Pucharze Polski Weteranów w Szermierce oraz Mistrzostwach Polski Weteranów w Szermierce;
-   2) [unit:otwarte-pps-mps] wyniki uzyskane w Pucharach Polski Seniorów w Szermierce oraz Mistrzostwach Polski Seniorów w Szermierce;
-   3) [unit:otwarte-pew-mew] wyniki uzyskane w Pucharach Europy Weteranów w Szermierce oraz Mistrzostwach Europy Weteranów w Szermierce;
-   4) [unit:otwarte-psw-msw] wyniki uzyskane w Pucharach Świata Weteranów w Szermierce, jeżeli zawody tego cyklu zostaną rozegrane, oraz Mistrzostwach Świata Weteranów w Szermierce.
+5. [unit:pozycje-otwarte] Na pięć pozycji otwartych składa się pięć najwyżej punktowanych spośród pozostałych wyników zawodnika uwzględnianych w rankingu.
 
-6. [unit:otwarte-brak-zero] Jeżeli po wybraniu trzech obowiązkowych pozycji krajowych zawodnik ma mniej niż pięć pozostałych wyników podlegających uwzględnieniu w pozycjach otwartych, za każdą niewypełnioną pozycję otwartą przyjmuje się zero punktów rankingowych.
+6. [unit:kolejnosc-wyboru-wynikow] Najpierw wybiera się wyniki wypełniające trzy obowiązkowe pozycje krajowe, a następnie wyniki wypełniające pięć pozycji otwartych.
 
-7. [unit:kolejnosc-wyboru-wynikow] Najpierw wybiera się wyniki wypełniające trzy obowiązkowe pozycje krajowe, a następnie wyniki wypełniające pięć pozycji otwartych.
-
-8. [unit:zakaz-podwojnego-liczenia] Żaden wynik nie może zostać policzony dwukrotnie.
+7. [unit:zakaz-podwojnego-liczenia] Żaden wynik nie może zostać policzony dwukrotnie.
 
 ### [section:punktacja] Zasady obliczania punktów
 

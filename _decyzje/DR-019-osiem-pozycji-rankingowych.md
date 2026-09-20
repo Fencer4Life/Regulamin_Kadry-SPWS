@@ -29,25 +29,25 @@ W sezonie odbywa się pięć zawodów zaliczanych do krajowego cyklu weteranów,
 
 ## Dyskusja
 
-Uzgodniono stałą strukturę ośmiu pozycji wynikowych. Najpierw wybiera się trzy najwyżej punktowane wyniki PPW i MPW. Następnie pięć najwyżej punktowanych wyników wybiera się z całej pozostałej puli. Brakujące pozycje otrzymują zero punktów, a ten sam wynik nie może być wykorzystany w obu pulach.
+Uzgodniono strukturę ośmiu pozycji wynikowych. Najpierw wybiera się trzy najwyżej punktowane wyniki PPW i MPW. Następnie nie więcej niż pięć najwyżej punktowanych wyników wybiera się z całej pozostałej puli. Brakujące obowiązkowe pozycje krajowe otrzymują zero punktów, a ten sam wynik nie może być wykorzystany w obu pulach.
 
 ## Rozważane warianty
 
 1. Pozostawienie wyłącznie limitu trzech wyników PPW i MPW.
 2. Uwzględnianie ośmiu najwyżej punktowanych wyników bez minimalnej liczby wyników krajowych.
-3. Trzy obowiązkowe pozycje krajowe oraz pięć pozycji otwartych, z zerami za brakujące wyniki.
+3. Trzy obowiązkowe pozycje krajowe oraz pięć pozycji otwartych, z zerami za brakujące wyniki krajowe.
 
 ## Decyzja
 
-Ranking obejmuje osiem pozycji wynikowych. Trzy obowiązkowe pozycje krajowe wypełniają trzy najwyżej punktowane wyniki uzyskane łącznie w PPW i MPW, bez obowiązku uwzględnienia wyniku z MPW. Pięć pozycji otwartych wypełniają najwyżej punktowane niewykorzystane wyniki z dodatkowych startów PPW lub MPW, zawodów seniorskich PZSz oraz zawodów weteranów EVF i FIE. Za każdą brakującą pozycję przyjmuje się zero punktów. Żaden wynik nie może zostać policzony dwukrotnie.
+Ranking obejmuje osiem pozycji wynikowych. Trzy obowiązkowe pozycje krajowe wypełniają trzy najwyżej punktowane wyniki uzyskane łącznie w PPW i MPW. Pięć pozycji otwartych wypełniają najwyżej punktowane niewykorzystane wyniki uwzględniane w rankingu. Za każdą brakującą obowiązkową pozycję krajową przyjmuje się zero punktów. Żaden wynik nie może zostać policzony dwukrotnie.
 
 ## Uzasadnienie
 
-Trzy obowiązkowe pozycje utrzymują znaczenie krajowego cyklu weteranów, a pięć pozycji otwartych pozwala zawodnikowi budować ranking zgodnie z własnym kalendarzem i poziomem sportowym. Wspólne porównywanie wyników PPW i MPW pozostawia wybór zawodnikowi. Stała liczba ośmiu pozycji i zera za braki zapewniają jednolity sposób obliczania rankingu.
+Trzy obowiązkowe pozycje utrzymują znaczenie krajowego cyklu weteranów, a pięć pozycji otwartych pozwala zawodnikowi budować ranking zgodnie z własnym kalendarzem i poziomem sportowym. Wspólne porównywanie wyników PPW i MPW pozostawia wybór zawodnikowi. Zera za brakujące wyniki krajowe zapewniają jednolite stosowanie wymaganego minimum trzech startów krajowych.
 
 ## Konsekwencje
 
-Algorytm rankingu musi najpierw zarezerwować trzy pozycje dla najlepszych wyników PPW i MPW, a dopiero potem wybrać pięć wyników z pozostałej puli. Dodatkowy wynik PPW lub MPW może konkurować o pozycję otwartą. Interfejs rankingu powinien pokazywać osiem pozycji, w tym zera za pozycje niewypełnione.
+Algorytm rankingu musi najpierw zarezerwować trzy pozycje dla najlepszych wyników PPW i MPW, a dopiero potem wybrać nie więcej niż pięć wyników z pozostałej puli. Dodatkowy wynik PPW lub MPW może konkurować o pozycję otwartą. Interfejs rankingu powinien pokazywać zera wyłącznie za niewypełnione obowiązkowe pozycje krajowe.
 
 ## Odrzucone alternatywy
 
