@@ -522,6 +522,28 @@ def _add_status_label(document: Document, status: str) -> None:
     label.paragraph_format.keep_with_next = True
 
 
+def _add_external_link(paragraph, url: str) -> None:
+    parsed = urlsplit(url)
+    if parsed.scheme != "https" or not parsed.netloc:
+        raise ValueError("Nieprawidłowy adres HTTPS materiału pomocniczego")
+    link = OxmlElement("w:hyperlink")
+    link.set(qn("r:id"), paragraph.part.relate_to(url, RT.HYPERLINK, is_external=True))
+    run = OxmlElement("w:r")
+    properties = OxmlElement("w:rPr")
+    style = OxmlElement("w:rStyle")
+    style.set(qn("w:val"), "Hyperlink")
+    properties.append(style)
+    size = OxmlElement("w:sz")
+    size.set(qn("w:val"), "18")
+    properties.append(size)
+    run.append(properties)
+    text = OxmlElement("w:t")
+    text.text = url
+    run.append(text)
+    link.append(run)
+    paragraph._p.append(link)
+
+
 def _add_resource_links(document: Document, model: RegulationDocument) -> None:
     if "resource_links_title" not in model.metadata:
         return
@@ -537,29 +559,11 @@ def _add_resource_links(document: Document, model: RegulationDocument) -> None:
         ("Kalkulator punktów", "resource_calculator_url"),
     )):
         url = model.metadata[key]
-        parsed = urlsplit(url)
-        if parsed.scheme != "https" or not parsed.netloc:
-            raise ValueError(f"Nieprawidłowy adres HTTPS materiału pomocniczego: {key}")
         paragraph = document.add_paragraph(style="Normal")
         paragraph.paragraph_format.keep_with_next = index < 2
         paragraph.paragraph_format.keep_together = True
         paragraph.add_run(label + ": ").bold = True
-        link = OxmlElement("w:hyperlink")
-        link.set(qn("r:id"), paragraph.part.relate_to(url, RT.HYPERLINK, is_external=True))
-        run = OxmlElement("w:r")
-        properties = OxmlElement("w:rPr")
-        style = OxmlElement("w:rStyle")
-        style.set(qn("w:val"), "Hyperlink")
-        properties.append(style)
-        size = OxmlElement("w:sz")
-        size.set(qn("w:val"), "18")
-        properties.append(size)
-        run.append(properties)
-        text = OxmlElement("w:t")
-        text.text = url
-        run.append(text)
-        link.append(run)
-        paragraph._p.append(link)
+        _add_external_link(paragraph, url)
 
 
 def _add_chapters(document: Document, model: RegulationDocument) -> None:
@@ -646,7 +650,7 @@ def _format_annex_cell(cell, text: str, *, header=False, first_column=False, alt
         run.font.color.rgb = RGBColor(255, 255, 255)
 
 
-def _add_points_annex(document: Document) -> None:
+def _add_points_annex(document: Document, model: RegulationDocument) -> None:
     document.add_page_break()
     label = document.add_paragraph("ZAŁĄCZNIK NR 1", style="Etykieta rozdzialu")
     label.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -704,6 +708,12 @@ def _add_points_annex(document: Document) -> None:
         "są publikowane przez SPWS na stronie internetowej."
     )
     note.paragraph_format.space_before = Pt(8)
+    if "resource_table_url" in model.metadata:
+        note.paragraph_format.keep_with_next = True
+        link = document.add_paragraph(style="Normal")
+        link.paragraph_format.keep_together = True
+        link.add_run("Pełna tabela punktacji — wersja nieoficjalna: ").bold = True
+        _add_external_link(link, model.metadata["resource_table_url"])
     document.add_page_break()
 
 
@@ -804,7 +814,7 @@ def build_document(source: Path, output: Path) -> Path:
     _add_outline(document, model)
     _add_chapters(document, model)
     if model.has_points_annex:
-        _add_points_annex(document)
+        _add_points_annex(document, model)
     _add_history(document, model)
     _ensure_blank_paragraph_after_tables(document)
     for table in document.tables:

@@ -6,6 +6,15 @@ from tests.test_docx_current_contract import CURRENT_DOCUMENT
 
 
 class DraftResourceLinksTests(unittest.TestCase):
+    def test_annex_has_clickable_unofficial_full_table_link(self):
+        document = Document(CURRENT_DOCUMENT)
+        texts = [p.text for p in document.paragraphs]
+        annex = document.paragraphs[texts.index("ZAŁĄCZNIK NR 1"):texts.index("Historia wersji")]
+        links = [document.part.rels[node.get(qn("r:id"))].target_ref
+                 for paragraph in annex for node in paragraph._p.xpath("w:hyperlink")]
+        self.assertEqual(links, ["https://fencer4life.github.io/spws-automated-ranklist/tabela-punktacji.html"])
+        self.assertTrue(any("wersja nieoficjalna" in p.text for p in annex))
+
     def test_cover_has_no_decorative_rule_above_title(self):
         document = Document(CURRENT_DOCUMENT)
         cover_text = "\n".join(p.text for p in document.paragraphs[:8])

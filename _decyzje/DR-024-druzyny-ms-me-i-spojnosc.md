@@ -71,6 +71,8 @@ Do uzupełnienia po sezonie 2026/2027.
 
 ## Historia zmian
 
+- 2026-09-20 — ten sam klikalny adres pełnej tabeli punktacji dodano także na końcu Załącznika nr 1, z oznaczeniem wersji nieoficjalnej. Oba miejsca korzystają z jednego adresu w Markdown.
+
 - 2026-09-20 — na polecenie Fencer4Life usunięto dekoracyjną kreskę nad tytułem na okładce; bez zmiany treści przepisów.
 
 - 2026-09-20 — na polecenie Fencer4Life dodano redakcyjną informację pomocniczą po § 7: trzy klikalne odnośniki do nieoficjalnego rankingu, tabeli punktacji i kalkulatora. Po uchwaleniu regulaminu adresy zostaną zastąpione właściwymi adresami w serwisie weteraniszermierki.pl. Nie zmieniono przepisów ani numeracji; informacja nie jest rozstrzygnięciem komisji. Adresy i objaśnienie zapisano w metadanych kanonicznego Markdown, a generator odtwarza je w DOCX.
