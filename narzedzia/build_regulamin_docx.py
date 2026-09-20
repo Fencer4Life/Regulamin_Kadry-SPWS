@@ -696,10 +696,6 @@ def _add_history(document: Document, model: RegulationDocument) -> None:
         run.font.name = "Aptos"
         run.font.size = Pt(9)
     _keep_table_together(table)
-    # A plain caption stays outside the TOC, including after Word refreshes it.
-    prototype_heading = document.add_paragraph(style="Normal")
-    prototype_heading.add_run("Informacja o prototypie").bold = True
-    document.add_paragraph(model.metadata["prototype_note"], style="Tekst roboczy")
 
 
 def _update_fields_on_open(document: Document) -> None:

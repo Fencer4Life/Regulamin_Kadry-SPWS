@@ -62,6 +62,6 @@ Każda decyzja wymagająca weryfikacji zawiera mierzalny plan oceny i termin prz
 
 ## Odpowiedzialność
 
-Komisja regulaminowa SPWS podejmuje decyzje i akceptuje ich dokumentację. Każda dyskusja ma własnego Koordynatora dyskusji, który porządkuje rozmowę i zapisuje jej uzgodniony wynik, ale nie rozstrzyga samodzielnie. Redaktor regulaminu przenosi przyjęte decyzje do dokumentu DOCX i czuwa nad spójnością jego treści. Publiczna dyskusja i recenzja nie zastępują decyzji komisji ani formalnego zatwierdzenia regulaminu przez właściwy organ PZSz.
+Komisja regulaminowa SPWS podejmuje decyzje i akceptuje ich dokumentację. Każda dyskusja ma własnego Koordynatora dyskusji, który porządkuje rozmowę i zapisuje jej uzgodniony wynik, ale nie rozstrzyga samodzielnie. Redaktor regulaminu przenosi przyjęte decyzje do dokumentu DOCX i czuwa nad spójnością jego treści. Publiczna dyskusja i recenzja nie zastępują decyzji komisji ani przyjęcia regulaminu uchwałą Zarządu SPWS.
 
 Szczegółową instrukcję dla członków komisji zawiera [publiczny przewodnik](przewodnik.html).

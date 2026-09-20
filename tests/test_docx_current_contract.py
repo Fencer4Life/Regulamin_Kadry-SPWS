@@ -64,9 +64,12 @@ class CurrentDocxContractTests(unittest.TestCase):
             if paragraph.style.name.lower().startswith("toc"):
                 self.assertNotIn("Informacja o prototypie", paragraph._p.xml)
             self.assertNotIn("Aktualizuj tabelę", paragraph.text)
-        note = next(p for p in self.document.paragraphs if p.text == "Informacja o prototypie")
-        self.assertEqual(note.style.name, "Normal")
-        self.assertFalse(note._p.xpath("w:pPr/w:outlineLvl"))
+        text = "\n".join(p.text for p in self.document.paragraphs)
+        self.assertNotIn("Informacja o prototypie", text)
+        self.assertNotIn("Przyjęcie treści podczas prac redakcyjnych", text)
+        self.assertIn("Regulamin przyjmuje Zarząd SPWS w drodze uchwały", text)
+        self.assertNotIn("właściwy organ PZSz", text)
+        self.assertIn("Zarząd SPWS", self.document.core_properties.comments)
 
     def test_age_definitions_and_european_reserve_are_explicit(self):
         texts = [p.text for p in self.document.paragraphs]
@@ -84,10 +87,10 @@ class CurrentDocxContractTests(unittest.TestCase):
         cls.contract = document_content_contract(CURRENT_DOCUMENT)
 
     def test_current_document_shape_is_frozen_before_generator_work(self):
-        self.assertEqual(len(self.document.paragraphs), 208)
+        self.assertEqual(len(self.document.paragraphs), 206)
         self.assertEqual(len(self.document.tables), 16)
         self.assertEqual(sum(len(table.rows) for table in self.document.tables), 146)
-        self.assertEqual(len(self.contract["blocks"]), 224)
+        self.assertEqual(len(self.contract["blocks"]), 222)
 
     def test_current_document_heading_order_is_explicit(self):
         headings = [

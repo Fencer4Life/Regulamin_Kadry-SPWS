@@ -43,19 +43,19 @@ Przyjęto wariant trzeci. MŚ: dwaj liderzy mają zapewnione miejsca, a trzech w
 
 Usunięto przesłanki 5 i 6 powołania uzupełniającego oraz dodatkowe zastrzeżenie o jednakowych wymaganiach komunikatu organizacyjnego. Przyjęto przepisy o zastępstwie indywidualnym i kategoriach drużynowych. Zachowano aktualne, już przyjęte rozdzielenie obecności w rankingu od warunków kwalifikacji reprezentacyjnej.
 
-Przyjęto obowiązkową ocenę posezonową przez Komisję Regulaminową SPWS, zapraszającą przedstawiciela PZSz i przedstawicieli podmiotów wskazanych przez PZSz, oraz publikację wniosków przed kolejnym sezonem. Wejście w życie następuje w terminie wskazanym w uchwale właściwego organu PZSz; zachowano wyłączenie Tbilisi 2026 i przewidziano publikację zatwierdzonego regulaminu z załącznikami.
+Przyjęto obowiązkową ocenę posezonową przez Komisję Regulaminową SPWS, zapraszającą przedstawiciela PZSz i przedstawicieli podmiotów wskazanych przez PZSz, oraz publikację wniosków przed kolejnym sezonem. Regulamin przyjmuje Zarząd SPWS w drodze uchwały, która określa termin wejścia w życie; zachowano wyłączenie Tbilisi 2026 i przewidziano publikację zatwierdzonego regulaminu z załącznikami. Akceptacja składów reprezentacji pozostaje kompetencją PZSz.
 
 ## Uzasadnienie
 
 Doprecyzowano § 12 ust. 3: na Drużynowe Mistrzostwa Europy powołuje się także zawodnika rezerwowego, wybieranego wyłącznie z puli kandydatów do drużyny. W § 13 zastosowano oznaczenia V1–V4. W § 2 dodano definicję tych kategorii: V1 40–49 lat, V2 50–59 lat, V3 60–69 lat, V4 70 lat i więcej, z wiekiem ustalanym na 31 grudnia roku mistrzostw. Źródło: [EVF Handbook of Regulations, lipiec 2026, pkt 1.1.1 i 3.1.1](https://www.veteransfencing.eu/wp-content/uploads/2026/07/EVF-Handbook-2026-V2.pdf).
 
-Ze spisu treści usunięto pozycję „Informacja o prototypie”, zachowując informację o statusie projektu poza spisem. Usunięto instrukcję ręcznej aktualizacji spisu w Wordzie; generator nadal ustawia automatyczną aktualizację pól przy otwieraniu dokumentu.
+Usunięto całą sekcję „Informacja o prototypie” wraz z jej treścią i pozycją w spisie treści. Usunięto instrukcję ręcznej aktualizacji spisu w Wordzie; generator nadal ustawia automatyczną aktualizację pól przy otwieraniu dokumentu.
 
 Na MŚ skład ustala się bezpośrednio przed startem z obecnych zawodników. Na ME wcześniejsza nominacja wymaga rezerwowego na wypadek rezygnacji. Spójne przepisy ogólne, tabele i harmonogram mają odzwierciedlać tę różnicę.
 
 ## Konsekwencje
 
-Zamknięte pule wyłączają powołania uzupełniające spoza nich na MŚ i ME. Wyniki indywidualne MŚ służą wyborowi trzech pozostałych zawodników, ale nie odbierają gwarancji liderom. Wszystkie jednostki kanonicznego dokumentu mają status accepted w projekcie; formalne zatwierdzenie PZSz pozostaje wymagane.
+Zamknięte pule wyłączają powołania uzupełniające spoza nich na MŚ i ME. Wyniki indywidualne MŚ służą wyborowi trzech pozostałych zawodników, ale nie odbierają gwarancji liderom. Wszystkie jednostki kanonicznego dokumentu mają status accepted w projekcie; przyjęcie regulaminu uchwałą Zarządu SPWS pozostaje wymagane.
 
 ## Odrzucone alternatywy
 
@@ -73,3 +73,4 @@ Do uzupełnienia po sezonie 2026/2027.
 
 - 2026-09-20 — doprecyzowanie MŚ i ME, przyjęcie pozostałych brudnopisów i aktualizacja PR #41.
 - 2026-09-20 — definicje V1–V4 według EVF, redakcja rezerwowego ME i uproszczenie spisu treści.
+- 2026-09-20 — usunięcie całej informacji o prototypie oraz wskazanie Zarządu SPWS jako organu przyjmującego regulamin; korekta § 19 i dokumentacji projektu.

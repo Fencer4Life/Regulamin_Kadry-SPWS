@@ -5,11 +5,10 @@ version = "0.2"
 status = "projekt do konsultacji"
 project_date = "2026-09-19"
 subject = "Projekt regulaminu w strukturze ZTP — sezon 2026/2027"
-comments = "Projekt do konsultacji. Treść przyjęta redakcyjnie; wymaga formalnego zatwierdzenia PZSz."
+comments = "Projekt do konsultacji. Treść przyjęta redakcyjnie; wymaga przyjęcia przez Zarząd SPWS."
 outline_intro = "Treść dokumentu podzielono następująco:"
 toc_note = ""
 history_scope = "Pełna struktura ZTP i jednorazowa migracja treści źródłowej"
-prototype_note = "Dokument jest projektem. Przyjęcie treści podczas prac redakcyjnych nie zastępuje formalnego zatwierdzenia przez właściwy organ PZSz."
 [milestones]
 otwarcie = 90
 karty = 75
@@ -296,7 +295,7 @@ zawody = 0
 
 ### [section:wejscie-w-zycie] Wejście w życie
 
-1. [unit:wejscie-w-zycie-zrodlo] Regulamin wchodzi w życie w terminie określonym w uchwale zatwierdzającej go przez właściwy organ PZSz.
+1. [unit:wejscie-w-zycie-zrodlo] Regulamin przyjmuje Zarząd SPWS w drodze uchwały. Regulamin wchodzi w życie w terminie określonym w tej uchwale.
 
 2. [unit:tbilisi-2026-zrodlo] Regulaminu nie stosuje się do Mistrzostw Świata Weteranów w Tbilisi w 2026 r.
 

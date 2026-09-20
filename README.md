@@ -9,9 +9,9 @@ Publiczne repozytorium prac nad **Regulaminem powoływania reprezentacji Polski 
 | Sezon | 2026/2027 |
 | Wersja dokumentu | 0.2 |
 | Status | projekt do konsultacji |
-| Stan treści | treść przyjęta redakcyjnie do projektu, bez pozostałych brudnopisów; wymaga formalnego zatwierdzenia PZSz |
+| Stan treści | treść przyjęta redakcyjnie do projektu, bez pozostałych brudnopisów; wymaga przyjęcia przez Zarząd SPWS |
 
-> **Ważne:** dokument znajdujący się w tym repozytorium jest projektem. Nie stanowi obowiązującego regulaminu do czasu jego formalnego zatwierdzenia przez właściwy organ Polskiego Związku Szermierczego.
+> **Ważne:** dokument znajdujący się w tym repozytorium jest projektem. Regulamin przyjmuje Zarząd SPWS w drodze uchwały, która określa termin wejścia w życie.
 
 ## Najważniejsze dokumenty
 
@@ -30,7 +30,9 @@ Publiczne repozytorium prac nad **Regulaminem powoływania reprezentacji Polski 
 
 **Stowarzyszenie Polskich Weteranów Szermierki (SPWS)** przygotowuje projekt, prowadzi konsultacje i dokumentuje decyzje podejmowane podczas prac.
 
-**Polski Związek Szermierczy (PZSz)** jest podmiotem, któremu projekt ma zostać przedstawiony do formalnego zatwierdzenia przez właściwy organ. Samo opublikowanie projektu przez SPWS ani połączenie zmian z gałęzią `main` nie oznacza zatwierdzenia regulaminu przez PZSz.
+**Zarząd SPWS** przyjmuje regulamin w drodze uchwały. Samo opublikowanie projektu ani połączenie zmian z gałęzią `main` nie oznacza przyjęcia regulaminu.
+
+**Polski Związek Szermierczy (PZSz)** akceptuje proponowane składy reprezentacji zgodnie z przepisami regulaminu; nie jest organem przyjmującym regulamin.
 
 ## Źródło aktualnej treści i automatyzacja
 
