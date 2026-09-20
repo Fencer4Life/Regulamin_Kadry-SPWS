@@ -9,6 +9,11 @@ comments = "Projekt do konsultacji. Treść przyjęta redakcyjnie; wymaga przyj�
 outline_intro = "Treść dokumentu podzielono następująco:"
 toc_note = ""
 history_scope = "Pełna struktura ZTP i jednorazowa migracja treści źródłowej"
+resource_links_title = "Materiały pomocnicze — wersja nieoficjalna"
+resource_links_note = "Regulamin nie został jeszcze uchwalony. Poniższe odnośniki prowadzą do nieoficjalnych wersji roboczych materiałów pomocniczych. Po uchwaleniu Regulaminu zostaną zastąpione odnośnikami do odpowiednich stron w oficjalnym serwisie SPWS: weteraniszermierki.pl."
+resource_ranking_url = "https://fencer4life.github.io/spws-automated-ranklist/"
+resource_table_url = "https://fencer4life.github.io/spws-automated-ranklist/tabela-punktacji.html"
+resource_calculator_url = "https://fencer4life.github.io/spws-automated-ranklist/kalkulator-punktow.html"
 [milestones]
 otwarcie = 90
 karty = 75
