@@ -22,6 +22,8 @@ Numeru DR nie otrzymują poprawki literowe, zmiany fleksyjne, techniczne ponowie
 
 Dyskusję zakończoną bez rozstrzygnięcia zamyka się jako `Porzucona` (`OUTDATED`) albo `Duplikat` (`DUPLICATE`). Nie tworzy się wtedy karty DR. Merytoryczne odrzucenie propozycji jest decyzją i otrzymuje kartę DR ze statusem `odrzucona`.
 
+Nadanie etykiety `PORZUCONA` albo `DUPLIKAT` automatycznie zamyka dyskusję z odpowiednim powodem i uruchamia Release. Po publikacji karta przechodzi z otwartych do zwijanego archiwum. Automat nie zmienia regulaminu ani nie tworzy karty DR. Nie łącz tych etykiet ze sobą ani z etykietami `rozstrzygnięta` lub `redakcja-bez-zmiany-sensu`. Etykiety istniejące przed wdrożeniem trzeba usunąć i nadać ponownie, aby uruchomić automat. Samo usunięcie etykiety nie otwiera dyskusji. Szczegóły i obsługa błędów: [ADR-002](dokumentacja/adr/ADR-002-zamykanie-etykieta.html).
+
 Numer raz nadany nie jest używany ponownie. Karta decyzji odrzuconej pozostaje w rejestrze.
 
 ## Statusy

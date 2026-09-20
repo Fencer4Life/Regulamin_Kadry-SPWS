@@ -1,0 +1,29 @@
+name: Zamknięcie dyskusji bez decyzji
+
+on:
+  discussion:
+    types: [labeled]
+
+permissions:
+  contents: read
+  discussions: write
+  actions: write
+
+concurrency:
+  group: close-discussion-${{ github.event.discussion.number }}
+  cancel-in-progress: false
+
+jobs:
+  close:
+    if: github.event.label.name == 'PORZUCONA' || github.event.label.name == 'DUPLIKAT'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Zamknięcie i odświeżenie strony
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m narzedzia.abandon_discussion "$GITHUB_EVENT_PATH"

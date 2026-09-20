@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ADR-002 — Zamykanie dyskusji etykietą</title>
+  <style>
+    :root{--bg:#e8ecf3;--surface:#fff;--ink:#101722;--muted:#445064;--line:#c7d0dc;--accent:#12467e}
+    @media(prefers-color-scheme:dark){:root{--bg:#121722;--surface:#1c2430;--ink:#eef4fb;--muted:#b6c0cf;--line:#3a4656;--accent:#8fc5f4}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.65 system-ui,sans-serif}main{max-width:980px;margin:auto;padding:52px 24px 92px}h1,h2{font-family:Georgia,serif;line-height:1.15}h1{font-size:clamp(38px,6vw,54px)}h2{margin-top:40px}.lead{font-size:22px;color:var(--muted)}.tag{font:700 13px ui-monospace,monospace;letter-spacing:.11em;color:var(--accent)}a{color:var(--accent)}.box{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:18px 22px;margin:22px 0}table{width:100%;border-collapse:collapse}th,td{padding:12px;border:1px solid var(--line);text-align:left}code{font-size:.9em}
+  </style>
+</head>
+<body><main>
+  <p class="tag">ADR-002 · PRZYJĘTA · 20.09.2026</p>
+  <h1>Zamykanie dyskusji etykietą</h1>
+  <p class="lead">Jedno nadanie etykiety kończy wątek bez decyzji regulaminowej i zleca odświeżenie strony.</p>
+  <h2>Problem i wybór</h2>
+  <p>Dyskusja #28 pozostawała na stronie wśród otwartych po zamknięciu na GitHubie, ponieważ publikacja przechowywała wcześniejszy stan. GitHub nie wymienia zdarzeń <code>closed</code> i <code>reopened</code> dla Discussions w <a href="https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#discussion">dokumentacji wyzwalaczy Actions</a>. Nie opieramy rozwiązania na tych zdarzeniach.</p>
+  <p>Wybrano obsługiwane zdarzenie nadania etykiety. Odrzucono częstszy harmonogram jako główne rozwiązanie: nie daje natychmiastowej reakcji i bywa opóźniany. Dotychczasowy harmonogram pozostaje zabezpieczeniem.</p>
+  <h2>Przyjęty mechanizm</h2>
+  <table><thead><tr><th>Nadana etykieta</th><th>Powód zamknięcia</th><th>Wynik</th></tr></thead><tbody>
+    <tr><td>PORZUCONA</td><td>OUTDATED</td><td>Zamknięcie bez rozstrzygnięcia komisji</td></tr>
+    <tr><td>DUPLIKAT</td><td>DUPLICATE</td><td>Zamknięcie powielonego wątku</td></tr>
+  </tbody></table>
+  <div class="box">Nadanie etykiety → odczyt aktualnego stanu → zamknięcie → jawne uruchomienie Release na main → karta w zwijanym archiwum.</div>
+  <p>Obsługa obejmuje dyskusje repozytorium. Publikacja na stronie nadal stosuje istniejący filtr kategorii. Karta znika z otwartych po zakończeniu Release, nie natychmiast po kliknięciu etykiety. Czas zależy od kolejki Actions i pamięci podręcznej Pages; brak gwarancji czasu. Przycisk odświeżania jedynie ponownie ładuje opublikowaną stronę.</p>
+  <h2>Granice i bezpieczeństwo</h2>
+  <ul>
+    <li>Brak zmian Markdown, DOCX i kart DR; brak komentarzy publikowanych w imieniu użytkownika.</li>
+    <li>Workflow ma tylko contents: read, discussions: write i actions: write. Nie ma uprawnień zapisu kodu ani tworzenia PR-ów.</li>
+    <li>Sprawdzamy aktualne etykiety, nie tylko historyczny payload. Usunięta etykieta oznacza pominięcie.</li>
+    <li>Sprzeczne etykiety (obie zamykające lub etykieta decyzji) oraz inny istniejący powód zamknięcia zatrzymują automat.</li>
+    <li>Ponowienie dla już zamkniętej dyskusji z właściwym powodem tylko uruchamia publikację. Błąd API lub publikacji jest widoczny w Actions.</li>
+    <li>Usunięcie etykiety nie otwiera dyskusji. Przy ręcznym otwarciu należy usunąć etykietę zamykającą i odświeżyć publikację. Ręczne zamknięcie bez nadania etykiety nadal korzysta z harmonogramu albo ręcznego Release.</li>
+    <li>Brak automatycznego przetwarzania starych etykiet przy wdrożeniu. Aby uruchomić nowy mechanizm dla takiego wątku, usuń i nadaj etykietę ponownie.</li>
+  </ul>
+  <h2>Plan wdrożenia i odbiór</h2>
+  <ol>
+    <li>Testy RED: oba powody zamknięcia, ponowienie, cofnięta etykieta, konflikty i błędy API.</li>
+    <li>Skrypt wywołujący GitHub CLI i workflow uruchamiany przez labeled; bez nowych zależności.</li>
+    <li>Pełne testy, CI i build strony; przegląd różnic potwierdza brak zmian regulaminu.</li>
+    <li>Po scaleniu na main nowo nadane etykiety uruchamiają automat. Nie zmieniamy istniejących dyskusji wyłącznie w celu testowania.</li>
+  </ol>
+  <p>Rozszerza <a href="ADR-001-archiwum-zamknietych-dyskusji.html">ADR-001</a>. Kod: <code>.github/workflows/abandon-discussion.yml</code>, <code>narzedzia/abandon_discussion.py</code>. Testy: <code>tests/test_abandon_discussion.py</code>.</p>
+</main></body>
+</html>

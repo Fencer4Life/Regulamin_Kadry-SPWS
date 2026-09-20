@@ -99,7 +99,8 @@ permalink: /przewodnik/
   <h2>Co dzieje się automatycznie</h2>
   <ul>
     <li>Strona dyskusji rozdziela <b>Otwarte dyskusje</b> od sekcji <b>Zamknięte dyskusje i decyzje</b>. Przyjęte sprawy prowadzą z archiwum bezpośrednio do opublikowanej karty DR.</li>
-    <li>Utworzenie, edycja oraz zmiana kategorii lub etykiety uruchamiają Release. Po jego zakończeniu lista ma nowe dane, ale cache GitHub Pages może przez kilka minut pokazywać starszą wersję. Wtedy wybierz <b>Odśwież dane</b> na stronie dyskusji.</li>
+    <li>Nadanie etykiety <b>PORZUCONA</b> albo <b>DUPLIKAT</b> automatycznie zamyka dyskusję bez karty DR i bez zmiany regulaminu, a następnie uruchamia Release. Po publikacji wątek trafia do zwijanego archiwum. Nie trzeba dodatkowo wybierać „Close discussion”. Nie łącz tych etykiet z etykietą przyjętej decyzji. <a href="{{ '/dokumentacja/adr/ADR-002-zamykanie-etykieta.html' | relative_url }}">Szczegóły i ponawianie po błędzie</a>.</li>
+    <li>Utworzenie, edycja oraz zmiana kategorii lub etykiety uruchamiają Release. Po jego zakończeniu lista ma nowe dane, ale cache GitHub Pages może przez kilka minut pokazywać starszą wersję. Wtedy wybierz <b>Odśwież dane</b> na stronie dyskusji. Ten przycisk przeładowuje stronę, nie uruchamia publikacji.</li>
     <li>Po scaleniu decyzji automat zamyka jej dyskusję, a następnie uruchamia Release jeszcze raz, aby przenieść wątek do archiwum dopiero po rzeczywistej zmianie stanu.</li>
     <li>Awaryjna synchronizacja działa <b>co 15 minut</b>. GitHub może uruchomić zadanie okresowe z opóźnieniem; harmonogram naprawia ewentualny rozjazd, ale nie jest podstawową drogą publikacji zamknięcia.</li>
     <li>Automatyzacja numeruje DR, zakłada draft PR, uruchamia testy i po scaleniu publikuje stronę. W szybkiej ścieżce dodaje do PR Markdown i wygenerowany DOCX; w obu ścieżkach CI udostępnia niezależny artefakt kandydata.</li>
