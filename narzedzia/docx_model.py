@@ -184,7 +184,7 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
         raise ValueError("Terminy muszą być nieujemnymi całkowitymi liczbami dni")
     required = {
         "title", "subtitle", "version", "status", "project_date", "subject",
-        "comments", "outline_intro", "toc_note", "history_scope", "prototype_note",
+        "comments", "outline_intro", "toc_note", "history_scope",
     }
     missing = sorted(required - metadata.keys())
     if missing:

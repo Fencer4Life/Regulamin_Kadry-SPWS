@@ -5,11 +5,10 @@ version = "0.2"
 status = "projekt do konsultacji"
 project_date = "2026-09-19"
 subject = "Projekt regulaminu w strukturze ZTP — sezon 2026/2027"
-comments = "Projekt do konsultacji. Treść przyjęta oraz jawnie oznaczony brudnopis ze źródła."
+comments = "Projekt do konsultacji. Treść przyjęta redakcyjnie; wymaga przyjęcia przez Zarząd SPWS."
 outline_intro = "Treść dokumentu podzielono następująco:"
-toc_note = "W Wordzie wybierz spis treści i polecenie „Aktualizuj tabelę”, jeżeli nie odświeży się automatycznie."
+toc_note = ""
 history_scope = "Pełna struktura ZTP i jednorazowa migracja treści źródłowej"
-prototype_note = "Dokument jest projektem. Fragmenty oznaczone jako brudnopis ze źródła nie są treścią przyjętą."
 [milestones]
 otwarcie = 90
 karty = 75
@@ -35,7 +34,12 @@ zawody = 0
    6) [unit:definicja-aktualizacja-krokowa] **aktualizacji krokowej** – należy przez to rozumieć sposób aktualizacji wyników zawodów organizowanych przez SPWS, PZSz lub FIE, zgodnie z którym punkty za zawody z poprzedniego sezonu pozostają w rankingu do czasu uwzględnienia punktów za odpowiadające im zawody w sezonie bieżącym, po czym poprzedni wynik przestaje być uwzględniany;
    7) [unit:definicja-wygaszanie-kalendarzowe] **wygaszaniu kalendarzowym** – należy przez to rozumieć sposób uwzględniania wyników zawodów organizowanych przez EVF, zgodnie z którym uzyskane punkty pozostają w rankingu przez okres właściwy dla danego rodzaju zawodów, liczony od dnia zakończenia zawodów, niezależnie od tego, czy zawody mają odpowiednik w kolejnym sezonie, a po upływie tego okresu przestają być uwzględniane;
    8) [unit:definicja-zawody-limitowane] **limitowanych zawodach międzynarodowych** – należy przez to rozumieć indywidualne lub drużynowe zawody międzynarodowe rangi mistrzowskiej, w których liczba zawodników reprezentujących dane państwo jest ograniczona przepisami organizatora zawodów;
-   9) [unit:definicja-powolanie-uzupelniajace] **powołaniu uzupełniającym** – należy przez to rozumieć wyjątkowe powołanie do startu drużynowego zawodnika nieposiadającego dodatniego dorobku punktowego, dokonywane wyłącznie w celu uzupełnienia braków uniemożliwiających wystawienie kompletnej i zgodnej z przepisami drużyny.
+   9) [unit:definicja-powolanie-uzupelniajace] **powołaniu uzupełniającym** – należy przez to rozumieć wyjątkowe powołanie do startu drużynowego zawodnika nieposiadającego dodatniego dorobku punktowego, dokonywane wyłącznie w celu uzupełnienia braków uniemożliwiających wystawienie kompletnej i zgodnej z przepisami drużyny;
+   10) [unit:definicja-kategorie-wiekowe] **kategoriach wiekowych V1–V4** – należy przez to rozumieć następujące kategorie wiekowe EVF, ustalane według wieku zawodnika na dzień 31 grudnia roku, w którym odbywają się mistrzostwa:
+      a) [unit:definicja-v1] V1 – od 40 do 49 lat,
+      b) [unit:definicja-v2] V2 – od 50 do 59 lat,
+      c) [unit:definicja-v3] V3 – od 60 do 69 lat,
+      d) [unit:definicja-v4] V4 – 70 lat i więcej.
 
 ### [section:cel] Cel i zasady wyłaniania reprezentacji
 
@@ -52,19 +56,17 @@ zawody = 0
 
 1. [unit:ranking-podstawa] Ranking indywidualny stanowi podstawę kwalifikowania zawodników do startów indywidualnych oraz wyłonienia puli kandydatów do składu drużyny.
 
-2. [unit:ranking-nie-automatyczny-druzyna] Miejsce w rankingu indywidualnym nie stanowi samoistnej podstawy powołania do składu drużyny. Skład drużyny ustala się zgodnie z zasadami określonymi w rozdziale 4.
+2. [unit:ranking-nie-automatyczny-druzyna] Ranking indywidualny wyznacza pulę kandydatów do drużyny oraz zapewnia miejsce w jej składzie najwyżej sklasyfikowanemu zawodnikowi z każdej z dwóch kategorii wiekowych objętych daną kategorią drużynową. Pozostałych zawodników drużyny, a w przypadku Drużynowych Mistrzostw Europy także zawodnika rezerwowego, wybiera zespół pełniący funkcję selekcjonera, na zasadach określonych w rozdziale 4.
 
-3. [unit:swoboda-wyboru-zawodow] Zawodnik samodzielnie decyduje, w których zawodach wymienionych w {{ref:zawody-rankingowe/katalog-zawodow}} bierze udział. Udział w określonych zawodach lub cyklu zawodów nie stanowi warunku powołania do reprezentacji.
+3. [unit:swoboda-wyboru-zawodow] Zawodnik samodzielnie wybiera zawody, w których bierze udział. Warunkiem uwzględnienia go w rankingu indywidualnym jest co najmniej jeden start w Pucharze Polski Weteranów w Szermierce albo Mistrzostwach Polski Weteranów w Szermierce.
 
 4. [unit:dodatni-dorobek] Z zastrzeżeniem {{ref:rola-rankingu/powolanie-uzupelniajace}}, do reprezentacji Polski na limitowane zawody międzynarodowe może zostać powołany wyłącznie zawodnik, który wystartował w co najmniej jednych zawodach uwzględnianych w rankingu indywidualnym i uzyskał w nim dorobek większy niż zero punktów.
 
-5. [unit:powolanie-uzupelniajace] W przypadku gdy nie jest możliwe skompletowanie drużyny z zawodników posiadających dodatni dorobek punktowy, dopuszcza się powołanie uzupełniające zawodnika bez punktów rankingowych, jeżeli łącznie:
+5. [unit:powolanie-uzupelniajace] W zawodach innych niż Drużynowe Mistrzostwa Świata i Drużynowe Mistrzostwa Europy, w przypadku gdy nie jest możliwe skompletowanie drużyny z zawodników posiadających dodatni dorobek punktowy, dopuszcza się powołanie uzupełniające zawodnika bez punktów rankingowych, jeżeli łącznie:
    1) [unit:uzupelnienie-niezbedne] powołanie jest niezbędne do wystawienia kompletnej drużyny zgodnej z przepisami zawodów;
    2) [unit:uzupelnienie-oferta] możliwość startu zaoferowano wszystkim dostępnym zawodnikom posiadającym dodatni dorobek punktowy, spełniającym wymagania dotyczące broni, płci i kategorii wiekowej;
    3) [unit:uzupelnienie-brak-gotowosci] żaden z zawodników, o których mowa w {{ref:rola-rankingu/uzupelnienie-oferta}}, nie potwierdził gotowości do udziału;
-   4) [unit:uzupelnienie-warunki-formalne] powoływana osoba spełnia wszystkie formalne warunki udziału określone przez organizatora zawodów;
-   5) [unit:uzupelnienie-brak-wyparcia] powołanie nie pozbawia miejsca zawodnika posiadającego dodatni dorobek punktowy i gotowego do udziału;
-   6) [unit:uzupelnienie-uzasadnienie] przyczyny powołania zostaną wskazane w pisemnym uzasadnieniu nominacji.
+   4) [unit:uzupelnienie-warunki-formalne] powoływana osoba spełnia wszystkie formalne warunki udziału określone przez organizatora zawodów.
 
 ### [section:zawody-rankingowe] Zawody uwzględniane w rankingu
 
@@ -77,7 +79,7 @@ zawody = 0
 2. [unit:zewnetrzny-organizator] Zawody organizowane przez podmiot inny niż SPWS mogą zostać zaliczone do cyklu Pucharu Polski Weteranów w Szermierce, jeżeli łącznie spełniają następujące warunki:
    1) [unit:warunek-zatwierdzenie] przed ich rozegraniem zostały zatwierdzone przez SPWS i ujęte w opublikowanym kalendarzu cyklu;
    2) [unit:warunek-komunikat] komunikat organizacyjny zawodów został opublikowany w ogólnodostępnym serwisie internetowym, bez konieczności logowania, najpóźniej 30 dni przed pierwszym dniem zawodów;
-   3) [unit:warunek-otwartosc] prawo zgłoszenia do udziału przysługuje wszystkim zawodnikom spełniającym kryterium wieku właściwe dla weteranów szermierki, niezależnie od obywatelstwa, miejsca zamieszkania, przynależności klubowej oraz państwa, w którym uprawiają szermierkę, pod warunkiem spełnienia jednakowych dla wszystkich uczestników wymagań określonych w komunikacie organizacyjnym;
+   3) [unit:warunek-otwartosc] prawo zgłoszenia do udziału przysługuje wszystkim zawodnikom spełniającym kryterium wieku właściwe dla weteranów szermierki, niezależnie od obywatelstwa, miejsca zamieszkania, przynależności klubowej oraz państwa, w którym uprawiają szermierkę;
    4) [unit:warunek-formula] zawody są rozgrywane według formuły sportowej zgodnej z regulaminami lub przepisami zawodów stosowanymi przez SPWS, PZSz, EVF albo FIE, przy czym właściwa formuła musi zostać wskazana w komunikacie organizacyjnym;
    5) [unit:warunek-kategorie] zawody są rozgrywane w kategoriach wieku, broni i płci określonych w komunikacie organizacyjnym i zgodnych z wybraną formułą sportową;
    6) [unit:warunek-protokoly] po zakończeniu zawodów organizator publikuje w serwisie internetowym kompletne protokoły wszystkich rozegranych walk, obejmujące fazę grupową oraz eliminację bezpośrednią, wraz z klasyfikacją końcową i liczbą uczestników, zapewniając publiczny i nieodpłatny dostęp do tych materiałów;
@@ -146,44 +148,58 @@ zawody = 0
 
 ### [section:rezygnacja-indywidualna] Rezygnacja i zastępstwo
 
-[unit:rezygnacja-indywidualna-zrodlo] [status:source-draft] W przypadku rezygnacji zawodnika z udziału w zawodach indywidualnych jego miejsce przechodzi na kolejnego zawodnika zgodnie z aktualnym rankingiem indywidualnym.
+[unit:rezygnacja-indywidualna-zrodlo] W przypadku rezygnacji zawodnika z udziału w zawodach indywidualnych jego miejsce przechodzi na kolejnego zawodnika zgodnie z aktualnym rankingiem indywidualnym.
 
 ## [chapter:druzyna] Dobór składu drużyny
 <!-- scope: pula kandydatów, wymogi kategorii i procedury wyboru -->
 
 ### [section:pula-druzyny] Pula kandydatów do drużyny
 
-[unit:pula-druzyny-ranking] Ranking indywidualny wyznacza pulę kandydatów do składu drużyny, lecz miejsce w rankingu nie stanowi samoistnej podstawy powołania do składu drużyny.
+1. [unit:pula-druzyny-ranking] Ranking indywidualny weteranów przyjęty dla danego cyklu powołań wyznacza pulę kandydatów do drużyny właściwą dla danej broni, płci i kategorii drużynowej. Na Mistrzostwa Świata pula obejmuje po czterech zawodników z każdej z dwóch kategorii wiekowych, a na Mistrzostwa Europy — po sześciu.
+
+2. [unit:pula-druzyny-zastepstwo] W przypadku rezygnacji zawodnika z udziału w puli kandydatów jego miejsce zajmuje kolejny zawodnik w rankingu indywidualnym jego kategorii wiekowej.
+
+3. [unit:pula-druzyny-zamknieta] Na Drużynowe Mistrzostwa Europy powołuje się także zawodnika rezerwowego, wybieranego wyłącznie spośród zawodników należących do puli kandydatów do drużyny.
 
 ### [section:kategorie-druzynowe] Kategorie wiekowe w drużynie
 
-[unit:kategorie-druzynowe-zrodlo] [status:source-draft] W rozgrywkach drużynowych zawody są rozgrywane w kategoriach Weteran, obejmującej kategorie 1 i 2, oraz Grand Weteran, obejmującej kategorie 3 i 4. Drużynę kompletuje się z udziałem zawodników obu właściwych kategorii wiekowych; co najmniej jeden zawodnik powinien należeć do kategorii wyższej, a preferowany jest udział dwóch takich zawodników.
-
-### [section:druzynowe-mistrzostwa-europy] Drużynowe Mistrzostwa Europy
-
-1. [unit:dme-pula-zrodlo] [status:source-draft] Przy ustalaniu składu reprezentacji uwzględnia się czterech najwyżej sklasyfikowanych zawodników z młodszej kategorii wiekowej i czterech najwyżej sklasyfikowanych zawodników ze starszej kategorii wiekowej. W przypadku rezygnacji zawodnika jego miejsce zajmuje kolejny zawodnik w jego kategorii wiekowej.
-
-2. [unit:dme-wybor-zrodlo] [status:source-draft] Ostateczny skład drużyny ustalają wspólnie najwyżej sklasyfikowany zawodnik młodszej kategorii wiekowej oraz najwyżej sklasyfikowany zawodnik starszej kategorii wiekowej. Dwóch zawodników wybiera się spośród pozostałych osób z puli na podstawie analizy osiągnięć w startach indywidualnych i drużynowych. Piąty zawodnik albo rezerwowy może zostać wybrany spoza tej puli.
-
-3. [unit:dme-brak-porozumienia-zrodlo] [status:source-draft] W przypadku braku porozumienia decyzję podejmuje Zarząd SPWS.
-
-4. [unit:dme-akceptacja-zrodlo] [status:source-draft] Skompletowaną drużynę przedstawia się Zarządowi PZSz do akceptacji.
+[unit:kategorie-druzynowe-zrodlo] Zawody drużynowe rozgrywane są w kategoriach Weteran, obejmującej kategorie V1 i V2, oraz Grand Weteran, obejmującej kategorie V3 i V4. Drużynę kompletuje się z udziałem zawodników obu właściwych kategorii wiekowych; co najmniej jeden zawodnik powinien należeć do kategorii wyższej, a preferowany jest udział dwóch takich zawodników.
 
 ### [section:druzynowe-mistrzostwa-swiata] Drużynowe Mistrzostwa Świata
 
-1. [unit:dms-termin-zrodlo] [status:source-draft] Skład reprezentacji ustala się po zakończeniu rywalizacji indywidualnej podczas Mistrzostw Świata.
+1. [unit:dms-pula] Pulę kandydatów do drużyny tworzy ośmiu zawodników nominowanych do startu indywidualnego: po czterech zawodników z każdej z dwóch kategorii wiekowych objętych daną kategorią drużynową. Podstawą wyłonienia puli jest ranking indywidualny weteranów przyjęty dla danego cyklu powołań.
 
-2. [unit:dms-podstawa-zrodlo] [status:source-draft] Podstawą wyłonienia składu drużyny są wyniki uzyskane przez zawodników w turnieju indywidualnym Mistrzostw Świata.
+2. [unit:dms-liderzy] Najwyżej sklasyfikowany w tym rankingu zawodnik młodszej kategorii wiekowej oraz najwyżej sklasyfikowany zawodnik starszej kategorii wiekowej spośród zawodników należących do puli mają zapewnione miejsca w drużynie. Wyniki turnieju indywidualnego Mistrzostw Świata nie zmieniają tego uprawnienia.
 
-3. [unit:dms-czterech-zrodlo] [status:source-draft] Do składu drużyny kwalifikuje się spośród uczestników Indywidualnych Mistrzostw Świata:
-   1) [unit:dms-dwoch-mlodszych-zrodlo] [status:source-draft] dwóch najwyżej sklasyfikowanych zawodników z młodszej kategorii wiekowej;
-   2) [unit:dms-dwoch-starszych-zrodlo] [status:source-draft] dwóch najwyżej sklasyfikowanych zawodników ze starszej kategorii wiekowej.
+3. [unit:dms-selekcjoner] Funkcję selekcjonera drużyny pełni zespół złożony z tych dwóch zawodników.
 
-4. [unit:dms-piaty-zrodlo] [status:source-draft] Piątego zawodnika drużyny wskazują wspólnie czterej zawodnicy zakwalifikowani zgodnie z {{ref:druzynowe-mistrzostwa-swiata/dms-czterech-zrodlo}} spośród pozostałych uczestników Indywidualnych Mistrzostw Świata.
+4. [unit:dms-termin-zrodlo] Pełny skład pięcioosobowej drużyny ustala się na miejscu podczas Mistrzostw Świata, po zakończeniu turnieju indywidualnego, w dniu poprzedzającym turniej drużynowy. Zespół pełniący funkcję selekcjonera wybiera trzech zawodników spośród pozostałych sześciu zawodników z puli, obecnych na mistrzostwach. Nie wyznacza się zawodnika rezerwowego. Trzej niewybrani zawodnicy nie uczestniczą w turnieju drużynowym.
+
+5. [unit:dms-kryteria] Zespół ustala skład w drodze porozumienia, kierując się celem wystawienia możliwie najsilniejszej drużyny. Przy wyborze uwzględnia wyniki turnieju indywidualnego Mistrzostw Świata, osiągnięcia kandydatów w startach indywidualnych i drużynowych oraz wymagania dotyczące kategorii wiekowych.
+
+6. [unit:dms-spor] W przypadku braku porozumienia do zespołu pełniącego funkcję selekcjonera dołącza Prezes SPWS. Jeżeli Prezes SPWS nie może uczestniczyć w pracach zespołu, wyznacza inną osobę do udziału w tych pracach w swoim imieniu.
+
+7. [unit:dms-akceptacja] Proponowany skład pięcioosobowej drużyny przedstawia się PZSz do akceptacji.
+
+### [section:druzynowe-mistrzostwa-europy] Drużynowe Mistrzostwa Europy
+
+1. [unit:dme-pula] Pulę kandydatów do drużyny tworzy dwunastu zawodników: sześciu najwyżej sklasyfikowanych zawodników młodszej kategorii wiekowej oraz sześciu najwyżej sklasyfikowanych zawodników starszej kategorii wiekowej w rankingu indywidualnym weteranów właściwym dla danej broni i płci, przyjętym dla danego cyklu powołań.
+
+2. [unit:dme-liderzy] Najwyżej sklasyfikowani zawodnicy młodszej i starszej kategorii wiekowej spośród zawodników należących do puli kandydatów mają zapewnione miejsca w składzie drużyny — po jednym zawodniku z każdej kategorii. Funkcję selekcjonera drużyny pełni zespół złożony z tych dwóch zawodników.
+
+3. [unit:dme-pozostaly-sklad] Zespół wybiera trzech kolejnych zawodników do składu drużyny oraz jednego zawodnika rezerwowego wyłącznie spośród pozostałych dziesięciu zawodników z puli kandydatów.
+
+4. [unit:dme-porozumienie] Zespół ustala skład w drodze porozumienia, kierując się celem wystawienia możliwie najsilniejszej drużyny, osiągnięciami kandydatów w startach indywidualnych i drużynowych oraz wymaganiami dotyczącymi kategorii wiekowych. Miejsce w rankingu indywidualnym nie przesądza o wyborze pozostałych zawodników do drużyny.
+
+5. [unit:dme-brak-porozumienia-zrodlo] W przypadku braku porozumienia do zespołu pełniącego funkcję selekcjonera dołącza Prezes SPWS. Jeżeli Prezes SPWS nie może uczestniczyć w pracach zespołu, wyznacza inną osobę do udziału w tych pracach w swoim imieniu.
+
+6. [unit:dme-akceptacja-zrodlo] Proponowany skład pięcioosobowej drużyny wraz ze wskazaniem zawodnika rezerwowego przedstawia się PZSz do akceptacji.
+
+7. [unit:dme-rezerwowy] W przypadku rezygnacji zawodnika z udziału w turnieju drużynowym jego miejsce zajmuje nominowany zawodnik rezerwowy, pod warunkiem zachowania wymagań dotyczących kategorii wiekowych drużyny.
 
 ### [section:powolanie-uzupelniajace-druzyna] Powołanie uzupełniające
 
-[unit:powolanie-uzupelniajace-odeslanie] Powołanie uzupełniające zawodnika bez dodatniego dorobku punktowego jest dopuszczalne wyłącznie na warunkach określonych w {{ref:rola-rankingu/powolanie-uzupelniajace}}.
+[unit:powolanie-uzupelniajace-odeslanie] Powołanie uzupełniające zawodnika bez dodatniego dorobku punktowego jest dopuszczalne wyłącznie na warunkach określonych w {{ref:rola-rankingu/powolanie-uzupelniajace}}. Powołania uzupełniającego nie stosuje się do Drużynowych Mistrzostw Świata ani Drużynowych Mistrzostw Europy; skład wybiera się wyłącznie z właściwej puli kandydatów.
 
 ## [chapter:terminarz] Terminarz procesu powoływania
 <!-- scope: terminy, deklaracje, odpowiedzialność, korekty danych i dokumentacja powołań -->
@@ -200,21 +216,23 @@ zawody = 0
 
 5. [unit:terminarz-t60] Najpóźniej na {{days:propozycja}} dni przed pierwszym dniem zawodów ({{term:propozycja}}) SPWS przekazuje PZSz uszeregowaną propozycję kandydatów do reprezentacji Polski wraz z kartami, pisemnymi uzasadnieniami oraz propozycją obsadzenia każdej kategorii rozgrywanej w danych zawodach. Przed przekazaniem propozycji SPWS weryfikuje warunki uwzględnienia kandydatów i wprowadza zweryfikowane korekty danych.
 
-6. [unit:terminarz-druzyna-ms] Propozycja przekazywana w {{term:propozycja}} obejmuje kandydatów do reprezentacji na Mistrzostwa Świata. Ostateczny skład drużyny ustala się po zakończeniu rywalizacji indywidualnej podczas tych mistrzostw, na podstawie uzyskanych w niej wyników i zgodnie z zasadami doboru drużyny określonymi w Regulaminie.
+6. [unit:terminarz-druzyna-ms] Propozycja przekazywana PZSz w terminie {{term:propozycja}} wskazuje ośmioosobową pulę kandydatów do drużyny na Mistrzostwa Świata oraz dwóch zawodników mających zapewnione miejsca w jej składzie. Pozostałych trzech zawodników wybiera się na miejscu podczas mistrzostw, po zakończeniu turnieju indywidualnego, w dniu poprzedzającym turniej drużynowy. Nie wyznacza się zawodnika rezerwowego.
 
-7. [unit:terminarz-spws] SPWS odpowiada za zebranie i weryfikację wyników, przygotowanie kart zawodników, uszeregowanie kandydatów wraz z pisemnymi uzasadnieniami, rozpatrzenie reklamacji danych oraz przekazanie propozycji PZSz w terminie {{term:propozycja}}.
+7. [unit:terminarz-druzyna-me] Propozycja przekazywana PZSz w terminie {{term:propozycja}} na Drużynowe Mistrzostwa Europy obejmuje skład pięcioosobowej drużyny wraz ze wskazaniem zawodnika rezerwowego.
 
-8. [unit:terminarz-pzsz] PZSz dokonuje wyboru i nominacji zawodników oraz zgłoszenia imiennego. W przypadku odstępstwa od kolejności zaproponowanej przez SPWS PZSz podaje pisemnie przyczynę odstępstwa.
+8. [unit:terminarz-spws] SPWS odpowiada za zebranie i weryfikację wyników, przygotowanie kart zawodników, uszeregowanie kandydatów wraz z pisemnymi uzasadnieniami, rozpatrzenie reklamacji danych oraz przekazanie propozycji PZSz w terminie {{term:propozycja}}.
 
-9. [unit:terminarz-reklamacje] Reklamacja danych dotyczy błędów faktycznych, w szczególności pominięcia wyniku, błędnej pisowni nazwiska albo przypisania wyniku niewłaściwemu zawodnikowi. Korekta danych nie oznacza dopuszczenia wyników uzyskanych po {{term:otwarcie}}. Zweryfikowaną korektę wprowadza się do karty przed przekazaniem propozycji PZSz w {{term:propozycja}}.
+9. [unit:terminarz-pzsz] PZSz dokonuje wyboru i nominacji zawodników oraz zgłoszenia imiennego. W przypadku odstępstwa od kolejności zaproponowanej przez SPWS PZSz podaje pisemnie przyczynę odstępstwa.
 
-10. [unit:terminarz-zastrzezenia] Po {{term:propozycja}} zawodnik może zgłosić zastrzeżenie do oceny lub uzasadnienia dotyczącego jego kandydatury. SPWS odpowiada pisemnie. Zgłoszenie zastrzeżenia nie wstrzymuje dalszego procesu powoływania.
+10. [unit:terminarz-reklamacje] Reklamacja danych dotyczy błędów faktycznych, w szczególności pominięcia wyniku, błędnej pisowni nazwiska albo przypisania wyniku niewłaściwemu zawodnikowi. Korekta danych nie oznacza dopuszczenia wyników uzyskanych po {{term:otwarcie}}. Zweryfikowaną korektę wprowadza się do karty przed przekazaniem propozycji PZSz w {{term:propozycja}}.
 
-11. [unit:terminarz-jawnosc] Reklamacje, zastrzeżenia oraz odpowiedzi udostępnia się zainteresowanemu zawodnikowi i archiwizuje wraz z dokumentacją cyklu.
+11. [unit:terminarz-zastrzezenia] Po {{term:propozycja}} zawodnik może zgłosić zastrzeżenie do oceny lub uzasadnienia dotyczącego jego kandydatury. SPWS odpowiada pisemnie. Zgłoszenie zastrzeżenia nie wstrzymuje dalszego procesu powoływania.
 
-12. [unit:terminarz-zrodla] SPWS wykorzystuje oficjalne wyniki i protokoły zawodów uwzględnianych w rankingu: PPW i MPW, zawodów PZSz, EVF oraz FIE. Każdy wynik ujęty w karcie zawodnika zawiera odnośnik do publicznego protokołu stanowiącego jego źródło.
+12. [unit:terminarz-jawnosc] Reklamacje, zastrzeżenia oraz odpowiedzi udostępnia się zainteresowanemu zawodnikowi i archiwizuje wraz z dokumentacją cyklu.
 
-13. [unit:terminarz-archiwum] SPWS archiwizuje stan danych z {{term:otwarcie}}, późniejsze korekty wraz z ich uzasadnieniem oraz ostateczną wersję propozycji przekazaną PZSz. Dokumentacja obejmuje karty zawodników, deklaracje gotowości, uzasadnienia, reklamacje, zastrzeżenia i odpowiedzi oraz pozwala odtworzyć podstawę przekazanej propozycji. Dokumentację ostatecznego wyboru drużyny na Mistrzostwa Świata uzupełnia się po zakończeniu rywalizacji indywidualnej.
+13. [unit:terminarz-zrodla] SPWS wykorzystuje oficjalne wyniki i protokoły zawodów uwzględnianych w rankingu: PPW i MPW, zawodów PZSz, EVF oraz FIE. Każdy wynik ujęty w karcie zawodnika zawiera odnośnik do publicznego protokołu stanowiącego jego źródło.
+
+14. [unit:terminarz-archiwum] SPWS archiwizuje stan danych z {{term:otwarcie}}, późniejsze korekty wraz z ich uzasadnieniem oraz ostateczną wersję propozycji przekazaną PZSz. Dokumentacja obejmuje karty zawodników, deklaracje gotowości, uzasadnienia, reklamacje, zastrzeżenia i odpowiedzi oraz pozwala odtworzyć podstawę przekazanej propozycji. Dokumentację ostatecznego wyboru drużyny na Mistrzostwa Świata uzupełnia się po zakończeniu rywalizacji indywidualnej.
 
 
 {{table:timeline-process}}
@@ -223,8 +241,8 @@ zawody = 0
 | --- | --- | --- |
 | {{term:otwarcie}} | Otwarcie procesu | Zamknięcie danych i otwarcie deklaracji |
 | {{term:karty}} | Karty zawodników | Koniec deklaracji; początek reklamacji |
-| {{term:propozycja}} | Propozycja do PZSz | Kandydaci, poprawione karty i uzasadnienia |
-| {{term:zawody}} | Początek zawodów | Na MŚ skład drużyny ustala się po rywalizacji indywidualnej |
+| {{term:propozycja}} | Propozycja do PZSz | MŚ: pula 8 i dwóch liderów. ME: drużyna 5 i rezerwowy. Karty i uzasadnienia. |
+| {{term:zawody}} | Początek zawodów | MŚ: po turnieju indywidualnym, dzień przed drużynowym — pełna piątka, bez rezerwowego. |
 
 
 {{table:process}}
@@ -234,7 +252,8 @@ zawody = 0
 | {{term:otwarcie}} | Otwarcie procesu | SPWS zamyka dane i wzywa do deklaracji. Późniejsze wyniki nie zmieniają kolejności kandydatów; wyjątek dotyczy wyboru drużyny na MŚ po rywalizacji indywidualnej. |
 | {{term:otwarcie}} → {{term:karty}} | Deklaracje | Zawodnik deklaruje gotowość do {{term:karty}} włącznie. |
 | {{term:karty}} → {{term:propozycja}} | Karty i reklamacje | Karty są udostępnione najpóźniej w {{term:karty}}. Zawodnik zgłasza błędy i brakujące wyniki sprzed zamknięcia danych. Zweryfikowane korekty wchodzą przed przekazaniem propozycji. |
-| {{term:propozycja}} | Propozycja do PZSz | SPWS przekazuje kolejność kandydatów, uzasadnienia i propozycję obsadzenia kategorii rozgrywanych w danych zawodach. |
+| {{term:propozycja}} | Propozycja do PZSz | MŚ: pula ośmiu kandydatów i dwóch liderów z zapewnionymi miejscami. ME: proponowana piątka i rezerwowy. Karty oraz uzasadnienia do PZSz. |
+| Dzień przed turniejem drużynowym MŚ, po turnieju indywidualnym | Pełny skład MŚ | Wybór trzech zawodników z pozostałej szóstki obecnej na mistrzostwach. Drużyna pięcioosobowa, bez rezerwowego; trzej niewybrani nie uczestniczą w turnieju drużynowym. |
 | Po {{term:propozycja}} | Zastrzeżenia do oceny | SPWS odpowiada pisemnie; zastrzeżenie nie wstrzymuje dalszego procesu. |
 
 
@@ -259,21 +278,27 @@ zawody = 0
 ## [chapter:ocena] Ocena regulaminu i doskonalenie metody
 <!-- scope: ewaluacja sezonowa i przygotowanie zmian -->
 
-### [section:zasady-oceny] Ocena posezonowa
+### [section:zasady-oceny] Posezonowa ocena działania regulaminu
 
-1. [unit:ocena-obowiazek] Po zakończeniu każdego sezonu przeprowadza się ocenę działania Regulaminu.
+1. [unit:ocena-obowiazek] Po zakończeniu każdego sezonu obowiązkowo przeprowadza się ocenę działania Regulaminu.
 
-2. [unit:ocena-zakres] Ocena obejmuje w szczególności terminowość procesu, spory interpretacyjne, zastosowane wyjątki, braki danych oraz zgodność nominacji z celem Regulaminu.
+2. [unit:ocena-komisja] Ocenę przeprowadza Komisja Regulaminowa SPWS, zapraszając do udziału przedstawiciela PZSz oraz przedstawicieli podmiotów wskazanych przez PZSz.
 
-3. [unit:ocena-wnioski] Na podstawie oceny wskazuje się usprawnienia wymagające rozważenia przed kolejnym sezonem oraz zapisuje wnioski przy właściwych kartach decyzji.
+3. [unit:ocena-zakres] Ocena obejmuje w szczególności terminowość procesu, spory interpretacyjne, zastosowane wyjątki, braki danych oraz zgodność nominacji z celem Regulaminu.
+
+4. [unit:ocena-wnioski] Na podstawie oceny Komisja wskazuje usprawnienia wymagające rozważenia przed kolejnym sezonem oraz zapisuje wnioski przy właściwych kartach decyzji.
+
+5. [unit:ocena-publikacja] SPWS publikuje podsumowanie oceny oraz propozycje zmian Regulaminu przed rozpoczęciem kolejnego sezonu.
 
 ## [chapter:koncowe] Postanowienia końcowe
 <!-- scope: wejście w życie i przepis przejściowy -->
 
 ### [section:wejscie-w-zycie] Wejście w życie
 
-1. [unit:wejscie-w-zycie-zrodlo] [status:source-draft] Regulamin wchodzi w życie z dniem uchwalenia.
+1. [unit:wejscie-w-zycie-zrodlo] Regulamin przyjmuje Zarząd SPWS w drodze uchwały. Regulamin wchodzi w życie w terminie określonym w tej uchwale.
 
-2. [unit:tbilisi-2026-zrodlo] [status:source-draft] Regulaminu nie stosuje się do Mistrzostw Świata Weteranów w Tbilisi w 2026 r.
+2. [unit:tbilisi-2026-zrodlo] Regulaminu nie stosuje się do Mistrzostw Świata Weteranów w Tbilisi w 2026 r.
+
+3. [unit:publikacja-regulaminu] SPWS publikuje zatwierdzony Regulamin wraz z załącznikami na swojej stronie internetowej.
 
 {{annex:points}}

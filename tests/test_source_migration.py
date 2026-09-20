@@ -48,7 +48,7 @@ class SourceMigrationTests(unittest.TestCase):
             if isinstance(block, ZtpUnit)
             for unit in walk(block)
         }
-        self.assertEqual(statuses, {"accepted", "source-draft"})
+        self.assertEqual(statuses, {"accepted"})
 
     def test_accepted_ranking_rules_are_not_rendered_as_source_drafts(self):
         source_text = SOURCE.read_text(encoding="utf-8")
@@ -77,16 +77,16 @@ class SourceMigrationTests(unittest.TestCase):
             paragraph for paragraph in document.paragraphs
             if paragraph.text == "BRUDNOPIS ZE ŹRÓDŁA — DO OPRACOWANIA"
         ]
-        self.assertEqual(len(labels), 5)
+        self.assertEqual(len(labels), 0)
         draft_texts = {
             "W przypadku rezygnacji zawodnika z udziału w zawodach indywidualnych jego miejsce przechodzi na kolejnego zawodnika zgodnie z aktualnym rankingiem indywidualnym.",
-            "1. Regulamin wchodzi w życie z dniem uchwalenia.",
+            "1. Regulamin przyjmuje Zarząd SPWS w drodze uchwały. Regulamin wchodzi w życie w terminie określonym w tej uchwale.",
         }
         paragraphs = {paragraph.text: paragraph for paragraph in document.paragraphs}
         for text in draft_texts:
             self.assertIn(text, paragraphs)
             colors = {str(run.font.color.rgb) for run in paragraphs[text].runs if run.text}
-            self.assertEqual(colors, {"595959"})
+            self.assertNotIn("595959", colors)
 
 
 if __name__ == "__main__":
