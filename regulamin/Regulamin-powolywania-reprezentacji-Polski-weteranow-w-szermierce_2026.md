@@ -9,11 +9,6 @@ comments = "Projekt do konsultacji. Treść przyjęta redakcyjnie; wymaga przyj�
 outline_intro = "Treść dokumentu podzielono następująco:"
 toc_note = ""
 history_scope = "Pełna struktura ZTP i jednorazowa migracja treści źródłowej"
-resource_links_title = "Materiały pomocnicze — wersja nieoficjalna"
-resource_links_note = "Regulamin nie został jeszcze uchwalony. Poniższe odnośniki prowadzą do nieoficjalnych wersji roboczych materiałów pomocniczych. Po uchwaleniu Regulaminu zostaną zastąpione odnośnikami do odpowiednich stron w oficjalnym serwisie SPWS: weteraniszermierki.pl."
-resource_ranking_url = "https://fencer4life.github.io/spws-automated-ranklist/"
-resource_table_url = "https://fencer4life.github.io/spws-automated-ranklist/tabela-punktacji.html"
-resource_calculator_url = "https://fencer4life.github.io/spws-automated-ranklist/kalkulator-punktow.html"
 [milestones]
 otwarcie = 90
 karty = 75
@@ -131,6 +126,19 @@ zawody = 0
 ### [section:publikacja-rankingu] Publikacja rankingu
 
 [unit:publikacja-rankingu-zrodlo] Ranking indywidualny oraz kalkulator punktów są publikowane na stronie internetowej.
+
+<!-- note:materialy-pomocnicze -->
+**Materiały pomocnicze — wersja nieoficjalna**
+
+Regulamin nie został jeszcze uchwalony. Poniższe odnośniki prowadzą do nieoficjalnych wersji roboczych materiałów pomocniczych. Po uchwaleniu Regulaminu zostaną zastąpione odnośnikami do odpowiednich stron w oficjalnym serwisie SPWS: weteraniszermierki.pl.
+
+**Ranking:** [https://fencer4life.github.io/spws-automated-ranklist/](https://fencer4life.github.io/spws-automated-ranklist/)
+
+**Tabela punktacji:** [https://fencer4life.github.io/spws-automated-ranklist/tabela-punktacji.html](https://fencer4life.github.io/spws-automated-ranklist/tabela-punktacji.html)
+
+**Kalkulator punktów:** [https://fencer4life.github.io/spws-automated-ranklist/kalkulator-punktow.html](https://fencer4life.github.io/spws-automated-ranklist/kalkulator-punktow.html)
+
+<!-- /note -->
 
 ### [section:polaczone-kategorie] Wyniki w połączonych kategoriach wiekowych
 
@@ -307,3 +315,8 @@ zawody = 0
 3. [unit:publikacja-regulaminu] SPWS publikuje zatwierdzony Regulamin wraz z załącznikami na swojej stronie internetowej.
 
 {{annex:points}}
+
+<!-- note:pelna-tabela-punktacji -->
+**Pełna tabela punktacji — wersja nieoficjalna:** [https://fencer4life.github.io/spws-automated-ranklist/tabela-punktacji.html](https://fencer4life.github.io/spws-automated-ranklist/tabela-punktacji.html)
+
+<!-- /note -->

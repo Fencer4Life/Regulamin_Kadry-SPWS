@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ADR-003 — Dokładna zmiana Markdown bez LLM</title>
+  <style>
+    :root{--bg:#e8ecf3;--surface:#fff;--ink:#101722;--muted:#445064;--line:#c7d0dc;--accent:#12467e}
+    @media(prefers-color-scheme:dark){:root{--bg:#121722;--surface:#1c2430;--ink:#eef4fb;--muted:#b6c0cf;--line:#3a4656;--accent:#8fc5f4}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.65 system-ui,sans-serif}main{max-width:980px;margin:auto;padding:52px 24px 92px}h1,h2{font-family:Georgia,serif;line-height:1.15}h1{font-size:clamp(38px,6vw,54px)}h2{margin-top:40px}.lead{font-size:22px;color:var(--muted)}.tag{font:700 13px ui-monospace,monospace;color:var(--accent)}a{color:var(--accent)}.box{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:10px;padding:18px 22px;margin:22px 0}table{width:100%;border-collapse:collapse}th,td{padding:12px;border:1px solid var(--line);text-align:left}code{font-size:.9em;overflow-wrap:anywhere}
+  </style>
+</head>
+<body><main>
+  <p class="tag">ADR-003 · PRZYJĘTA · 20.09.2026</p>
+  <h1>Dokładna zmiana Markdown bez LLM</h1>
+  <p class="lead">Redaktor określa treść do zastąpienia i jej nowe brzmienie. Automat wykonuje dosłowną zamianę, sprawdza strukturę i generuje dokument do przeglądu.</p>
+  <h2>Problem i decyzja</h2>
+  <p>Linki ukryte w metadanych i znaczniki tabel utrudniały odczyt źródła. Opis decyzji nie wystarcza do bezpiecznej automatycznej zmiany przepisu. Przyjmujemy jawne bloki Markdown dla objaśnień i linków, pełny generowany podgląd oraz jedną parę pól starego i nowego fragmentu w karcie decyzji. Nie korzystamy z LLM ani z dopasowania przybliżonego.</p>
+  <table><thead><tr><th>Plik</th><th>Rola</th><th>Czy edytować?</th></tr></thead><tbody>
+    <tr><td>Kanoniczny <code>regulamin/…2026.md</code></td><td>Przepisy, stabilne identyfikatory, linki, objaśnienia i znaczniki tabel</td><td>Tak — stąd kopiujemy stary fragment</td></tr>
+    <tr><td><code>regulamin/…2026.podglad.md</code></td><td>Pełna treść wygenerowanego DOCX, w tym wszystkie tabele i oś czasu</td><td>Nie — nadpisywany przez generator</td></tr>
+    <tr><td><code>regulamin/…2026.docx</code></td><td>Wersja do przeglądu i publikacji</td><td>Nie — powstaje z kanonicznego źródła i renderera</td></tr>
+  </tbody></table>
+  <p>Tabele obliczeniowe nadal powstają z reguł generatora, a nie z ręcznie przepisanych wyników. Zmiana algorytmu wymaga zmiany kodu i testów; karta stary/nowy służy do zmiany kanonicznego Markdown. Podgląd jest czytelnym wynikiem, nie drugim źródłem prawdy.</p>
+  <h2>Co wpisuje Redaktor</h2>
+  <ol>
+    <li>Otwiera <a href="../../szablony/nowa-decyzja.md">szablon decyzji</a> lub kartę utworzoną z dyskusji.</li>
+    <li>Pod nagłówkiem <b>Stary fragment Markdown</b>, wewnątrz pustego bloku kodu, wkleja dokładny fragment aktualnego kanonicznego źródła: wraz z oznaczeniami <code>[unit:…]</code>, komentarzami i wcięciami. Nie kopiuje tekstu z Worda ani podglądu.</li>
+    <li>Pod nagłówkiem <b>Nowy fragment Markdown</b>, w drugim bloku kodu, wkleja kompletne nowe brzmienie. Zachowuje identyfikatory istniejących jednostek. Nowe identyfikatory muszą być unikalne.</li>
+    <li>Opis decyzji i uzasadnienie wypełnia osobno. Automat nie odczytuje z nich instrukcji edycji.</li>
+    <li>Jedna karta zawiera jedną parę fragmentów. Dla kilku zmian wybiera wspólny ciągły fragment. Przy usuwaniu przepisu obejmuje fragmentem także sąsiednią treść, którą pozostawia w nowym polu. Puste nowe pole jest odrzucane.</li>
+  </ol>
+  <p>Jeśli decyzja nie zmienia dokumentu, oba pola pozostają puste i nie uruchamia się wdrożenia. Formularz dyskusji przekazuje wypełnione pola do karty automatycznie.</p>
+  <h2>Obie ścieżki</h2>
+  <p><b>Szybka:</b> istniejący mechanizm redakcyjny korzysta z dokładnych fragmentów z dyskusji. Po kontroli tworzy kartę, źródło, DOCX i podgląd w jednym draft PR. Karta otrzymuje znacznik wykonania — nie należy wdrażać jej ponownie.</p>
+  <p><b>Pełna:</b> powstaje karta DR i draft PR. Redaktor uzupełnia uzasadnienie oraz pola stary/nowy. Po przyjęciu decyzji karta musi mieć <code>status: przyjęta</code>. W GitHub Actions wybiera <b>Wdrożenie dokładnej zmiany z decyzji → Run workflow</b>, wskazuje gałąź otwartego PR decyzji w <b>Use workflow from</b> i podaje jej numer, np. <code>DR-025</code>. Automat aktualizuje ten sam PR. Uruchomiony z <code>main</code> tworzy osobny draft PR wdrożenia. Nie scala go sam.</p>
+  <div class="box">Przyjęta karta → jedno dokładne dopasowanie → normalizacja ZTP → DOCX i pełny podgląd → testy → PR → przegląd Redaktora.</div>
+  <h2>Kontrole i zatrzymanie</h2>
+  <ul>
+    <li>Brak fragmentu, wiele wystąpień, identyczne stare i nowe brzmienie, puste pola lub nieprzyjęta decyzja zatrzymują wdrożenie.</li>
+    <li>Normalizacja obejmuje techniczną numerację, odwołania i interpunkcję obsługiwanej struktury ZTP; nie tworzy nowych przepisów i nie ocenia ich sensu.</li>
+    <li>Kandydat budowany jest w katalogu tymczasowym. Błąd parsowania, budowania lub weryfikacji nie zastępuje dotychczasowych plików. Błąd późniejszych testów w CI zatrzymuje commit i push.</li>
+    <li>Karta otrzymuje znacznik wykonania z SHA-256 źródła sprzed zmiany. To ślad audytowy i blokada ponownego wdrożenia, nie obowiązkowe pole do ręcznego uzupełnienia.</li>
+    <li>Pełne testy mogą zablokować zmianę zatwierdzonej treści. Jeśli celowo zmieniono przepis objęty kontraktem testowym, trzeba jawnie zaktualizować jego test w tym samym PR; automat nie pomija zabezpieczenia.</li>
+    <li>Workflow nie nadpisuje istniejącej gałęzi wdrożenia utworzonej z main. Konflikty i błędy uprawnień wymagają sprawdzenia, nie wymuszonego push.</li>
+    <li>Nie dodajemy zależności produkcyjnych ani usług AI. Workflow ma uprawnienia zapisu zawartości i PR, działa na gałęzi roboczej i nie publikuje sam nowej wersji na main.</li>
+  </ul>
+  <h2>Przegląd i granice</h2>
+  <p>Redaktor sprawdza różnicę źródła, pełny podgląd i DOCX przed Approve. Weryfikacja techniczna potwierdza zgodność źródła z wygenerowanym dokumentem, ale nie zastępuje kontroli merytorycznej ani otwarcia w Microsoft Word w celu oceny podziału stron. Nowy workflow jest dostępny w standardowym wykazie Actions po scaleniu wdrożenia do main.</p>
+  <p>Kod: <code>narzedzia/decision_patch.py</code>, <code>narzedzia/markdown_preview.py</code>, <code>narzedzia/prepare_regulamin.py</code>. Workflow: <code>.github/workflows/apply-decision.yml</code>. Testy: <code>tests/test_decision_patch.py</code>, <code>tests/test_readable_markdown.py</code>.</p>
+  <p><a href="index.html">Wszystkie ADR</a></p>
+</main></body>
+</html>

@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import sys
 from pathlib import Path
 
 from narzedzia.create_decision_from_discussion import create, parse_discussion_form
+from narzedzia.decision_patch import replace_exact
 
 
 EMPTY_FORM_VALUES = {"", "_No response_"}
@@ -28,6 +30,7 @@ def apply_editorial_change(
         raise ValueError("Nowe brzmienie musi różnić się od zastępowanego fragmentu")
 
     original = source_path.read_text(encoding="utf-8")
+    changed = replace_exact(original, current, replacement)
     occurrences = original.count(current)
     if occurrences != 1:
         raise ValueError(
@@ -59,7 +62,8 @@ def apply_editorial_change(
             "po oznaczeniu dyskusji jako `redakcja-bez-zmiany-sensu`",
             1,
         )
-        source_path.write_text(original.replace(current, replacement, 1), encoding="utf-8")
+        card += f"\n<!-- applied-source-sha256:{hashlib.sha256(original.encode('utf-8')).hexdigest()} -->\n"
+        source_path.write_text(changed, encoding="utf-8")
         card_path.write_text(card, encoding="utf-8")
     except Exception:
         card_path.unlink(missing_ok=True)

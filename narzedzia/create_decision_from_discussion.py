@@ -140,6 +140,11 @@ Nie dotyczy przed przyjęciem decyzji.
 
 - {date} — robocza karta utworzona automatycznie po oznaczeniu dyskusji jako `rozstrzygnięta`.
 '''
+    # Import here to avoid coupling the form parser to document generation at import time.
+    from narzedzia.decision_patch import format_fragments
+    content = content.replace("## Uzasadnienie\n", format_fragments(
+        source["fragment_markdown"], source["nowe_brzmienie_markdown"]
+    ) + "\n## Uzasadnienie\n", 1)
     path.write_text(content, encoding="utf-8")
     return path
 

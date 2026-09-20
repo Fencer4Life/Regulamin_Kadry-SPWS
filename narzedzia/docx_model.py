@@ -4,6 +4,7 @@ import re
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
+from urllib.parse import urlsplit
 
 
 CHAPTER_RE = re.compile(r"^## \[chapter:([a-z0-9-]+)] (.+)$")
@@ -31,6 +32,7 @@ UNIT_LEVELS = {
 class InlineRun:
     text: str
     bold: bool = False
+    href: str | None = None
 
 
 @dataclass
@@ -56,7 +58,13 @@ class TableBlock:
     rows: list[list[str]]
 
 
-ContentBlock = ZtpUnit | TableBlock
+@dataclass(frozen=True)
+class NoteBlock:
+    identifier: str
+    paragraphs: tuple[str, ...]
+
+
+ContentBlock = ZtpUnit | TableBlock | NoteBlock
 
 
 def _parse_inline_runs(text: str) -> tuple[str, tuple[InlineRun, ...]]:
@@ -64,10 +72,16 @@ def _parse_inline_runs(text: str) -> tuple[str, tuple[InlineRun, ...]]:
         raise ValueError(f"Niedomknięte pogrubienie Markdown: {text}")
     runs: list[InlineRun] = []
     position = 0
-    for match in re.finditer(r"\*\*(.+?)\*\*", text):
+    for match in re.finditer(r"\*\*(.+?)\*\*|\[([^\]\n]+)\]\(([^\s)]+)\)", text):
         if match.start() > position:
             runs.append(InlineRun(text=text[position : match.start()]))
-        runs.append(InlineRun(text=match.group(1), bold=True))
+        if match.group(1) is not None:
+            runs.append(InlineRun(text=match.group(1), bold=True))
+        else:
+            href = match.group(3)
+            if urlsplit(href).scheme != "https" or not urlsplit(href).netloc:
+                raise ValueError("Link Markdown wymaga pełnego adresu HTTPS")
+            runs.append(InlineRun(text=match.group(2), href=href))
         position = match.end()
     if position < len(text):
         runs.append(InlineRun(text=text[position:]))
@@ -98,6 +112,7 @@ class RegulationDocument:
     has_points_annex: bool
     metadata_source: str = ""
     milestones: dict[str, int] = field(default_factory=dict)
+    annex_notes: list[NoteBlock] = field(default_factory=list)
 
 
 TERM_RE = re.compile(r"\{\{(term|days):([a-z0-9-]+)}}")
@@ -196,6 +211,7 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
     current_section: RegulationSection | None = None
     unit_stack: dict[int, ZtpUnit] = {}
     has_points_annex = False
+    annex_notes: list[NoteBlock] = []
     identifiers: set[str] = set()
     index = 0
     while index < len(lines):
@@ -203,6 +219,32 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
         line = raw_line.strip()
         index += 1
         if not line:
+            continue
+        if note_match := re.fullmatch(r"<!-- note:([a-z0-9-]+) -->", line):
+            identifier = note_match.group(1)
+            if identifier in identifiers:
+                raise ValueError(f"Powtórzony identyfikator: {identifier}")
+            identifiers.add(identifier)
+            paragraphs = []
+            while index < len(lines) and lines[index].strip() != "<!-- /note -->":
+                content = lines[index].strip()
+                index += 1
+                if content:
+                    if content.startswith(("<!--", "{{", "#")):
+                        raise ValueError("Nota zawiera niedozwoloną strukturę")
+                    _parse_inline_runs(content)
+                    paragraphs.append(content)
+            if index == len(lines) or not paragraphs:
+                raise ValueError("Pusta lub niedomknięta nota Markdown")
+            index += 1
+            note = NoteBlock(identifier, tuple(paragraphs))
+            if has_points_annex:
+                annex_notes.append(note)
+            elif current_section is not None:
+                current_section.blocks.append(note)
+            else:
+                raise ValueError("Nota musi należeć do paragrafu albo załącznika")
+            unit_stack.clear()
             continue
         if match := CHAPTER_RE.fullmatch(line):
             identifier, title = match.groups()
@@ -297,4 +339,5 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
         has_points_annex=has_points_annex,
         metadata_source=metadata_text,
         milestones=milestones,
+        annex_notes=annex_notes,
     )

@@ -15,6 +15,8 @@ from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.shared import Cm, Pt, RGBColor
 
 from narzedzia.docx_model import (
+    NoteBlock,
+    _parse_inline_runs,
     RegulationDocument,
     TableBlock,
     ZtpUnit,
@@ -489,6 +491,9 @@ def _add_unit(
     if prefix:
         content.add_run(prefix)
     for inline_run in unit.runs:
+        if inline_run.href:
+            _add_external_link(content, inline_run.href, inline_run.text)
+            continue
         run = content.add_run(resolve_references(model, inline_run.text))
         if inline_run.bold:
             run.bold = True
@@ -522,7 +527,7 @@ def _add_status_label(document: Document, status: str) -> None:
     label.paragraph_format.keep_with_next = True
 
 
-def _add_external_link(paragraph, url: str) -> None:
+def _add_external_link(paragraph, url: str, label: str | None = None) -> None:
     parsed = urlsplit(url)
     if parsed.scheme != "https" or not parsed.netloc:
         raise ValueError("Nieprawidłowy adres HTTPS materiału pomocniczego")
@@ -538,32 +543,33 @@ def _add_external_link(paragraph, url: str) -> None:
     properties.append(size)
     run.append(properties)
     text = OxmlElement("w:t")
-    text.text = url
+    text.text = label if label is not None else url
     run.append(text)
     link.append(run)
     paragraph._p.append(link)
 
 
-def _add_resource_links(document: Document, model: RegulationDocument) -> None:
-    if "resource_links_title" not in model.metadata:
-        return
-    heading = document.add_paragraph(style="Normal")
-    heading.add_run(model.metadata["resource_links_title"]).bold = True
-    heading.paragraph_format.space_before = Pt(10)
-    heading.paragraph_format.keep_with_next = True
-    note = document.add_paragraph(model.metadata["resource_links_note"], style="Normal")
-    note.paragraph_format.keep_with_next = True
-    for index, (label, key) in enumerate((
-        ("Ranking", "resource_ranking_url"),
-        ("Tabela punktacji", "resource_table_url"),
-        ("Kalkulator punktów", "resource_calculator_url"),
-    )):
-        url = model.metadata[key]
+def _add_note(document: Document, model: RegulationDocument, note: NoteBlock) -> None:
+    for index, text in enumerate(note.paragraphs):
         paragraph = document.add_paragraph(style="Normal")
-        paragraph.paragraph_format.keep_with_next = index < 2
-        paragraph.paragraph_format.keep_together = True
-        paragraph.add_run(label + ": ").bold = True
-        _add_external_link(paragraph, url)
+        if index < len(note.paragraphs) - 1:
+            paragraph.paragraph_format.keep_with_next = True
+        if index == 0 and len(note.paragraphs) > 1:
+            paragraph.paragraph_format.space_before = Pt(10)
+        _, runs = _parse_inline_runs(text)
+        if len(note.paragraphs) > 1 and any(inline.href for inline in runs):
+            paragraph.paragraph_format.keep_with_next = index < len(note.paragraphs) - 1
+        for inline in runs:
+            if inline.href:
+                paragraph.paragraph_format.keep_together = True
+                _add_external_link(paragraph, inline.href, inline.text)
+            else:
+                if inline.text.isspace() and paragraph.runs and paragraph.runs[-1].bold:
+                    paragraph.runs[-1].text += inline.text
+                    continue
+                run = paragraph.add_run(resolve_references(model, inline.text))
+                if inline.bold:
+                    run.bold = True
 
 
 def _add_chapters(document: Document, model: RegulationDocument) -> None:
@@ -599,14 +605,14 @@ def _add_chapters(document: Document, model: RegulationDocument) -> None:
                         unit_index,
                         keep_together=unit_index == 1,
                     )
+                elif isinstance(block, NoteBlock):
+                    _add_note(document, model, block)
                 elif block.name == "rank-coefficients":
                     active_status = "accepted"
                     _add_rank_coefficients(document, block)
                 else:
                     active_status = "accepted"
                     _add_source_table(document, model, block)
-            if section.identifier == "publikacja-rankingu":
-                _add_resource_links(document, model)
 
 
 def _is_power_of_two(value: int) -> bool:
@@ -708,12 +714,10 @@ def _add_points_annex(document: Document, model: RegulationDocument) -> None:
         "są publikowane przez SPWS na stronie internetowej."
     )
     note.paragraph_format.space_before = Pt(8)
-    if "resource_table_url" in model.metadata:
+    if model.annex_notes:
         note.paragraph_format.keep_with_next = True
-        link = document.add_paragraph(style="Normal")
-        link.paragraph_format.keep_together = True
-        link.add_run("Pełna tabela punktacji — wersja nieoficjalna: ").bold = True
-        _add_external_link(link, model.metadata["resource_table_url"])
+        for annex_note in model.annex_notes:
+            _add_note(document, model, annex_note)
     document.add_page_break()
 
 

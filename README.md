@@ -38,6 +38,10 @@ Publiczne repozytorium prac nad **Regulaminem powoływania reprezentacji Polski 
 
 Kontrolowany Markdown w `regulamin/` jest jedynym źródłem kanonicznym. DOCX jest wynikiem generatora i nie służy do ręcznego wprowadzania zmian. Markdown zapisuje semantyczną hierarchię ZTP: rozdział, paragraf, ustęp, punkt, literę, tiret i podwójne tiret. Każda jednostka ma stabilny identyfikator, dlatego automat może przenumerować dokument i poprawić odesłania bez zmiany słów przepisu.
 
+[Pełny podgląd Markdown, ze wszystkimi tabelami i linkami](regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.podglad.md) jest generowany razem z DOCX; nie służy do edycji. W źródle linki i objaśnienia są zwykłym Markdown w blokach `<!-- note:identyfikator -->` … `<!-- /note -->`, w odpowiednich miejscach dokumentu. Punktacja pozostaje obliczana automatycznie, a podgląd pokazuje wszystkie jej tabele.
+
+Redaktor wypełnia w [szablonie decyzji](szablony/nowa-decyzja.md) pola **Stary fragment Markdown** oraz **Nowy fragment Markdown**. Są przenoszone również z formularza dyskusji. Workflow **Wdrożenie dokładnej zmiany z decyzji** przyjmuje numer DR i działa bez LLM: dokładne pojedyncze dopasowanie → normalizacja ZTP → DOCX i podgląd → testy → PR. Dla otwartego PR decyzji wybierz jego gałąź w „Use workflow from”, aby zaktualizować ten sam PR. Z `main` powstaje osobny draft PR wdrożenia. Wymagany jest status `przyjęta`; puste, wieloznaczne lub już wdrożone zmiany są odrzucane. Instrukcja i ograniczenia: [ADR-003](dokumentacja/adr/ADR-003-deterministyczny-markdown.html).
+
 Automat normalizuje strukturę Markdown przed generowaniem DOCX. Może poprawić numery, oznaczenia wyliczeń, wcięcia, interpunkcję techniczną i odesłania. Nie może samodzielnie parafrazować ani zmieniać znaczenia. Gdy struktura jest niejednoznaczna i wymaga decyzji merytorycznej, build zatrzymuje się, a poprzedni prawidłowy DOCX pozostaje bez zmian.
 
 W dokumencie obowiązują trzy jawne statusy treści:

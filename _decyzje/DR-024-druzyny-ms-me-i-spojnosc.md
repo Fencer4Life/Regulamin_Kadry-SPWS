@@ -71,6 +71,8 @@ Do uzupełnienia po sezonie 2026/2027.
 
 ## Historia zmian
 
+- 2026-09-20 — na polecenie Fencer4Life przeniesiono linki i objaśnienia z metadanych do czytelnych bloków Markdown w § 7 i załączniku. Treść i układ DOCX zachowano (potwierdzone porównaniem). Dodano generowany pełny podgląd `.podglad.md`; tabel punktacji nie przepisuje się ręcznie. Instrukcja dla Redaktora i deterministyczne pola stary/nowy są opisane w ADR-003.
+
 - 2026-09-20 — ten sam klikalny adres pełnej tabeli punktacji dodano także na końcu Załącznika nr 1, z oznaczeniem wersji nieoficjalnej. Oba miejsca korzystają z jednego adresu w Markdown.
 
 - 2026-09-20 — na polecenie Fencer4Life usunięto dekoracyjną kreskę nad tytułem na okładce; bez zmiany treści przepisów.

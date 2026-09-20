@@ -44,6 +44,22 @@ Jakie rozwiązanie przyjęto albo proponuje się przyjąć?
 
 Dlaczego wybrano ten wariant?
 
+## Stary fragment Markdown
+
+Redaktor: wklej pomiędzy poniższe znaczniki kodu dokładny fragment z kanonicznego pliku `regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md`, NIE z pliku `.podglad.md` ani z DOCX. Kopiuj razem z `[unit:...]`, `<!-- note:... -->`, linkami i wcięciami. Fragment musi występować dokładnie raz. Nie wpisuj tutaj uzasadnienia. Jedna karta wdrożeniowa zawiera jedną parę stary/nowy; dla kilku zmian wybierz wspólny ciągły fragment.
+
+```markdown
+
+```
+
+## Nowy fragment Markdown
+
+Redaktor: wklej pomiędzy poniższe znaczniki kompletną treść, która ma zastąpić stary fragment. Zachowaj identyfikatory istniejących jednostek; nowe muszą być unikalne. Automat nie dopisuje treści i nie interpretuje decyzji. Przy usuwaniu przepisu wskaż szerszy stary fragment, a w nowym pozostaw sąsiednią treść. Jeżeli decyzja nie zmienia dokumentu, pozostaw oba pola puste i nie uruchamiaj wdrożenia.
+
+```markdown
+
+```
+
 ## Konsekwencje
 
 Jakie skutki i obowiązki wynikają z decyzji?

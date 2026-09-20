@@ -73,6 +73,10 @@ class EditorialChangeTests(unittest.TestCase):
             self.assertIn("- [ ] **Nie**", card)
             self.assertIn("Korekta redakcyjna bez zmiany sensu", card)
             self.assertNotIn("Do uzupełnienia", card)
+            self.assertIn("## Stary fragment Markdown", card)
+            self.assertIn("## Nowy fragment Markdown", card)
+            from narzedzia.decision_patch import read_fragments
+            self.assertEqual(read_fragments(card), ("stare brzmienie", "nowe brzmienie"))
 
     def test_rejects_non_unique_fragment_without_changing_source_or_creating_card(self):
         with tempfile.TemporaryDirectory() as directory:

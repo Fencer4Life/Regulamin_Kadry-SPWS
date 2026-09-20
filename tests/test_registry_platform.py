@@ -225,7 +225,7 @@ class RegistryPlatformTests(unittest.TestCase):
         )
         for fragment in (
             "redakcja-bez-zmiany-sensu",
-            "apply_editorial_change.py",
+            "narzedzia.apply_editorial_change",
             "prepare_regulamin normalize-and-build",
             "normalize_regulamin_markdown",
             "REGULAMIN_DOCX_PATH",
