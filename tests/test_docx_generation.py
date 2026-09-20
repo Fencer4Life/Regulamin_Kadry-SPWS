@@ -5,6 +5,7 @@ import unittest
 from pathlib import Path
 
 from docx import Document
+from docx.shared import Cm
 from narzedzia.build_regulamin_docx import build_document
 from narzedzia.docx_parity import (
     document_content_contract,
@@ -22,6 +23,22 @@ SOURCE = ROOT / "regulamin" / (
 
 
 class GeneratedDocxTests(unittest.TestCase):
+    def test_outline_is_reader_facing_and_uses_a_compact_chapter_column(self):
+        document = Document(CURRENT_DOCUMENT)
+        self.assertIn("Treść dokumentu podzielono następująco:", [
+            paragraph.text for paragraph in document.paragraphs
+        ])
+        outline = next(
+            table
+            for table in document.tables
+            if [cell.text for cell in table.rows[0].cells]
+            == ["Rozdział", "Tytuł", "Zakres"]
+        )
+        self.assertFalse(outline.autofit)
+        self.assertAlmostEqual(outline.columns[0].width, Cm(1.8), delta=Cm(0.01))
+        self.assertLess(outline.columns[0].width, outline.columns[1].width)
+        self.assertLess(outline.columns[0].width, outline.columns[2].width)
+
     def test_renders_arabic_chapter_separate_paragraph_title_and_draft_label(self):
         source_text = METADATA + '''
 ## [chapter:ogolne] Ogólne

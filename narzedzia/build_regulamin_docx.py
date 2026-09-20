@@ -313,10 +313,15 @@ def _add_outline(document: Document, model: RegulationDocument) -> None:
     document.add_paragraph(model.metadata["outline_intro"])
     table = document.add_table(rows=1, cols=3)
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.autofit = False
+    widths = (Cm(1.8), Cm(5.2), Cm(9.0))
+    for column, width in zip(table.columns, widths):
+        column.width = width
     set_table_borders(table, color=LINE, size="4")
     header = table.rows[0]
     set_repeat_table_header(header)
-    for cell, text in zip(header.cells, ("Rozdział", "Tytuł", "Zakres roboczy")):
+    for cell, width, text in zip(header.cells, widths, ("Rozdział", "Tytuł", "Zakres")):
+        cell.width = width
         set_cell_shading(cell, BLUE)
         set_cell_margins(cell)
         paragraph = cell.paragraphs[0]
@@ -330,7 +335,8 @@ def _add_outline(document: Document, model: RegulationDocument) -> None:
         cells = table.add_row().cells
         for cell in cells:
             set_cell_margins(cell)
-        for cell, text in zip(cells, (str(index), chapter.title, chapter.scope)):
+        for cell, width, text in zip(cells, widths, (str(index), chapter.title, chapter.scope)):
+            cell.width = width
             cell.text = text
         cells[0].paragraphs[0].runs[0].bold = True
         cells[0].paragraphs[0].runs[0].font.color.rgb = RGBColor.from_string(BLUE)
