@@ -9,7 +9,7 @@ sezon: 2026/2027
 dotyczy: § 4 ust. 5 oraz § 12, § 14 i § 16
 decydenci: Komisja regulaminowa SPWS — na etapie inicjalnym autor projektu
 discussion_url: ""
-pr_url: ""
+pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/41
 stan_obowiązywania: obowiązuje
 zmienia: ["DR-010"]
 zmieniona_przez: []
