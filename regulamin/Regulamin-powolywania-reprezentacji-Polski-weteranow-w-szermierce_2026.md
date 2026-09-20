@@ -76,10 +76,21 @@ prototype_note = "Dokument jest projektem. Fragmenty oznaczone jako brudnopis ze
    4) [unit:warunek-formula] zawody są rozgrywane według formuły sportowej zgodnej z regulaminami lub przepisami zawodów stosowanymi przez SPWS, PZSz, EVF albo FIE, przy czym właściwa formuła musi zostać wskazana w komunikacie organizacyjnym;
    5) [unit:warunek-kategorie] zawody są rozgrywane w kategoriach wieku, broni i płci określonych w komunikacie organizacyjnym i zgodnych z wybraną formułą sportową;
    6) [unit:warunek-protokoly] po zakończeniu zawodów organizator publikuje w serwisie internetowym kompletne protokoły wszystkich rozegranych walk, obejmujące fazę grupową oraz eliminację bezpośrednią, wraz z klasyfikacją końcową i liczbą uczestników, zapewniając publiczny i nieodpłatny dostęp do tych materiałów;
-   7) [unit:warunek-dostepnosc] protokoły i wyniki, o których mowa w {{ref:zawody-rankingowe/warunek-protokoly}}, pozostają dostępne online przez co najmniej 36 miesięcy od dnia zakończenia zawodów;
-   8) [unit:warunek-dane] opublikowane wyniki zawierają dane niezbędne do ich zweryfikowania oraz obliczenia punktów rankingowych.
+   7) [unit:warunek-dostepnosc] protokoły i wyniki, o których mowa w {{ref:zawody-rankingowe/warunek-protokoly}}, pozostają dostępne online przez co najmniej 36 miesięcy od dnia zakończenia zawodów.
 
-3. [unit:trzy-wyniki] Spośród wyników uzyskanych w zawodach, o których mowa w {{ref:zawody-rankingowe/zawody-ppw-mpw}}, w rankingu uwzględnia się trzy wyniki, za które zawodnik uzyskał najwyższą liczbę punktów rankingowych.
+3. [unit:osiem-pozycji-rankingowych] Łączna liczba punktów zawodnika w rankingu indywidualnym jest sumą punktów przypisanych do ośmiu pozycji wynikowych:
+   1) [unit:trzy-pozycje-krajowe] trzech obowiązkowych pozycji krajowych;
+   2) [unit:piec-pozycji-otwartych] pięciu pozycji otwartych.
+
+4. [unit:obowiazkowe-pozycje-krajowe] Trzy obowiązkowe pozycje krajowe wypełnia się wynikami uzyskanymi w zawodach Pucharu Polski Weteranów w Szermierce oraz Mistrzostwach Polski Weteranów w Szermierce, według następujących zasad:
+   1) [unit:krajowe-trzy-najlepsze] spośród wszystkich wyników uzyskanych przez zawodnika w tych zawodach wybiera się trzy wyniki, za które zawodnik otrzymał najwyższą liczbę punktów rankingowych;
+   2) [unit:krajowe-brak-zero] jeżeli zawodnik uzyskał mniej niż trzy wyniki w Pucharze Polski Weteranów w Szermierce lub Mistrzostwach Polski Weteranów w Szermierce, za każdą niewypełnioną obowiązkową pozycję krajową przyjmuje się zero punktów rankingowych.
+
+5. [unit:pozycje-otwarte] Na pięć pozycji otwartych składa się pięć najwyżej punktowanych spośród pozostałych wyników zawodnika uwzględnianych w rankingu.
+
+6. [unit:kolejnosc-wyboru-wynikow] Najpierw wybiera się wyniki wypełniające trzy obowiązkowe pozycje krajowe, a następnie wyniki wypełniające pięć pozycji otwartych.
+
+7. [unit:zakaz-podwojnego-liczenia] Żaden wynik nie może zostać policzony dwukrotnie.
 
 ### [section:punktacja] Zasady obliczania punktów
 

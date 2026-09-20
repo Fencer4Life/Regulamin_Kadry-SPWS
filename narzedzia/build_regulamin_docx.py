@@ -432,8 +432,17 @@ def _unit_prefix(unit: ZtpUnit, index: int) -> str:
     raise ValueError(f"Nieobsługiwany rodzaj jednostki: {unit.kind}")
 
 
-def _add_unit(document: Document, model: RegulationDocument, unit: ZtpUnit, index: int) -> None:
+def _add_unit(
+    document: Document,
+    model: RegulationDocument,
+    unit: ZtpUnit,
+    index: int,
+    *,
+    keep_together: bool = False,
+) -> None:
     content = document.add_paragraph(style="Normal")
+    if keep_together:
+        content.paragraph_format.keep_together = True
     prefix = _unit_prefix(unit, index)
     if prefix:
         content.add_run(prefix)
@@ -480,11 +489,10 @@ def _add_chapters(document: Document, model: RegulationDocument) -> None:
         heading = document.add_paragraph(chapter.title, style="Heading 1")
         heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
         _add_bookmark(heading, chapter_index + 1)
-        for section_index, section in enumerate(chapter.sections):
+        for section in chapter.sections:
             section_number += 1
             paragraph = document.add_paragraph(f"§ {section_number}", style="Paragraf")
-            if section_index > 0:
-                paragraph.paragraph_format.page_break_before = True
+            paragraph.paragraph_format.keep_with_next = True
             if section.identifier in {"cel", "definicje"}:
                 paragraph.paragraph_format.left_indent = Cm(0.15)
             if section.title:
@@ -498,14 +506,19 @@ def _add_chapters(document: Document, model: RegulationDocument) -> None:
                     if block.status != "accepted" and block.status != active_status:
                         _add_status_label(document, block.status)
                     active_status = block.status
-                    _add_unit(document, model, block, unit_index)
+                    _add_unit(
+                        document,
+                        model,
+                        block,
+                        unit_index,
+                        keep_together=unit_index == 1,
+                    )
                 elif block.name == "rank-coefficients":
                     active_status = "accepted"
                     _add_rank_coefficients(document, block)
                 else:
                     raise ValueError(f"Nieobsługiwana tabela: {block.name}")
-        if chapter_index >= 2:
-            document.add_page_break()
+
 
 def _is_power_of_two(value: int) -> bool:
     return value > 0 and (value & (value - 1)) == 0
@@ -679,6 +692,17 @@ def _normalize_cover_run_properties(document: Document) -> None:
         row.cells[1].paragraphs[0].runs[0].bold = None
 
 
+def _ensure_blank_paragraph_after_tables(document: Document) -> None:
+    for table in document.tables:
+        following = table._tbl.getnext()
+        if following is not None and following.tag == qn("w:p"):
+            text = "".join(element.text or "" for element in following.iter(qn("w:t")))
+            if not text:
+                continue
+        separator = document.add_paragraph(style="Normal")
+        table._tbl.addnext(separator._p)
+
+
 def build_document(source: Path, output: Path) -> Path:
     source = source.resolve()
     output = output.resolve()
@@ -700,6 +724,7 @@ def build_document(source: Path, output: Path) -> Path:
     if model.has_points_annex:
         _add_points_annex(document)
     _add_history(document, model)
+    _ensure_blank_paragraph_after_tables(document)
     for table in document.tables:
         _keep_table_together(table)
         _normalize_cell_margins_for_word(table)
