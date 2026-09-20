@@ -58,7 +58,7 @@ zawody = 0
 
 4. [unit:dodatni-dorobek] Z zastrzeżeniem {{ref:rola-rankingu/powolanie-uzupelniajace}}, do reprezentacji Polski na limitowane zawody międzynarodowe może zostać powołany wyłącznie zawodnik, który wystartował w co najmniej jednych zawodach uwzględnianych w rankingu indywidualnym i uzyskał w nim dorobek większy niż zero punktów.
 
-5. [unit:powolanie-uzupelniajace] W przypadku gdy nie jest możliwe skompletowanie drużyny z zawodników posiadających dodatni dorobek punktowy, dopuszcza się powołanie uzupełniające zawodnika bez punktów rankingowych, jeżeli łącznie:
+5. [unit:powolanie-uzupelniajace] W zawodach innych niż Drużynowe Mistrzostwa Europy, w przypadku gdy nie jest możliwe skompletowanie drużyny z zawodników posiadających dodatni dorobek punktowy, dopuszcza się powołanie uzupełniające zawodnika bez punktów rankingowych, jeżeli łącznie:
    1) [unit:uzupelnienie-niezbedne] powołanie jest niezbędne do wystawienia kompletnej drużyny zgodnej z przepisami zawodów;
    2) [unit:uzupelnienie-oferta] możliwość startu zaoferowano wszystkim dostępnym zawodnikom posiadającym dodatni dorobek punktowy, spełniającym wymagania dotyczące broni, płci i kategorii wiekowej;
    3) [unit:uzupelnienie-brak-gotowosci] żaden z zawodników, o których mowa w {{ref:rola-rankingu/uzupelnienie-oferta}}, nie potwierdził gotowości do udziału;
@@ -153,7 +153,11 @@ zawody = 0
 
 ### [section:pula-druzyny] Pula kandydatów do drużyny
 
-[unit:pula-druzyny-ranking] Ranking indywidualny wyznacza pulę kandydatów do składu drużyny, lecz miejsce w rankingu nie stanowi samoistnej podstawy powołania do składu drużyny.
+1. [unit:pula-druzyny-ranking] Pulę kandydatów do drużyny na Drużynowe Mistrzostwa Europy tworzy ośmiu zawodników nominowanych do startu indywidualnego: czterech najwyżej sklasyfikowanych w rankingu indywidualnym zawodników młodszej kategorii wiekowej oraz czterech najwyżej sklasyfikowanych zawodników starszej kategorii wiekowej objętej daną kategorią drużynową.
+
+2. [unit:pula-druzyny-zastepstwo] W przypadku rezygnacji zawodnika jego miejsce zajmuje kolejny zawodnik w rankingu indywidualnym jego kategorii wiekowej.
+
+3. [unit:pula-druzyny-zamknieta] Skład drużyny oraz zawodnika rezerwowego wybiera się wyłącznie spośród zawodników należących do tej puli.
 
 ### [section:kategorie-druzynowe] Kategorie wiekowe w drużynie
 
@@ -161,13 +165,17 @@ zawody = 0
 
 ### [section:druzynowe-mistrzostwa-europy] Drużynowe Mistrzostwa Europy
 
-1. [unit:dme-pula-zrodlo] [status:source-draft] Przy ustalaniu składu reprezentacji uwzględnia się czterech najwyżej sklasyfikowanych zawodników z młodszej kategorii wiekowej i czterech najwyżej sklasyfikowanych zawodników ze starszej kategorii wiekowej. W przypadku rezygnacji zawodnika jego miejsce zajmuje kolejny zawodnik w jego kategorii wiekowej.
+1. [unit:dme-liderzy] Najwyżej sklasyfikowany zawodnik młodszej kategorii wiekowej oraz najwyżej sklasyfikowany zawodnik starszej kategorii wiekowej należący do puli kandydatów wchodzą do składu drużyny. Obaj zawodnicy mają zapewnione miejsca w składzie drużyny.
 
-2. [unit:dme-wybor-zrodlo] [status:source-draft] Ostateczny skład drużyny ustalają wspólnie najwyżej sklasyfikowany zawodnik młodszej kategorii wiekowej oraz najwyżej sklasyfikowany zawodnik starszej kategorii wiekowej. Dwóch zawodników wybiera się spośród pozostałych osób z puli na podstawie analizy osiągnięć w startach indywidualnych i drużynowych. Piąty zawodnik albo rezerwowy może zostać wybrany spoza tej puli.
+2. [unit:dme-wybor-zrodlo] Funkcję selekcjonera drużyny pełni zespół złożony z tych dwóch zawodników.
 
-3. [unit:dme-brak-porozumienia-zrodlo] [status:source-draft] W przypadku braku porozumienia decyzję podejmuje Zarząd SPWS.
+3. [unit:dme-pozostaly-sklad] Zespół wybiera trzech kolejnych zawodników do składu drużyny oraz szóstego zawodnika jako rezerwowego wyłącznie spośród pozostałych sześciu zawodników z puli kandydatów.
 
-4. [unit:dme-akceptacja-zrodlo] [status:source-draft] Skompletowaną drużynę przedstawia się Zarządowi PZSz do akceptacji.
+4. [unit:dme-porozumienie] Zespół ustala skład w drodze porozumienia, kierując się celem wystawienia możliwie najsilniejszej drużyny, osiągnięciami kandydatów w startach indywidualnych i drużynowych oraz wymaganiami dotyczącymi kategorii wiekowych. Miejsce w rankingu indywidualnym nie przesądza o wyborze pozostałych zawodników do drużyny.
+
+5. [unit:dme-brak-porozumienia-zrodlo] W przypadku braku porozumienia do zespołu pełniącego funkcję selekcjonera dołącza Prezes SPWS.
+
+6. [unit:dme-akceptacja-zrodlo] Proponowany skład drużyny wraz ze wskazaniem zawodnika rezerwowego przedstawia się PZSz do akceptacji.
 
 ### [section:druzynowe-mistrzostwa-swiata] Drużynowe Mistrzostwa Świata
 
@@ -183,7 +191,7 @@ zawody = 0
 
 ### [section:powolanie-uzupelniajace-druzyna] Powołanie uzupełniające
 
-[unit:powolanie-uzupelniajace-odeslanie] Powołanie uzupełniające zawodnika bez dodatniego dorobku punktowego jest dopuszczalne wyłącznie na warunkach określonych w {{ref:rola-rankingu/powolanie-uzupelniajace}}.
+[unit:powolanie-uzupelniajace-odeslanie] Powołanie uzupełniające zawodnika bez dodatniego dorobku punktowego jest dopuszczalne wyłącznie na warunkach określonych w {{ref:rola-rankingu/powolanie-uzupelniajace}}. Powołania uzupełniającego nie stosuje się do Drużynowych Mistrzostw Europy; skład drużyny i zawodnika rezerwowego wybiera się wyłącznie z puli kandydatów nominowanych do startu indywidualnego.
 
 ## [chapter:terminarz] Terminarz procesu powoływania
 <!-- scope: terminy, deklaracje, odpowiedzialność, korekty danych i dokumentacja powołań -->

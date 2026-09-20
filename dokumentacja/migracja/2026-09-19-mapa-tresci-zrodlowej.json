@@ -17,7 +17,7 @@
     {"id":"SRC-010","summary":"Szczególna kwalifikacja krajowego turnieju EVC","status":"replaced","reason":"Nie przeniesiono wobec przyjętego katalogu i warunków zewnętrznego organizatora; DR-011 i DR-012"},
     {"id":"SRC-011","summary":"Jednakowy współczynnik 1,0 dla wszystkich zawodów","status":"replaced","reason":"Zastąpiony zróżnicowanymi współczynnikami; DR-015"},
     {"id":"SRC-012","summary":"Kategorie Weteran i Grand Weteran w drużynie","status":"source-draft","destination":"§ 12"},
-    {"id":"SRC-013","summary":"Procedura wyboru drużyny na DME","status":"source-draft","destination":"§ 13"},
+    {"id":"SRC-013","summary":"Procedura wyboru drużyny na DME","status":"accepted","destination":"§ 12 i § 14; DR-023"},
     {"id":"SRC-014","summary":"Czterech zawodników na indywidualne MŚ i zastępstwo","status":"source-draft","destination":"Zasada czterech w § 10 jest zgodna z DR-004 i DR-010; zastępstwo pozostaje brudnopisem w § 11"},
     {"id":"SRC-015","summary":"Procedura wyboru drużyny na DMS","status":"source-draft","destination":"§ 14"},
     {"id":"SRC-016","summary":"Pytania o dobrowolność udziału drużynowego i koszty","status":"discussion-proposal","destination":"dokumentacja/dyskusje/2026-09-19-propozycje-z-dokumentu-zrodlowego.md"},

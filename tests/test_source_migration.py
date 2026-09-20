@@ -77,7 +77,7 @@ class SourceMigrationTests(unittest.TestCase):
             paragraph for paragraph in document.paragraphs
             if paragraph.text == "BRUDNOPIS ZE ŹRÓDŁA — DO OPRACOWANIA"
         ]
-        self.assertEqual(len(labels), 5)
+        self.assertEqual(len(labels), 4)
         draft_texts = {
             "W przypadku rezygnacji zawodnika z udziału w zawodach indywidualnych jego miejsce przechodzi na kolejnego zawodnika zgodnie z aktualnym rankingiem indywidualnym.",
             "1. Regulamin wchodzi w życie z dniem uchwalenia.",
