@@ -39,7 +39,7 @@ Autor potwierdził, że jest jedna funkcja selekcjonera pełniona przez zespół
 
 ## Decyzja
 
-Przyjęto zamkniętą pulę ośmiu zawodników na DME i gwarantowane miejsca obu liderów. Zespół pełniący funkcję selekcjonera wybiera trzech kolejnych zawodników i jednego rezerwowego wyłącznie spośród pozostałej szóstki. Kieruje się siłą drużyny, osiągnięciami kandydatów i wymaganiami wieku. W przypadku braku porozumienia dołącza Prezes SPWS. Propozycja podlega akceptacji PZSz.
+Przyjęto zamkniętą pulę ośmiu zawodników na DME i gwarantowane miejsca obu liderów. Zespół pełniący funkcję selekcjonera wybiera trzech kolejnych zawodników i jednego rezerwowego wyłącznie spośród pozostałej szóstki. Kieruje się siłą drużyny, osiągnięciami kandydatów i wymaganiami wieku. W przypadku braku porozumienia dołącza Prezes SPWS. Jeżeli nie może uczestniczyć w pracach zespołu, wyznacza inną osobę do udziału w swoim imieniu. Propozycja podlega akceptacji PZSz.
 
 ## Uzasadnienie
 

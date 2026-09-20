@@ -165,7 +165,7 @@ zawody = 0
 
 ### [section:druzynowe-mistrzostwa-europy] Drużynowe Mistrzostwa Europy
 
-1. [unit:dme-liderzy] Najwyżej sklasyfikowany zawodnik młodszej kategorii wiekowej oraz najwyżej sklasyfikowany zawodnik starszej kategorii wiekowej należący do puli kandydatów wchodzą do składu drużyny. Obaj zawodnicy mają zapewnione miejsca w składzie drużyny.
+1. [unit:dme-liderzy] Najwyżej sklasyfikowani zawodnicy młodszej i starszej kategorii wiekowej spośród zawodników należących do puli kandydatów mają zapewnione miejsca w składzie drużyny — po jednym zawodniku z każdej kategorii.
 
 2. [unit:dme-wybor-zrodlo] Funkcję selekcjonera drużyny pełni zespół złożony z tych dwóch zawodników.
 
@@ -173,7 +173,7 @@ zawody = 0
 
 4. [unit:dme-porozumienie] Zespół ustala skład w drodze porozumienia, kierując się celem wystawienia możliwie najsilniejszej drużyny, osiągnięciami kandydatów w startach indywidualnych i drużynowych oraz wymaganiami dotyczącymi kategorii wiekowych. Miejsce w rankingu indywidualnym nie przesądza o wyborze pozostałych zawodników do drużyny.
 
-5. [unit:dme-brak-porozumienia-zrodlo] W przypadku braku porozumienia do zespołu pełniącego funkcję selekcjonera dołącza Prezes SPWS.
+5. [unit:dme-brak-porozumienia-zrodlo] W przypadku braku porozumienia do zespołu pełniącego funkcję selekcjonera dołącza Prezes SPWS. Jeżeli Prezes SPWS nie może uczestniczyć w pracach zespołu, wyznacza inną osobę do udziału w tych pracach w swoim imieniu.
 
 6. [unit:dme-akceptacja-zrodlo] Proponowany skład drużyny wraz ze wskazaniem zawodnika rezerwowego przedstawia się PZSz do akceptacji.
 
