@@ -1,5 +1,5 @@
 ---
-id: DR-020
+id: DR-021
 tytul: Czytelna tabela konstrukcji Regulaminu
 typ: redakcyjna
 status: przyjęta
@@ -9,7 +9,7 @@ sezon: 2026/2027
 dotyczy: Strona „Konstrukcja regulaminu”
 decydenci: Komisja regulaminowa SPWS — na etapie inicjalnym autor projektu
 discussion_url: ""
-pr_url: ""
+pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/38
 stan_obowiązywania: obowiązuje
 zmienia: []
 zmieniona_przez: []
@@ -63,4 +63,4 @@ Nie dotyczy skutków sportowych.
 
 ## Historia zmian
 
-- 2026-09-20 — decyzja przyjęta dla poprawy czytelności dokumentu.
+- 2026-09-20 — decyzja przyjęta dla poprawy czytelności dokumentu i wdrożona w PR #38.
