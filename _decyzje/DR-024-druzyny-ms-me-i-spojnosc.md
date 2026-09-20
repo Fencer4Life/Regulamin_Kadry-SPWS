@@ -6,7 +6,7 @@ status: przyjęta
 data_inicjacji: 2026-09-20
 data_decyzji: 2026-09-20
 sezon: 2026/2027
-dotyczy: § 4–5, § 11–19
+dotyczy: § 2, § 4–5, § 11–19 oraz spis treści
 decydenci: Komisja regulaminowa SPWS — na etapie inicjalnym autor projektu
 discussion_url: ""
 pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/41
@@ -47,6 +47,10 @@ Przyjęto obowiązkową ocenę posezonową przez Komisję Regulaminową SPWS, za
 
 ## Uzasadnienie
 
+Doprecyzowano § 12 ust. 3: na Drużynowe Mistrzostwa Europy powołuje się także zawodnika rezerwowego, wybieranego wyłącznie z puli kandydatów do drużyny. W § 13 zastosowano oznaczenia V1–V4. W § 2 dodano definicję tych kategorii: V1 40–49 lat, V2 50–59 lat, V3 60–69 lat, V4 70 lat i więcej, z wiekiem ustalanym na 31 grudnia roku mistrzostw. Źródło: [EVF Handbook of Regulations, lipiec 2026, pkt 1.1.1 i 3.1.1](https://www.veteransfencing.eu/wp-content/uploads/2026/07/EVF-Handbook-2026-V2.pdf).
+
+Ze spisu treści usunięto pozycję „Informacja o prototypie”, zachowując informację o statusie projektu poza spisem. Usunięto instrukcję ręcznej aktualizacji spisu w Wordzie; generator nadal ustawia automatyczną aktualizację pól przy otwieraniu dokumentu.
+
 Na MŚ skład ustala się bezpośrednio przed startem z obecnych zawodników. Na ME wcześniejsza nominacja wymaga rezerwowego na wypadek rezygnacji. Spójne przepisy ogólne, tabele i harmonogram mają odzwierciedlać tę różnicę.
 
 ## Konsekwencje
@@ -68,3 +72,4 @@ Do uzupełnienia po sezonie 2026/2027.
 ## Historia zmian
 
 - 2026-09-20 — doprecyzowanie MŚ i ME, przyjęcie pozostałych brudnopisów i aktualizacja PR #41.
+- 2026-09-20 — definicje V1–V4 według EVF, redakcja rezerwowego ME i uproszczenie spisu treści.

@@ -7,7 +7,7 @@ project_date = "2026-09-19"
 subject = "Projekt regulaminu w strukturze ZTP — sezon 2026/2027"
 comments = "Projekt do konsultacji. Treść przyjęta redakcyjnie; wymaga formalnego zatwierdzenia PZSz."
 outline_intro = "Treść dokumentu podzielono następująco:"
-toc_note = "W Wordzie wybierz spis treści i polecenie „Aktualizuj tabelę”, jeżeli nie odświeży się automatycznie."
+toc_note = ""
 history_scope = "Pełna struktura ZTP i jednorazowa migracja treści źródłowej"
 prototype_note = "Dokument jest projektem. Przyjęcie treści podczas prac redakcyjnych nie zastępuje formalnego zatwierdzenia przez właściwy organ PZSz."
 [milestones]
@@ -35,7 +35,12 @@ zawody = 0
    6) [unit:definicja-aktualizacja-krokowa] **aktualizacji krokowej** – należy przez to rozumieć sposób aktualizacji wyników zawodów organizowanych przez SPWS, PZSz lub FIE, zgodnie z którym punkty za zawody z poprzedniego sezonu pozostają w rankingu do czasu uwzględnienia punktów za odpowiadające im zawody w sezonie bieżącym, po czym poprzedni wynik przestaje być uwzględniany;
    7) [unit:definicja-wygaszanie-kalendarzowe] **wygaszaniu kalendarzowym** – należy przez to rozumieć sposób uwzględniania wyników zawodów organizowanych przez EVF, zgodnie z którym uzyskane punkty pozostają w rankingu przez okres właściwy dla danego rodzaju zawodów, liczony od dnia zakończenia zawodów, niezależnie od tego, czy zawody mają odpowiednik w kolejnym sezonie, a po upływie tego okresu przestają być uwzględniane;
    8) [unit:definicja-zawody-limitowane] **limitowanych zawodach międzynarodowych** – należy przez to rozumieć indywidualne lub drużynowe zawody międzynarodowe rangi mistrzowskiej, w których liczba zawodników reprezentujących dane państwo jest ograniczona przepisami organizatora zawodów;
-   9) [unit:definicja-powolanie-uzupelniajace] **powołaniu uzupełniającym** – należy przez to rozumieć wyjątkowe powołanie do startu drużynowego zawodnika nieposiadającego dodatniego dorobku punktowego, dokonywane wyłącznie w celu uzupełnienia braków uniemożliwiających wystawienie kompletnej i zgodnej z przepisami drużyny.
+   9) [unit:definicja-powolanie-uzupelniajace] **powołaniu uzupełniającym** – należy przez to rozumieć wyjątkowe powołanie do startu drużynowego zawodnika nieposiadającego dodatniego dorobku punktowego, dokonywane wyłącznie w celu uzupełnienia braków uniemożliwiających wystawienie kompletnej i zgodnej z przepisami drużyny;
+   10) [unit:definicja-kategorie-wiekowe] **kategoriach wiekowych V1–V4** – należy przez to rozumieć następujące kategorie wiekowe EVF, ustalane według wieku zawodnika na dzień 31 grudnia roku, w którym odbywają się mistrzostwa:
+      a) [unit:definicja-v1] V1 – od 40 do 49 lat,
+      b) [unit:definicja-v2] V2 – od 50 do 59 lat,
+      c) [unit:definicja-v3] V3 – od 60 do 69 lat,
+      d) [unit:definicja-v4] V4 – 70 lat i więcej.
 
 ### [section:cel] Cel i zasady wyłaniania reprezentacji
 
@@ -155,11 +160,11 @@ zawody = 0
 
 2. [unit:pula-druzyny-zastepstwo] W przypadku rezygnacji zawodnika z udziału w puli kandydatów jego miejsce zajmuje kolejny zawodnik w rankingu indywidualnym jego kategorii wiekowej.
 
-3. [unit:pula-druzyny-zamknieta] Skład drużyny, a na Drużynowe Mistrzostwa Europy także zawodnika rezerwowego, wybiera się wyłącznie spośród zawodników należących do właściwej puli.
+3. [unit:pula-druzyny-zamknieta] Na Drużynowe Mistrzostwa Europy powołuje się także zawodnika rezerwowego, wybieranego wyłącznie spośród zawodników należących do puli kandydatów do drużyny.
 
 ### [section:kategorie-druzynowe] Kategorie wiekowe w drużynie
 
-[unit:kategorie-druzynowe-zrodlo] W rozgrywkach drużynowych zawody są rozgrywane w kategoriach Weteran, obejmującej kategorie 1 i 2, oraz Grand Weteran, obejmującej kategorie 3 i 4. Drużynę kompletuje się z udziałem zawodników obu właściwych kategorii wiekowych; co najmniej jeden zawodnik powinien należeć do kategorii wyższej, a preferowany jest udział dwóch takich zawodników.
+[unit:kategorie-druzynowe-zrodlo] Zawody drużynowe rozgrywane są w kategoriach Weteran, obejmującej kategorie V1 i V2, oraz Grand Weteran, obejmującej kategorie V3 i V4. Drużynę kompletuje się z udziałem zawodników obu właściwych kategorii wiekowych; co najmniej jeden zawodnik powinien należeć do kategorii wyższej, a preferowany jest udział dwóch takich zawodników.
 
 ### [section:druzynowe-mistrzostwa-swiata] Drużynowe Mistrzostwa Świata
 

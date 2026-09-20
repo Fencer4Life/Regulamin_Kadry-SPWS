@@ -55,21 +55,39 @@ EXPECTED_HEADINGS = [
     "Miejsca 21–30 · stawka 38–40 zawodników",
     "Miejsca 31–40 · stawka 31–40 zawodników",
     "Historia wersji",
-    "Informacja o prototypie",
 ]
 
 
 class CurrentDocxContractTests(unittest.TestCase):
+    def test_toc_has_no_prototype_entry_or_word_instruction(self):
+        for paragraph in self.document.paragraphs:
+            if paragraph.style.name.lower().startswith("toc"):
+                self.assertNotIn("Informacja o prototypie", paragraph._p.xml)
+            self.assertNotIn("Aktualizuj tabelę", paragraph.text)
+        note = next(p for p in self.document.paragraphs if p.text == "Informacja o prototypie")
+        self.assertEqual(note.style.name, "Normal")
+        self.assertFalse(note._p.xpath("w:pPr/w:outlineLvl"))
+
+    def test_age_definitions_and_european_reserve_are_explicit(self):
+        texts = [p.text for p in self.document.paragraphs]
+        definitions = "\n".join(texts[texts.index("§ 2"):texts.index("§ 3")])
+        for definition in ("V1 – od 40 do 49 lat", "V2 – od 50 do 59 lat", "V3 – od 60 do 69 lat", "V4 – 70 lat i więcej", "31 grudnia"):
+            self.assertIn(definition, definitions)
+        self.assertIn("3. Na Drużynowe Mistrzostwa Europy powołuje się także zawodnika rezerwowego, wybieranego wyłącznie spośród zawodników należących do puli kandydatów do drużyny.", texts)
+        categories = "\n".join(texts[texts.index("§ 13"):texts.index("§ 14")])
+        self.assertIn("kategorie V1 i V2", categories)
+        self.assertIn("kategorie V3 i V4", categories)
+
     @classmethod
     def setUpClass(cls):
         cls.document = Document(CURRENT_DOCUMENT)
         cls.contract = document_content_contract(CURRENT_DOCUMENT)
 
     def test_current_document_shape_is_frozen_before_generator_work(self):
-        self.assertEqual(len(self.document.paragraphs), 205)
+        self.assertEqual(len(self.document.paragraphs), 208)
         self.assertEqual(len(self.document.tables), 16)
         self.assertEqual(sum(len(table.rows) for table in self.document.tables), 146)
-        self.assertEqual(len(self.contract["blocks"]), 221)
+        self.assertEqual(len(self.contract["blocks"]), 224)
 
     def test_current_document_heading_order_is_explicit(self):
         headings = [

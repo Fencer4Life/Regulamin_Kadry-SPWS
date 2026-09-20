@@ -292,7 +292,6 @@ def _add_toc(document: Document, model: RegulationDocument) -> None:
         ("Konstrukcja regulaminu", 3, 1),
         *((chapter.title, index + 4, 1) for index, chapter in enumerate(model.chapters)),
         ("Historia wersji", 11, 1),
-        ("Informacja o prototypie", 11, 2),
     ]
     for index, (title, page, level) in enumerate(entries):
         paragraph = document.add_paragraph(style=f"toc {level}")
@@ -302,8 +301,9 @@ def _add_toc(document: Document, model: RegulationDocument) -> None:
     spacer = document.add_paragraph()
     spacer.paragraph_format.space_after = Pt(16)
     _add_field_end(spacer)
-    note = document.add_paragraph(style="Tekst roboczy")
-    note.add_run(model.metadata["toc_note"])
+    if model.metadata["toc_note"]:
+        note = document.add_paragraph(style="Tekst roboczy")
+        note.add_run(model.metadata["toc_note"])
     document.add_page_break()
 
 
@@ -696,8 +696,9 @@ def _add_history(document: Document, model: RegulationDocument) -> None:
         run.font.name = "Aptos"
         run.font.size = Pt(9)
     _keep_table_together(table)
-    prototype_heading = document.add_heading("Informacja o prototypie", level=2)
-    _add_bookmark(prototype_heading, 10)
+    # A plain caption stays outside the TOC, including after Word refreshes it.
+    prototype_heading = document.add_paragraph(style="Normal")
+    prototype_heading.add_run("Informacja o prototypie").bold = True
     document.add_paragraph(model.metadata["prototype_note"], style="Tekst roboczy")
 
 

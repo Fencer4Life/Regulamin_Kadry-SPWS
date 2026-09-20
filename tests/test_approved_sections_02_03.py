@@ -55,7 +55,12 @@ APPROVED_SECTION_2 = [
     "państwo jest ograniczona przepisami organizatora zawodów;",
     "9) powołaniu uzupełniającym – należy przez to rozumieć wyjątkowe powołanie do startu drużynowego "
     "zawodnika nieposiadającego dodatniego dorobku punktowego, dokonywane wyłącznie w celu "
-    "uzupełnienia braków uniemożliwiających wystawienie kompletnej i zgodnej z przepisami drużyny.",
+    "uzupełnienia braków uniemożliwiających wystawienie kompletnej i zgodnej z przepisami drużyny;",
+    "10) kategoriach wiekowych V1–V4 – należy przez to rozumieć następujące kategorie wiekowe EVF, ustalane według wieku zawodnika na dzień 31 grudnia roku, w którym odbywają się mistrzostwa:",
+    "a) V1 – od 40 do 49 lat,",
+    "b) V2 – od 50 do 59 lat,",
+    "c) V3 – od 60 do 69 lat,",
+    "d) V4 – 70 lat i więcej.",
 ]
 
 
