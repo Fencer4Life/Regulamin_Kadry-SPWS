@@ -9,7 +9,7 @@ sezon: 2026/2027
 dotyczy: § 7–9
 decydenci: Komisja regulaminowa SPWS — na etapie inicjalnym autor projektu
 discussion_url: ""
-pr_url: ""
+pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/39
 stan_obowiązywania: obowiązuje
 zmienia: []
 zmieniona_przez: []
@@ -63,4 +63,4 @@ Do uzupełnienia po sezonie 2026/2027.
 
 ## Historia zmian
 
-- 2026-09-20 — decyzja przyjęta na podstawie zatwierdzenia autora projektu i przeznaczona do wdrożenia w Pull Requeście.
+- 2026-09-20 — decyzja przyjęta na podstawie zatwierdzenia autora projektu i wdrożona w PR #39.
