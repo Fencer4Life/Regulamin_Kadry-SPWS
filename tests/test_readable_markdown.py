@@ -18,7 +18,7 @@ class ReadableMarkdownTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             source, output = Path(directory)/'source.md', Path(directory)/'out.docx'
             text = CANONICAL_SOURCE.read_text()
-            text = text.replace('cover_version = "0.1"', 'cover_version = "TEST-VERSION"')
+            text = text.replace('| Wersja dokumentu | 0.1 |', '| Wersja dokumentu | TEST-VERSION |')
             text = text.replace('| 4 | 54,3 |', '| 4 | 9,9 |', 1)
             source.write_text(text)
             build_document(source, output)
@@ -30,7 +30,7 @@ class ReadableMarkdownTests(unittest.TestCase):
         text = CANONICAL_SOURCE.read_text()
         metadata, body = text[4:].split("\n+++\n", 1)
         self.assertNotIn("resource_", metadata)
-        section = body.split("[section:publikacja-rankingu]", 1)[1].split("### ", 1)[0]
+        section = body.split("<!-- section:publikacja-rankingu -->", 1)[1].split("### ", 1)[0]
         self.assertIn("<!-- note:", section)
         self.assertIn("[https://fencer4life.github.io/spws-automated-ranklist/]", section)
         self.assertIn("tabela-punktacji.html", body.split("{{annex:points}}", 1)[1])

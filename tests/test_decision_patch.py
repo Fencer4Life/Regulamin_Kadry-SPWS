@@ -101,7 +101,7 @@ class DecisionPatchTests(unittest.TestCase):
             source.write_bytes(CANONICAL_SOURCE.read_bytes())
             docx.write_bytes(CURRENT_DOCUMENT.read_bytes())
             card.write_text("---\nstatus: przyjęta\n---\n" + format_fragments(
-                "[unit:publikacja-rankingu-zrodlo]", "[unit:INVALID-ID]"))
+                "<!-- unit:publikacja-rankingu-zrodlo -->", "<!-- unit:INVALID-ID -->"))
             before = source.read_bytes(), docx.read_bytes(), card.read_bytes()
             with self.assertRaises(ValueError):
                 apply_decision(card, source, docx)

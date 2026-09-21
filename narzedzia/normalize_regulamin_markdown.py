@@ -67,7 +67,11 @@ def _serialize_note(note: NoteBlock, lines: list[str]) -> None:
 
 
 def serialize_regulation(model: RegulationDocument) -> str:
+    from narzedzia.publication_source import wrap, make_visible
     lines = ["+++", model.metadata_source, "+++", ""]
+    if model.publication:
+        lines.append(''.join(wrap(key, model.publication[key]) for key in ('cover', 'toc', 'outline')).rstrip())
+        lines.append('')
     for chapter in model.chapters:
         lines.extend(
             [
@@ -102,16 +106,23 @@ def serialize_regulation(model: RegulationDocument) -> str:
             lines.append("")
     if model.has_points_annex:
         lines.extend(["{{annex:points}}", ""])
+        if model.publication:
+            lines.extend([wrap('annex-heading', model.publication['annex-heading']).rstrip(), ''])
         for table in model.annex_tables:
             lines.extend([f"#### {table.name}", ""])
             lines.append("| " + " | ".join(table.rows[0]) + " |")
             lines.append("| " + " | ".join("---" for _ in table.rows[0]) + " |")
             lines.extend("| " + " | ".join(row) + " |" for row in table.rows[1:])
             lines.append("")
+        if model.publication:
+            lines.extend([wrap('annex-note', model.publication['annex-note']).rstrip(), ''])
         for note in model.annex_notes:
             _serialize_note(note, lines)
             lines.append("")
-    return "\n".join(lines).rstrip() + "\n"
+    if model.publication:
+        lines.append(''.join(wrap(key, model.publication[key]) for key in ('history', 'running')).rstrip())
+    result = "\n".join(lines).rstrip() + "\n"
+    return make_visible(result, model) if model.publication else result
 
 
 def normalize_source(path: Path) -> str:

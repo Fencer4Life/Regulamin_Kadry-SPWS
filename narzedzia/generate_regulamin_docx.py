@@ -196,9 +196,9 @@ def add_header_footer(section, content=None):
     run.font.name = "Aptos"
     run.font.size = Pt(8)
     run.font.color.rgb = RGBColor.from_string(MUTED)
-    add_field(p, "PAGE", "1")
-    p.add_run(" z ")
-    add_field(p, "NUMPAGES", "1")
+    add_field(p, "PAGE", content.get("page_cache", "1"))
+    p.add_run(content.get("footer_join", " z "))
+    add_field(p, "NUMPAGES", content.get("pages_cache", "1"))
 
 
 def add_cover(doc, content=None):
@@ -251,11 +251,11 @@ def add_cover(doc, content=None):
     table.columns[1].width = Cm(10.0)
     set_table_borders(table, color=LINE, size="4")
     values = (
-        ("Wersja dokumentu", content.get("cover_version", "0.1")),
-        ("Status", content.get("status", "projekt do konsultacji")),
-        ("Data projektu", content.get("cover_date", "[data]")),
+        (content.get("cover_label_0", "Wersja dokumentu"), content.get("cover_version", "0.1")),
+        (content.get("cover_label_1", "Status"), content.get("status", "projekt do konsultacji")),
+        (content.get("cover_label_2", "Data projektu"), content.get("cover_date", "[data]")),
     )
-    for row, (label, value) in zip(table.rows, values):
+    for number, (row, (label, value)) in enumerate(zip(table.rows, values)):
         row.cells[0].width = Cm(5.2)
         row.cells[1].width = Cm(10.0)
         row.cells[0].vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
@@ -274,7 +274,7 @@ def add_cover(doc, content=None):
         run = p.add_run(value)
         run.font.name = "Aptos"
         run.font.size = Pt(10)
-        run.bold = label == "Wersja dokumentu"
+        run.bold = number == 0
 
     doc.add_page_break()
 
