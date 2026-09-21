@@ -32,13 +32,26 @@ def parse_discussion_form(body: str) -> dict[str, str]:
         "priorytet": _discussion_field(body, "Priorytet"),
         "obszar": _discussion_field(body, "Obszar"),
         "propozycja": _discussion_field(body, "Proponowane rozwiązanie"),
-        "fragment_markdown": _discussion_field(body, "Fragment Markdown do zastąpienia"),
-        "nowe_brzmienie_markdown": _discussion_field(body, "Nowe brzmienie Markdown"),
+        "fragment_markdown": _discussion_fragment(body, "Fragment Markdown do zastąpienia"),
+        "nowe_brzmienie_markdown": _discussion_fragment(body, "Nowe brzmienie Markdown"),
         "alternatywy": _discussion_field(body, "Inne rozważane podejścia"),
         "materialy": _discussion_field(body, "Materiały lub przykłady"),
         "powiazane": zalezy_od,
         "zalezy_od": zalezy_od,
     }
+
+
+def _discussion_fragment(body: str, label: str) -> str:
+    # Source section headings are content, not form boundaries. Preserve ZTP indentation.
+    labels = ('Koordynator dyskusji', 'Problem', 'Priorytet', 'Obszar',
+              'Proponowane rozwiązanie', 'Fragment Markdown do zastąpienia',
+              'Nowe brzmienie Markdown', 'Inne rozważane podejścia',
+              'Materiały lub przykłady', 'Zależy od', 'Powiązane decyzje')
+    boundary = '|'.join(re.escape(item) for item in labels)
+    pattern = rf'^### {re.escape(label)}[ \t]*\r?\n(.*?)(?=^### (?:{boundary})[ \t]*\r?$|\Z)'
+    match = re.search(pattern, body, re.MULTILINE | re.DOTALL)
+    value = match.group(1).strip('\r\n') if match else ''
+    return '' if value.strip() == '_No response_' else value
 
 
 def create(event_path: Path, decisions_dir: Path) -> Path:

@@ -658,60 +658,55 @@ def _format_annex_cell(cell, text: str, *, header=False, first_column=False, alt
 
 def _add_points_annex(document: Document, model: RegulationDocument) -> None:
     document.add_page_break()
-    label = document.add_paragraph("ZAŁĄCZNIK NR 1", style="Etykieta rozdzialu")
+    label = document.add_paragraph(model.metadata["annex_label"], style="Etykieta rozdzialu")
     label.alignment = WD_ALIGN_PARAGRAPH.CENTER
     title = document.add_paragraph(
-        "Tabela punktacji Pucharu Polski Weteranów w szermierce",
+        model.metadata["annex_title"],
         style="Heading 1",
     )
     title.alignment = WD_ALIGN_PARAGRAPH.CENTER
     subtitle = document.add_paragraph(style="Normal")
     subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
     subtitle.add_run(
-        "Punkty rankingowe za miejsce zdobyte w stawce liczącej od 4 do 40 zawodników "
-        "— sezon 2026/2027"
+        model.metadata["annex_subtitle"]
     ).italic = True
     coefficient = document.add_paragraph(style="Normal")
     coefficient.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    coefficient.add_run("Współczynnik rangi PPW: 1,0").bold = True
+    coefficient.add_run(model.metadata["annex_coefficient"]).bold = True
 
-    for first_place, last_place in PLACE_BLOCKS:
-        places = list(range(first_place, last_place + 1))
-        first_participant = max(MIN_PARTICIPANTS, first_place)
-        participants = list(range(first_participant, MAX_PARTICIPANTS + 1))
-        for start in range(0, len(participants), PARTICIPANT_CHUNK_SIZE):
-            chunk = participants[start : start + PARTICIPANT_CHUNK_SIZE]
-            heading = document.add_paragraph(
-                f"Miejsca {first_place}–{last_place} · stawka {chunk[0]}–{chunk[-1]} zawodników",
-                style="Heading 2",
-            )
-            heading.paragraph_format.keep_with_next = True
-            table = document.add_table(rows=1, cols=1 + len(places))
-            table.style = "Table Grid"
-            table.autofit = False
-            header = table.rows[0]
-            set_repeat_table_header(header)
-            header.cells[0].width = Cm(3.0)
-            _format_annex_cell(header.cells[0], "Liczba zawodników w stawce", header=True)
-            for index, place in enumerate(places, start=1):
-                header.cells[index].width = Cm(1.25)
-                _format_annex_cell(header.cells[index], str(place), header=True)
-            for row_number, participant_count in enumerate(chunk):
-                row = table.add_row()
-                row.cells[0].width = Cm(3.0)
-                _format_annex_cell(row.cells[0], str(participant_count), first_column=True)
-                for column_index, place in enumerate(places, start=1):
-                    row.cells[column_index].width = Cm(1.25)
-                    value = _format_points(_score(place, participant_count)) if place <= participant_count else "—"
-                    _format_annex_cell(
-                        row.cells[column_index],
-                        value,
-                        alternate=row_number % 2 == 1,
-                    )
-            _keep_table_together(table)
+    if not model.annex_tables:
+        raise ValueError("Brak tabel załącznika w źródle Markdown")
+    for block in model.annex_tables:
+        places = block.rows[0][1:]
+        heading = document.add_paragraph(
+            block.name,
+            style="Heading 2",
+        )
+        heading.paragraph_format.keep_with_next = True
+        table = document.add_table(rows=1, cols=1 + len(places))
+        table.style = "Table Grid"
+        table.autofit = False
+        header = table.rows[0]
+        set_repeat_table_header(header)
+        header.cells[0].width = Cm(3.0)
+        _format_annex_cell(header.cells[0], block.rows[0][0], header=True)
+        for index, place in enumerate(places, start=1):
+            header.cells[index].width = Cm(1.25)
+            _format_annex_cell(header.cells[index], str(place), header=True)
+        for row_number, values in enumerate(block.rows[1:]):
+            row = table.add_row()
+            row.cells[0].width = Cm(3.0)
+            _format_annex_cell(row.cells[0], values[0], first_column=True)
+            for column_index, value in enumerate(values[1:], start=1):
+                row.cells[column_index].width = Cm(1.25)
+                _format_annex_cell(
+                    row.cells[column_index],
+                    value,
+                    alternate=row_number % 2 == 1,
+                )
+        _keep_table_together(table)
     note = document.add_paragraph(
-        "Pełna tabela dla stawek liczących od 4 do 300 zawodników oraz kalkulator punktów "
-        "są publikowane przez SPWS na stronie internetowej."
+        model.metadata["annex_note"]
     )
     note.paragraph_format.space_before = Pt(8)
     if model.annex_notes:
@@ -810,8 +805,8 @@ def build_document(source: Path, output: Path) -> Path:
     _align_styles_with_current_document(document)
     for section in document.sections:
         configure_page(section)
-    add_header_footer(document.sections[0])
-    add_cover(document)
+    add_header_footer(document.sections[0], model.metadata)
+    add_cover(document, model.metadata)
     _normalize_empty_first_page_header(document)
     _normalize_cover_run_properties(document)
     _add_toc(document, model)

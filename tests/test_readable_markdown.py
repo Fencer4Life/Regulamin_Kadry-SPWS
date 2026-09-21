@@ -8,6 +8,24 @@ from tests.test_docx_current_contract import CANONICAL_SOURCE, CURRENT_DOCUMENT
 
 
 class ReadableMarkdownTests(unittest.TestCase):
+    def test_annex_tables_and_cover_values_are_authoritative_source(self):
+        from docx import Document
+        from narzedzia.build_regulamin_docx import build_document
+        model = parse_regulation_source(CANONICAL_SOURCE)
+        self.assertTrue(model.annex_tables)
+        reference = Document(CURRENT_DOCUMENT)
+        self.assertEqual(model.metadata['cover_version'], reference.tables[0].cell(0, 1).text)
+        with tempfile.TemporaryDirectory() as directory:
+            source, output = Path(directory)/'source.md', Path(directory)/'out.docx'
+            text = CANONICAL_SOURCE.read_text()
+            text = text.replace('cover_version = "0.1"', 'cover_version = "TEST-VERSION"')
+            text = text.replace('| 4 | 54,3 |', '| 4 | 9,9 |', 1)
+            source.write_text(text)
+            build_document(source, output)
+            document = Document(output)
+            self.assertEqual(document.tables[0].cell(0, 1).text, 'TEST-VERSION')
+            self.assertTrue(any(t.cell(1, 1).text == '9,9' for t in document.tables if len(t.columns) == 11))
+
     def test_links_live_in_source_body_and_annex_not_metadata(self):
         text = CANONICAL_SOURCE.read_text()
         metadata, body = text[4:].split("\n+++\n", 1)

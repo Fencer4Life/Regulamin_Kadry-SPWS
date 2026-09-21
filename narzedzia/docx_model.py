@@ -113,6 +113,7 @@ class RegulationDocument:
     metadata_source: str = ""
     milestones: dict[str, int] = field(default_factory=dict)
     annex_notes: list[NoteBlock] = field(default_factory=list)
+    annex_tables: list[TableBlock] = field(default_factory=list)
 
 
 TERM_RE = re.compile(r"\{\{(term|days):([a-z0-9-]+)}}")
@@ -200,6 +201,8 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
     required = {
         "title", "subtitle", "version", "status", "project_date", "subject",
         "comments", "outline_intro", "toc_note", "history_scope",
+        "cover_version", "cover_date", "cover_label", "cover_footer", "header_text", "footer_text",
+        "annex_label", "annex_title", "annex_subtitle", "annex_coefficient", "annex_note",
     }
     missing = sorted(required - metadata.keys())
     if missing:
@@ -212,6 +215,7 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
     unit_stack: dict[int, ZtpUnit] = {}
     has_points_annex = False
     annex_notes: list[NoteBlock] = []
+    annex_tables: list[TableBlock] = []
     identifiers: set[str] = set()
     index = 0
     while index < len(lines):
@@ -219,6 +223,14 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
         line = raw_line.strip()
         index += 1
         if not line:
+            continue
+        if line.startswith('#### ') and has_points_annex:
+            while index < len(lines) and not lines[index].strip():
+                index += 1
+            rows, index = _parse_markdown_table(lines, index)
+            if len(rows[0]) != 11:
+                raise ValueError('Tabela załącznika wymaga 11 kolumn')
+            annex_tables.append(TableBlock(name=line[5:], rows=rows))
             continue
         if note_match := re.fullmatch(r"<!-- note:([a-z0-9-]+) -->", line):
             identifier = note_match.group(1)
@@ -340,4 +352,5 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
         metadata_source=metadata_text,
         milestones=milestones,
         annex_notes=annex_notes,
+        annex_tables=annex_tables,
     )

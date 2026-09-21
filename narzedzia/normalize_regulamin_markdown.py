@@ -102,6 +102,12 @@ def serialize_regulation(model: RegulationDocument) -> str:
             lines.append("")
     if model.has_points_annex:
         lines.extend(["{{annex:points}}", ""])
+        for table in model.annex_tables:
+            lines.extend([f"#### {table.name}", ""])
+            lines.append("| " + " | ".join(table.rows[0]) + " |")
+            lines.append("| " + " | ".join("---" for _ in table.rows[0]) + " |")
+            lines.extend("| " + " | ".join(row) + " |" for row in table.rows[1:])
+            lines.append("")
         for note in model.annex_notes:
             _serialize_note(note, lines)
             lines.append("")

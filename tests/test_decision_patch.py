@@ -8,6 +8,20 @@ from tests.test_docx_current_contract import CANONICAL_SOURCE, CURRENT_DOCUMENT
 
 
 class DecisionPatchTests(unittest.TestCase):
+    def test_decision_before_after_changes_annex_table_in_docx_and_preview(self):
+        from docx import Document
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source, docx, card = root/'source.md', root/'source.docx', root/'DR-999.md'
+            source.write_bytes(CANONICAL_SOURCE.read_bytes())
+            old = next(line for line in source.read_text().splitlines() if line.startswith('| 4 | 54,3 |'))
+            new = old.replace('54,3', '54,4', 1)
+            card.write_text('---\nstatus: przyjęta\n---\n'+format_fragments(old, new))
+            apply_decision(card, source, docx)
+            self.assertIn(new, source.read_text())
+            self.assertIn(new, source.with_suffix('.podglad.md').read_text())
+            self.assertTrue(any(t.cell(1, 1).text == '54,4' for t in Document(docx).tables if len(t.columns) == 11))
+
     def test_template_has_distinct_empty_code_fields_with_instructions(self):
         template = (CANONICAL_SOURCE.parents[1] / "szablony/nowa-decyzja.md").read_text()
         self.assertIn("## Stary fragment Markdown", template)

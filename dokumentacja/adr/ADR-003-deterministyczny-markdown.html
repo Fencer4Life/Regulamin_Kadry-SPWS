@@ -21,7 +21,8 @@
     <tr><td><code>regulamin/…2026.podglad.md</code></td><td>Pełna treść wygenerowanego DOCX, w tym wszystkie tabele i oś czasu</td><td>Nie — nadpisywany przez generator</td></tr>
     <tr><td><code>regulamin/…2026.docx</code></td><td>Wersja do przeglądu i publikacji</td><td>Nie — powstaje z kanonicznego źródła i renderera</td></tr>
   </tbody></table>
-  <p>Tabele obliczeniowe nadal powstają z reguł generatora, a nie z ręcznie przepisanych wyników. Zmiana algorytmu wymaga zmiany kodu i testów; karta stary/nowy służy do zmiany kanonicznego Markdown. Podgląd jest czytelnym wynikiem, nie drugim źródłem prawdy.</p>
+  <p>Aktualizacja 21.09.2026: zgodnie z poleceniem odtworzenia aktualnego DOCX przeniesiono wszystkie komórki tabel załącznika do kanonicznego Markdown, mechanicznie z dokumentu wzorcowego, bez ręcznej transkrypcji. Generator odczytuje te wartości, nie przelicza ich po cichu. Nagłówki tabel zapisuje się jako <code>####</code> po znaczniku załącznika. Opisy załącznika, dane okładki, nagłówka i stopki pochodzą z jawnych metadanych źródła. Podgląd pozostaje wynikiem, nie drugim źródłem prawdy. Zmiana punktacji wymaga jawnej zmiany źródła i odpowiadających jej testów.</p>
+  <p>Wzorcowy DOCX ma na okładce wersję 0.1 i datę [data], natomiast w historii wersję 0.2 i datę 2026-09-19. Migracja zachowuje tę istniejącą różnicę za pomocą osobnych pól <code>cover_version</code> i <code>cover_date</code>, zamiast samowolnie zmieniać wzorzec. Test modyfikacji źródła sprawdza, że nowa wartość okładki i komórki tabeli rzeczywiście przechodzi do DOCX.</p>
   <h2>Co wpisuje Redaktor</h2>
   <ol>
     <li>Otwiera <a href="../../szablony/nowa-decyzja.md">szablon decyzji</a> lub kartę utworzoną z dyskusji.</li>
