@@ -4,7 +4,7 @@ import argparse
 import re
 from pathlib import Path
 
-from narzedzia.docx_model import RegulationDocument, TableBlock, ZtpUnit, parse_regulation_source, resolve_terms
+from narzedzia.docx_model import NoteBlock, RegulationDocument, TableBlock, ZtpUnit, parse_regulation_source, resolve_terms
 
 
 REFERENCE_RE = re.compile(r"\{\{ref:([a-z0-9-]+)/([a-z0-9-]+)}}")
@@ -12,7 +12,8 @@ INDENTS = {"paragraph": 0, "ust": 0, "pkt": 3, "lit": 6, "tiret": 9, "double-tir
 
 
 def _markdown_text(unit: ZtpUnit) -> str:
-    return "".join(f"**{run.text}**" if run.bold else run.text for run in unit.runs)
+    return "".join(f"[{run.text}]({run.href})" if run.href else
+                   f"**{run.text}**" if run.bold else run.text for run in unit.runs)
 
 
 def _unit_marker(unit: ZtpUnit, index: int) -> str:
@@ -58,6 +59,13 @@ def _serialize_unit(unit: ZtpUnit, index: int, total: int, lines: list[str]) -> 
         _serialize_unit(child, child_index, child_total, lines)
 
 
+def _serialize_note(note: NoteBlock, lines: list[str]) -> None:
+    lines.append(f"<!-- note:{note.identifier} -->")
+    for paragraph in note.paragraphs:
+        lines.extend([paragraph, ""])
+    lines.append("<!-- /note -->")
+
+
 def serialize_regulation(model: RegulationDocument) -> str:
     lines = ["+++", model.metadata_source, "+++", ""]
     for chapter in model.chapters:
@@ -79,6 +87,8 @@ def serialize_regulation(model: RegulationDocument) -> str:
                 if isinstance(block, ZtpUnit):
                     unit_index += 1
                     _serialize_unit(block, unit_index, len(unit_blocks), lines)
+                elif isinstance(block, NoteBlock):
+                    _serialize_note(block, lines)
                 elif isinstance(block, TableBlock):
                     lines.extend(["", f"{{{{table:{block.name}}}}}", ""])
                     lines.append("| " + " | ".join(block.rows[0]) + " |")
@@ -92,6 +102,15 @@ def serialize_regulation(model: RegulationDocument) -> str:
             lines.append("")
     if model.has_points_annex:
         lines.extend(["{{annex:points}}", ""])
+        for table in model.annex_tables:
+            lines.extend([f"#### {table.name}", ""])
+            lines.append("| " + " | ".join(table.rows[0]) + " |")
+            lines.append("| " + " | ".join("---" for _ in table.rows[0]) + " |")
+            lines.extend("| " + " | ".join(row) + " |" for row in table.rows[1:])
+            lines.append("")
+        for note in model.annex_notes:
+            _serialize_note(note, lines)
+            lines.append("")
     return "\n".join(lines).rstrip() + "\n"
 
 

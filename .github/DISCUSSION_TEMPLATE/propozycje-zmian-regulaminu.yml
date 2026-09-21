@@ -67,13 +67,13 @@ body:
     id: current_markdown
     attributes:
       label: Fragment Markdown do zastąpienia
-      description: Dla szybkiej korekty wklej dokładny fragment źródła Markdown. Pozostaw puste dla pełnej ścieżki decyzji.
+      description: Wklej dokładny stary fragment kanonicznego Markdown, razem ze znacznikami jednostek i wcięciami. Nie kopiuj z DOCX ani z podglądu. Automat przeniesie go do pola Stary fragment Markdown w karcie decyzji. Możesz uzupełnić później, ale bez obu fragmentów automat nie zmieni regulaminu.
 
   - type: textarea
     id: replacement_markdown
     attributes:
       label: Nowe brzmienie Markdown
-      description: Dla szybkiej korekty wklej pełne nowe brzmienie fragmentu. Pozostaw puste dla pełnej ścieżki decyzji.
+      description: Wklej kompletny nowy fragment zastępujący stary. Zachowaj identyfikatory istniejących jednostek. Automat przeniesie go do pola Nowy fragment Markdown w karcie decyzji; nie wywnioskuje zmiany z opisu ani uzasadnienia.
 
   - type: textarea
     id: alternatives

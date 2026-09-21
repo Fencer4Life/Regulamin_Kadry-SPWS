@@ -51,7 +51,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: regulamin-candidate
-          path: .artifacts/regulamin-candidate.docx
+          path: |
+            .artifacts/regulamin-candidate.docx
+            regulamin/*.podglad.md
           if-no-files-found: error
           retention-days: 14
   build:

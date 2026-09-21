@@ -72,7 +72,7 @@ class CommissionGuideTests(unittest.TestCase):
         text = (ROOT / "przewodnik.html").read_text(encoding="utf-8")
         for value in (
             "Dwie ścieżki dokumentu: pełna i szybka",
-            "Redaktor uzupełnia kartę, sam opracowuje zmianę Markdown",
+            "Redaktor uzupełnia kartę, w szczególności pola starego i nowego fragmentu",
             "sekcji <b>Artifacts</b>",
             "regulamin-candidate",
             "Request changes",

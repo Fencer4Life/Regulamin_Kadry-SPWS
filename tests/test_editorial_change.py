@@ -47,6 +47,15 @@ nowe brzmienie
 
 
 class EditorialChangeTests(unittest.TestCase):
+    def test_form_preserves_source_heading_and_indentation_in_before_after_fields(self):
+        from narzedzia.create_decision_from_discussion import parse_discussion_form
+        old = '   1) [unit:sample] Treść.\n\n### [section:next] Następny paragraf\n\n[unit:next] Dalej.'
+        new = old.replace('Treść.', 'Nowa treść.')
+        form = FORM.replace('stare brzmienie', old).replace('nowe brzmienie', new)
+        fields = parse_discussion_form(form)
+        self.assertEqual(fields['fragment_markdown'], old)
+        self.assertEqual(fields['nowe_brzmienie_markdown'], new)
+
     def test_applies_one_exact_replacement_and_creates_complete_editorial_card(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -73,6 +82,10 @@ class EditorialChangeTests(unittest.TestCase):
             self.assertIn("- [ ] **Nie**", card)
             self.assertIn("Korekta redakcyjna bez zmiany sensu", card)
             self.assertNotIn("Do uzupełnienia", card)
+            self.assertIn("## Stary fragment Markdown", card)
+            self.assertIn("## Nowy fragment Markdown", card)
+            from narzedzia.decision_patch import read_fragments
+            self.assertEqual(read_fragments(card), ("stare brzmienie", "nowe brzmienie"))
 
     def test_rejects_non_unique_fragment_without_changing_source_or_creating_card(self):
         with tempfile.TemporaryDirectory() as directory:

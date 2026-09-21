@@ -9,11 +9,17 @@ comments = "Projekt do konsultacji. Treść przyjęta redakcyjnie; wymaga przyj�
 outline_intro = "Treść dokumentu podzielono następująco:"
 toc_note = ""
 history_scope = "Pełna struktura ZTP i jednorazowa migracja treści źródłowej"
-resource_links_title = "Materiały pomocnicze — wersja nieoficjalna"
-resource_links_note = "Regulamin nie został jeszcze uchwalony. Poniższe odnośniki prowadzą do nieoficjalnych wersji roboczych materiałów pomocniczych. Po uchwaleniu Regulaminu zostaną zastąpione odnośnikami do odpowiednich stron w oficjalnym serwisie SPWS: weteraniszermierki.pl."
-resource_ranking_url = "https://fencer4life.github.io/spws-automated-ranklist/"
-resource_table_url = "https://fencer4life.github.io/spws-automated-ranklist/tabela-punktacji.html"
-resource_calculator_url = "https://fencer4life.github.io/spws-automated-ranklist/kalkulator-punktow.html"
+cover_version = "0.1"
+cover_date = "[data]"
+cover_label = "PROJEKT"
+cover_footer = "Projekt regulaminu  ·  sezon 2026/2027"
+header_text = "Regulamin powoływania reprezentacji Polski weteranów"
+footer_text = "Projekt · wersja 0.1     |     Strona "
+annex_label = "ZAŁĄCZNIK NR 1"
+annex_title = "Tabela punktacji Pucharu Polski Weteranów w szermierce"
+annex_subtitle = "Punkty rankingowe za miejsce zdobyte w stawce liczącej od 4 do 40 zawodników — sezon 2026/2027"
+annex_coefficient = "Współczynnik rangi PPW: 1,0"
+annex_note = "Pełna tabela dla stawek liczących od 4 do 300 zawodników oraz kalkulator punktów są publikowane przez SPWS na stronie internetowej."
 [milestones]
 otwarcie = 90
 karty = 75
@@ -131,6 +137,19 @@ zawody = 0
 ### [section:publikacja-rankingu] Publikacja rankingu
 
 [unit:publikacja-rankingu-zrodlo] Ranking indywidualny oraz kalkulator punktów są publikowane na stronie internetowej.
+
+<!-- note:materialy-pomocnicze -->
+**Materiały pomocnicze — wersja nieoficjalna**
+
+Regulamin nie został jeszcze uchwalony. Poniższe odnośniki prowadzą do nieoficjalnych wersji roboczych materiałów pomocniczych. Po uchwaleniu Regulaminu zostaną zastąpione odnośnikami do odpowiednich stron w oficjalnym serwisie SPWS: weteraniszermierki.pl.
+
+**Ranking:** [https://fencer4life.github.io/spws-automated-ranklist/](https://fencer4life.github.io/spws-automated-ranklist/)
+
+**Tabela punktacji:** [https://fencer4life.github.io/spws-automated-ranklist/tabela-punktacji.html](https://fencer4life.github.io/spws-automated-ranklist/tabela-punktacji.html)
+
+**Kalkulator punktów:** [https://fencer4life.github.io/spws-automated-ranklist/kalkulator-punktow.html](https://fencer4life.github.io/spws-automated-ranklist/kalkulator-punktow.html)
+
+<!-- /note -->
 
 ### [section:polaczone-kategorie] Wyniki w połączonych kategoriach wiekowych
 
@@ -307,3 +326,145 @@ zawody = 0
 3. [unit:publikacja-regulaminu] SPWS publikuje zatwierdzony Regulamin wraz z załącznikami na swojej stronie internetowej.
 
 {{annex:points}}
+
+#### Miejsca 1–10 · stawka 4–20 zawodników
+
+| Liczba zawodników w stawce | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 4 | 54,3 | 30,0 | 9,7 | 1,0 | — | — | — | — | — | — |
+| 5 | 68,6 | 43,9 | 23,2 | 14,1 | 1,0 | — | — | — | — | — |
+| 6 | 72,2 | 47,1 | 26,1 | 16,6 | 3,5 | 1,0 | — | — | — | — |
+| 7 | 75,3 | 49,9 | 28,5 | 18,8 | 5,7 | 3,1 | 1,0 | — | — | — |
+| 8 | 78,0 | 52,3 | 30,7 | 20,7 | 7,6 | 5,0 | 2,9 | 1,0 | — | — |
+| 9 | 90,4 | 64,5 | 42,6 | 32,3 | 19,2 | 16,7 | 14,5 | 12,6 | 1,0 | — |
+| 10 | 92,6 | 66,4 | 44,3 | 33,8 | 20,7 | 18,1 | 16,0 | 14,1 | 2,5 | 1,0 |
+| 11 | 94,6 | 68,2 | 45,9 | 35,2 | 22,0 | 19,5 | 17,3 | 15,5 | 3,8 | 2,3 |
+| 12 | 96,5 | 69,9 | 47,3 | 36,4 | 23,3 | 20,7 | 18,6 | 16,7 | 5,0 | 3,6 |
+| 13 | 98,2 | 71,4 | 48,6 | 37,5 | 24,4 | 21,9 | 19,7 | 17,8 | 6,2 | 4,7 |
+| 14 | 99,8 | 72,8 | 49,9 | 38,6 | 25,5 | 22,9 | 20,7 | 18,9 | 7,2 | 5,7 |
+| 15 | 101,3 | 74,1 | 51,0 | 39,6 | 26,4 | 23,9 | 21,7 | 19,8 | 8,2 | 6,7 |
+| 16 | 102,7 | 75,4 | 52,1 | 40,5 | 27,4 | 24,8 | 22,6 | 20,8 | 9,1 | 7,6 |
+| 17 | 114,0 | 86,5 | 63,1 | 51,4 | 38,2 | 35,7 | 33,5 | 31,6 | 20,0 | 18,5 |
+| 18 | 115,3 | 87,7 | 64,1 | 52,2 | 39,0 | 36,5 | 34,3 | 32,4 | 20,8 | 19,3 |
+| 19 | 116,5 | 88,7 | 65,0 | 53,0 | 39,8 | 37,2 | 35,1 | 33,2 | 21,5 | 20,0 |
+| 20 | 117,6 | 89,7 | 65,9 | 53,7 | 40,5 | 38,0 | 35,8 | 33,9 | 22,3 | 20,8 |
+
+#### Miejsca 1–10 · stawka 21–37 zawodników
+
+| Liczba zawodników w stawce | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 21 | 118,8 | 90,7 | 66,7 | 54,4 | 41,2 | 38,7 | 36,5 | 34,6 | 22,9 | 21,5 |
+| 22 | 119,8 | 91,6 | 67,5 | 55,0 | 41,9 | 39,3 | 37,2 | 35,3 | 23,6 | 22,1 |
+| 23 | 120,8 | 92,5 | 68,3 | 55,7 | 42,5 | 40,0 | 37,8 | 35,9 | 24,2 | 22,8 |
+| 24 | 121,8 | 93,4 | 69,0 | 56,3 | 43,1 | 40,6 | 38,4 | 36,5 | 24,8 | 23,4 |
+| 25 | 122,8 | 94,2 | 69,7 | 56,9 | 43,7 | 41,1 | 39,0 | 37,1 | 25,4 | 23,9 |
+| 26 | 123,7 | 95,0 | 70,4 | 57,4 | 44,3 | 41,7 | 39,5 | 37,6 | 26,0 | 24,5 |
+| 27 | 124,5 | 95,8 | 71,0 | 58,0 | 44,8 | 42,2 | 40,1 | 38,2 | 26,5 | 25,0 |
+| 28 | 125,4 | 96,5 | 71,7 | 58,5 | 45,3 | 42,8 | 40,6 | 38,7 | 27,0 | 25,5 |
+| 29 | 126,2 | 97,2 | 72,3 | 59,0 | 45,8 | 43,3 | 41,1 | 39,2 | 27,5 | 26,0 |
+| 30 | 127,0 | 97,9 | 72,9 | 59,5 | 46,3 | 43,7 | 41,6 | 39,7 | 28,0 | 26,5 |
+| 31 | 127,8 | 98,6 | 73,4 | 59,9 | 46,8 | 44,2 | 42,0 | 40,1 | 28,5 | 27,0 |
+| 32 | 128,6 | 99,2 | 74,0 | 60,4 | 47,2 | 44,7 | 42,5 | 40,6 | 28,9 | 27,4 |
+| 33 | 138,9 | 109,5 | 84,2 | 70,6 | 57,4 | 54,9 | 52,7 | 50,9 | 39,2 | 37,7 |
+| 34 | 139,2 | 109,8 | 84,5 | 70,7 | 57,6 | 55,1 | 53,0 | 51,1 | 39,5 | 38,0 |
+| 35 | 139,4 | 110,1 | 84,7 | 70,9 | 57,8 | 55,3 | 53,2 | 51,3 | 39,7 | 38,3 |
+| 36 | 139,7 | 110,3 | 84,9 | 71,0 | 58,0 | 55,5 | 53,4 | 51,6 | 40,0 | 38,5 |
+| 37 | 140,0 | 110,6 | 85,1 | 71,2 | 58,2 | 55,7 | 53,6 | 51,8 | 40,2 | 38,8 |
+
+#### Miejsca 1–10 · stawka 38–40 zawodników
+
+| Liczba zawodników w stawce | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 38 | 140,3 | 110,8 | 85,3 | 71,3 | 58,3 | 55,9 | 53,8 | 52,0 | 40,4 | 39,0 |
+| 39 | 140,5 | 111,1 | 85,5 | 71,5 | 58,5 | 56,0 | 54,0 | 52,2 | 40,6 | 39,2 |
+| 40 | 140,8 | 111,3 | 85,7 | 71,6 | 58,6 | 56,2 | 54,2 | 52,4 | 40,8 | 39,4 |
+
+#### Miejsca 11–20 · stawka 11–27 zawodników
+
+| Liczba zawodników w stawce | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 11 | 1,0 | — | — | — | — | — | — | — | — | — |
+| 12 | 2,2 | 1,0 | — | — | — | — | — | — | — | — |
+| 13 | 3,3 | 2,1 | 1,0 | — | — | — | — | — | — | — |
+| 14 | 4,4 | 3,2 | 2,0 | 1,0 | — | — | — | — | — | — |
+| 15 | 5,4 | 4,1 | 3,0 | 2,0 | 1,0 | — | — | — | — | — |
+| 16 | 6,3 | 5,0 | 3,9 | 2,9 | 1,9 | 1,0 | — | — | — | — |
+| 17 | 17,1 | 15,9 | 14,8 | 13,7 | 12,8 | 11,9 | 1,0 | — | — | — |
+| 18 | 17,9 | 16,7 | 15,6 | 14,5 | 13,6 | 12,7 | 1,8 | 1,0 | — | — |
+| 19 | 18,7 | 17,5 | 16,3 | 15,3 | 14,3 | 13,4 | 2,6 | 1,8 | 1,0 | — |
+| 20 | 19,4 | 18,2 | 17,1 | 16,0 | 15,1 | 14,1 | 3,3 | 2,5 | 1,7 | 1,0 |
+| 21 | 20,1 | 18,9 | 17,8 | 16,7 | 15,7 | 14,8 | 4,0 | 3,2 | 2,4 | 1,7 |
+| 22 | 20,8 | 19,5 | 18,4 | 17,4 | 16,4 | 15,5 | 4,6 | 3,8 | 3,1 | 2,3 |
+| 23 | 21,4 | 20,2 | 19,0 | 18,0 | 17,0 | 16,1 | 5,3 | 4,5 | 3,7 | 3,0 |
+| 24 | 22,0 | 20,8 | 19,7 | 18,6 | 17,6 | 16,7 | 5,9 | 5,1 | 4,3 | 3,6 |
+| 25 | 22,6 | 21,4 | 20,2 | 19,2 | 18,2 | 17,3 | 6,4 | 5,6 | 4,9 | 4,1 |
+| 26 | 23,1 | 21,9 | 20,8 | 19,7 | 18,8 | 17,9 | 7,0 | 6,2 | 5,4 | 4,7 |
+| 27 | 23,7 | 22,5 | 21,3 | 20,3 | 19,3 | 18,4 | 7,5 | 6,7 | 6,0 | 5,2 |
+
+#### Miejsca 11–20 · stawka 28–40 zawodników
+
+| Liczba zawodników w stawce | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 28 | 24,2 | 23,0 | 21,8 | 20,8 | 19,8 | 18,9 | 8,0 | 7,2 | 6,5 | 5,8 |
+| 29 | 24,7 | 23,5 | 22,3 | 21,3 | 20,3 | 19,4 | 8,5 | 7,7 | 7,0 | 6,3 |
+| 30 | 25,2 | 23,9 | 22,8 | 21,8 | 20,8 | 19,9 | 9,0 | 8,2 | 7,5 | 6,7 |
+| 31 | 25,6 | 24,4 | 23,3 | 22,2 | 21,3 | 20,3 | 9,5 | 8,7 | 7,9 | 7,2 |
+| 32 | 26,1 | 24,9 | 23,7 | 22,7 | 21,7 | 20,8 | 9,9 | 9,1 | 8,4 | 7,6 |
+| 33 | 36,4 | 35,2 | 34,1 | 33,0 | 32,0 | 31,1 | 20,3 | 19,5 | 18,7 | 18,0 |
+| 34 | 36,7 | 35,5 | 34,4 | 33,3 | 32,4 | 31,5 | 20,6 | 19,8 | 19,1 | 18,4 |
+| 35 | 37,0 | 35,8 | 34,6 | 33,6 | 32,7 | 31,8 | 21,0 | 20,2 | 19,4 | 18,7 |
+| 36 | 37,2 | 36,0 | 34,9 | 33,9 | 33,0 | 32,1 | 21,3 | 20,5 | 19,7 | 19,0 |
+| 37 | 37,5 | 36,3 | 35,2 | 34,2 | 33,3 | 32,4 | 21,6 | 20,8 | 20,0 | 19,3 |
+| 38 | 37,7 | 36,5 | 35,4 | 34,5 | 33,5 | 32,7 | 21,8 | 21,1 | 20,3 | 19,6 |
+| 39 | 37,9 | 36,8 | 35,7 | 34,7 | 33,8 | 32,9 | 22,1 | 21,3 | 20,6 | 19,9 |
+| 40 | 38,1 | 37,0 | 35,9 | 34,9 | 34,0 | 33,2 | 22,4 | 21,6 | 20,9 | 20,2 |
+
+#### Miejsca 21–30 · stawka 21–37 zawodników
+
+| Liczba zawodników w stawce | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 21 | 1,0 | — | — | — | — | — | — | — | — | — |
+| 22 | 1,7 | 1,0 | — | — | — | — | — | — | — | — |
+| 23 | 2,3 | 1,6 | 1,0 | — | — | — | — | — | — | — |
+| 24 | 2,9 | 2,2 | 1,6 | 1,0 | — | — | — | — | — | — |
+| 25 | 3,5 | 2,8 | 2,2 | 1,6 | 1,0 | — | — | — | — | — |
+| 26 | 4,0 | 3,4 | 2,7 | 2,1 | 1,6 | 1,0 | — | — | — | — |
+| 27 | 4,5 | 3,9 | 3,3 | 2,7 | 2,1 | 1,5 | 1,0 | — | — | — |
+| 28 | 5,1 | 4,4 | 3,8 | 3,2 | 2,6 | 2,0 | 1,5 | 1,0 | — | — |
+| 29 | 5,6 | 4,9 | 4,3 | 3,7 | 3,1 | 2,5 | 2,0 | 1,5 | 1,0 | — |
+| 30 | 6,0 | 5,4 | 4,8 | 4,2 | 3,6 | 3,0 | 2,5 | 2,0 | 1,5 | 1,0 |
+| 31 | 6,5 | 5,8 | 5,2 | 4,6 | 4,0 | 3,5 | 3,0 | 2,4 | 1,9 | 1,5 |
+| 32 | 7,0 | 6,3 | 5,7 | 5,1 | 4,5 | 3,9 | 3,4 | 2,9 | 2,4 | 1,9 |
+| 33 | 17,3 | 16,7 | 16,1 | 15,5 | 14,9 | 14,3 | 13,8 | 13,3 | 12,8 | 12,3 |
+| 34 | 17,7 | 17,0 | 16,4 | 15,8 | 15,3 | 14,7 | 14,2 | 13,7 | 13,2 | 12,7 |
+| 35 | 18,0 | 17,4 | 16,8 | 16,2 | 15,6 | 15,1 | 14,6 | 14,1 | 13,6 | 13,1 |
+| 36 | 18,4 | 17,7 | 17,1 | 16,5 | 16,0 | 15,4 | 14,9 | 14,4 | 14,0 | 13,5 |
+| 37 | 18,7 | 18,1 | 17,5 | 16,9 | 16,3 | 15,8 | 15,3 | 14,8 | 14,3 | 13,8 |
+
+#### Miejsca 21–30 · stawka 38–40 zawodników
+
+| Liczba zawodników w stawce | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 38 | 19,0 | 18,4 | 17,8 | 17,2 | 16,6 | 16,1 | 15,6 | 15,1 | 14,6 | 14,2 |
+| 39 | 19,3 | 18,7 | 18,1 | 17,5 | 16,9 | 16,4 | 15,9 | 15,4 | 15,0 | 14,5 |
+| 40 | 19,6 | 18,9 | 18,4 | 17,8 | 17,2 | 16,7 | 16,2 | 15,7 | 15,3 | 14,8 |
+
+#### Miejsca 31–40 · stawka 31–40 zawodników
+
+| Liczba zawodników w stawce | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 31 | 1,0 | — | — | — | — | — | — | — | — | — |
+| 32 | 1,4 | 1,0 | — | — | — | — | — | — | — | — |
+| 33 | 11,9 | 11,4 | 1,0 | — | — | — | — | — | — | — |
+| 34 | 12,3 | 11,8 | 1,4 | 1,0 | — | — | — | — | — | — |
+| 35 | 12,7 | 12,2 | 1,8 | 1,4 | 1,0 | — | — | — | — | — |
+| 36 | 13,0 | 12,6 | 2,2 | 1,8 | 1,4 | 1,0 | — | — | — | — |
+| 37 | 13,4 | 13,0 | 2,6 | 2,1 | 1,8 | 1,4 | 1,0 | — | — | — |
+| 38 | 13,7 | 13,3 | 2,9 | 2,5 | 2,1 | 1,7 | 1,4 | 1,0 | — | — |
+| 39 | 14,1 | 13,6 | 3,2 | 2,8 | 2,4 | 2,1 | 1,7 | 1,3 | 1,0 | — |
+| 40 | 14,4 | 14,0 | 3,6 | 3,2 | 2,8 | 2,4 | 2,0 | 1,7 | 1,3 | 1,0 |
+
+<!-- note:pelna-tabela-punktacji -->
+**Pełna tabela punktacji — wersja nieoficjalna:** [https://fencer4life.github.io/spws-automated-ranklist/tabela-punktacji.html](https://fencer4life.github.io/spws-automated-ranklist/tabela-punktacji.html)
+
+<!-- /note -->

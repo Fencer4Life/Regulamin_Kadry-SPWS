@@ -15,6 +15,8 @@ from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.shared import Cm, Pt, RGBColor
 
 from narzedzia.docx_model import (
+    NoteBlock,
+    _parse_inline_runs,
     RegulationDocument,
     TableBlock,
     ZtpUnit,
@@ -489,6 +491,9 @@ def _add_unit(
     if prefix:
         content.add_run(prefix)
     for inline_run in unit.runs:
+        if inline_run.href:
+            _add_external_link(content, inline_run.href, inline_run.text)
+            continue
         run = content.add_run(resolve_references(model, inline_run.text))
         if inline_run.bold:
             run.bold = True
@@ -522,7 +527,7 @@ def _add_status_label(document: Document, status: str) -> None:
     label.paragraph_format.keep_with_next = True
 
 
-def _add_external_link(paragraph, url: str) -> None:
+def _add_external_link(paragraph, url: str, label: str | None = None) -> None:
     parsed = urlsplit(url)
     if parsed.scheme != "https" or not parsed.netloc:
         raise ValueError("Nieprawidłowy adres HTTPS materiału pomocniczego")
@@ -538,32 +543,33 @@ def _add_external_link(paragraph, url: str) -> None:
     properties.append(size)
     run.append(properties)
     text = OxmlElement("w:t")
-    text.text = url
+    text.text = label if label is not None else url
     run.append(text)
     link.append(run)
     paragraph._p.append(link)
 
 
-def _add_resource_links(document: Document, model: RegulationDocument) -> None:
-    if "resource_links_title" not in model.metadata:
-        return
-    heading = document.add_paragraph(style="Normal")
-    heading.add_run(model.metadata["resource_links_title"]).bold = True
-    heading.paragraph_format.space_before = Pt(10)
-    heading.paragraph_format.keep_with_next = True
-    note = document.add_paragraph(model.metadata["resource_links_note"], style="Normal")
-    note.paragraph_format.keep_with_next = True
-    for index, (label, key) in enumerate((
-        ("Ranking", "resource_ranking_url"),
-        ("Tabela punktacji", "resource_table_url"),
-        ("Kalkulator punktów", "resource_calculator_url"),
-    )):
-        url = model.metadata[key]
+def _add_note(document: Document, model: RegulationDocument, note: NoteBlock) -> None:
+    for index, text in enumerate(note.paragraphs):
         paragraph = document.add_paragraph(style="Normal")
-        paragraph.paragraph_format.keep_with_next = index < 2
-        paragraph.paragraph_format.keep_together = True
-        paragraph.add_run(label + ": ").bold = True
-        _add_external_link(paragraph, url)
+        if index < len(note.paragraphs) - 1:
+            paragraph.paragraph_format.keep_with_next = True
+        if index == 0 and len(note.paragraphs) > 1:
+            paragraph.paragraph_format.space_before = Pt(10)
+        _, runs = _parse_inline_runs(text)
+        if len(note.paragraphs) > 1 and any(inline.href for inline in runs):
+            paragraph.paragraph_format.keep_with_next = index < len(note.paragraphs) - 1
+        for inline in runs:
+            if inline.href:
+                paragraph.paragraph_format.keep_together = True
+                _add_external_link(paragraph, inline.href, inline.text)
+            else:
+                if inline.text.isspace() and paragraph.runs and paragraph.runs[-1].bold:
+                    paragraph.runs[-1].text += inline.text
+                    continue
+                run = paragraph.add_run(resolve_references(model, inline.text))
+                if inline.bold:
+                    run.bold = True
 
 
 def _add_chapters(document: Document, model: RegulationDocument) -> None:
@@ -599,14 +605,14 @@ def _add_chapters(document: Document, model: RegulationDocument) -> None:
                         unit_index,
                         keep_together=unit_index == 1,
                     )
+                elif isinstance(block, NoteBlock):
+                    _add_note(document, model, block)
                 elif block.name == "rank-coefficients":
                     active_status = "accepted"
                     _add_rank_coefficients(document, block)
                 else:
                     active_status = "accepted"
                     _add_source_table(document, model, block)
-            if section.identifier == "publikacja-rankingu":
-                _add_resource_links(document, model)
 
 
 def _is_power_of_two(value: int) -> bool:
@@ -652,68 +658,61 @@ def _format_annex_cell(cell, text: str, *, header=False, first_column=False, alt
 
 def _add_points_annex(document: Document, model: RegulationDocument) -> None:
     document.add_page_break()
-    label = document.add_paragraph("ZAŁĄCZNIK NR 1", style="Etykieta rozdzialu")
+    label = document.add_paragraph(model.metadata["annex_label"], style="Etykieta rozdzialu")
     label.alignment = WD_ALIGN_PARAGRAPH.CENTER
     title = document.add_paragraph(
-        "Tabela punktacji Pucharu Polski Weteranów w szermierce",
+        model.metadata["annex_title"],
         style="Heading 1",
     )
     title.alignment = WD_ALIGN_PARAGRAPH.CENTER
     subtitle = document.add_paragraph(style="Normal")
     subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
     subtitle.add_run(
-        "Punkty rankingowe za miejsce zdobyte w stawce liczącej od 4 do 40 zawodników "
-        "— sezon 2026/2027"
+        model.metadata["annex_subtitle"]
     ).italic = True
     coefficient = document.add_paragraph(style="Normal")
     coefficient.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    coefficient.add_run("Współczynnik rangi PPW: 1,0").bold = True
+    coefficient.add_run(model.metadata["annex_coefficient"]).bold = True
 
-    for first_place, last_place in PLACE_BLOCKS:
-        places = list(range(first_place, last_place + 1))
-        first_participant = max(MIN_PARTICIPANTS, first_place)
-        participants = list(range(first_participant, MAX_PARTICIPANTS + 1))
-        for start in range(0, len(participants), PARTICIPANT_CHUNK_SIZE):
-            chunk = participants[start : start + PARTICIPANT_CHUNK_SIZE]
-            heading = document.add_paragraph(
-                f"Miejsca {first_place}–{last_place} · stawka {chunk[0]}–{chunk[-1]} zawodników",
-                style="Heading 2",
-            )
-            heading.paragraph_format.keep_with_next = True
-            table = document.add_table(rows=1, cols=1 + len(places))
-            table.style = "Table Grid"
-            table.autofit = False
-            header = table.rows[0]
-            set_repeat_table_header(header)
-            header.cells[0].width = Cm(3.0)
-            _format_annex_cell(header.cells[0], "Liczba zawodników w stawce", header=True)
-            for index, place in enumerate(places, start=1):
-                header.cells[index].width = Cm(1.25)
-                _format_annex_cell(header.cells[index], str(place), header=True)
-            for row_number, participant_count in enumerate(chunk):
-                row = table.add_row()
-                row.cells[0].width = Cm(3.0)
-                _format_annex_cell(row.cells[0], str(participant_count), first_column=True)
-                for column_index, place in enumerate(places, start=1):
-                    row.cells[column_index].width = Cm(1.25)
-                    value = _format_points(_score(place, participant_count)) if place <= participant_count else "—"
-                    _format_annex_cell(
-                        row.cells[column_index],
-                        value,
-                        alternate=row_number % 2 == 1,
-                    )
-            _keep_table_together(table)
+    if not model.annex_tables:
+        raise ValueError("Brak tabel załącznika w źródle Markdown")
+    for block in model.annex_tables:
+        places = block.rows[0][1:]
+        heading = document.add_paragraph(
+            block.name,
+            style="Heading 2",
+        )
+        heading.paragraph_format.keep_with_next = True
+        table = document.add_table(rows=1, cols=1 + len(places))
+        table.style = "Table Grid"
+        table.autofit = False
+        header = table.rows[0]
+        set_repeat_table_header(header)
+        header.cells[0].width = Cm(3.0)
+        _format_annex_cell(header.cells[0], block.rows[0][0], header=True)
+        for index, place in enumerate(places, start=1):
+            header.cells[index].width = Cm(1.25)
+            _format_annex_cell(header.cells[index], str(place), header=True)
+        for row_number, values in enumerate(block.rows[1:]):
+            row = table.add_row()
+            row.cells[0].width = Cm(3.0)
+            _format_annex_cell(row.cells[0], values[0], first_column=True)
+            for column_index, value in enumerate(values[1:], start=1):
+                row.cells[column_index].width = Cm(1.25)
+                _format_annex_cell(
+                    row.cells[column_index],
+                    value,
+                    alternate=row_number % 2 == 1,
+                )
+        _keep_table_together(table)
     note = document.add_paragraph(
-        "Pełna tabela dla stawek liczących od 4 do 300 zawodników oraz kalkulator punktów "
-        "są publikowane przez SPWS na stronie internetowej."
+        model.metadata["annex_note"]
     )
     note.paragraph_format.space_before = Pt(8)
-    if "resource_table_url" in model.metadata:
+    if model.annex_notes:
         note.paragraph_format.keep_with_next = True
-        link = document.add_paragraph(style="Normal")
-        link.paragraph_format.keep_together = True
-        link.add_run("Pełna tabela punktacji — wersja nieoficjalna: ").bold = True
-        _add_external_link(link, model.metadata["resource_table_url"])
+        for annex_note in model.annex_notes:
+            _add_note(document, model, annex_note)
     document.add_page_break()
 
 
@@ -806,8 +805,8 @@ def build_document(source: Path, output: Path) -> Path:
     _align_styles_with_current_document(document)
     for section in document.sections:
         configure_page(section)
-    add_header_footer(document.sections[0])
-    add_cover(document)
+    add_header_footer(document.sections[0], model.metadata)
+    add_cover(document, model.metadata)
     _normalize_empty_first_page_header(document)
     _normalize_cover_run_properties(document)
     _add_toc(document, model)

@@ -178,12 +178,13 @@ def configure_page(section):
     section.footer_distance = Cm(0.9)
 
 
-def add_header_footer(section):
+def add_header_footer(section, content=None):
+    content = content or {}
     header = section.header
     p = header.paragraphs[0]
     p.alignment = WD_ALIGN_PARAGRAPH.LEFT
     set_bottom_border(p)
-    run = p.add_run("Regulamin powoływania reprezentacji Polski weteranów")
+    run = p.add_run(content.get("header_text", "Regulamin powoływania reprezentacji Polski weteranów"))
     run.font.name = "Aptos"
     run.font.size = Pt(8)
     run.font.color.rgb = RGBColor.from_string(MUTED)
@@ -191,7 +192,7 @@ def add_header_footer(section):
     footer = section.footer
     p = footer.paragraphs[0]
     p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    run = p.add_run("Projekt · wersja 0.1     |     Strona ")
+    run = p.add_run(content.get("footer_text", "Projekt · wersja 0.1     |     Strona "))
     run.font.name = "Aptos"
     run.font.size = Pt(8)
     run.font.color.rgb = RGBColor.from_string(MUTED)
@@ -200,13 +201,14 @@ def add_header_footer(section):
     add_field(p, "NUMPAGES", "1")
 
 
-def add_cover(doc):
+def add_cover(doc, content=None):
+    content = content or {}
     section = doc.sections[0]
     section.different_first_page_header_footer = True
     section.first_page_header.paragraphs[0].text = ""
     footer = section.first_page_footer.paragraphs[0]
     footer.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    run = footer.add_run("Projekt regulaminu  ·  sezon 2026/2027")
+    run = footer.add_run(content.get("cover_footer", "Projekt regulaminu  ·  sezon 2026/2027"))
     run.font.name = "Aptos"
     run.font.size = Pt(8)
     run.font.color.rgb = RGBColor.from_string(MUTED)
@@ -214,7 +216,7 @@ def add_cover(doc):
     project = doc.add_paragraph()
     project.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     project.paragraph_format.space_after = Pt(58)
-    run = project.add_run("PROJEKT")
+    run = project.add_run(content.get("cover_label", "PROJEKT"))
     run.bold = True
     run.font.name = "Aptos"
     run.font.size = Pt(11)
@@ -232,11 +234,11 @@ def add_cover(doc):
     # Keep the existing cover spacing, without a decorative line above the title.
 
     title = doc.add_paragraph(style="Title")
-    title.add_run("Regulamin powoływania reprezentacji Polski weteranów w szermierce")
+    title.add_run(content.get("title", "Regulamin powoływania reprezentacji Polski weteranów w szermierce"))
 
     subtitle = doc.add_paragraph()
     subtitle.paragraph_format.space_after = Pt(96)
-    run = subtitle.add_run("w sezonie 2026/2027")
+    run = subtitle.add_run(content.get("subtitle", "w sezonie 2026/2027"))
     run.bold = True
     run.font.name = "Aptos Display"
     run.font.size = Pt(17)
@@ -249,9 +251,9 @@ def add_cover(doc):
     table.columns[1].width = Cm(10.0)
     set_table_borders(table, color=LINE, size="4")
     values = (
-        ("Wersja dokumentu", "0.1"),
-        ("Status", "projekt do konsultacji"),
-        ("Data projektu", "[data]"),
+        ("Wersja dokumentu", content.get("cover_version", "0.1")),
+        ("Status", content.get("status", "projekt do konsultacji")),
+        ("Data projektu", content.get("cover_date", "[data]")),
     )
     for row, (label, value) in zip(table.rows, values):
         row.cells[0].width = Cm(5.2)

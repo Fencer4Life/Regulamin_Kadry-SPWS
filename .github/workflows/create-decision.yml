@@ -51,7 +51,7 @@ jobs:
             fi
           else
             if [ "$TRIGGER_LABEL" = "redakcja-bez-zmiany-sensu" ]; then
-              if ! python narzedzia/apply_editorial_change.py "$GITHUB_EVENT_PATH" _decyzje "$source_path" >/tmp/editorial-paths.txt 2>/tmp/decision-error.txt; then
+              if ! python -m narzedzia.apply_editorial_change "$GITHUB_EVENT_PATH" _decyzje "$source_path" >/tmp/editorial-paths.txt 2>/tmp/decision-error.txt; then
                 error=$(cat /tmp/decision-error.txt)
                 gh api graphql -f query='mutation($discussionId:ID!,$body:String!){addDiscussionComment(input:{discussionId:$discussionId,body:$body}){comment{id}}}' \
                   -F discussionId="$DISCUSSION_ID" \
@@ -59,7 +59,7 @@ jobs:
                 exit 1
               fi
               path=$(sed -n '1p' /tmp/editorial-paths.txt)
-            elif ! path=$(python narzedzia/create_decision_from_discussion.py "$GITHUB_EVENT_PATH" _decyzje 2>/tmp/decision-error.txt); then
+            elif ! path=$(python -m narzedzia.create_decision_from_discussion "$GITHUB_EVENT_PATH" _decyzje 2>/tmp/decision-error.txt); then
               error=$(cat /tmp/decision-error.txt)
               gh api graphql -f query='mutation($discussionId:ID!,$body:String!){addDiscussionComment(input:{discussionId:$discussionId,body:$body}){comment{id}}}' \
                 -F discussionId="$DISCUSSION_ID" \
@@ -77,7 +77,7 @@ jobs:
             cp "$candidate_path" "$docx_path"
             python -m narzedzia.docx_parity "$docx_path" "$candidate_path" >/tmp/docx-parity.json
             python -m unittest discover -s tests -v
-            git add -- "$path" "$source_path" "$docx_path"
+            git add -- "$path" "$source_path" "$docx_path" "${source_path%.md}.podglad.md"
             commit_message="docs: prepare editorial decision ${DISCUSSION_NUMBER}"
             pr_body="Szybka korekta utworzona z dyskusji ${DISCUSSION_URL}. Automat zmienił Markdown, wygenerował DOCX i uruchomił testy. Pobierz artefakt regulamin-candidate z runu ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}, otwórz go w Wordzie, a następnie wybierz Approve albo Request changes."
           else
