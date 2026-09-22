@@ -47,7 +47,7 @@ Brak zgłoszonych alternatyw.
 
 ## Decyzja
 
-> _Do uzupełnienia przez osobę przygotowującą decyzję._
+Zmiana zatwierdzona
 
 ## Stary fragment Markdown
 
@@ -67,13 +67,13 @@ Wklej kompletną treść zastępującą stary fragment; zachowaj identyfikatory 
 
 ## Uzasadnienie
 
-> _Do uzupełnienia przez osobę przygotowującą decyzję._
+Poprawienie czytelności tekstu
 
 ## Konsekwencje
 
 ### Czy decyzja wymaga zmiany Regulaminu?
 
-- [ ] **Tak** — należy przygotować zmianę Regulaminu i dołączyć ją do tego samego pull requestu.
+- [x] **Tak** — należy przygotować zmianę Regulaminu i dołączyć ją do tego samego pull requestu.
 - [ ] **Nie** — decyzja nie wymaga zmiany Regulaminu.
 
 ## Odrzucone alternatywy
