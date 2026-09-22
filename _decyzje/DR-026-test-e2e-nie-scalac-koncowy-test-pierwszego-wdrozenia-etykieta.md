@@ -67,13 +67,13 @@ Wklej kompletną treść zastępującą stary fragment; zachowaj identyfikatory 
 
 ## Uzasadnienie
 
-> _Do uzupełnienia przez osobę przygotowującą decyzję._
+Sprawdzenie pierwszego wdrożenia etykietą po poprawce synchronizacji API. To izolowany test techniczny, nie decyzja komisji. Nie scalać.
 
 ## Konsekwencje
 
 ### Czy decyzja wymaga zmiany Regulaminu?
 
-- [ ] **Tak** — należy przygotować zmianę Regulaminu i dołączyć ją do tego samego pull requestu.
+- [x] **Tak** — należy przygotować zmianę Regulaminu i dołączyć ją do tego samego pull requestu.
 - [ ] **Nie** — decyzja nie wymaga zmiany Regulaminu.
 
 ## Odrzucone alternatywy
