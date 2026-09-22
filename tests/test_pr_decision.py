@@ -5,6 +5,25 @@ from unittest.mock import patch
 
 
 class PrDecisionTests(unittest.TestCase):
+    def test_label_pr_may_change_only_decision_and_document_data(self):
+        from narzedzia.pr_decision import check_changed_paths
+        from narzedzia.pr_docx_link import SOURCE, DOCX
+        card = '_decyzje/DR-026-test.md'
+        check_changed_paths([{'filename': p} for p in (card, SOURCE, DOCX)], card)
+        for extra in ('.github/workflows/validate.yml', 'narzedzia/pr_decision.py', 'tests/test_fake.py'):
+            with self.assertRaises(ValueError):
+                check_changed_paths([{'filename': card}, {'filename': extra}], card)
+
+    def test_ci_is_dispatched_automatically_with_actions_permission(self):
+        root = Path(__file__).resolve().parents[1]
+        workflow = (root / '.github/workflows/apply-decision-label.yml').read_text()
+        self.assertIn('actions: write', workflow)
+        from narzedzia.pr_decision import dispatch_ci
+        with patch('narzedzia.pr_decision.command') as command:
+            dispatch_ci('owner/repo', 'decision/test')
+            command.assert_called_once_with(['gh', 'workflow', 'run', 'validate.yml',
+                                             '--repo', 'owner/repo', '--ref', 'decision/test'])
+
     def test_real_decision_changes_source_and_docx_only_once(self):
         from narzedzia.pr_decision import apply_once
         from narzedzia.decision_patch import format_fragments

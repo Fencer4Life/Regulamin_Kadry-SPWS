@@ -23,6 +23,17 @@ def select_card(files):
     return paths[0]
 
 
+def check_changed_paths(files, card):
+    allowed = {card, SOURCE, DOCX}
+    if any(f['filename'] not in allowed or f.get('previous_filename', f['filename']) not in allowed
+           for f in files):
+        raise ValueError('Etykieta wdrażaj obsługuje tylko kartę DR, Markdown i DOCX; kod wymaga osobnego PR')
+
+
+def dispatch_ci(repo, branch):
+    command(['gh', 'workflow', 'run', 'validate.yml', '--repo', repo, '--ref', branch])
+
+
 def check_pr(pr, repo):
     if (pr['state'] != 'open' or pr['head']['repo']['full_name'] != repo
             or pr['head']['ref'] == pr['base']['ref'] or pr['base']['ref'] != 'main'):
@@ -60,7 +71,9 @@ def run(repo, number, run_url):
     pr = gh_api(endpoint)
     check_pr(pr, repo)
     pages = json.loads(command(['gh', 'api', endpoint + '/files?per_page=100', '--paginate', '--slurp']))
-    card_path = select_card([f for page in pages for f in page])
+    files = [f for page in pages for f in page]
+    card_path = select_card(files)
+    check_changed_paths(files, card_path)
     sha, branch = pr['head']['sha'], pr['head']['ref']
     command(['git', 'fetch', 'origin', sha])
     with tempfile.TemporaryDirectory(prefix='decision-pr-') as directory:
@@ -86,6 +99,9 @@ def run(repo, number, run_url):
                 sha = command(['git', 'rev-parse', 'HEAD'], cwd=checkout)
                 command(['git', 'push', 'origin', f'HEAD:refs/heads/{branch}'], cwd=checkout)
             publish(repo, number, sha, run_url, wait_for_sha=True)
+            # GITHUB_TOKEN commits do not reliably start required pull_request CI.
+            # Explicit dispatch starts read-only validation without a human action.
+            dispatch_ci(repo, branch)
             print(f'PR #{number}: ' + ('wdrożono decyzję i opublikowano DOCX' if changed
                                       else 'decyzja już wdrożona; bez kolejnej zmiany plików'))
         finally:

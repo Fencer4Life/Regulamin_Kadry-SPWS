@@ -4,6 +4,7 @@ on:
     types: [labeled]
 
 permissions:
+  actions: write
   contents: write
   pull-requests: write
   discussions: write
@@ -99,6 +100,7 @@ jobs:
             pr_number=$(gh pr view "$branch" --json number --jq .number)
             python -m narzedzia.pr_docx_link "$GITHUB_REPOSITORY" "$pr_number" "$(git rev-parse HEAD)" \
               --run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+            gh workflow run validate.yml --repo "$GITHUB_REPOSITORY" --ref "$branch"
           fi
       - name: Kandydacki DOCX szybkiej korekty
         if: github.event.label.name == 'redakcja-bez-zmiany-sensu'
