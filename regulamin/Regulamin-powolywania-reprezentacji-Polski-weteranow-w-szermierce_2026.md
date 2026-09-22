@@ -19,7 +19,7 @@ w sezonie 2026/2027
 | --- | --- |
 | Wersja dokumentu | 0.1 |
 | Status | projekt do konsultacji |
-| Data projektu | [data] |
+| Data projektu | [data] TEST-E2E-53 |
 <!-- /publication -->
 
 <!-- publication:toc -->
