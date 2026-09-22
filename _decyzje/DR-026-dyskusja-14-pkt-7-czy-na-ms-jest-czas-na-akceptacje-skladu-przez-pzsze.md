@@ -10,7 +10,7 @@ sezon: 2026/2027
 dotyczy: None
 decydenci: Komisja regulaminowa SPWS
 discussion_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/49
-pr_url: ""
+pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/66
 zmienia: []
 zmieniona_przez: []
 zakres_zmiany: {}
