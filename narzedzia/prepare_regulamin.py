@@ -8,7 +8,6 @@ from pathlib import Path
 from narzedzia.build_regulamin_docx import build_document
 from narzedzia.docx_parity import document_content_contract, document_layout_contract
 from narzedzia.normalize_regulamin_markdown import normalize_source
-from narzedzia.markdown_preview import preview_path, render_preview
 
 
 def _atomic_write(path: Path, content: str) -> None:
@@ -35,14 +34,12 @@ def normalize_and_build(source: Path, output: Path) -> Path:
         staged_source = Path(directory) / "source.md"
         staged_source.write_text(normalized, encoding="utf-8")
         build_document(staged_source, candidate)
-        preview = render_preview(candidate)
-        paths = (source, output, preview_path(source))
+        paths = (source, output)
         backups = [path.read_bytes() if path.exists() else None for path in paths]
         try:
             if source.read_text(encoding="utf-8") != normalized:
                 _atomic_write(source, normalized)
             candidate.replace(output)
-            _atomic_write(preview_path(source), preview)
         except BaseException:
             for path, content in zip(paths, backups):
                 if content is None:
@@ -66,8 +63,6 @@ def verify(source: Path, tracked_docx: Path) -> None:
             raise ValueError("Treść śledzonego DOCX nie odpowiada Markdown")
         if document_layout_contract(candidate) != document_layout_contract(tracked_docx):
             raise ValueError("Układ śledzonego DOCX nie odpowiada Markdown")
-        if not preview_path(source).exists() or preview_path(source).read_text(encoding="utf-8") != render_preview(candidate):
-            raise ValueError("Podgląd Markdown jest nieaktualny; wygeneruj dokument ponownie")
     if source.read_bytes() != before_source or tracked_docx.read_bytes() != before_docx:
         raise RuntimeError("Tryb verify zmodyfikował śledzony plik")
 

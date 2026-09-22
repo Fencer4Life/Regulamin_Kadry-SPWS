@@ -43,15 +43,3 @@ class ReadableMarkdownTests(unittest.TestCase):
             source = Path(directory) / "source.md"
             source.write_text(normalize_source(CANONICAL_SOURCE))
             self.assertEqual(normalize_source(source), CANONICAL_SOURCE.read_text())
-
-    def test_preview_contains_every_table_and_clickable_links(self):
-        from docx import Document
-        from narzedzia.markdown_preview import render_preview
-        preview = render_preview(CURRENT_DOCUMENT)
-        for table in Document(CURRENT_DOCUMENT).tables:
-            for row in table.rows:
-                for cell in row.cells:
-                    if cell.text:
-                        self.assertIn(cell.text.replace("\n", "<br>"), preview)
-        self.assertIn("](https://fencer4life.github.io/spws-automated-ranklist/)", preview)
-        self.assertNotIn("{{annex:", preview)

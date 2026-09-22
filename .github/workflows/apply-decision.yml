@@ -41,7 +41,6 @@ jobs:
           card="${cards[0]}"
           source="regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md"
           docx="regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx"
-          preview="${source%.md}.podglad.md"
           branch="$GITHUB_REF_NAME"
           if [[ "$branch" == main ]]; then
             branch="decision/apply-${DECISION_ID}"
@@ -62,7 +61,7 @@ jobs:
           git diff --check
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -- "$card" "$source" "$docx" "$preview"
+          git add -- "$card" "$source" "$docx"
           git diff --cached --check
           git commit -m "docs: apply exact change from ${DECISION_ID}"
           git push origin "HEAD:$branch"
@@ -72,5 +71,5 @@ jobs:
           else
             gh pr create --draft --base main --head "$branch" \
               --title "Wdrożenie ${DECISION_ID}: dokładna zmiana Markdown" \
-              --body "Automat bez LLM zastosował dosłowną zmianę z karty ${DECISION_ID}. Sprawdź diff, DOCX i podgląd Markdown przed Approve. [DOCX](https://github.com/${GITHUB_REPOSITORY}/raw/refs/heads/${branch}/${docx}) · [Podgląd](https://github.com/${GITHUB_REPOSITORY}/blob/${branch}/${preview}). Testy i kontrola zgodności wykonane w tym uruchomieniu Actions."
+              --body "Automat bez LLM zastosował dosłowną zmianę z karty ${DECISION_ID}. Sprawdź diff źródła i DOCX przed Approve. [DOCX](https://github.com/${GITHUB_REPOSITORY}/raw/refs/heads/${branch}/${docx}) · [Źródło Markdown](https://github.com/${GITHUB_REPOSITORY}/blob/${branch}/${source}). Testy i kontrola zgodności wykonane w tym uruchomieniu Actions."
           fi

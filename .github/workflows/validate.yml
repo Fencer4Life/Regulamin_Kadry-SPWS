@@ -53,7 +53,6 @@ jobs:
           name: regulamin-candidate
           path: |
             .artifacts/regulamin-candidate.docx
-            regulamin/*.podglad.md
           if-no-files-found: error
           retention-days: 14
       - name: Pokrycie źródła i E2E decyzja Markdown DOCX
