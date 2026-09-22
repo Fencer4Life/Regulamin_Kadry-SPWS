@@ -56,6 +56,20 @@ jobs:
             regulamin/*.podglad.md
           if-no-files-found: error
           retention-days: 14
+      - name: Pokrycie źródła i E2E decyzja Markdown DOCX
+        run: |
+          python -m narzedzia.source_evidence \
+            regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
+            regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx \
+            .artifacts/source-evidence
+      - name: Raport pokrycia i testowe dokumenty E2E
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-evidence
+          path: .artifacts/source-evidence/
+          if-no-files-found: warn
+          retention-days: 14
   build:
     runs-on: ubuntu-latest
     steps:

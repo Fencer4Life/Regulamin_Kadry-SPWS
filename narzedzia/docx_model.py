@@ -114,6 +114,7 @@ class RegulationDocument:
     milestones: dict[str, int] = field(default_factory=dict)
     annex_notes: list[NoteBlock] = field(default_factory=list)
     annex_tables: list[TableBlock] = field(default_factory=list)
+    publication: dict[str, str] = field(default_factory=dict)
 
 
 TERM_RE = re.compile(r"\{\{(term|days):([a-z0-9-]+)}}")
@@ -192,6 +193,9 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
     except ValueError as error:
         raise ValueError("Brak zamykającego bloku metadanych TOML") from error
     metadata = tomllib.loads(metadata_text)
+    from narzedzia.publication_source import extract, restore_tokens
+    markdown, publication = extract(markdown, metadata)
+    markdown = restore_tokens(markdown)
     milestones = metadata.pop("milestones", {})
     if not isinstance(milestones, dict) or any(
         not re.fullmatch(r"[a-z0-9-]+", key) or type(value) is not int or value < 0
@@ -353,4 +357,5 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
         milestones=milestones,
         annex_notes=annex_notes,
         annex_tables=annex_tables,
+        publication=publication,
     )

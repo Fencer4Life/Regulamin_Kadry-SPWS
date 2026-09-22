@@ -60,7 +60,7 @@ class SourceMigrationTests(unittest.TestCase):
             "Punkty uzyskane w zawodach organizowanych przez EVF albo FIE uwzględnia się wyłącznie, jeżeli zawodnik wystąpił w tych zawodach jako reprezentant Polski.",
         )
         for fragment in accepted_fragments:
-            self.assertIn(f"[unit:", source_text)
+            self.assertIn("<!-- unit:", source_text)
             self.assertIn(fragment, source_text)
             prefix = source_text.split(fragment, 1)[0].rsplit("\n", 1)[-1]
             self.assertNotIn("[status:source-draft]", prefix)

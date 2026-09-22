@@ -71,6 +71,7 @@ Do uzupełnienia po sezonie 2026/2027.
 
 ## Historia zmian
 
+- 2026-09-21 — dalsza korekta źródła na polecenie Fencer4Life: pełna treść dokumentu jest widoczna w kanonicznym Markdown, łącznie z okładką, spisem treści, tabelą konstrukcji, historią i stopkami. Techniczne identyfikatory przeniesiono do komentarzy. Dodano test pokrycia oraz E2E karty stary/nowy sprawdzający jedno miejsce w DOCX bez modyfikacji regulaminu testowym tekstem.
 - 2026-09-21 — na polecenie Fencer4Life źródło uzupełniono o pełne tabele załącznika oraz dane okładki, nagłówka, stopki i opisy załącznika odczytane z aktualnego DOCX. Generator ma odtwarzać wzorzec bez zmiany przepisów; nie korzysta z ukrytych wartości punktacji. Aktualizacja ADR-003 opisuje różnicę między polami okładki i historii.
 - 2026-09-20 — na polecenie Fencer4Life przeniesiono linki i objaśnienia z metadanych do czytelnych bloków Markdown w § 7 i załączniku. Treść i układ DOCX zachowano (potwierdzone porównaniem). Dodano generowany pełny podgląd `.podglad.md`; tabel punktacji nie przepisuje się ręcznie. Instrukcja dla Redaktora i deterministyczne pola stary/nowy są opisane w ADR-003.
 

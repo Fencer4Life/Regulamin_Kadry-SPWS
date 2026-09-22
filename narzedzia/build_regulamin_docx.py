@@ -288,7 +288,7 @@ def _add_internal_hyperlink(paragraph, text: str, anchor: str, page: int) -> Non
 
 def _add_toc(document: Document, model: RegulationDocument) -> None:
     _ensure_toc_styles(document)
-    heading = document.add_heading("Spis treści", level=1)
+    heading = document.add_heading(model.metadata.get('toc_title', 'Spis treści'), level=1)
     heading.paragraph_format.space_after = Pt(16)
     _add_bookmark(heading, 0)
     entries = [
@@ -297,6 +297,14 @@ def _add_toc(document: Document, model: RegulationDocument) -> None:
         *((chapter.title, index + 4, 1) for index, chapter in enumerate(model.chapters)),
         ("Historia wersji", 11, 1),
     ]
+    if model.publication:
+        titles = [line[2:] for line in model.publication['toc'].splitlines() if line.startswith('- ')]
+        if len(titles) != len(entries):
+            raise ValueError('Spis treści nie odpowiada liczbie rozdziałów')
+        entries = []
+        for title in titles:
+            name, page = title.rsplit('\t', 1)
+            entries.append((name, int(page), 1))
     for index, (title, page, level) in enumerate(entries):
         paragraph = document.add_paragraph(style=f"toc {level}")
         if index == 0:
@@ -312,7 +320,7 @@ def _add_toc(document: Document, model: RegulationDocument) -> None:
 
 
 def _add_outline(document: Document, model: RegulationDocument) -> None:
-    heading = document.add_heading("Konstrukcja regulaminu", level=1)
+    heading = document.add_heading(model.metadata.get('outline_title', 'Konstrukcja regulaminu'), level=1)
     _add_bookmark(heading, 1)
     document.add_paragraph(model.metadata["outline_intro"])
     table = document.add_table(rows=1, cols=3)
@@ -324,7 +332,12 @@ def _add_outline(document: Document, model: RegulationDocument) -> None:
     set_table_borders(table, color=LINE, size="4")
     header = table.rows[0]
     set_repeat_table_header(header)
-    for cell, width, text in zip(header.cells, widths, ("Rozdział", "Tytuł", "Zakres")):
+    from narzedzia.publication_source import table_rows
+    outline_rows = table_rows(model.publication['outline']) if model.publication else [
+        ['Rozdział', 'Tytuł', 'Zakres'], *[[str(i), c.title, c.scope] for i, c in enumerate(model.chapters, 1)]]
+    if len(outline_rows[0]) != 3:
+        raise ValueError('Tabela konstrukcji wymaga trzech kolumn')
+    for cell, width, text in zip(header.cells, widths, outline_rows[0]):
         cell.width = width
         set_cell_shading(cell, BLUE)
         set_cell_margins(cell)
@@ -335,11 +348,11 @@ def _add_outline(document: Document, model: RegulationDocument) -> None:
         run.font.name = "Aptos"
         run.font.size = Pt(9)
         run.font.color.rgb = RGBColor(255, 255, 255)
-    for index, chapter in enumerate(model.chapters, start=1):
+    for values in outline_rows[1:]:
         cells = table.add_row().cells
         for cell in cells:
             set_cell_margins(cell)
-        for cell, width, text in zip(cells, widths, (str(index), chapter.title, chapter.scope)):
+        for cell, width, text in zip(cells, widths, values):
             cell.width = width
             cell.text = text
         cells[0].paragraphs[0].runs[0].bold = True
@@ -717,14 +730,16 @@ def _add_points_annex(document: Document, model: RegulationDocument) -> None:
 
 
 def _add_history(document: Document, model: RegulationDocument) -> None:
-    history_heading = document.add_heading("Historia wersji", level=1)
+    history_heading = document.add_heading(model.metadata.get('history_title', 'Historia wersji'), level=1)
     _add_bookmark(history_heading, 9)
     table = document.add_table(rows=1, cols=4)
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
     set_table_borders(table, color=LINE, size="4")
     header = table.rows[0]
     set_repeat_table_header(header)
-    for cell, text in zip(header.cells, ("Wersja", "Data", "Zakres zmian", "Status")):
+    from narzedzia.publication_source import table_rows
+    history_headers = table_rows(model.publication['history'])[0] if model.publication else ('Wersja', 'Data', 'Zakres zmian', 'Status')
+    for cell, text in zip(header.cells, history_headers):
         set_cell_shading(cell, BLUE)
         set_cell_margins(cell)
         paragraph = cell.paragraphs[0]
@@ -739,7 +754,7 @@ def _add_history(document: Document, model: RegulationDocument) -> None:
         model.metadata["version"],
         model.metadata["project_date"],
         model.metadata["history_scope"],
-        model.metadata["status"],
+        model.metadata.get('history_status', model.metadata["status"]),
     )
     for cell, text in zip(cells, values):
         set_cell_margins(cell)
