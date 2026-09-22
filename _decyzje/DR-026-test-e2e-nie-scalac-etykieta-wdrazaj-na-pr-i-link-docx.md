@@ -10,7 +10,7 @@ sezon: 2026/2027
 dotyczy: Test automatu
 decydenci: Komisja regulaminowa SPWS
 discussion_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/59
-pr_url: ""
+pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/60
 zmienia: []
 zmieniona_przez: []
 zakres_zmiany: {}
