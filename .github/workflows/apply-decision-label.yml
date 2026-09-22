@@ -1,0 +1,37 @@
+name: Wdrożenie decyzji etykietą PR
+
+on:
+  pull_request_target:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: apply-decision-${{ github.event.pull_request.head.ref }}
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    if: github.event.label.name == 'wdrażaj' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Only trusted main code is executed, never scripts/workflows from the PR.
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r narzedzia/requirements-docx.txt
+      - run: python -m unittest discover -s tests -v
+      - name: Wdrożenie i link DOCX w opisie PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          python -m narzedzia.pr_decision "$GITHUB_REPOSITORY" "$PR_NUMBER" \
+            --run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"

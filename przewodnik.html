@@ -64,14 +64,14 @@ permalink: /przewodnik/
     <li>Po uzgodnieniu wyniku Koordynator dodaje etykietę <b>rozstrzygnięta</b>. Nie trzeba niczego przepisywać do komentarza.</li>
     <li>Automatyzacja tworzy kolejną kartę DR oraz roboczy pull request. Z dyskusji przenosi problem, koordynatora, priorytet, obszar, materiały, powiązania, proponowane rozwiązanie jako treść decyzji oraz rozważane podejścia jako odrzucone alternatywy.</li>
     <li>W roboczej karcie osoba przygotowująca decyzję dopisuje <b>Uzasadnienie</b> i wybiera <b>Tak</b> albo <b>Nie</b> przy pytaniu o zmianę Regulaminu.</li>
-    <li>Jeżeli zostanie wybrane „Tak”, Redaktor wpisuje w karcie <b>Stary fragment Markdown</b> (dokładna kopia źródła ze znacznikami) i <b>Nowy fragment Markdown</b> (pełne zastępstwo). Po przyjęciu decyzji uruchamia workflow <b>Wdrożenie dokładnej zmiany z decyzji</b> na gałęzi tego PR-a, podając numer DR. Automat zmienia źródło, generuje DOCX, uruchamia testy i aktualizuje ten sam PR. Nie interpretuje uzasadnienia i nie używa LLM.</li>
+    <li>Jeżeli zostanie wybrane „Tak”, Redaktor wpisuje w karcie <b>Stary fragment Markdown</b> (dokładna kopia źródła ze znacznikami) i <b>Nowy fragment Markdown</b> (pełne zastępstwo). Po przyjęciu decyzji nadaje etykietę <b>wdrażaj</b> na <b>Pull Requeście</b>, w panelu Labels. Nie nadaje jej na dyskusji i nie wpisuje numeru DR. Automat zmienia źródło, generuje DOCX, uruchamia testy i aktualizuje ten sam PR. Na górze opisu PR pojawia się sekcja <b>DOCX do sprawdzenia</b> z linkiem do konkretnej wersji. Ponowne nadanie etykiety nie stosuje decyzji drugi raz. Nie interpretuje uzasadnienia i nie używa LLM.</li>
     <li>Komisja przegląda kartę i dokument. Po akceptacji i scaleniu publikowane są DR oraz regulamin, a dyskusja jest technicznie zamykana jako <b>RESOLVED</b>. Dla użytkownika pozostaje <b>Rozstrzygnięta</b>.</li>
   </ol>
 </section>
 
 <section class="guide-card">
   <h2>Dwie ścieżki dokumentu: pełna i szybka</h2>
-  <p><b>Status:</b> automat działa po opublikowaniu workflow na gałęzi <code>main</code>. Nie przerabia wstecz istniejących PR; obsługuje nowe zdarzenia dodania etykiety do dyskusji.</p>
+  <p><b>Status:</b> automat działa po opublikowaniu workflow na gałęzi <code>main</code>. Karty powstają po dodaniu etykiety do dyskusji. Wdrożenie pełnej ścieżki uruchamia osobna etykieta <code>wdrażaj</code> na PR, także istniejącym.</p>
   <p><b>Najważniejsza różnica:</b> bez etykiety szybkiej ścieżki Redaktor sam opracowuje tekst Markdown na podstawie decyzji komisji, ponieważ sprawa może zmieniać sens przepisu. Z etykietą automat wykonuje tylko dokładną zamianę starego fragmentu na nowe brzmienie; Redaktor sprawdza wynik, ale nie musi redagować przepisu od początku.</p>
   <ol>
     <li><b>Pełna ścieżka:</b> Koordynator dodaje etykietę <b>rozstrzygnięta</b>. Automat tworzy kartę DR i draft PR. Redaktor uzupełnia kartę, w szczególności pola starego i nowego fragmentu. Automat wdraża wyłącznie dosłowną, jednoznaczną zmianę; Redaktor odpowiada za jej sens. <a href="{{ '/dokumentacja/adr/ADR-003-deterministyczny-markdown.html' | relative_url }}">Instrukcja wdrożenia</a>.</li>
