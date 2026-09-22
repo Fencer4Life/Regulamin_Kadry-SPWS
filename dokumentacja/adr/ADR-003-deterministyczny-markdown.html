@@ -38,9 +38,10 @@
   <p>Jeśli decyzja nie zmienia dokumentu, oba pola pozostają puste i nie uruchamia się wdrożenia. Formularz dyskusji przekazuje wypełnione pola do karty automatycznie.</p>
   <h2>Obie ścieżki</h2>
   <p><b>Szybka:</b> istniejący mechanizm redakcyjny korzysta z dokładnych fragmentów z dyskusji. Po kontroli tworzy kartę, źródło i DOCX w jednym draft PR. Karta otrzymuje znacznik wykonania — nie należy wdrażać jej ponownie.</p>
-  <p><b>Pełna:</b> powstaje karta DR i draft PR. Redaktor uzupełnia uzasadnienie oraz pola stary/nowy. Po przyjęciu decyzji karta musi mieć <code>status: przyjęta</code>. W GitHub Actions wybiera <b>Wdrożenie dokładnej zmiany z decyzji → Run workflow</b>, wskazuje gałąź otwartego PR decyzji w <b>Use workflow from</b> i podaje jej numer, np. <code>DR-025</code>. Automat aktualizuje ten sam PR. Uruchomiony z <code>main</code> tworzy osobny draft PR wdrożenia. Nie scala go sam.</p>
-  <div class="box">Przyjęta karta → jedno dokładne dopasowanie → normalizacja ZTP → DOCX → testy → PR → przegląd Redaktora.</div>
+  <p><b>Pełna:</b> powstaje karta DR i draft PR. Redaktor uzupełnia uzasadnienie oraz pola stary/nowy. Po przyjęciu decyzji karta musi mieć <code>status: przyjęta</code>. Na Pull Requeście nadaje etykietę <code>wdrażaj</code>. Automat ustala gałąź i jedyną zmienioną kartę DR, generuje DOCX i dodaje na górze opisu sekcję <b>DOCX do sprawdzenia</b>. Link wskazuje konkretny commit. Nie wybiera się gałęzi ani numeru DR; ręczny workflow pozostaje opcją techniczną. Ponowne nadanie etykiety nie wdraża decyzji drugi raz. Automat nie scala PR.</p>
+  <div class="box">Przyjęta karta → etykieta wdrażaj na PR → jedno dokładne dopasowanie → normalizacja ZTP → DOCX → testy → PR → przegląd Redaktora.</div>
   <h2>Kontrole i zatrzymanie</h2>
+  <p>Workflow etykiety wykonuje kod z main, nie kod z PR. Odrzuca obce forki, zamknięte PR, brak lub wiele zmienionych kart. Przed zapisem sprawdza, czy gałąź nie zmieniła się podczas pracy. Równoległe wdrożenia tej samej gałęzi są serializowane. Publikator zachowuje opis Redaktora i aktualizuje jedną oznaczoną sekcję zamiast dopisywać duplikaty. Link wskazuje pliki z pełnego SHA, nie ruchomą gałąź.</p>
   <ul>
     <li>Brak fragmentu, wiele wystąpień, identyczne stare i nowe brzmienie, puste pola lub nieprzyjęta decyzja zatrzymują wdrożenie.</li>
     <li>Normalizacja obejmuje techniczną numerację, odwołania i interpunkcję obsługiwanej struktury ZTP; nie tworzy nowych przepisów i nie ocenia ich sensu.</li>

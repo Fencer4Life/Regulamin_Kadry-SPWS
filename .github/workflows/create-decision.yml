@@ -95,6 +95,11 @@ jobs:
           git commit -m "docs: link decision draft pull request"
           git push origin "$branch"
           gh api graphql -f query='mutation($discussionId:ID!,$body:String!){addDiscussionComment(input:{discussionId:$discussionId,body:$body}){comment{id}}}' -F discussionId="$DISCUSSION_ID" -f body="Utworzono roboczą kartę decyzji: ${pr_url}"
+          if [ "$TRIGGER_LABEL" = "redakcja-bez-zmiany-sensu" ]; then
+            pr_number=$(gh pr view "$branch" --json number --jq .number)
+            python -m narzedzia.pr_docx_link "$GITHUB_REPOSITORY" "$pr_number" "$(git rev-parse HEAD)" \
+              --run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          fi
       - name: Kandydacki DOCX szybkiej korekty
         if: github.event.label.name == 'redakcja-bez-zmiany-sensu'
         uses: actions/upload-artifact@v4

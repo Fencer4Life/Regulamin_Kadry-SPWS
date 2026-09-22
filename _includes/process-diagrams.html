@@ -40,7 +40,7 @@
   <div style="display:grid;grid-template-columns:150px repeat(7,1fr);min-height:112px;align-items:center">
     <div style="height:100%;padding:15px;background:#edf3fa;font-weight:800">✍️ Redaktor regulaminu</div>
     <div></div><div></div><div></div><div></div>
-    <div style="padding:8px"><div style="background:#f4e9ff;border:2px solid #8c63b5;border-radius:9px;padding:10px"><b>Zmienia przepisy</b><br><small>zgodnie z DR</small></div></div>
+    <div style="padding:8px"><div style="background:#f4e9ff;border:2px solid #8c63b5;border-radius:9px;padding:10px"><b>Uzupełnia kartę</b><br><small>stary/nowy<br>wdrażaj na PR</small></div></div>
     <div style="padding:8px"><div style="background:#f4e9ff;border:2px solid #8c63b5;border-radius:9px;padding:10px"><b>Poprawia</b><br><small>po uwagach komisji</small></div></div>
     <div></div>
   </div>
@@ -140,12 +140,12 @@
     <text x="900" y="403" text-anchor="middle" font-size="14" font-weight="800" fill="#356a4c">Zakres: zmiana sensu lub potrzeba oceny</text>
     <text x="900" y="430" text-anchor="middle" font-size="14" fill="#356a4c">Wejście: decyzja, uzasadnienie i rozważane warianty</text>
     <text x="900" y="457" text-anchor="middle" font-size="14" fill="#356a4c">Redaktor opracowuje brzmienie Markdown</text>
-    <text x="900" y="484" text-anchor="middle" font-size="14" fill="#356a4c">Generator buduje DOCX dopiero z tej redakcji</text>
+    <text x="900" y="484" text-anchor="middle" font-size="14" fill="#356a4c">Etykieta „wdrażaj” na PR uruchamia generator DOCX</text>
 
     <path d="M300 510 V550 H600 M900 510 V550 H600 V574" fill="none" stroke="#477cab" stroke-width="5" marker-end="url(#decision-arrow-blue)"/>
     <rect x="380" y="584" width="440" height="92" rx="18" fill="#dbeafe" stroke="#477cab" stroke-width="3" filter="url(#decision-shadow)"/>
     <text x="600" y="614" text-anchor="middle" font-size="18" font-weight="900" fill="#174a7e">WSPÓLNA BRAMKA PR</text>
-    <text x="600" y="642" text-anchor="middle" font-size="13" fill="#48637d">CI → Artefakt DOCX → Word → Approve albo Request changes</text>
+    <text x="600" y="642" text-anchor="middle" font-size="13" fill="#48637d">Artefakt DOCX · link w opisie PR → Word → Approve / Request changes</text>
     <text x="600" y="663" text-anchor="middle" font-size="13" fill="#48637d">Approve → Merge → Release · Request changes → main bez zmian</text>
   </svg>
   </div>

@@ -13,7 +13,7 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: apply-decision-${{ inputs.decision_id }}
+  group: apply-decision-${{ github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -73,3 +73,6 @@ jobs:
               --title "Wdrożenie ${DECISION_ID}: dokładna zmiana Markdown" \
               --body "Automat bez LLM zastosował dosłowną zmianę z karty ${DECISION_ID}. Sprawdź diff źródła i DOCX przed Approve. [DOCX](https://github.com/${GITHUB_REPOSITORY}/raw/refs/heads/${branch}/${docx}) · [Źródło Markdown](https://github.com/${GITHUB_REPOSITORY}/blob/${branch}/${source}). Testy i kontrola zgodności wykonane w tym uruchomieniu Actions."
           fi
+          pr_number=$(gh pr view "$branch" --json number --jq .number)
+          python -m narzedzia.pr_docx_link "$GITHUB_REPOSITORY" "$pr_number" "$(git rev-parse HEAD)" \
+            --run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
