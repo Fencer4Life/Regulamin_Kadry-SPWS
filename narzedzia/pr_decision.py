@@ -85,7 +85,7 @@ def run(repo, number, run_url):
                          'commit', '-m', f'docs: apply decision in PR #{number}'], cwd=checkout)
                 sha = command(['git', 'rev-parse', 'HEAD'], cwd=checkout)
                 command(['git', 'push', 'origin', f'HEAD:refs/heads/{branch}'], cwd=checkout)
-            publish(repo, number, sha, run_url)
+            publish(repo, number, sha, run_url, wait_for_sha=True)
             print(f'PR #{number}: ' + ('wdrożono decyzję i opublikowano DOCX' if changed
                                       else 'decyzja już wdrożona; bez kolejnej zmiany plików'))
         finally:

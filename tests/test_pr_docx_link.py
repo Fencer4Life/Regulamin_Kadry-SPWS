@@ -3,6 +3,32 @@ from unittest.mock import Mock
 
 
 class PrDocxLinkTests(unittest.TestCase):
+    def test_waits_for_pr_api_only_when_branch_already_has_expected_commit(self):
+        from narzedzia.pr_docx_link import publish, SOURCE, DOCX
+        old = {'head': {'sha': 'b' * 40, 'ref': 'decision/test', 'repo': {'full_name': 'owner/repo'}}, 'body': 'Opis'}
+        new = {**old, 'head': {**old['head'], 'sha': 'a' * 40}}
+        tree = {'tree': [{'path': p, 'type': 'blob'} for p in (SOURCE, DOCX)]}
+        api = Mock(side_effect=[old, {'object': {'sha': 'a' * 40}}, new, tree, new, {}])
+        sleep = Mock()
+        publish('owner/repo', 60, 'a' * 40, '', api=api, wait_for_sha=True, sleep=sleep)
+        sleep.assert_called_once()
+        moved = Mock(side_effect=[old, {'object': {'sha': 'c' * 40}}])
+        with self.assertRaises(ValueError):
+            publish('owner/repo', 60, 'a' * 40, '', api=moved, wait_for_sha=True, sleep=sleep)
+        self.assertEqual(moved.call_count, 2)
+
+    def test_propagation_timeout_is_bounded_and_never_publishes(self):
+        from narzedzia.pr_docx_link import publish
+        old = {'head': {'sha': 'b' * 40, 'ref': 'decision/test', 'repo': {'full_name': 'owner/repo'}}}
+        def response(endpoint, **kwargs):
+            self.assertNotIn('payload', kwargs)
+            return {'object': {'sha': 'a' * 40}} if '/git/ref/' in endpoint else old
+        api, sleep = Mock(side_effect=response), Mock()
+        with self.assertRaises(ValueError):
+            publish('owner/repo', 60, 'a' * 40, '', api=api, wait_for_sha=True, sleep=sleep)
+        self.assertEqual(sleep.call_count, 6)
+        self.assertEqual(api.call_count, 13)
+
     def test_both_existing_paths_publish_links_after_push(self):
         from pathlib import Path
         root = Path(__file__).resolve().parents[1]
