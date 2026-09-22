@@ -67,13 +67,13 @@ Wklej kompletną treść zastępującą stary fragment; zachowaj identyfikatory 
 
 ## Uzasadnienie
 
-> _Do uzupełnienia przez osobę przygotowującą decyzję._
+Test techniczny etykiety wdrażaj oraz linku w opisie PR; zmiana nie zostanie scalona i nie stanowi decyzji komisji.
 
 ## Konsekwencje
 
 ### Czy decyzja wymaga zmiany Regulaminu?
 
-- [ ] **Tak** — należy przygotować zmianę Regulaminu i dołączyć ją do tego samego pull requestu.
+- [x] **Tak** — należy przygotować zmianę Regulaminu i dołączyć ją do tego samego pull requestu.
 - [ ] **Nie** — decyzja nie wymaga zmiany Regulaminu.
 
 ## Odrzucone alternatywy
