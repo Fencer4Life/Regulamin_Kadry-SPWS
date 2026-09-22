@@ -8,7 +8,7 @@ from tests.test_docx_current_contract import CANONICAL_SOURCE, CURRENT_DOCUMENT
 
 
 class DecisionPatchTests(unittest.TestCase):
-    def test_decision_before_after_changes_annex_table_in_docx_and_preview(self):
+    def test_decision_before_after_changes_annex_table_without_preview(self):
         from docx import Document
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -19,7 +19,7 @@ class DecisionPatchTests(unittest.TestCase):
             card.write_text('---\nstatus: przyjęta\n---\n'+format_fragments(old, new))
             apply_decision(card, source, docx)
             self.assertIn(new, source.read_text())
-            self.assertIn(new, source.with_suffix('.podglad.md').read_text())
+            self.assertFalse(source.with_suffix('.podglad.md').exists())
             self.assertTrue(any(t.cell(1, 1).text == '54,4' for t in Document(docx).tables if len(t.columns) == 11))
 
     def test_template_has_distinct_empty_code_fields_with_instructions(self):
@@ -43,21 +43,19 @@ class DecisionPatchTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 replace_exact(source, old, new)
 
-    def test_failed_generation_preserves_source_docx_and_preview(self):
+    def test_failed_generation_preserves_source_docx_and_card(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             source, docx, card = root/"source.md", root/"source.docx", root/"DR-999.md"
             source.write_bytes(CANONICAL_SOURCE.read_bytes())
             docx.write_bytes(CURRENT_DOCUMENT.read_bytes())
-            preview = source.with_suffix(".podglad.md")
-            preview.write_text("previous preview")
             card.write_text("---\nstatus: przyjęta\n---\n" + format_fragments(
                 "weteraniszermierki.pl", "www.weteraniszermierki.pl"))
-            original = [p.read_bytes() for p in (source, docx, preview)]
+            original = [p.read_bytes() for p in (source, docx, card)]
             with patch("narzedzia.decision_patch.normalize_and_build", side_effect=ValueError("build")):
                 with self.assertRaises(ValueError):
                     apply_decision(card, source, docx)
-            self.assertEqual(original, [p.read_bytes() for p in (source, docx, preview)])
+            self.assertEqual(original, [p.read_bytes() for p in (source, docx, card)])
 
     def test_accepted_card_builds_all_outputs_and_rejects_second_application(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -69,14 +67,14 @@ class DecisionPatchTests(unittest.TestCase):
             apply_decision(card, source, docx)
             self.assertTrue(docx.is_file())
             self.assertIn("www."+old, source.read_text())
-            self.assertTrue(source.with_suffix(".podglad.md").is_file())
+            self.assertFalse(source.with_suffix(".podglad.md").exists())
             with self.assertRaises(ValueError):
                 apply_decision(card, source, docx)
 
     def test_workflow_updates_existing_pr_and_has_no_llm_dependency(self):
         workflow = (CANONICAL_SOURCE.parents[1] / ".github/workflows/apply-decision.yml").read_text()
         for expected in ("workflow_dispatch:", "decision_patch", "prepare_regulamin verify",
-                         "unittest discover", "gh pr view", "--draft", 'git add -- "$card" "$source" "$docx" "$preview"'):
+                         "unittest discover", "gh pr view", "--draft", 'git add -- "$card" "$source" "$docx"'):
             self.assertIn(expected, workflow)
         for forbidden in ("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "curl", "--force", "git push origin main"):
             self.assertNotIn(forbidden, workflow)

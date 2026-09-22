@@ -46,7 +46,7 @@ Dlaczego wybrano ten wariant?
 
 ## Stary fragment Markdown
 
-Redaktor: wklej pomiędzy poniższe znaczniki kodu dokładny fragment z kanonicznego pliku `regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md`, NIE z pliku `.podglad.md` ani z DOCX. Użyj widoku Code lub Raw, żeby skopiować również komentarze `<!-- unit:... -->`, `<!-- ref:... -->`, `<!-- publication:... -->`, linki i wcięcia. Fragment musi występować dokładnie raz. Nie wpisuj tutaj uzasadnienia. Jedna karta wdrożeniowa zawiera jedną parę stary/nowy; dla kilku zmian wybierz wspólny ciągły fragment.
+Redaktor: wklej pomiędzy poniższe znaczniki kodu dokładny fragment z kanonicznego pliku `regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md`, nie z DOCX. Użyj widoku Code lub Raw, żeby skopiować również komentarze `<!-- unit:... -->`, `<!-- ref:... -->`, `<!-- publication:... -->`, linki i wcięcia. Fragment musi występować dokładnie raz. Nie wpisuj tutaj uzasadnienia. Jedna karta wdrożeniowa zawiera jedną parę stary/nowy; dla kilku zmian wybierz wspólny ciągły fragment.
 
 ```markdown
 

@@ -77,7 +77,7 @@ jobs:
             cp "$candidate_path" "$docx_path"
             python -m narzedzia.docx_parity "$docx_path" "$candidate_path" >/tmp/docx-parity.json
             python -m unittest discover -s tests -v
-            git add -- "$path" "$source_path" "$docx_path" "${source_path%.md}.podglad.md"
+            git add -- "$path" "$source_path" "$docx_path"
             commit_message="docs: prepare editorial decision ${DISCUSSION_NUMBER}"
             pr_body="Szybka korekta utworzona z dyskusji ${DISCUSSION_URL}. Automat zmienił Markdown, wygenerował DOCX i uruchomił testy. Pobierz artefakt regulamin-candidate z runu ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}, otwórz go w Wordzie, a następnie wybierz Approve albo Request changes."
           else

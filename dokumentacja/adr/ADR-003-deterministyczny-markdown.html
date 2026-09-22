@@ -18,11 +18,12 @@
   <p>Linki ukryte w metadanych i znaczniki tabel utrudniały odczyt źródła. Opis decyzji nie wystarcza do bezpiecznej automatycznej zmiany przepisu. Przyjmujemy jawne bloki Markdown dla objaśnień i linków, pełny generowany podgląd oraz jedną parę pól starego i nowego fragmentu w karcie decyzji. Nie korzystamy z LLM ani z dopasowania przybliżonego.</p>
   <table><thead><tr><th>Plik</th><th>Rola</th><th>Czy edytować?</th></tr></thead><tbody>
     <tr><td>Kanoniczny <code>regulamin/…2026.md</code></td><td>Przepisy, stabilne identyfikatory, linki, objaśnienia i znaczniki tabel</td><td>Tak — stąd kopiujemy stary fragment</td></tr>
-    <tr><td><code>regulamin/…2026.podglad.md</code></td><td>Pełna treść wygenerowanego DOCX, w tym wszystkie tabele i oś czasu</td><td>Nie — nadpisywany przez generator</td></tr>
     <tr><td><code>regulamin/…2026.docx</code></td><td>Wersja do przeglądu i publikacji</td><td>Nie — powstaje z kanonicznego źródła i renderera</td></tr>
   </tbody></table>
   <p>Aktualizacja 21.09.2026: zgodnie z poleceniem odtworzenia aktualnego DOCX przeniesiono wszystkie komórki tabel załącznika do kanonicznego Markdown, mechanicznie z dokumentu wzorcowego, bez ręcznej transkrypcji. Generator odczytuje te wartości, nie przelicza ich po cichu. Nagłówki tabel zapisuje się jako <code>####</code> po znaczniku załącznika. Opisy załącznika, dane okładki, nagłówka i stopki pochodzą z jawnych metadanych źródła. Podgląd pozostaje wynikiem, nie drugim źródłem prawdy. Zmiana punktacji wymaga jawnej zmiany źródła i odpowiadających jej testów.</p>
   <p>Wzorcowy DOCX ma na okładce wersję 0.1 i datę [data], natomiast w historii wersję 0.2 i datę 2026-09-19. Migracja zachowuje tę istniejącą różnicę za pomocą osobnych pól <code>cover_version</code> i <code>cover_date</code>, zamiast samowolnie zmieniać wzorzec. Test modyfikacji źródła sprawdza, że nowa wartość okładki i komórki tabeli rzeczywiście przechodzi do DOCX.</p>
+  <h2>Aktualizacja 22.09.2026: jedno źródło, jeden dokument wynikowy</h2>
+  <p>Usuwamy osobny plik <code>.podglad.md</code> i jego generator. Po uzupełnieniu kanonicznego źródła podgląd dublował treść i utrudniał wybór właściwego pliku do edycji. Redaktor zmienia wyłącznie kanoniczny Markdown; automat generuje DOCX. Raport pokrycia i testowe dokumenty pozostają artefaktami CI. Zmiana techniczna nie zmienia treści ani układu regulaminu. Wcześniejsze akapity opisują historię rozwiązania, nie aktualny obowiązek generowania podglądu.</p>
   <h2>Korekta: pełna treść w źródle, nie tylko w podglądzie</h2>
   <p>Końcowa korekta 21.09.2026 zastępuje opisane powyżej przechowywanie tekstów w metadanych. Kanoniczny Markdown zawiera widoczne: okładkę, spis treści z wartościami pól numerów stron ze wzorca, tabelę konstrukcji, wszystkie przepisy, załącznik, historię, nagłówki i stopki. Bloki <code>&lt;!-- publication:... --&gt;</code> określają przeznaczenie tekstu; identyfikatory jednostek i odesłań pozostają w komentarzach. Renderer pobiera z nich treść. Widoczne odesłania i terminy normalizuje na podstawie ich stabilnych identyfikatorów. Nie wolno traktować dodatkowego podglądu jako zastępstwa za kompletne źródło.</p>
   <p>Sprawdzamy osobno obecność każdego niepustego akapitu oraz komórki tabeli w widocznym źródle, odtworzenie paczki DOCX zgodnej ze wzorcem i identyczność dwóch kolejnych generowań. E2E kopiuje źródło, stosuje kartę stary/nowy i wymaga jednej zamiany tekstu w tym samym węźle XML; reszta paczki pozostaje identyczna. CI publikuje raport HTML/JSON i dokumenty dowodowe w artefakcie <code>source-evidence</code>. Kopii <code>E2E_TEST</code> nie publikuje się jako regulaminu. Zgodność techniczna nie jest deklaracją ręcznego sprawdzenia paginacji w Wordzie.</p>
@@ -36,9 +37,9 @@
   </ol>
   <p>Jeśli decyzja nie zmienia dokumentu, oba pola pozostają puste i nie uruchamia się wdrożenia. Formularz dyskusji przekazuje wypełnione pola do karty automatycznie.</p>
   <h2>Obie ścieżki</h2>
-  <p><b>Szybka:</b> istniejący mechanizm redakcyjny korzysta z dokładnych fragmentów z dyskusji. Po kontroli tworzy kartę, źródło, DOCX i podgląd w jednym draft PR. Karta otrzymuje znacznik wykonania — nie należy wdrażać jej ponownie.</p>
+  <p><b>Szybka:</b> istniejący mechanizm redakcyjny korzysta z dokładnych fragmentów z dyskusji. Po kontroli tworzy kartę, źródło i DOCX w jednym draft PR. Karta otrzymuje znacznik wykonania — nie należy wdrażać jej ponownie.</p>
   <p><b>Pełna:</b> powstaje karta DR i draft PR. Redaktor uzupełnia uzasadnienie oraz pola stary/nowy. Po przyjęciu decyzji karta musi mieć <code>status: przyjęta</code>. W GitHub Actions wybiera <b>Wdrożenie dokładnej zmiany z decyzji → Run workflow</b>, wskazuje gałąź otwartego PR decyzji w <b>Use workflow from</b> i podaje jej numer, np. <code>DR-025</code>. Automat aktualizuje ten sam PR. Uruchomiony z <code>main</code> tworzy osobny draft PR wdrożenia. Nie scala go sam.</p>
-  <div class="box">Przyjęta karta → jedno dokładne dopasowanie → normalizacja ZTP → DOCX i pełny podgląd → testy → PR → przegląd Redaktora.</div>
+  <div class="box">Przyjęta karta → jedno dokładne dopasowanie → normalizacja ZTP → DOCX → testy → PR → przegląd Redaktora.</div>
   <h2>Kontrole i zatrzymanie</h2>
   <ul>
     <li>Brak fragmentu, wiele wystąpień, identyczne stare i nowe brzmienie, puste pola lub nieprzyjęta decyzja zatrzymują wdrożenie.</li>
@@ -50,8 +51,8 @@
     <li>Nie dodajemy zależności produkcyjnych ani usług AI. Workflow ma uprawnienia zapisu zawartości i PR, działa na gałęzi roboczej i nie publikuje sam nowej wersji na main.</li>
   </ul>
   <h2>Przegląd i granice</h2>
-  <p>Redaktor sprawdza różnicę źródła, pełny podgląd i DOCX przed Approve. Weryfikacja techniczna potwierdza zgodność źródła z wygenerowanym dokumentem, ale nie zastępuje kontroli merytorycznej ani otwarcia w Microsoft Word w celu oceny podziału stron. Nowy workflow jest dostępny w standardowym wykazie Actions po scaleniu wdrożenia do main.</p>
-  <p>Kod: <code>narzedzia/decision_patch.py</code>, <code>narzedzia/markdown_preview.py</code>, <code>narzedzia/prepare_regulamin.py</code>. Workflow: <code>.github/workflows/apply-decision.yml</code>. Testy: <code>tests/test_decision_patch.py</code>, <code>tests/test_readable_markdown.py</code>.</p>
+  <p>Redaktor sprawdza różnicę źródła i DOCX przed Approve. Weryfikacja techniczna potwierdza zgodność źródła z wygenerowanym dokumentem, ale nie zastępuje kontroli merytorycznej ani otwarcia w Microsoft Word w celu oceny podziału stron. Nowy workflow jest dostępny w standardowym wykazie Actions po scaleniu wdrożenia do main.</p>
+  <p>Kod: <code>narzedzia/decision_patch.py</code>, <code>narzedzia/prepare_regulamin.py</code>. Workflow: <code>.github/workflows/apply-decision.yml</code>. Testy: <code>tests/test_decision_patch.py</code>, <code>tests/test_readable_markdown.py</code>.</p>
   <p><a href="index.html">Wszystkie ADR</a></p>
 </main></body>
 </html>

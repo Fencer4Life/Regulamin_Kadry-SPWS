@@ -6,7 +6,6 @@ import re
 import tempfile
 from pathlib import Path
 
-from narzedzia.markdown_preview import preview_path
 from narzedzia.prepare_regulamin import normalize_and_build, verify
 
 
@@ -73,9 +72,9 @@ def apply_decision(card_path, source, output, *, require_source_hash=None):
         raise ValueError("Źródło zmieniło się od przygotowania decyzji")
     old, new = read_fragments(card)
     changed = replace_exact(original.decode("utf-8"), old, new)
-    paths = (source, output, preview_path(source), card_path)
+    paths = (source, output, card_path)
     if len({path.resolve() for path in paths}) != len(paths):
-        raise ValueError("Źródło, DOCX, podgląd i karta muszą być osobnymi plikami")
+        raise ValueError("Źródło, DOCX i karta muszą być osobnymi plikami")
     with tempfile.TemporaryDirectory() as directory:
         staged_source = Path(directory) / source.name
         staged_output = Path(directory) / output.name
@@ -84,7 +83,7 @@ def apply_decision(card_path, source, output, *, require_source_hash=None):
         verify(staged_source, staged_output)
         updated_card = card.rstrip() + f"\n\n<!-- applied-source-sha256:{digest} -->\n"
         contents = (staged_source.read_bytes(), staged_output.read_bytes(),
-                    preview_path(staged_source).read_bytes(), updated_card.encode("utf-8"))
+                    updated_card.encode("utf-8"))
         backups = [path.read_bytes() if path.exists() else None for path in paths]
         try:
             for path, content in zip(paths, contents):

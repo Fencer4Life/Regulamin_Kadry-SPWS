@@ -17,4 +17,5 @@ class SourceE2ETests(unittest.TestCase):
             self.assertEqual(result['e2e_changed_parts'], ['word/document.xml'])
             self.assertTrue(result['e2e_only_expected_replacement'])
             self.assertEqual(result['e2e_occurrences'], 1)
+            self.assertEqual(list(Path(directory).glob('*.podglad.md')), [])
         self.assertEqual(before, (CANONICAL_SOURCE.read_bytes(), CURRENT_DOCUMENT.read_bytes()))
