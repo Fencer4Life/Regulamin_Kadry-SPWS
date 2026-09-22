@@ -229,8 +229,6 @@ Regulamin nie został jeszcze uchwalony. Poniższe odnośniki prowadzą do nieof
 
 6. <!-- unit:dms-spor --> W przypadku braku porozumienia do zespołu pełniącego funkcję selekcjonera dołącza Prezes SPWS. Jeżeli Prezes SPWS nie może uczestniczyć w pracach zespołu, wyznacza inną osobę do udziału w tych pracach w swoim imieniu.
 
-7. <!-- unit:dms-akceptacja --> Proponowany skład pięcioosobowej drużyny przedstawia się PZSz do akceptacji.
-
 ### § 15 — Drużynowe Mistrzostwa Europy <!-- section:druzynowe-mistrzostwa-europy -->
 
 1. <!-- unit:dme-pula --> Pulę kandydatów do drużyny tworzy dwunastu zawodników: sześciu najwyżej sklasyfikowanych zawodników młodszej kategorii wiekowej oraz sześciu najwyżej sklasyfikowanych zawodników starszej kategorii wiekowej w rankingu indywidualnym weteranów właściwym dla danej broni i płci, przyjętym dla danego cyklu powołań.
