@@ -52,6 +52,7 @@
     <li>Nie dodajemy zależności produkcyjnych ani usług AI. Workflow ma uprawnienia zapisu zawartości i PR, działa na gałęzi roboczej i nie publikuje sam nowej wersji na main.</li>
   </ul>
   <h2>Przegląd i granice</h2>
+  <p>Po zapisaniu dokumentu i linku automat sam uruchamia CI dla gałęzi PR, aby kontrole <code>build</code> i <code>test</code> były dostępne także po commicie bota. Służy do tego uprawnienie workflow <code>actions: write</code>; nie zmieniamy wymaganych kontroli ani ochrony main. Etykieta obsługuje wyłącznie PR zmieniający jedną kartę DR, źródło Markdown i DOCX. Zmiany kodu lub workflow wymagają osobnego PR. CI waliduje dokument z uprawnieniami tylko do odczytu.</p>
   <p>Redaktor sprawdza różnicę źródła i DOCX przed Approve. Weryfikacja techniczna potwierdza zgodność źródła z wygenerowanym dokumentem, ale nie zastępuje kontroli merytorycznej ani otwarcia w Microsoft Word w celu oceny podziału stron. Nowy workflow jest dostępny w standardowym wykazie Actions po scaleniu wdrożenia do main.</p>
   <p>Kod: <code>narzedzia/decision_patch.py</code>, <code>narzedzia/prepare_regulamin.py</code>. Workflow: <code>.github/workflows/apply-decision.yml</code>. Testy: <code>tests/test_decision_patch.py</code>, <code>tests/test_readable_markdown.py</code>.</p>
   <p><a href="index.html">Wszystkie ADR</a></p>
