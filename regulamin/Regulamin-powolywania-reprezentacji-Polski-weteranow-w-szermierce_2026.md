@@ -111,7 +111,7 @@ Treść dokumentu podzielono następująco:
    1) <!-- unit:zawody-ppw-mpw --> Pucharze Polski Weteranów w Szermierce oraz Mistrzostwach Polski Weteranów w Szermierce, organizowanych przez SPWS albo przez inny podmiot na zasadach określonych w § 5 ust. 2<!-- ref:zawody-rankingowe/zewnetrzny-organizator -->;
    2) <!-- unit:zawody-pps-mps --> Pucharze Polski Seniorów w Szermierce oraz Mistrzostwach Polski Seniorów w Szermierce, ujętych w oficjalnym kalendarzu PZSz;
    3) <!-- unit:zawody-pew-mew --> Pucharze Europy Weteranów w Szermierce oraz Mistrzostwach Europy Weteranów w Szermierce, ujętych w oficjalnym kalendarzu EVF;
-   4) <!-- unit:zawody-psw-msw --> Pucharze Świata Weteranów w Szermierce – o ile zawody tego cyklu zostaną rozegrane – oraz Mistrzostwach Świata Weteranów w Szermierce, ujętych w oficjalnym kalendarzu FIE.
+   4) <!-- unit:zawody-psw-msw --> Pucharze Świata Weteranów w Szermierce oraz Mistrzostwach Świata Weteranów w Szermierce, ujętych w oficjalnym kalendarzu FIE.
 
 2. <!-- unit:zewnetrzny-organizator --> Zawody organizowane przez podmiot inny niż SPWS mogą zostać zaliczone do cyklu Pucharu Polski Weteranów w Szermierce, jeżeli łącznie spełniają następujące warunki:
    1) <!-- unit:warunek-zatwierdzenie --> przed ich rozegraniem zostały zatwierdzone przez SPWS i ujęte w opublikowanym kalendarzu cyklu;
