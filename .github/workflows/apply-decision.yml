@@ -36,7 +36,7 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$DECISION_ID" =~ ^DR-[0-9]{3}$ ]] || { echo "Nieprawidłowy numer decyzji"; exit 1; }
-          mapfile -t cards < <(rg --files _decyzje | rg "^_decyzje/${DECISION_ID}[-.].*\.md$")
+          mapfile -t cards < <(find _decyzje -maxdepth 1 -type f | grep -E "^_decyzje/${DECISION_ID}[-.].*\.md$")
           [[ ${#cards[@]} == 1 ]] || { echo "Nie znaleziono jednej karty decyzji"; exit 1; }
           card="${cards[0]}"
           source="regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md"
@@ -52,7 +52,7 @@ jobs:
             git switch -c "$branch"
           else
             # Continue the existing decision PR instead of creating another PR chain.
-            gh pr view "$branch" --json state --jq .state | rg '^OPEN$'
+            gh pr view "$branch" --json state --jq .state | grep -x 'OPEN'
             git switch "$branch"
           fi
           python -m narzedzia.decision_patch "$card" "$source" "$docx"

@@ -86,6 +86,10 @@ class DecisionPatchTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 apply_decision(card, CANONICAL_SOURCE, Path(directory)/"out.docx")
 
+    def test_workflow_does_not_require_uninstalled_ripgrep(self):
+        workflow = (CANONICAL_SOURCE.parents[1] / ".github/workflows/apply-decision.yml").read_text()
+        self.assertNotRegex(workflow, r'\brg\b')
+
     def test_ambiguous_or_unclosed_fields_are_rejected(self):
         for text in (format_fragments("old", "new") + format_fragments("other", "new"),
                      format_fragments("old", "new").rsplit("```", 1)[0]):
