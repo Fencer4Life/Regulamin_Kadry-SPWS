@@ -86,11 +86,21 @@ class CurrentDocxContractTests(unittest.TestCase):
         cls.document = Document(CURRENT_DOCUMENT)
         cls.contract = document_content_contract(CURRENT_DOCUMENT)
 
-    def test_current_document_shape_is_frozen_before_generator_work(self):
-        self.assertEqual(len(self.document.paragraphs), 212)
-        self.assertEqual(len(self.document.tables), 16)
-        self.assertEqual(sum(len(table.rows) for table in self.document.tables), 146)
-        self.assertEqual(len(self.contract["blocks"]), 228)
+    def test_current_document_shape_matches_source(self):
+        # Editorial decisions can add/remove units and table rows. The current
+        # Markdown defines the expected shape, not the migration-era totals.
+        with tempfile.TemporaryDirectory() as directory:
+            candidate = Path(directory) / "candidate.docx"
+            build_document(CANONICAL_SOURCE, candidate)
+            expected = Document(candidate)
+            self.assertEqual(len(self.document.paragraphs), len(expected.paragraphs))
+            self.assertEqual(len(self.document.tables), len(expected.tables))
+            self.assertEqual(
+                [len(table.rows) for table in self.document.tables],
+                [len(table.rows) for table in expected.tables],
+            )
+            self.assertEqual(len(self.contract["blocks"]),
+                             len(document_content_contract(candidate)["blocks"]))
 
     def test_current_document_heading_order_is_explicit(self):
         headings = [
