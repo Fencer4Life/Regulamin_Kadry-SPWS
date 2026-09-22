@@ -3,6 +3,7 @@ import argparse
 import json
 import re
 import subprocess
+import time
 from urllib.parse import quote
 
 from narzedzia.validate_regulation_change import SOURCE, DOCX
@@ -44,22 +45,37 @@ def update_body(body, repo, sha, run_url):
     return section + f'{END}\n\n' + body
 
 
-def publish(repo, number, sha, run_url, *, api=gh_api):
+def publish(repo, number, sha, run_url, *, api=gh_api, wait_for_sha=False, sleep=time.sleep):
     endpoint = f'repos/{repo}/pulls/{int(number)}'
 
     def check(pr):
         if pr['head']['sha'] != sha or pr['head']['repo']['full_name'] != repo:
             raise ValueError('PR zmienił wersję lub pochodzi z innego repozytorium')
 
-    pr = api(endpoint)
-    check(pr)
+    def current_pr():
+        pr = api(endpoint)
+        if wait_for_sha:
+            for _ in range(6):
+                if pr['head']['sha'] == sha:
+                    break
+                if pr['head']['repo']['full_name'] != repo:
+                    raise ValueError('PR pochodzi z innego repozytorium')
+                branch = quote(pr['head']['ref'], safe='/')
+                ref = api(f'repos/{repo}/git/ref/heads/{branch}')
+                if ref['object']['sha'] != sha:
+                    raise ValueError('Gałąź PR zmieniła się; nie publikujemy starego linku')
+                sleep(2)
+                pr = api(endpoint)
+        check(pr)
+        return pr
+
+    pr = current_pr()
     tree = api(f'repos/{repo}/git/trees/{sha}?recursive=1')
     paths = {item['path'] for item in tree['tree'] if item['type'] == 'blob'}
     if tree.get('truncated') or not {SOURCE, DOCX}.issubset(paths):
         raise ValueError('Brak potwierdzonego Markdown lub DOCX w commicie')
     # Refresh immediately before writing: preserve recent human edits, reject stale results.
-    pr = api(endpoint)
-    check(pr)
+    pr = current_pr()
     body = update_body(pr.get('body'), repo, sha, run_url)
     if body != (pr.get('body') or ''):
         api(endpoint, payload={'body': body})
@@ -73,7 +89,7 @@ def main():
     parser.add_argument('sha')
     parser.add_argument('--run-url', default='')
     args = parser.parse_args()
-    publish(args.repo, args.pr, args.sha, args.run_url)
+    publish(args.repo, args.pr, args.sha, args.run_url, wait_for_sha=True)
     print(f'Link DOCX opublikowany w PR #{args.pr}')
 
 
