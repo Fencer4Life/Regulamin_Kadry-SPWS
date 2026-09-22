@@ -75,7 +75,7 @@ Wklej kompletną treść zastępującą stary fragment; zachowaj identyfikatory 
 
 ### Czy decyzja wymaga zmiany Regulaminu?
 
-- [ ] **Tak** — należy przygotować zmianę Regulaminu i dołączyć ją do tego samego pull requestu.
+- [x] **Tak** — należy przygotować zmianę Regulaminu i dołączyć ją do tego samego pull requestu.
 - [ ] **Nie** — decyzja nie wymaga zmiany Regulaminu.
 
 ## Odrzucone alternatywy
