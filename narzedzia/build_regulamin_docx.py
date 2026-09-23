@@ -507,7 +507,7 @@ def _add_unit(
         if inline_run.href:
             _add_external_link(content, inline_run.href, inline_run.text)
             continue
-        run = content.add_run(resolve_references(model, inline_run.text))
+        run = content.add_run(resolve_references(model, inline_run.text, current_unit=unit.identifier))
         if inline_run.bold:
             run.bold = True
     indents = {

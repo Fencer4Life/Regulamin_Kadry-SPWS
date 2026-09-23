@@ -161,15 +161,59 @@ def _reference_index(model: RegulationDocument) -> dict[tuple[str, str], str]:
     return index
 
 
-def resolve_references(model: RegulationDocument, text: str) -> str:
+def _reference_locations(model: RegulationDocument) -> dict:
+    locations = {}
+    for chapter in model.chapters:
+        for section in chapter.sections:
+            def visit(unit, path, number):
+                current = path + ((unit.kind, number),)
+                locations[(section.identifier, unit.identifier)] = current
+                for i, child in enumerate(unit.children, 1):
+                    visit(child, current, i)
+            units = [block for block in section.blocks if isinstance(block, ZtpUnit)]
+            for i, unit in enumerate(units, 1):
+                visit(unit, (), i)
+    return locations
+
+
+def resolve_references(model: RegulationDocument, text: str, *, current_unit: str | None = None) -> str:
     references = _reference_index(model)
+    locations = _reference_locations(model)
+    current = None
+    if current_unit is not None:
+        matches = [key for key in locations if key[1] == current_unit]
+        if len(matches) != 1:
+            raise ValueError(f"Nieznana lub niejednoznaczna jednostka: {current_unit}")
+        current = matches[0]
 
     def replace(match: re.Match[str]) -> str:
         key = (match.group(1), match.group(2))
         try:
-            return references[key]
+            full = references[key]
         except KeyError as error:
             raise ValueError(f"Nieznane odwołanie: {match.group(0)}") from error
+        if current is None or current[0] != key[0]:
+            return full
+        if current == key:
+            raise ValueError("Odsyłacz prowadzi do tej samej jednostki")
+        origin, target = locations[current], locations[key]
+        common = 0
+        for left, right in zip(origin, target):
+            if left != right:
+                break
+            common += 1
+        # When referring to an ancestor, retain its own label.
+        visible = target[min(common, len(target) - 1):]
+        labels = {'ust': 'ust.', 'pkt': 'pkt', 'lit': 'lit.',
+                  'tiret': 'tiret', 'double-tiret': 'podwójne tiret'}
+        parts = []
+        for kind, number in visible:
+            if kind in labels:
+                parts.extend((labels[kind], chr(96 + number) if kind == 'lit' else str(number)))
+        if not parts:
+            raise ValueError("Brak numerowanej jednostki docelowej odsyłacza lokalnego")
+        direction = 'powyżej' if tuple(n for _, n in origin) > tuple(n for _, n in target) else 'poniżej'
+        return ' '.join([*parts, direction])
 
     return resolve_terms(model.milestones, REFERENCE_RE.sub(replace, text))
 
