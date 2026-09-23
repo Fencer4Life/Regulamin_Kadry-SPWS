@@ -34,8 +34,8 @@ jobs:
           TRIGGER_LABEL: ${{ github.event.label.name }}
         run: |
           branch="decision/discussion-${DISCUSSION_NUMBER}"
-          source_path="regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md"
-          docx_path="regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx"
+          source_path="regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md"
+          docx_path="regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
           candidate_path="/tmp/regulamin-candidate.docx"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

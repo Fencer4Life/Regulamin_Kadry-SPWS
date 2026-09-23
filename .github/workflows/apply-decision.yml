@@ -40,8 +40,8 @@ jobs:
           mapfile -t cards < <(find _decyzje -maxdepth 1 -type f | grep -E "^_decyzje/${DECISION_ID}[-.].*\.md$")
           [[ ${#cards[@]} == 1 ]] || { echo "Nie znaleziono jednej karty decyzji"; exit 1; }
           card="${cards[0]}"
-          source="regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md"
-          docx="regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx"
+          source="regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md"
+          docx="regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
           branch="$GITHUB_REF_NAME"
           if [[ "$branch" == main ]]; then
             branch="decision/apply-${DECISION_ID}"

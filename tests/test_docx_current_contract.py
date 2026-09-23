@@ -11,10 +11,10 @@ from narzedzia.docx_parity import document_content_contract
 
 ROOT = Path(__file__).resolve().parents[1]
 CURRENT_DOCUMENT = ROOT / "regulamin" / (
-    "Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx"
+    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
 )
 CANONICAL_SOURCE = ROOT / "regulamin" / (
-    "Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md"
+    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md"
 )
 EXPECTED_HEADINGS = [
     "Spis treści",

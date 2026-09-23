@@ -9,7 +9,7 @@ from docx.oxml.ns import qn
 
 
 DEFAULT_DOCUMENT = Path(__file__).resolve().parents[1] / "regulamin" / (
-    "Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx"
+    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
 )
 MAX_ATOMIC_TABLE_ROWS = 18
 SECTION_TITLE_STYLE = "Tytuł paragrafu"

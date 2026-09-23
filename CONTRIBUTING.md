@@ -39,16 +39,16 @@ Pełna ścieżka zaczyna się od etykiety `rozstrzygnięta`. Automat tworzy kart
 
 ```bash
 python -m narzedzia.prepare_regulamin normalize-and-build \
-  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
-  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx
+  regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md \
+  regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx
 ```
 
 Przed commitem należy uruchomić tryb bez zapisu:
 
 ```bash
 python -m narzedzia.prepare_regulamin verify \
-  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
-  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx
+  regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md \
+  regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx
 ```
 
 ### Semantyczny Markdown ZTP
@@ -70,8 +70,8 @@ W obu ścieżkach Redaktor otwiera run `CI` przypisany do PR, pobiera `regulamin
 ```bash
 source .venv/bin/activate
 python -m narzedzia.prepare_regulamin verify \
-  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
-  regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx
+  regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md \
+  regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx
 python narzedzia/sanitize_docx_metadata.py
 python -m unittest discover -s tests -v
 git diff --check

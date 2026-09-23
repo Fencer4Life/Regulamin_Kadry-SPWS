@@ -10,9 +10,9 @@ from narzedzia.docx_model import ZtpUnit, parse_regulation_source
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "dokumentacja/migracja/2026-09-19-mapa-tresci-zrodlowej.json"
-SOURCE = ROOT / "regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md"
+SOURCE = ROOT / "regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md"
 DISCUSSIONS = ROOT / "dokumentacja/dyskusje/2026-09-19-propozycje-z-dokumentu-zrodlowego.md"
-DOCX = ROOT / "regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx"
+DOCX = ROOT / "regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
 
 
 def walk(unit: ZtpUnit):

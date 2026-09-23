@@ -32,20 +32,20 @@ jobs:
         run: |
           mkdir -p .artifacts
           python -m narzedzia.normalize_regulamin_markdown \
-            regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
+            regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md \
             --check
           python -m narzedzia.prepare_regulamin verify \
-            regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
-            regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx
+            regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md \
+            regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx
           python -m narzedzia.build_regulamin_docx \
-            regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
+            regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md \
             .artifacts/regulamin-candidate.docx
           python tests/test_approved_sections_02_03.py .artifacts/regulamin-candidate.docx
           python tests/test_docx_pagination.py .artifacts/regulamin-candidate.docx
           REGULAMIN_DOCX_PATH=.artifacts/regulamin-candidate.docx \
             python -m unittest tests.test_docx_publication_safety -v
           python -m narzedzia.docx_parity \
-            regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx \
+            regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx \
             .artifacts/regulamin-candidate.docx
       - name: Kandydacki DOCX do kontroli w Wordzie
         uses: actions/upload-artifact@v4
@@ -58,8 +58,8 @@ jobs:
       - name: Pokrycie źródła i E2E decyzja Markdown DOCX
         run: |
           python -m narzedzia.source_evidence \
-            regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md \
-            regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx \
+            regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md \
+            regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx \
             .artifacts/source-evidence
       - name: Raport pokrycia i testowe dokumenty E2E
         if: always()

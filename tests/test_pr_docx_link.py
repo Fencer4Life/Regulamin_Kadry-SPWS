@@ -46,7 +46,7 @@ class PrDocxLinkTests(unittest.TestCase):
         self.assertIn('## DOCX do sprawdzenia', once)
         self.assertTrue(once.endswith(original))
         self.assertIn('/raw/' + 'a' * 40 + '/', once)
-        self.assertIn('weteran%C3%B3w', once)
+        self.assertIn('Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx', once)
         self.assertEqual(update_body(once, *args), once)
         newer = update_body(once, args[0], 'b' * 40, args[2])
         self.assertEqual(newer.count('## DOCX do sprawdzenia'), 1)

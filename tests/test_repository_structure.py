@@ -12,7 +12,7 @@ REQUIRED_PATHS = (
     "README.md",
     "CONTRIBUTING.md",
     "ZASADY_REJESTRU.md",
-    "regulamin/Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx",
+    "regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx",
     "zalaczniki/Zalacznik-1-tabela-punktacji-SPWS_2026-2027.html",
     "narzedzia/requirements-docx.txt",
     "narzedzia/generate_regulamin_docx.py",

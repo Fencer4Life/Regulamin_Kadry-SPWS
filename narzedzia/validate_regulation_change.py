@@ -6,11 +6,11 @@ import sys
 
 SOURCE = (
     "regulamin/"
-    "Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md"
+    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md"
 )
 DOCX = (
     "regulamin/"
-    "Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx"
+    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
 )
 
 

@@ -10,7 +10,7 @@ from lxml import etree
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DOCUMENT = ROOT / "regulamin" / (
-    "Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx"
+    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
 )
 DOCUMENT = Path(os.environ.get("REGULAMIN_DOCX_PATH", DEFAULT_DOCUMENT))
 ALLOWED_EDITOR = "Komisja regulaminowa SPWS"

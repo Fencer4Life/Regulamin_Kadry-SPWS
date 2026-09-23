@@ -7,7 +7,7 @@ from docx import Document
 
 
 DOCUMENT = Path(__file__).resolve().parents[1] / "regulamin" / (
-    "Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx"
+    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
 )
 
 EXPECTED_SELECTION_RULES = [
