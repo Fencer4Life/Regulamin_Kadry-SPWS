@@ -11,7 +11,7 @@ zawody = 0
 <!-- publication:cover -->
 PROJEKT
 
-# Regulamin powoływania reprezentacji Polski weteranów w szermierce
+# Regulamin powoływania Reprezentacji Polski Weteranów w szermierce
 
 w sezonie 2026/2027
 
@@ -38,7 +38,7 @@ w sezonie 2026/2027
 <!-- /publication -->
 
 <!-- publication:outline -->
-## Konstrukcja regulaminu
+## Konstrukcja Regulaminu
 
 Treść dokumentu podzielono następująco:
 
@@ -49,7 +49,7 @@ Treść dokumentu podzielono następująco:
 | 3 | Powołania do startów indywidualnych | kolejność kandydatów, rezygnacje i zastępstwa |
 | 4 | Dobór składu drużyny | pula kandydatów, wymogi kategorii i procedury wyboru |
 | 5 | Terminarz procesu powoływania | terminy, deklaracje, odpowiedzialność, korekty danych i dokumentacja powołań |
-| 6 | Ocena regulaminu i doskonalenie metody | ewaluacja sezonowa i przygotowanie zmian |
+| 6 | Ocena Regulaminu i doskonalenie metody | ewaluacja sezonowa i przygotowanie zmian |
 | 7 | Postanowienia końcowe | wejście w życie i przepis przejściowy |
 <!-- /publication -->
 
@@ -58,7 +58,7 @@ Treść dokumentu podzielono następująco:
 
 ### § 1 — Przedmiot regulaminu <!-- section:przedmiot -->
 
-<!-- unit:przedmiot-zakres --> Regulamin określa zasady kwalifikowania i powoływania zawodników do reprezentacji Polski weteranów w szermierce na indywidualne i drużynowe zawody międzynarodowe rangi mistrzowskiej, w których liczba zawodników reprezentujących państwo podlega ograniczeniom określonym przez organizatora zawodów.
+<!-- unit:przedmiot-zakres --> Regulamin powoływania Reprezentacji Polski Weteranów w Szermierce zwany dalej “Regulaminem” określa zasady kwalifikowania i powoływania zawodników do reprezentacji Polski na indywidualne i drużynowe zawody międzynarodowe rangi mistrzowskiej, w których liczba zawodników reprezentujących państwo podlega ograniczeniom określonym przez organizatora zawodów.
 
 ### § 2 — Definicje <!-- section:definicje -->
 
@@ -97,18 +97,18 @@ Treść dokumentu podzielono następująco:
 
 3. <!-- unit:swoboda-wyboru-zawodow --> Zawodnik samodzielnie wybiera zawody, w których bierze udział. Warunkiem uwzględnienia go w rankingu indywidualnym jest co najmniej jeden start w Pucharze Polski Weteranów w Szermierce albo Mistrzostwach Polski Weteranów w Szermierce.
 
-4. <!-- unit:dodatni-dorobek --> Z zastrzeżeniem § 4 ust. 5<!-- ref:rola-rankingu/powolanie-uzupelniajace -->, do reprezentacji Polski na limitowane zawody międzynarodowe może zostać powołany wyłącznie zawodnik, który wystartował w co najmniej jednych zawodach uwzględnianych w rankingu indywidualnym i uzyskał w nim dorobek większy niż zero punktów.
+4. <!-- unit:dodatni-dorobek --> Z zastrzeżeniem ust. 5<!-- ref:rola-rankingu/powolanie-uzupelniajace -->, do reprezentacji Polski na limitowane zawody międzynarodowe może zostać powołany wyłącznie zawodnik, który wystartował w co najmniej jednych zawodach uwzględnianych w rankingu indywidualnym i uzyskał w nim dorobek większy niż zero punktów.
 
 5. <!-- unit:powolanie-uzupelniajace --> W zawodach innych niż Drużynowe Mistrzostwa Świata i Drużynowe Mistrzostwa Europy, w przypadku gdy nie jest możliwe skompletowanie drużyny z zawodników posiadających dodatni dorobek punktowy, dopuszcza się powołanie uzupełniające zawodnika bez punktów rankingowych, jeżeli łącznie:
    1) <!-- unit:uzupelnienie-niezbedne --> powołanie jest niezbędne do wystawienia kompletnej drużyny zgodnej z przepisami zawodów;
    2) <!-- unit:uzupelnienie-oferta --> możliwość startu zaoferowano wszystkim dostępnym zawodnikom posiadającym dodatni dorobek punktowy, spełniającym wymagania dotyczące broni, płci i kategorii wiekowej;
-   3) <!-- unit:uzupelnienie-brak-gotowosci --> żaden z zawodników, o których mowa w § 4 ust. 5 pkt 2<!-- ref:rola-rankingu/uzupelnienie-oferta -->, nie potwierdził gotowości do udziału;
+   3) <!-- unit:uzupelnienie-brak-gotowosci --> żaden z zawodników, o których mowa w pkt 2 powyżej<!-- ref:rola-rankingu/uzupelnienie-oferta -->, nie potwierdził gotowości do udziału;
    4) <!-- unit:uzupelnienie-warunki-formalne --> powoływana osoba spełnia wszystkie formalne warunki udziału określone przez organizatora zawodów.
 
 ### § 5 — Zawody uwzględniane w rankingu <!-- section:zawody-rankingowe -->
 
 1. <!-- unit:katalog-zawodow --> W sezonie 2026/2027 w rankingu indywidualnym uwzględnia się wyniki uzyskane w następujących cyklach i zawodach:
-   1) <!-- unit:zawody-ppw-mpw --> Pucharze Polski Weteranów w Szermierce oraz Mistrzostwach Polski Weteranów w Szermierce, organizowanych przez SPWS albo przez inny podmiot na zasadach określonych w § 5 ust. 2<!-- ref:zawody-rankingowe/zewnetrzny-organizator -->;
+   1) <!-- unit:zawody-ppw-mpw --> Pucharze Polski Weteranów w Szermierce oraz Mistrzostwach Polski Weteranów w Szermierce, organizowanych przez SPWS albo przez inny podmiot na zasadach określonych w ust. 2<!-- ref:zawody-rankingowe/zewnetrzny-organizator -->;
    2) <!-- unit:zawody-pps-mps --> Pucharze Polski Seniorów w Szermierce oraz Mistrzostwach Polski Seniorów w Szermierce, ujętych w oficjalnym kalendarzu PZSz;
    3) <!-- unit:zawody-pew-mew --> Pucharze Europy Weteranów w Szermierce oraz Mistrzostwach Europy Weteranów w Szermierce, ujętych w oficjalnym kalendarzu EVF;
    4) <!-- unit:zawody-psw-msw --> Pucharze Świata Weteranów w Szermierce oraz Mistrzostwach Świata Weteranów w Szermierce, ujętych w oficjalnym kalendarzu FIE.
@@ -120,7 +120,7 @@ Treść dokumentu podzielono następująco:
    4) <!-- unit:warunek-formula --> zawody są rozgrywane według formuły sportowej zgodnej z regulaminami lub przepisami zawodów stosowanymi przez SPWS, PZSz, EVF albo FIE, przy czym właściwa formuła musi zostać wskazana w komunikacie organizacyjnym;
    5) <!-- unit:warunek-kategorie --> zawody są rozgrywane w kategoriach wieku, broni i płci określonych w komunikacie organizacyjnym i zgodnych z wybraną formułą sportową;
    6) <!-- unit:warunek-protokoly --> po zakończeniu zawodów organizator publikuje w serwisie internetowym kompletne protokoły wszystkich rozegranych walk, obejmujące fazę grupową oraz eliminację bezpośrednią, wraz z klasyfikacją końcową i liczbą uczestników, zapewniając publiczny i nieodpłatny dostęp do tych materiałów;
-   7) <!-- unit:warunek-dostepnosc --> protokoły i wyniki, o których mowa w § 5 ust. 2 pkt 6<!-- ref:zawody-rankingowe/warunek-protokoly -->, pozostają dostępne online przez co najmniej 36 miesięcy od dnia zakończenia zawodów.
+   7) <!-- unit:warunek-dostepnosc --> protokoły i wyniki, o których mowa w pkt 6 powyżej<!-- ref:zawody-rankingowe/warunek-protokoly -->, pozostają dostępne online przez co najmniej 36 miesięcy od dnia zakończenia zawodów.
 
 3. <!-- unit:osiem-pozycji-rankingowych --> Łączna liczba punktów zawodnika w rankingu indywidualnym jest sumą punktów przypisanych do ośmiu pozycji wynikowych:
    1) <!-- unit:trzy-pozycje-krajowe --> trzech obowiązkowych pozycji krajowych;
