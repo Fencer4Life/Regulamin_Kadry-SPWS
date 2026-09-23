@@ -18,7 +18,7 @@ CANONICAL_SOURCE = ROOT / "regulamin" / (
 )
 EXPECTED_HEADINGS = [
     "Spis treści",
-    "Konstrukcja regulaminu",
+    "Konstrukcja Regulaminu",
     "Postanowienia ogólne",
     "§ 1", "Przedmiot regulaminu",
     "§ 2", "Definicje",

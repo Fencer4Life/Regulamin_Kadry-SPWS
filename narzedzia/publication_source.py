@@ -75,8 +75,11 @@ def wrap(key, text):
 
 
 def restore_tokens(markdown):
-    markdown = re.sub(r'§ \d+(?: (?:ust\.|pkt|lit\.|tiret|podwójne tiret) [\da-z]+)*<!-- ref:([a-z0-9-]+/[a-z0-9-]+) -->',
+    label = r'(?:ust\.|pkt|lit\.|podwójne tiret|tiret) [\da-z]+'
+    markdown = re.sub(r'(?:§ \d+(?: '+label+r')*|'+label+r'(?: '+label+r')*)(?: (?:powyżej|poniżej))?<!-- ref:([a-z0-9-]+/[a-z0-9-]+) -->',
                       lambda m: '{{ref:'+m[1]+'}}', markdown)
+    if re.search(r'<!--\s*ref:', markdown):
+        raise ValueError('Nieprawidłowy tekst widoczny odsyłacza; znacznik ref nie może trafić do DOCX')
     markdown = re.sub(r'(?:T−\d+|T|\d+)<!-- (term|days):([a-z0-9-]+) -->',
                       lambda m: '{{'+m[1]+':'+m[2]+'}}', markdown)
     # Editorial IDs stay hidden in rendered Markdown, but are preserved for the parser.
@@ -89,8 +92,12 @@ def restore_tokens(markdown):
 
 def make_visible(text, model):
     from narzedzia.normalize_regulamin_markdown import resolve_references
-    text = re.sub(r'\{\{((?:ref|term|days):[^}]+)}}',
-                  lambda m: resolve_references(model, m[0])+'<!-- '+m[1]+' -->', text)
+    def visible_line(line):
+        unit = re.search(r'\[unit:([a-z0-9-]+)]', line)
+        return re.sub(r'\{\{((?:ref|term|days):[^}]+)}}',
+                      lambda m: resolve_references(model, m[0], current_unit=unit[1] if unit else None)
+                      +'<!-- '+m[1]+' -->', line)
+    text = ''.join(visible_line(line) for line in text.splitlines(keepends=True))
     text = re.sub(r'\[unit:([a-z0-9-]+)]', r'<!-- unit:\1 -->', text)
     chapter_count = section_count = 0
     def chapter(m):

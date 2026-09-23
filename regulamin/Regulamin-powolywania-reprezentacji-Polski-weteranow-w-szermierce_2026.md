@@ -97,7 +97,7 @@ Treść dokumentu podzielono następująco:
 
 3. <!-- unit:swoboda-wyboru-zawodow --> Zawodnik samodzielnie wybiera zawody, w których bierze udział. Warunkiem uwzględnienia go w rankingu indywidualnym jest co najmniej jeden start w Pucharze Polski Weteranów w Szermierce albo Mistrzostwach Polski Weteranów w Szermierce.
 
-4. <!-- unit:dodatni-dorobek --> Z zastrzeżeniem ust. 5<!-- ref:rola-rankingu/powolanie-uzupelniajace -->, do reprezentacji Polski na limitowane zawody międzynarodowe może zostać powołany wyłącznie zawodnik, który wystartował w co najmniej jednych zawodach uwzględnianych w rankingu indywidualnym i uzyskał w nim dorobek większy niż zero punktów.
+4. <!-- unit:dodatni-dorobek --> Z zastrzeżeniem ust. 5 poniżej<!-- ref:rola-rankingu/powolanie-uzupelniajace -->, do reprezentacji Polski na limitowane zawody międzynarodowe może zostać powołany wyłącznie zawodnik, który wystartował w co najmniej jednych zawodach uwzględnianych w rankingu indywidualnym i uzyskał w nim dorobek większy niż zero punktów.
 
 5. <!-- unit:powolanie-uzupelniajace --> W zawodach innych niż Drużynowe Mistrzostwa Świata i Drużynowe Mistrzostwa Europy, w przypadku gdy nie jest możliwe skompletowanie drużyny z zawodników posiadających dodatni dorobek punktowy, dopuszcza się powołanie uzupełniające zawodnika bez punktów rankingowych, jeżeli łącznie:
    1) <!-- unit:uzupelnienie-niezbedne --> powołanie jest niezbędne do wystawienia kompletnej drużyny zgodnej z przepisami zawodów;
@@ -108,7 +108,7 @@ Treść dokumentu podzielono następująco:
 ### § 5 — Zawody uwzględniane w rankingu <!-- section:zawody-rankingowe -->
 
 1. <!-- unit:katalog-zawodow --> W sezonie 2026/2027 w rankingu indywidualnym uwzględnia się wyniki uzyskane w następujących cyklach i zawodach:
-   1) <!-- unit:zawody-ppw-mpw --> Pucharze Polski Weteranów w Szermierce oraz Mistrzostwach Polski Weteranów w Szermierce, organizowanych przez SPWS albo przez inny podmiot na zasadach określonych w ust. 2<!-- ref:zawody-rankingowe/zewnetrzny-organizator -->;
+   1) <!-- unit:zawody-ppw-mpw --> Pucharze Polski Weteranów w Szermierce oraz Mistrzostwach Polski Weteranów w Szermierce, organizowanych przez SPWS albo przez inny podmiot na zasadach określonych w ust. 2 poniżej<!-- ref:zawody-rankingowe/zewnetrzny-organizator -->;
    2) <!-- unit:zawody-pps-mps --> Pucharze Polski Seniorów w Szermierce oraz Mistrzostwach Polski Seniorów w Szermierce, ujętych w oficjalnym kalendarzu PZSz;
    3) <!-- unit:zawody-pew-mew --> Pucharze Europy Weteranów w Szermierce oraz Mistrzostwach Europy Weteranów w Szermierce, ujętych w oficjalnym kalendarzu EVF;
    4) <!-- unit:zawody-psw-msw --> Pucharze Świata Weteranów w Szermierce oraz Mistrzostwach Świata Weteranów w Szermierce, ujętych w oficjalnym kalendarzu FIE.
