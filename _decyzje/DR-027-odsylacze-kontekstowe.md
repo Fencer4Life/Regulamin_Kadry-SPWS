@@ -56,6 +56,10 @@ Czytelny tekst nie wymaga powtarzania adresu bieżącego paragrafu. Stabilne ide
 
 Nie zmieniamy merytorycznej treści przepisów, uprawnień GitHub ani workflow. Przegląd i zgoda na scalenie pozostają ręczne.
 
+### Zastosowanie w PR #72
+
+W [PR #72](https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/72) zachowano redakcję Fencer4Life: pisownię nazwy na okładce, nagłówka „Konstrukcja Regulaminu”, pozycji 6 tabeli konstrukcji oraz rozwinięcie nazwy i określenie „Regulaminem” w § 1. Krótkie odsyłacze doprowadzono do reguł niniejszej decyzji, dodając „poniżej” w dwóch miejscach. DOCX odtworzono z Markdown; test oczekiwanego nagłówka dostosowano do nowej pisowni. Zapis dokumentuje zgodę redakcyjną Fencer4Life na integrację, nie uchwałę komisji.
+
 ## Odrzucone alternatywy
 
 Pozostawienie pełnych adresów we wszystkich odsyłaczach oraz ręczne utrzymywanie numerów niezależnie od identyfikatorów.
@@ -71,3 +75,4 @@ Do przeprowadzenia w ramach przeglądu redakcyjnego.
 ## Historia zmian
 
 - 2026-09-23 — zatwierdzenie reguł i zgoda Fencer4Life na zapis DR oraz integrację po testach.
+- 2026-09-23 — zastosowanie generatora w PR #72 wraz z zachowaniem poprawek redakcyjnych autora i ponowną kontrolą zgodności Markdown–DOCX.
