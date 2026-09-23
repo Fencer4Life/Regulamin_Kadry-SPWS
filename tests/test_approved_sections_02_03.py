@@ -8,7 +8,7 @@ from docx import Document
 
 
 DEFAULT_DOCUMENT = Path(__file__).resolve().parents[1] / "regulamin" / (
-    "Regulamin-powolywania-reprezentacji-Polski-weteranów-w-szermierce_2026.docx"
+    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
 )
 
 APPROVED_PURPOSE = (

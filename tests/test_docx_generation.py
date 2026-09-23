@@ -18,7 +18,7 @@ from tests.test_ztp_model import METADATA
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "regulamin" / (
-    "Regulamin-powolywania-reprezentacji-Polski-weteranow-w-szermierce_2026.md"
+    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md"
 )
 
 

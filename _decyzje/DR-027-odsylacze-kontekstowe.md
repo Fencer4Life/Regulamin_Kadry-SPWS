@@ -76,3 +76,4 @@ Do przeprowadzenia w ramach przeglądu redakcyjnego.
 
 - 2026-09-23 — zatwierdzenie reguł i zgoda Fencer4Life na zapis DR oraz integrację po testach.
 - 2026-09-23 — zastosowanie generatora w PR #72 wraz z zachowaniem poprawek redakcyjnych autora i ponowną kontrolą zgodności Markdown–DOCX.
+- 2026-09-23 — na polecenie Fencer4Life zmieniono wyłącznie nazwy źródła i wyniku na wspólny rdzeń `Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026` z rozszerzeniami `.md` i `.docx`; zawartość obu plików pozostała identyczna. Dostosowano ścieżki w narzędziach, testach, workflow i bieżących linkach.
