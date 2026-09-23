@@ -1,5 +1,5 @@
 +++
-title = "Regulamin powoływania reprezentacji Polski weteranów w szermierce"
+title = "Regulamin powoływania Reprezentacji Polski Weteranów w szermierce"
 subtitle = "w sezonie 2026/2027"
 version = "0.2"
 status = "projekt do konsultacji"
@@ -17,7 +17,7 @@ prototype_note = "Dokument jest projektem. Fragmenty oznaczone jako brudnopis ze
 
 ### [section:przedmiot] Przedmiot regulaminu
 
-[unit:przedmiot-zakres] Regulamin określa zasady kwalifikowania i powoływania zawodników do reprezentacji Polski weteranów w szermierce na indywidualne i drużynowe zawody międzynarodowe rangi mistrzowskiej, w których liczba zawodników reprezentujących państwo podlega ograniczeniom określonym przez organizatora zawodów.
+[unit:przedmiot-zakres] Regulamin powoływania Reprezentacji Polski Weteranów w Szermierce zwany dalej “Regulaminem” określa zasady kwalifikowania i powoływania zawodników do reprezentacji Polski na indywidualne i drużynowe zawody międzynarodowe rangi mistrzowskiej, w których liczba zawodników reprezentujących państwo podlega ograniczeniom określonym przez organizatora zawodów.
 
 ### [section:definicje] Definicje
 
