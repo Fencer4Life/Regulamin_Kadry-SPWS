@@ -1,5 +1,13 @@
+"""Check accepted sections against visible Markdown, independently of the renderer.
+
+The source is authoritative. Frozen copies of legal paragraphs would prevent
+accepted decisions from changing them. Candidate checks explicitly supply the
+candidate source; ordinary CI uses the source from its own checkout.
+"""
 from __future__ import annotations
 
+import os
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -11,57 +19,25 @@ DEFAULT_DOCUMENT = Path(__file__).resolve().parents[1] / "regulamin" / (
     "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
 )
 
-APPROVED_PURPOSE = (
-    "1. Celem Regulaminu jest wyłonienie możliwie najsilniejszej reprezentacji Polski weteranów "
-    "w szermierce. Równe traktowanie zawodników oraz przejrzystość zasad stanowią podstawę "
-    "przyjętego procesu wyłaniania reprezentacji."
-)
 
-APPROVED_SECTION_3 = [
-    "§ 3",
-    "Cel i zasady wyłaniania reprezentacji",
-    APPROVED_PURPOSE,
-    "2. Proces wyłaniania reprezentacji opiera się na następujących zasadach:",
-    "1) szerokiego wyboru zawodów – w rankingu indywidualnym uwzględnia się wyniki uzyskane w "
-    "zawodach ujętych w kalendarzach SPWS, PZSz, EVF i FIE, na zasadach określonych w § 5 ust. 1;",
-    "2) powołania do startów indywidualnych wyłącznie na podstawie rankingu – do startu "
-    "indywidualnego powołuje się czterech najwyżej sklasyfikowanych zawodników w rankingu właściwym "
-    "dla danej broni, płci i kategorii wiekowej. Zawodnik z zerowym dorobkiem punktowym nie może "
-    "zostać powołany do reprezentacji. Wyjątek stanowi powołanie uzupełniające, o którym mowa "
-    "w § 4 ust. 5.",
-]
+def visible_line(line: str) -> str:
+    line = re.sub(r"<!--.*?-->", "", line)
+    line = re.sub(r"\[([^]]+)\]\([^)]*\)", r"\1", line)
+    return " ".join(line.replace("**", "").split())
 
-APPROVED_SECTION_2 = [
-    "§ 2",
-    "Definicje",
-    "Ilekroć w Regulaminie jest mowa o:",
-    "1) SPWS – należy przez to rozumieć Stowarzyszenie Polskich Weteranów Szermierki;",
-    "2) PZSz – należy przez to rozumieć Polski Związek Szermierczy;",
-    "3) EVF – należy przez to rozumieć European Veterans Fencing;",
-    "4) FIE – należy przez to rozumieć Fédération Internationale d’Escrime (Międzynarodową Federację Szermierczą);",
-    "5) rankingu hybrydowym – należy przez to rozumieć ranking indywidualny, w którym wyniki są "
-    "aktualizowane z zastosowaniem aktualizacji krokowej albo wygaszania kalendarzowego, zależnie "
-    "od organizatora i rodzaju zawodów;",
-    "6) aktualizacji krokowej – należy przez to rozumieć sposób aktualizacji wyników zawodów "
-    "organizowanych przez SPWS, PZSz lub FIE, zgodnie z którym punkty za zawody z poprzedniego "
-    "sezonu pozostają w rankingu do czasu uwzględnienia punktów za odpowiadające im zawody w "
-    "sezonie bieżącym, po czym poprzedni wynik przestaje być uwzględniany;",
-    "7) wygaszaniu kalendarzowym – należy przez to rozumieć sposób uwzględniania wyników zawodów "
-    "organizowanych przez EVF, zgodnie z którym uzyskane punkty pozostają w rankingu przez okres "
-    "właściwy dla danego rodzaju zawodów, liczony od dnia zakończenia zawodów, niezależnie od tego, "
-    "czy zawody mają odpowiednik w kolejnym sezonie, a po upływie tego okresu przestają być uwzględniane;",
-    "8) limitowanych zawodach międzynarodowych – należy przez to rozumieć indywidualne lub drużynowe "
-    "zawody międzynarodowe rangi mistrzowskiej, w których liczba zawodników reprezentujących dane "
-    "państwo jest ograniczona przepisami organizatora zawodów;",
-    "9) powołaniu uzupełniającym – należy przez to rozumieć wyjątkowe powołanie do startu drużynowego "
-    "zawodnika nieposiadającego dodatniego dorobku punktowego, dokonywane wyłącznie w celu "
-    "uzupełnienia braków uniemożliwiających wystawienie kompletnej i zgodnej z przepisami drużyny;",
-    "10) kategoriach wiekowych V1–V4 – należy przez to rozumieć następujące kategorie wiekowe EVF, ustalane według wieku zawodnika na dzień 31 grudnia roku, w którym odbywają się mistrzostwa:",
-    "a) V1 – od 40 do 49 lat,",
-    "b) V2 – od 50 do 59 lat,",
-    "c) V3 – od 60 do 69 lat,",
-    "d) V4 – 70 lat i więcej.",
-]
+
+def source_section(source: str, number: int) -> list[str]:
+    matches = list(re.finditer(
+        rf"^### § {number} — (.*?) <!-- section:[^>]+ -->$", source, re.MULTILINE,
+    ))
+    if len(matches) != 1:
+        raise ValueError(f"Źródło musi zawierać dokładnie jeden § {number}")
+    heading = matches[0]
+    body = re.split(r"^#{2,3} ", source[heading.end():], maxsplit=1, flags=re.MULTILINE)[0]
+    lines = [line for line in body.splitlines() if line.strip()]
+    if not lines or any('<!-- unit:' not in line for line in lines):
+        raise ValueError(f"Nieobsługiwana struktura treści § {number}; wymaga kontroli testu")
+    return [f"§ {number}", visible_line(heading[1]), *map(visible_line, lines)]
 
 
 def section(document: Document, start: str, end: str) -> list[str]:
@@ -80,34 +56,23 @@ class ApprovedContentTests(unittest.TestCase):
             else DEFAULT_DOCUMENT
         )
         cls.document = Document(path)
+        cls.source = Path(os.environ.get(
+            'REGULAMIN_SOURCE_PATH', str(DEFAULT_DOCUMENT.with_suffix('.md')),
+        )).read_text(encoding='utf-8')
 
     def test_approved_purpose_is_literal_and_unique(self):
-        matches = [p for p in self.document.paragraphs if p.text == APPROVED_PURPOSE]
-        self.assertEqual(len(matches), 1, "Cel Regulaminu został zmieniony bez aktualizacji testu akceptacyjnego")
+        lines = [line for line in self.source.splitlines() if '<!-- unit:cel-glowny -->' in line]
+        self.assertEqual(len(lines), 1)
+        expected = visible_line(lines[0])
+        matches = [p for p in self.document.paragraphs if p.text == expected]
+        self.assertEqual(len(matches), 1, "Cel Regulaminu w DOCX musi odpowiadać źródłu")
 
     def test_section_2_defines_all_abbreviations_and_terms(self):
-        self.assertEqual(
-            section(
-                self.document,
-                "§ 2",
-                "§ 3",
-            ),
-            APPROVED_SECTION_2,
-        )
+        self.assertEqual(section(self.document, "§ 2", "§ 3"), source_section(self.source, 2))
 
     def test_section_3_matches_approved_purpose_and_principles(self):
-        self.assertEqual(
-            section(
-                self.document,
-                "§ 3",
-                "Rozdział 2",
-            ),
-            APPROVED_SECTION_3,
-        )
+        self.assertEqual(section(self.document, "§ 3", "Rozdział 2"), source_section(self.source, 3))
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1].lower().endswith(".docx"):
-        document_argument = sys.argv.pop(1)
-        sys.argv.append(document_argument)
     unittest.main(argv=[sys.argv[0]], verbosity=2)

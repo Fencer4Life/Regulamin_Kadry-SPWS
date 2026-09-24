@@ -58,11 +58,11 @@ def command(args, *, cwd=ROOT, env=None):
                           stdout=subprocess.PIPE).stdout.strip()
 
 
-def candidate_checks(docx):
+def candidate_checks(docx, source):
     # Never execute scripts supplied by the PR; only trusted tests from this checkout.
+    env = {**os.environ, 'REGULAMIN_SOURCE_PATH': str(source), 'REGULAMIN_DOCX_PATH': str(docx)}
     for script in ('test_approved_sections_02_03.py', 'test_docx_pagination.py'):
-        command([sys.executable, str(ROOT / 'tests' / script), str(docx)])
-    env = {**os.environ, 'REGULAMIN_DOCX_PATH': str(docx)}
+        command([sys.executable, str(ROOT / 'tests' / script), str(docx)], env=env)
     command([sys.executable, '-m', 'unittest', 'tests.test_docx_publication_safety', '-v'], env=env)
 
 
@@ -85,7 +85,7 @@ def run(repo, number, run_url):
                 if not path.is_file() or not path.resolve().is_relative_to(checkout.resolve()) or path.is_symlink():
                     raise ValueError('Pliki decyzji i dokumentu muszą być zwykłymi plikami wewnątrz PR')
             changed = apply_once(checkout / card_path, checkout / SOURCE, checkout / DOCX)
-            candidate_checks(checkout / DOCX)
+            candidate_checks(checkout / DOCX, checkout / SOURCE)
             latest = gh_api(endpoint)
             check_pr(latest, repo)
             if latest['head']['sha'] != sha:
