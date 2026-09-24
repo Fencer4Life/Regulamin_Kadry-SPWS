@@ -269,7 +269,7 @@ class RegistryPlatformTests(unittest.TestCase):
         workflow = ROOT / ".github" / "workflows" / "resolve-discussion.yml"
         self.assertTrue(workflow.is_file())
         text = workflow.read_text(encoding="utf-8")
-        for fragment in ("pull_request:", "closed", "merged", "discussion_url", "RESOLVED", "closeDiscussion", "actions: write", "gh workflow run pages.yml --ref main"):
+        for fragment in ("pull_request:", "workflow_dispatch:", "pr_number:", "closed", "merged", "resolve_discussion.py", "RESOLVED", "closeDiscussion", "actions: write", "gh workflow run pages.yml --ref main"):
             self.assertIn(fragment, text)
         self.assertLess(text.index("closeDiscussion"), text.index("gh workflow run pages.yml --ref main"))
 
