@@ -108,6 +108,29 @@ class AutomaticDecisionTests(unittest.TestCase):
             self.assertIn('Aktualna treść.', card.read_text())
             self.assertNotIn('Nowa treść.', card.read_text())
 
+    def test_refresh_migrates_legacy_pending_card(self):
+        from narzedzia.pr_decision import refresh_from_discussion
+        legacy = '''---
+id: DR-030
+typ: merytoryczna
+discussion_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/99
+pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/100
+---
+
+## Uzasadnienie
+
+> _Do uzupełnienia przez osobę przygotowującą decyzję._
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            card = Path(directory) / 'DR-030-test.md'
+            card.write_text(legacy, encoding='utf-8')
+            with patch('narzedzia.pr_decision.load_discussion', return_value=discussion()):
+                refresh_from_discussion(card, 'Fencer4Life/Regulamin_Kadry-SPWS')
+            migrated = card.read_text(encoding='utf-8')
+            self.assertIn('schema_version: 2', migrated)
+            self.assertIn('Uzgodnione uzasadnienie z dyskusji.', migrated)
+            self.assertNotIn('Do uzupełnienia', migrated)
+
     def test_generated_card_has_no_trailing_whitespace_outside_code(self):
         with tempfile.TemporaryDirectory() as directory:
             card = self.generate(Path(directory), BODY.replace('dyskusji.', 'dyskusji.   ')).read_text()

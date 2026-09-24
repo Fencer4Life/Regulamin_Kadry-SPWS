@@ -30,7 +30,7 @@ def load_discussion(repo, number):
 def refresh_from_discussion(card, repo):
     from narzedzia.create_decision_from_discussion import render_card
     text = card.read_text(encoding='utf-8')
-    if 'schema_version: 2\n' not in text.split('---', 2)[1] or '<!-- applied-source-sha256:' in text:
+    if '<!-- applied-source-sha256:' in text:
         return
     front = text.split('---', 2)[1]
     def value(key):
