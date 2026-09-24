@@ -24,10 +24,9 @@ jobs:
       - run: python -m pip install -r narzedzia/requirements-docx.txt
       - run: python -m unittest discover -s tests -v
       - name: Powiązanie zmiany Regulaminu z DOCX i decyzją
-        if: github.event_name != 'workflow_dispatch'
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: python narzedzia/validate_regulation_change.py "$BASE_SHA"
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || 'origin/main' }}
+        run: python -m narzedzia.validate_regulation_change "$BASE_SHA"
       - name: Zbudowanie i kontrola kandydackiego DOCX
         run: |
           mkdir -p .artifacts

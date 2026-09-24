@@ -15,7 +15,7 @@ class DiscussionSnapshotTests(unittest.TestCase):
     def test_next_decision_id_uses_highest_existing_number(self):
         self.assertEqual(next_decision_id(["DR-002-a.md", "DR-016-b.md"]), "DR-017")
 
-    def test_generated_card_uses_discussion_form_and_leaves_only_human_fields_empty(self):
+    def test_generated_card_is_complete_and_uses_discussion_only(self):
         event = {"discussion": {"html_url": "https://example/7", "title": "Próba", "created_at": "2026-09-13T10:00:00Z", "body": """### Koordynator dyskusji
 
 @ala
@@ -36,6 +36,10 @@ Punktacja
 
 Wariant A
 
+### Uzasadnienie
+
+Powód z dyskusji.
+
 ### Inne rozważane podejścia
 
 Wariant B
@@ -54,17 +58,15 @@ DR-002
             decisions.mkdir()
             event_path.write_text(json.dumps(event), encoding="utf-8")
             card = create(event_path, decisions).read_text(encoding="utf-8")
-        self.assertIn("## Odrzucone alternatywy\n\nWariant B", card)
-        self.assertIn("## Problem\n\nProblem źródłowy", card)
+        self.assertNotIn("## Odrzucone alternatywy", card)
+        self.assertNotIn("## Problem", card)
         self.assertIn("## Decyzja\n\nWariant A", card)
         self.assertIn("status: przyjęta", card)
-        self.assertIn("## Uzasadnienie\n\n> _Do uzupełnienia przez osobę przygotowującą decyzję._", card)
-        self.assertIn("- [ ] **Tak**", card)
-        self.assertIn("- [ ] **Nie**", card)
+        self.assertIn("## Uzasadnienie\n\nPowód z dyskusji.", card)
+        self.assertNotIn("- [ ]", card)
         self.assertIn("Punktacja", card)
-        self.assertIn("https://example.com/material", card)
         self.assertIn("DR-002", card)
-        self.assertIn("**Koordynator dyskusji:** @ala", card)
+        self.assertIn("https://example/7", card)
 
     def test_splits_all_paginated_regulation_proposals_and_sorts_each_state(self):
         payload = [

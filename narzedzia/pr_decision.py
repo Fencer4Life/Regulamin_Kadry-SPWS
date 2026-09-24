@@ -15,6 +15,40 @@ from narzedzia.pr_docx_link import gh_api, publish, SOURCE, DOCX
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def load_discussion(repo, number):
+    owner, name = repo.split('/')
+    result = json.loads(command([
+        'gh', 'api', 'graphql', '-f',
+        'query=query($owner:String!,$name:String!,$number:Int!){repository(owner:$owner,name:$name){discussion(number:$number){title body url createdAt}}}',
+        '-f', f'owner={owner}', '-f', f'name={name}', '-F', f'number={number}',
+    ]))
+    data = result['data']['repository']['discussion']
+    return {'title': data['title'], 'body': data['body'], 'html_url': data['url'],
+            'created_at': data['createdAt']}
+
+
+def refresh_from_discussion(card, repo):
+    from narzedzia.create_decision_from_discussion import render_card
+    text = card.read_text(encoding='utf-8')
+    if 'schema_version: 2\n' not in text.split('---', 2)[1] or '<!-- applied-source-sha256:' in text:
+        return
+    front = text.split('---', 2)[1]
+    def value(key):
+        match = re.search(rf'^{key}: (.*)$', front, re.MULTILINE)
+        return match[1].strip().strip('"') if match else ''
+    url = value('discussion_url')
+    match = re.fullmatch(r'https://github.com/' + re.escape(repo) + r'/discussions/(\d+)', url)
+    if not match:
+        raise ValueError('Dyskusja źródłowa musi należeć do tego repozytorium')
+    discussion = load_discussion(repo, int(match[1]))
+    if discussion['html_url'] != url:
+        raise ValueError('Niezgodny adres dyskusji źródłowej')
+    rendered = render_card(discussion, value('id'), value('pr_url'))
+    if value('typ') == 'redakcyjna':
+        rendered = rendered.replace('typ: merytoryczna', 'typ: redakcyjna', 1)
+    card.write_text(rendered, encoding='utf-8')
+
+
 def select_card(files):
     paths = [f['filename'] for f in files if f.get('status') != 'removed'
              and re.fullmatch(r'_decyzje/DR-\d{3}-[^/]+\.md', f['filename'])]
@@ -84,6 +118,7 @@ def run(repo, number, run_url):
                 path = checkout / relative
                 if not path.is_file() or not path.resolve().is_relative_to(checkout.resolve()) or path.is_symlink():
                     raise ValueError('Pliki decyzji i dokumentu muszą być zwykłymi plikami wewnątrz PR')
+            refresh_from_discussion(checkout / card_path, repo)
             changed = apply_once(checkout / card_path, checkout / SOURCE, checkout / DOCX)
             candidate_checks(checkout / DOCX, checkout / SOURCE)
             latest = gh_api(endpoint)

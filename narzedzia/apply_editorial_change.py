@@ -10,7 +10,6 @@ from narzedzia.decision_patch import replace_exact
 
 
 EMPTY_FORM_VALUES = {"", "_No response_"}
-PLACEHOLDER = "> _Do uzupełnienia przez osobę przygotowującą decyzję._"
 
 
 def apply_editorial_change(
@@ -42,26 +41,8 @@ def apply_editorial_change(
     try:
         card = card_path.read_text(encoding="utf-8")
         card = card.replace("typ: merytoryczna", "typ: redakcyjna", 1)
-        if fields["propozycja"] in EMPTY_FORM_VALUES:
-            empty_decision = fields["propozycja"] or PLACEHOLDER
-            card = card.replace(
-                f"## Decyzja\n\n{empty_decision}",
-                "## Decyzja\n\nZastąpić wskazany fragment Markdown dokładnie podanym "
-                "nowym brzmieniem.",
-                1,
-            )
-        card = card.replace(
-            f"## Uzasadnienie\n\n{PLACEHOLDER}",
-            "## Uzasadnienie\n\nKorekta redakcyjna bez zmiany sensu; dokładne "
-            "stare i nowe brzmienie zapisano w dyskusji źródłowej.",
-            1,
-        )
-        card = card.replace("- [ ] **Tak**", "- [x] **Tak**", 1)
-        card = card.replace(
-            "po oznaczeniu dyskusji jako `rozstrzygnięta`",
-            "po oznaczeniu dyskusji jako `redakcja-bez-zmiany-sensu`",
-            1,
-        )
+        card = card.replace("Oczekuje na etykietę `wdrażaj` na PR.",
+                            "Wdrożono automatycznie; DOCX do kontroli znajduje się w opisie PR.")
         card += f"\n<!-- applied-source-sha256:{hashlib.sha256(original.encode('utf-8')).hexdigest()} -->\n"
         source_path.write_text(changed, encoding="utf-8")
         card_path.write_text(card, encoding="utf-8")
