@@ -245,7 +245,7 @@ class RegistryPlatformTests(unittest.TestCase):
             "normalize_regulamin_markdown",
             "REGULAMIN_DOCX_PATH",
             "docx_parity",
-            "validate_regulation_change.py",
+            "narzedzia.validate_regulation_change",
             "actions/upload-artifact",
             "regulamin-candidate",
         ):

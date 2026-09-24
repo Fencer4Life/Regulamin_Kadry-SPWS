@@ -36,6 +36,10 @@ Redakcja regulaminu
 
 Poprawić literówkę bez zmiany sensu.
 
+### Uzasadnienie
+
+Korekta redakcyjna bez zmiany sensu — uzasadnienie autora dyskusji.
+
 ### Fragment Markdown do zastąpienia
 
 stare brzmienie
@@ -78,8 +82,8 @@ class EditorialChangeTests(unittest.TestCase):
             card = card_path.read_text(encoding="utf-8")
             self.assertIn("typ: redakcyjna", card)
             self.assertIn("status: przyjęta", card)
-            self.assertIn("- [x] **Tak**", card)
-            self.assertIn("- [ ] **Nie**", card)
+            self.assertNotIn("- [x]", card)
+            self.assertNotIn("- [ ]", card)
             self.assertIn("Korekta redakcyjna bez zmiany sensu", card)
             self.assertNotIn("Do uzupełnienia", card)
             self.assertIn("## Stary fragment Markdown", card)

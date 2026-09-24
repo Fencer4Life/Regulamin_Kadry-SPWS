@@ -1,81 +1,20 @@
----
-id: DR-NNN
-tytul: Krótki tytuł decyzji
-typ: merytoryczna
-status: w dyskusji
-data_inicjacji: RRRR-MM-DD
-data_decyzji: RRRR-MM-DD
-sezon: RRRR/RRRR
-dotyczy: Paragraf lub obszar regulaminu
-decydenci: Komisja regulaminowa SPWS
-discussion_url: ""
-pr_url: ""
-stan_obowiązywania: nie dotyczy
-zmienia: []
-zmieniona_przez: []
-zakres_zmiany: {}
-zastepuje: []
-zastapiona_przez: []
-termin_oceny: Termin albo warunek przeglądu
----
+# Automatyczna karta decyzji
 
-## Problem
+Nie twórz ani nie uzupełniaj karty ręcznie. Wszystkie dane wpisz w opisie dyskusji:
 
-Jaki problem wymaga rozstrzygnięcia?
+- **Fragment Markdown do zastąpienia** — dokładny fragment z widoku Code lub Raw źródła, ze znacznikami i wcięciami.
+- **Nowe brzmienie Markdown** — kompletne zastępstwo. Zachowaj identyfikatory; odsyłacz i komentarz ref pozostają razem.
+- **Uzasadnienie** — uzgodniony powód decyzji; automat kopiuje tekst dosłownie, nie streszcza komentarzy.
 
-## Kontekst
+Po etykiecie `rozstrzygnięta` na dyskusji automat tworzy kartę oraz draft PR.
+Na PR nadaj `wdrażaj`. Przed wdrożeniem automat odświeża dane z dyskusji.
+Nie zaznaczasz Tak/Nie i nie przepisujesz pól do karty.
+Poczekaj na DOCX do sprawdzenia oraz zielone CI, otwórz dokument i dopiero potem scal PR.
 
-Jakie fakty i wcześniejsze ustalenia mają znaczenie?
+Jedna decyzja zawiera jedną parę fragmentów; dla kilku zmian wybierz wspólny ciągły fragment.
+Przy usuwaniu przepisu obejmij fragmentem sąsiednią treść, którą zachowasz w nowym polu.
 
-## Dyskusja
+Dla decyzji bez zmiany dokumentu pozostaw oba fragmenty puste oraz podaj **Proponowane rozwiązanie** i **Uzasadnienie**.
+Nie nadawaj wtedy `wdrażaj`.
 
-Jakie argumenty rzeczywiście odnotowano?
-
-## Rozważane warianty
-
-1. Wariant pierwszy.
-2. Wariant drugi.
-
-## Decyzja
-
-Jakie rozwiązanie przyjęto albo proponuje się przyjąć?
-
-## Uzasadnienie
-
-Dlaczego wybrano ten wariant?
-
-## Stary fragment Markdown
-
-Redaktor: wklej pomiędzy poniższe znaczniki kodu dokładny fragment z kanonicznego pliku `regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md`, nie z DOCX. Użyj widoku Code lub Raw, żeby skopiować również komentarze `<!-- unit:... -->`, `<!-- ref:... -->`, `<!-- publication:... -->`, linki i wcięcia. Fragment musi występować dokładnie raz. Nie wpisuj tutaj uzasadnienia. Jedna karta wdrożeniowa zawiera jedną parę stary/nowy; dla kilku zmian wybierz wspólny ciągły fragment.
-
-```markdown
-
-```
-
-## Nowy fragment Markdown
-
-Redaktor: wklej pomiędzy poniższe znaczniki kompletną treść, która ma zastąpić stary fragment. Zachowaj identyfikatory istniejących jednostek; nowe muszą być unikalne. Automat nie dopisuje treści i nie interpretuje decyzji. Przy usuwaniu przepisu wskaż szerszy stary fragment, a w nowym pozostaw sąsiednią treść. Jeżeli decyzja nie zmienia dokumentu, pozostaw oba pola puste i nie uruchamiaj wdrożenia.
-
-```markdown
-
-```
-
-## Konsekwencje
-
-Jakie skutki i obowiązki wynikają z decyzji?
-
-## Odrzucone alternatywy
-
-Które warianty odrzucono i dlaczego?
-
-## Plan oceny
-
-Według jakich danych i kryteriów rozwiązanie zostanie ocenione?
-
-## Ocena po sezonie
-
-Do uzupełnienia po terminie oceny.
-
-## Historia zmian
-
-- RRRR-MM-DD — zainicjowanie decyzji.
+Po wdrożeniu kolejną zmianę zgłoś w nowej dyskusji. Historyczne karty zachowują stary format.

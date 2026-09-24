@@ -64,7 +64,7 @@ class CommissionGuideTests(unittest.TestCase):
         guide = ROOT / "przewodnik.html"
         self.assertTrue(guide.is_file())
         text = guide.read_text(encoding="utf-8") + (ROOT / "_includes/process-diagrams.html").read_text(encoding="utf-8")
-        for value in ("Koordynator dyskusji", "Redaktor regulaminu", "co 15 minut", "Rozstrzygnięta", "Uzasadnienie", "swimlane", "Tak / Nie?", "DOKUMENTACJA<br>DECYZJI", "Zamknięte dyskusje i decyzje", "uruchamia Release jeszcze raz", "Odśwież dane", "cache GitHub Pages"):
+        for value in ("Koordynator dyskusji", "Redaktor regulaminu", "co 15 minut", "Rozstrzygnięta", "Uzasadnienie", "swimlane", "Decyzja?", "DOKUMENTACJA<br>DECYZJI", "Zamknięte dyskusje i decyzje", "uruchamia Release jeszcze raz", "Odśwież dane", "cache GitHub Pages"):
             self.assertIn(value, text)
         self.assertNotIn("Redaktor prowadzący", text)
 
@@ -72,7 +72,7 @@ class CommissionGuideTests(unittest.TestCase):
         text = (ROOT / "przewodnik.html").read_text(encoding="utf-8")
         for value in (
             "Dwie ścieżki dokumentu: pełna i szybka",
-            "Redaktor uzupełnia kartę, w szczególności pola starego i nowego fragmentu",
+            "Redaktor uzupełnia dane wyłącznie w dyskusji; karta powstaje automatycznie.",
             "sekcji <b>Artifacts</b>",
             "regulamin-candidate",
             "Request changes",
@@ -121,7 +121,7 @@ class CommissionGuideTests(unittest.TestCase):
             "korekta bez zmiany sensu",
             "zmiana sensu lub potrzeba oceny",
             "Automat sam zmienia Markdown",
-            "Redaktor opracowuje brzmienie Markdown",
+            "Automatyczna karta → wdrażaj na PR",
             "Artefakt DOCX",
             "Approve",
             "Request changes",

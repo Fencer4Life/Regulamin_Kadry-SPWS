@@ -64,6 +64,12 @@ body:
       description: Jeżeli masz już propozycję, opisz ją tutaj.
 
   - type: textarea
+    id: rationale
+    attributes:
+      label: Uzasadnienie
+      description: Wpisz uzgodniony powód decyzji. Wymagane przed rozstrzygnięciem; automat kopiuje tekst dosłownie, nie streszcza komentarzy. Nie wpisuj go ponownie w PR.
+
+  - type: textarea
     id: current_markdown
     attributes:
       label: Fragment Markdown do zastąpienia
@@ -96,6 +102,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        Po uzgodnieniu wyniku Koordynator dodaje etykietę **rozstrzygnięta**. Dla oczywistej korekty bez zmiany sensu zamiast tego dodaje etykietę **redakcja-bez-zmiany-sensu** po podaniu obu fragmentów Markdown.
+        Przed rozstrzygnięciem uzupełnij Uzasadnienie oraz oba fragmenty Markdown. Dla decyzji bez zmiany dokumentu zostaw oba fragmenty puste i wpisz rozstrzygnięcie w Proponowane rozwiązanie.
+
+        Koordynator dodaje etykietę **rozstrzygnięta** na dyskusji. Automat tworzy kompletną kartę i draft PR. Na PR nadaj **wdrażaj** i poczekaj na DOCX do sprawdzenia; niczego nie przepisuj do karty. Poprawki wprowadzaj w opisie dyskusji. Dla oczywistej korekty bez zmiany sensu etykieta **redakcja-bez-zmiany-sensu** nadal uruchamia szybką ścieżkę.
 
         [← Powrót do publicznej listy dyskusji](https://fencer4life.github.io/Regulamin_Kadry-SPWS/dyskusje/)

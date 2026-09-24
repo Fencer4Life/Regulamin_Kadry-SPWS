@@ -22,11 +22,13 @@ class DecisionPatchTests(unittest.TestCase):
             self.assertFalse(source.with_suffix('.podglad.md').exists())
             self.assertTrue(any(t.cell(1, 1).text == '54,4' for t in Document(docx).tables if len(t.columns) == 11))
 
-    def test_template_has_distinct_empty_code_fields_with_instructions(self):
+    def test_template_redirects_author_to_discussion_not_manual_card(self):
         template = (CANONICAL_SOURCE.parents[1] / "szablony/nowa-decyzja.md").read_text()
-        self.assertIn("## Stary fragment Markdown", template)
-        self.assertIn("## Nowy fragment Markdown", template)
-        self.assertIn("kanonicznego", template)
+        self.assertIn("Nie twórz ani nie uzupełniaj karty ręcznie", template)
+        self.assertIn("Fragment Markdown do zastąpienia", template)
+        self.assertIn("Nowe brzmienie Markdown", template)
+        self.assertIn("Uzasadnienie", template)
+        self.assertIn("Na PR nadaj `wdrażaj`", template)
         with self.assertRaises(ValueError):
             read_fragments(template)
 
