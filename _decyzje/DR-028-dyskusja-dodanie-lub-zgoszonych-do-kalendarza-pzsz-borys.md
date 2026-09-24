@@ -65,7 +65,7 @@ Wklej kompletną treść zastępującą stary fragment; zachowaj identyfikatory 
 
 ```markdown
 2. <!-- unit:cel-zasady --> Proces wyłaniania reprezentacji opiera się na następujących zasadach:
-   1) <!-- unit:zasada-szeroki-wybor --> **szerokiego wyboru zawodów** – w rankingu indywidualnym uwzględnia się wyniki uzyskane w zawodach ujętych w kalendarzach SPWS, PZSz, EVF i FIE, na zasadach określonych w § 5 ust. 1 lub zgłoszonych do kalendarza PZSz.<!-- ref:zawody-rankingowe/katalog-zawodow -->;
+   1) <!-- unit:zasada-szeroki-wybor --> **szerokiego wyboru zawodów** – w rankingu indywidualnym uwzględnia się wyniki uzyskane w zawodach ujętych w kalendarzach SPWS, PZSz, EVF i FIE, na zasadach określonych w § 5 ust. 1<!-- ref:zawody-rankingowe/katalog-zawodow --> lub zgłoszonych do kalendarza PZSz;
 ```
 
 ## Uzasadnienie
