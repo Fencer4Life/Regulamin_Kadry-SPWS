@@ -13,12 +13,14 @@ OLD = "Stary fragment Markdown"
 NEW = "Nowy fragment Markdown"
 
 
-def format_fragments(old="", new=""):
+def format_fragments(old="", new="", *, instructions=True):
     longest = max((len(x) for x in re.findall(r"`+", old + new)), default=0)
     fence = "`" * max(3, longest + 1)
-    return (f"## {OLD}\n\nWklej dokładny fragment kanonicznego .md, ze znacznikami i wcięciami.\n\n"
+    old_hint = "Wklej dokładny fragment kanonicznego .md, ze znacznikami i wcięciami.\n\n" if instructions else ""
+    new_hint = "Wklej kompletną treść zastępującą stary fragment; zachowaj identyfikatory jednostek.\n\n" if instructions else ""
+    return (f"## {OLD}\n\n{old_hint}"
             f"{fence}markdown\n{old}\n{fence}\n\n"
-            f"## {NEW}\n\nWklej kompletną treść zastępującą stary fragment; zachowaj identyfikatory jednostek.\n\n"
+            f"## {NEW}\n\n{new_hint}"
             f"{fence}markdown\n{new}\n{fence}\n")
 
 
@@ -81,7 +83,9 @@ def apply_decision(card_path, source, output, *, require_source_hash=None):
         staged_source.write_text(changed, encoding="utf-8")
         normalize_and_build(staged_source, staged_output)
         verify(staged_source, staged_output)
-        updated_card = card.rstrip() + f"\n\n<!-- applied-source-sha256:{digest} -->\n"
+        updated_card = card.replace("Oczekuje na etykietę `wdrażaj` na PR.",
+                                    "Wdrożono automatycznie; DOCX do kontroli znajduje się w opisie PR.")
+        updated_card = updated_card.rstrip() + f"\n\n<!-- applied-source-sha256:{digest} -->\n"
         contents = (staged_source.read_bytes(), staged_output.read_bytes(),
                     updated_card.encode("utf-8"))
         backups = [path.read_bytes() if path.exists() else None for path in paths]

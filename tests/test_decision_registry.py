@@ -87,7 +87,9 @@ class DecisionRegistryTests(unittest.TestCase):
             for date_field in ("data_inicjacji", "data_decyzji"):
                 if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", metadata.get(date_field, "")):
                     errors.append(f"{path.name}: niepoprawne pole {date_field}")
-            missing_sections = [section for section in REQUIRED_SECTIONS if section not in body]
+            sections = (("## Decyzja", "## Uzasadnienie", "## Dyskusja", "## Wdrożenie")
+                        if metadata.get('schema_version') == '2' else REQUIRED_SECTIONS)
+            missing_sections = [section for section in sections if section not in body]
             if missing_sections:
                 errors.append(f"{path.name}: brak sekcji {missing_sections}")
         self.assertEqual(errors, [], "\n".join(errors))

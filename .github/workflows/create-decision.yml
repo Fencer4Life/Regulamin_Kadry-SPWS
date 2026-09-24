@@ -84,7 +84,7 @@ jobs:
           else
             git add -- "$path"
             commit_message="docs: initiate decision from discussion ${DISCUSSION_NUMBER}"
-            pr_body="Robocza karta utworzona z dyskusji ${DISCUSSION_URL}. Uzupełnij uzasadnienie, wybierz Tak albo Nie przy zmianie Regulaminu i opracuj brzmienie Markdown wynikające z decyzji."
+            pr_body="Kompletna karta utworzona automatycznie z dyskusji ${DISCUSSION_URL}. Nie edytuj karty: uzasadnienie i teksty przed/po poprawiaj wyłącznie w opisie dyskusji. Jeśli karta zawiera zmianę Regulaminu, nadaj etykietę wdrażaj NA TYM PR i poczekaj na sekcję DOCX do sprawdzenia oraz zielone CI przed scaleniem. Dla decyzji bez zmiany dokumentu nie nadawaj tej etykiety."
           fi
           if ! git diff --cached --quiet; then
             git commit -m "$commit_message"
@@ -100,8 +100,8 @@ jobs:
             pr_number=$(gh pr view "$branch" --json number --jq .number)
             python -m narzedzia.pr_docx_link "$GITHUB_REPOSITORY" "$pr_number" "$(git rev-parse HEAD)" \
               --run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-            gh workflow run validate.yml --repo "$GITHUB_REPOSITORY" --ref "$branch"
           fi
+          gh workflow run validate.yml --repo "$GITHUB_REPOSITORY" --ref "$branch"
       - name: Kandydacki DOCX szybkiej korekty
         if: github.event.label.name == 'redakcja-bez-zmiany-sensu'
         uses: actions/upload-artifact@v4

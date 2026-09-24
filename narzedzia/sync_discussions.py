@@ -28,7 +28,8 @@ def normalize_discussions(payload: dict | list[dict], generated_at: str) -> dict
     for node in _discussion_nodes(payload):
         if node.get("category", {}).get("slug") != CATEGORY:
             continue
-        source = parse_discussion_form(node.get("body") or "")
+        # Listing unfinished discussions must not require a valid decision form.
+        source = parse_discussion_form(node.get("body") or "", strict=False)
         coordinator = source["koordynator"].lstrip("@").strip() or None
         avatar_login = coordinator if coordinator and GITHUB_LOGIN.fullmatch(coordinator) else None
         priority = PRIORITIES.get(source["priorytet"].strip().casefold())

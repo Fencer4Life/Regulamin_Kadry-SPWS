@@ -8,6 +8,7 @@ permissions:
   actions: write
   contents: write
   pull-requests: write
+  discussions: read
 
 concurrency:
   group: apply-decision-${{ github.event.pull_request.head.ref }}

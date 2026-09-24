@@ -12,6 +12,7 @@ permissions:
   actions: write
   contents: write
   pull-requests: write
+  discussions: read
 
 concurrency:
   group: apply-decision-${{ github.ref_name }}
@@ -56,6 +57,7 @@ jobs:
             gh pr view "$branch" --json state --jq .state | grep -x 'OPEN'
             git switch "$branch"
           fi
+          python -c 'import sys; from pathlib import Path; from narzedzia.pr_decision import refresh_from_discussion; refresh_from_discussion(Path(sys.argv[1]), sys.argv[2])' "$card" "$GITHUB_REPOSITORY"
           python -m narzedzia.decision_patch "$card" "$source" "$docx"
           python -m narzedzia.prepare_regulamin verify "$source" "$docx"
           python -m unittest discover -s tests -v
