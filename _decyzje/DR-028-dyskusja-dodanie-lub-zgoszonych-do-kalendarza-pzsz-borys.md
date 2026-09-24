@@ -21,7 +21,7 @@ termin_oceny: po zakończeniu sezonu 2026/2027
 
 ## Problem
 
-brakuje 
+brakuje
 "lub zgłoszonych do kalendarza PZSz"
 
 ## Kontekst
