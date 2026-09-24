@@ -51,19 +51,26 @@ class SourceMigrationTests(unittest.TestCase):
         self.assertEqual(statuses, {"accepted"})
 
     def test_accepted_ranking_rules_are_not_rendered_as_source_drafts(self):
-        source_text = SOURCE.read_text(encoding="utf-8")
-        accepted_fragments = (
-            "Ranking indywidualny oraz kalkulator punktów są publikowane na stronie internetowej.",
-            "W przypadku zawodów rozgrywanych w połączonych kategoriach wiekowych wyniki przypisuje się zgodnie z zajętym miejscem, bez dodatkowego rozdzielania kategorii w celu obliczenia punktów rankingowych.",
-            "W rankingu indywidualnym uwzględnia się wyłącznie weteranów szermierki, którzy co najmniej raz wystartowali w zawodach Pucharu Polski Weteranów w Szermierce albo Mistrzostwach Polski Weteranów w Szermierce.",
-            "Przy ustalaniu kolejności zawodników do powołania do reprezentacji Polski uwzględnia się wyłącznie zawodników posiadających polskie obywatelstwo albo kartę pobytu.",
-            "Punkty uzyskane w zawodach organizowanych przez EVF albo FIE uwzględnia się wyłącznie, jeżeli zawodnik wystąpił w tych zawodach jako reprezentant Polski.",
+        model = parse_regulation_source(SOURCE)
+        units = {
+            unit.identifier: unit
+            for chapter in model.chapters
+            for section in chapter.sections
+            for block in section.blocks
+            if isinstance(block, ZtpUnit)
+            for unit in walk(block)
+        }
+        accepted_identifiers = (
+            "publikacja-rankingu-zrodlo",
+            "polaczone-kategorie-zrodlo",
+            "ranking-warunek-startu-krajowego",
+            "ranking-powolanie-obywatelstwo",
+            "ranking-evf-fie-reprezentacja",
         )
-        for fragment in accepted_fragments:
-            self.assertIn("<!-- unit:", source_text)
-            self.assertIn(fragment, source_text)
-            prefix = source_text.split(fragment, 1)[0].rsplit("\n", 1)[-1]
-            self.assertNotIn("[status:source-draft]", prefix)
+        for identifier in accepted_identifiers:
+            with self.subTest(identifier=identifier):
+                self.assertIn(identifier, units)
+                self.assertEqual(units[identifier].status, "accepted")
 
     def test_author_questions_are_routed_to_discussion_proposals(self):
         text = DISCUSSIONS.read_text(encoding="utf-8")
