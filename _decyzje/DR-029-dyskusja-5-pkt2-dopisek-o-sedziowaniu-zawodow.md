@@ -122,3 +122,5 @@ Nie dotyczy przed przyjęciem decyzji.
 ## Historia zmian
 
 - 2026-09-24 — robocza karta utworzona automatycznie po oznaczeniu dyskusji jako `rozstrzygnięta`.
+
+<!-- applied-source-sha256:d0f0c91ec151ada285c66f7ad35644a2f196d8d356c2a0561b1e7e806741be95 -->
