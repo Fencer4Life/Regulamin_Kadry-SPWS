@@ -70,7 +70,6 @@ Wklej dokładny fragment kanonicznego .md, ze znacznikami i wcięciami.
    5) <!-- unit:warunek-kategorie --> zawody są rozgrywane w kategoriach wieku, broni i płci określonych w komunikacie organizacyjnym i zgodnych z wybraną formułą sportową;
    6) <!-- unit:warunek-protokoly --> po zakończeniu zawodów organizator publikuje w serwisie internetowym kompletne protokoły wszystkich rozegranych walk, obejmujące fazę grupową oraz eliminację bezpośrednią, wraz z klasyfikacją końcową i liczbą uczestników, zapewniając publiczny i nieodpłatny dostęp do tych materiałów;
    7) <!-- unit:warunek-dostepnosc --> protokoły i wyniki, o których mowa w pkt 6 powyżej<!-- ref:zawody-rankingowe/warunek-protokoly -->, pozostają dostępne online przez co najmniej 36 miesięcy od dnia zakończenia zawodów.
-   8) <!-- unit:warunek-sedziowanie --> od ćwierć finałów, walki eliminacji bezpośredniej są prowadzone przez licencjonowanych sędziów PZSz.
 ```
 
 ## Nowy fragment Markdown
@@ -86,6 +85,7 @@ Wklej kompletną treść zastępującą stary fragment; zachowaj identyfikatory 
    5) <!-- unit:warunek-kategorie --> zawody są rozgrywane w kategoriach wieku, broni i płci określonych w komunikacie organizacyjnym i zgodnych z wybraną formułą sportową;
    6) <!-- unit:warunek-protokoly --> po zakończeniu zawodów organizator publikuje w serwisie internetowym kompletne protokoły wszystkich rozegranych walk, obejmujące fazę grupową oraz eliminację bezpośrednią, wraz z klasyfikacją końcową i liczbą uczestników, zapewniając publiczny i nieodpłatny dostęp do tych materiałów;
    7) <!-- unit:warunek-dostepnosc --> protokoły i wyniki, o których mowa w pkt 6 powyżej<!-- ref:zawody-rankingowe/warunek-protokoly -->, pozostają dostępne online przez co najmniej 36 miesięcy od dnia zakończenia zawodów.
+   8) <!-- unit:warunek-sedziowanie --> od ćwierć finałów, walki eliminacji bezpośredniej są prowadzone przez licencjonowanych sędziów PZSz.
 ```
 
 ## Uzasadnienie
