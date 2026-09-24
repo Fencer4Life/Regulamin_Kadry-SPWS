@@ -93,4 +93,6 @@ Nie dotyczy przed przyjęciem decyzji.
 
 ## Historia zmian
 
+- 2026-09-24 — PR #76 scalono z samą kartą decyzji, przed zmianą Markdown i wygenerowaniem DOCX. Przygotowano osobny PR wdrożeniowy, zachowując rozstrzygnięcie i poprawione pole zamiany; techniczną blokadę testów naprawia PR #77.
+
 - 2026-09-24 — robocza karta utworzona automatycznie po oznaczeniu dyskusji jako `rozstrzygnięta`.
