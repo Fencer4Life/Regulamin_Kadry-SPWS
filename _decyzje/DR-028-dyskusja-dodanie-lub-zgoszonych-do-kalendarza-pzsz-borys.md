@@ -21,7 +21,7 @@ termin_oceny: po zakończeniu sezonu 2026/2027
 
 ## Problem
 
-brakuje 
+brakuje
 "lub zgłoszonych do kalendarza PZSz"
 
 ## Kontekst
@@ -93,4 +93,8 @@ Nie dotyczy przed przyjęciem decyzji.
 
 ## Historia zmian
 
+- 2026-09-24 — PR #76 scalono z samą kartą decyzji, przed zmianą Markdown i wygenerowaniem DOCX. Przygotowano osobny PR wdrożeniowy, zachowując rozstrzygnięcie i poprawione pole zamiany; techniczną blokadę testów naprawia PR #77.
+
 - 2026-09-24 — robocza karta utworzona automatycznie po oznaczeniu dyskusji jako `rozstrzygnięta`.
+
+<!-- applied-source-sha256:fff3935c2a8fd45925f54e32c81f8d87b7a9d59250867c7b95216aae493fa6cd -->
