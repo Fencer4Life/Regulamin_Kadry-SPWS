@@ -120,7 +120,8 @@ Treść dokumentu podzielono następująco:
    4) <!-- unit:warunek-formula --> zawody są rozgrywane według formuły sportowej zgodnej z regulaminami lub przepisami zawodów stosowanymi przez SPWS, PZSz, EVF albo FIE, przy czym właściwa formuła musi zostać wskazana w komunikacie organizacyjnym;
    5) <!-- unit:warunek-kategorie --> zawody są rozgrywane w kategoriach wieku, broni i płci określonych w komunikacie organizacyjnym i zgodnych z wybraną formułą sportową;
    6) <!-- unit:warunek-protokoly --> po zakończeniu zawodów organizator publikuje w serwisie internetowym kompletne protokoły wszystkich rozegranych walk, obejmujące fazę grupową oraz eliminację bezpośrednią, wraz z klasyfikacją końcową i liczbą uczestników, zapewniając publiczny i nieodpłatny dostęp do tych materiałów;
-   7) <!-- unit:warunek-dostepnosc --> protokoły i wyniki, o których mowa w pkt 6 powyżej<!-- ref:zawody-rankingowe/warunek-protokoly -->, pozostają dostępne online przez co najmniej 36 miesięcy od dnia zakończenia zawodów.
+   7) <!-- unit:warunek-dostepnosc --> protokoły i wyniki, o których mowa w pkt 6 powyżej<!-- ref:zawody-rankingowe/warunek-protokoly -->, pozostają dostępne online przez co najmniej 36 miesięcy od dnia zakończenia zawodów;
+   8) <!-- unit:warunek-sedziowanie --> od ćwierć finałów, walki eliminacji bezpośredniej są prowadzone przez licencjonowanych sędziów PZSz.
 
 3. <!-- unit:osiem-pozycji-rankingowych --> Łączna liczba punktów zawodnika w rankingu indywidualnym jest sumą punktów przypisanych do ośmiu pozycji wynikowych:
    1) <!-- unit:trzy-pozycje-krajowe --> trzech obowiązkowych pozycji krajowych;
