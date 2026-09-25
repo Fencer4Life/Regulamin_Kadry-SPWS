@@ -186,7 +186,7 @@ Regulamin nie został jeszcze uchwalony. Poniższe odnośniki prowadzą do nieof
 
 1. <!-- unit:ranking-warunek-startu-krajowego --> W rankingu indywidualnym uwzględnia się wyłącznie weteranów szermierki, którzy co najmniej raz wystartowali w zawodach Pucharu Polski Weteranów w Szermierce albo Mistrzostwach Polski Weteranów w Szermierce.
 
-2. <!-- unit:ranking-powolanie-obywatelstwo --> Przy ustalaniu kolejności zawodników do powołania do reprezentacji Polski uwzględnia się wyłącznie zawodników posiadających polskie obywatelstwo albo kartę pobytu.
+2. <!-- unit:ranking-powolanie-obywatelstwo --> Przy ustalaniu kolejności zawodników do powołania do reprezentacji Polski uwzględnia się wyłącznie zawodników posiadających polskie obywatelstwo albo kartę pobytu, zgodnie z przepisami FIE i EVF.
 
 3. <!-- unit:ranking-evf-fie-reprezentacja --> Punkty uzyskane w zawodach organizowanych przez EVF albo FIE uwzględnia się wyłącznie, jeżeli zawodnik wystąpił w tych zawodach jako reprezentant Polski.
 
