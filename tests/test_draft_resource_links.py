@@ -50,6 +50,6 @@ class DraftResourceLinksTests(unittest.TestCase):
         self.assertIn("Regulamin nie został jeszcze uchwalony", note)
         self.assertIn("weteraniszermierki.pl", note)
         self.assertIn(
-            "Ranking indywidualny oraz kalkulator punktów są publikowane na stronie internetowej.",
+            "Ranking oraz kalkulator punktów są publikowane na stronie internetowej.",
             note,
         )

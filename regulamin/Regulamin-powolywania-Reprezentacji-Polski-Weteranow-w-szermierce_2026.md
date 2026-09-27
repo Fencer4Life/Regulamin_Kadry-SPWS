@@ -28,7 +28,7 @@ w sezonie 2026/2027
 - Spis treści	2
 - Konstrukcja regulaminu	3
 - Postanowienia ogólne	4
-- Ranking indywidualny	5
+- Ranking wyłaniania reprezentacji	5
 - Powołania do startów indywidualnych	6
 - Dobór składu drużyny	7
 - Terminarz procesu powoływania	8
@@ -45,7 +45,7 @@ Treść dokumentu podzielono następująco:
 | Rozdział | Tytuł | Zakres |
 | --- | --- | --- |
 | 1 | Postanowienia ogólne | przedmiot, definicje i zasady wyłaniania reprezentacji |
-| 2 | Ranking indywidualny | rola rankingu, zawody, punktacja i warunki ujęcia wyników |
+| 2 | Ranking wyłaniania reprezentacji | rola Rankingu, zawody, punktacja i warunki ujęcia wyników |
 | 3 | Powołania do startów indywidualnych | kolejność kandydatów, rezygnacje i zastępstwa |
 | 4 | Dobór składu drużyny | pula kandydatów, wymogi kategorii i procedury wyboru |
 | 5 | Terminarz procesu powoływania | terminy, deklaracje, odpowiedzialność, korekty danych i dokumentacja powołań |
@@ -67,12 +67,15 @@ Treść dokumentu podzielono następująco:
    2) <!-- unit:definicja-pzsz --> **PZSz** – należy przez to rozumieć Polski Związek Szermierczy;
    3) <!-- unit:definicja-evf --> **EVF** – należy przez to rozumieć European Veterans Fencing;
    4) <!-- unit:definicja-fie --> **FIE** – należy przez to rozumieć Fédération Internationale d’Escrime (Międzynarodową Federację Szermierczą);
-   5) <!-- unit:definicja-ranking-hybrydowy --> **rankingu hybrydowym** – należy przez to rozumieć ranking indywidualny, w którym wyniki są aktualizowane z zastosowaniem aktualizacji krokowej albo wygaszania kalendarzowego, zależnie od organizatora i rodzaju zawodów;
-   6) <!-- unit:definicja-aktualizacja-krokowa --> **aktualizacji krokowej** – należy przez to rozumieć sposób aktualizacji wyników zawodów organizowanych przez SPWS, PZSz lub FIE, zgodnie z którym punkty za zawody z poprzedniego sezonu pozostają w rankingu do czasu uwzględnienia punktów za odpowiadające im zawody w sezonie bieżącym, po czym poprzedni wynik przestaje być uwzględniany;
-   7) <!-- unit:definicja-wygaszanie-kalendarzowe --> **wygaszaniu kalendarzowym** – należy przez to rozumieć sposób uwzględniania wyników zawodów organizowanych przez EVF, zgodnie z którym uzyskane punkty pozostają w rankingu przez okres właściwy dla danego rodzaju zawodów, liczony od dnia zakończenia zawodów, niezależnie od tego, czy zawody mają odpowiednik w kolejnym sezonie, a po upływie tego okresu przestają być uwzględniane;
-   8) <!-- unit:definicja-zawody-limitowane --> **limitowanych zawodach międzynarodowych** – należy przez to rozumieć indywidualne lub drużynowe zawody międzynarodowe rangi mistrzowskiej, w których liczba zawodników reprezentujących dane państwo jest ograniczona przepisami organizatora zawodów;
-   9) <!-- unit:definicja-powolanie-uzupelniajace --> **powołaniu uzupełniającym** – należy przez to rozumieć wyjątkowe powołanie do startu drużynowego zawodnika nieposiadającego dodatniego dorobku punktowego, dokonywane wyłącznie w celu uzupełnienia braków uniemożliwiających wystawienie kompletnej i zgodnej z przepisami drużyny;
-   10) <!-- unit:definicja-kategorie-wiekowe --> **kategoriach wiekowych V1–V4** – należy przez to rozumieć następujące kategorie wiekowe EVF, ustalane według wieku zawodnika na dzień 31 grudnia roku, w którym odbywają się mistrzostwa:
+   5) <!-- unit:definicja-ranking --> **Rankingu** – należy przez to rozumieć Ranking wyłaniania Reprezentacji Polski Weteranów, prowadzony osobno dla każdej broni, płci i kategorii wiekowej;
+   6) <!-- unit:definicja-ranking-hybrydowy --> **rankingu hybrydowym** – należy przez to rozumieć Ranking, w którym wyniki są aktualizowane z zastosowaniem aktualizacji krokowej albo wygaszania kalendarzowego, zależnie od organizatora i rodzaju zawodów;
+   7) <!-- unit:definicja-aktualizacja-krokowa --> **aktualizacji krokowej** – należy przez to rozumieć sposób aktualizacji wyników zawodów organizowanych przez SPWS, PZSz lub FIE, zgodnie z którym punkty za zawody z poprzedniego sezonu pozostają w Rankingu do czasu uwzględnienia punktów za odpowiadające im zawody w sezonie bieżącym, po czym poprzedni wynik przestaje być uwzględniany;
+   8) <!-- unit:definicja-wygaszanie-kalendarzowe --> **wygaszaniu kalendarzowym** – należy przez to rozumieć sposób uwzględniania wyników zawodów organizowanych przez EVF, zgodnie z którym uzyskane punkty pozostają w Rankingu przez okres właściwy dla danego rodzaju zawodów, liczony od dnia zakończenia zawodów, niezależnie od tego, czy zawody mają odpowiednik w kolejnym sezonie, a po upływie tego okresu przestają być uwzględniane;
+   9) <!-- unit:definicja-zawody-limitowane --> **limitowanych zawodach międzynarodowych** – należy przez to rozumieć indywidualne lub drużynowe zawody międzynarodowe rangi mistrzowskiej, w których liczba zawodników reprezentujących dane państwo jest ograniczona przepisami organizatora zawodów;
+   10) <!-- unit:definicja-powolanie-uzupelniajace --> **powołaniu uzupełniającym** – należy przez to rozumieć wyjątkowe powołanie do startu drużynowego zawodnika nieposiadającego dodatniego dorobku punktowego, dokonywane wyłącznie w celu uzupełnienia braków uniemożliwiających wystawienie kompletnej i zgodnej z przepisami drużyny;
+   11) <!-- unit:definicja-v0-krajowa --> **kategorii V0** – należy przez to rozumieć krajową kategorię zawodników w wieku od 30 do 39 lat, która nie występuje w klasyfikacjach EVF ani FIE:
+      a) <!-- unit:definicja-v0 --> V0 – od 30 do 39 lat.
+   12) <!-- unit:definicja-kategorie-wiekowe --> **kategoriach wiekowych V1–V4** – należy przez to rozumieć następujące kategorie wiekowe EVF, ustalane według wieku zawodnika na dzień 31 grudnia roku, w którym odbywają się mistrzostwa:
       a) <!-- unit:definicja-v1 --> V1 – od 40 do 49 lat,
       b) <!-- unit:definicja-v2 --> V2 – od 50 do 59 lat,
       c) <!-- unit:definicja-v3 --> V3 – od 60 do 69 lat,
@@ -83,21 +86,21 @@ Treść dokumentu podzielono następująco:
 1. <!-- unit:cel-glowny --> Celem Regulaminu jest wyłonienie możliwie najsilniejszej reprezentacji Polski weteranów w szermierce. Równe traktowanie zawodników oraz przejrzystość zasad stanowią podstawę przyjętego procesu wyłaniania reprezentacji.
 
 2. <!-- unit:cel-zasady --> Proces wyłaniania reprezentacji opiera się na następujących zasadach:
-   1) <!-- unit:zasada-szeroki-wybor --> **szerokiego wyboru zawodów** – w rankingu indywidualnym uwzględnia się wyniki uzyskane w zawodach ujętych w kalendarzach SPWS, PZSz, EVF i FIE, na zasadach określonych w § 5 ust. 1<!-- ref:zawody-rankingowe/katalog-zawodow --> lub zgłoszonych do kalendarza PZSz;
-   2) <!-- unit:zasada-ranking-indywidualny --> **powołania do startów indywidualnych wyłącznie na podstawie rankingu** – do startu indywidualnego powołuje się czterech najwyżej sklasyfikowanych zawodników w rankingu właściwym dla danej broni, płci i kategorii wiekowej. Zawodnik z zerowym dorobkiem punktowym nie może zostać powołany do reprezentacji. Wyjątek stanowi powołanie uzupełniające, o którym mowa w § 4 ust. 5<!-- ref:rola-rankingu/powolanie-uzupelniajace -->.
+   1) <!-- unit:zasada-szeroki-wybor --> **szerokiego wyboru zawodów** – w Rankingu uwzględnia się wyniki uzyskane w zawodach ujętych w kalendarzach SPWS, PZSz, EVF i FIE, z zastrzeżeniem odrębnych zasad dla kategorii V0, na zasadach określonych w § 5 ust. 1<!-- ref:zawody-rankingowe/katalog-zawodow --> lub zgłoszonych do kalendarza PZSz;
+   2) <!-- unit:zasada-ranking-indywidualny --> **powołania do startów indywidualnych wyłącznie na podstawie Rankingu** – do startu indywidualnego powołuje się czterech najwyżej sklasyfikowanych zawodników kategorii V1–V4 w Rankingu właściwym dla danej broni, płci i kategorii wiekowej. Zawodnik z zerowym dorobkiem punktowym nie może zostać powołany do reprezentacji. Wyjątek stanowi powołanie uzupełniające, o którym mowa w § 4 ust. 5<!-- ref:rola-rankingu/powolanie-uzupelniajace -->.
 
-## Rozdział 2 — Ranking indywidualny <!-- chapter:ranking-indywidualny -->
+## Rozdział 2 — Ranking wyłaniania reprezentacji <!-- chapter:ranking-indywidualny -->
 <!-- scope: rola rankingu, zawody, punktacja i warunki ujęcia wyników -->
 
-### § 4 — Rola rankingu indywidualnego <!-- section:rola-rankingu -->
+### § 4 — Rola Rankingu <!-- section:rola-rankingu -->
 
-1. <!-- unit:ranking-podstawa --> Ranking indywidualny stanowi podstawę kwalifikowania zawodników do startów indywidualnych oraz wyłonienia puli kandydatów do składu drużyny.
+1. <!-- unit:ranking-podstawa --> Ranking w kategoriach V1–V4 stanowi podstawę kwalifikowania zawodników do startów indywidualnych oraz wyłonienia puli kandydatów do składu drużyny.
 
-2. <!-- unit:ranking-nie-automatyczny-druzyna --> Ranking indywidualny wyznacza pulę kandydatów do drużyny oraz zapewnia miejsce w jej składzie najwyżej sklasyfikowanemu zawodnikowi z każdej z dwóch kategorii wiekowych objętych daną kategorią drużynową. Pozostałych zawodników drużyny, a w przypadku Drużynowych Mistrzostw Europy także zawodnika rezerwowego, wybiera zespół pełniący funkcję selekcjonera, na zasadach określonych w rozdziale 4.
+2. <!-- unit:ranking-nie-automatyczny-druzyna --> Ranking w kategoriach V1–V4 wyznacza pulę kandydatów do drużyny oraz zapewnia miejsce w jej składzie najwyżej sklasyfikowanemu zawodnikowi z każdej z dwóch kategorii wiekowych objętych daną kategorią drużynową. Pozostałych zawodników drużyny, a w przypadku Drużynowych Mistrzostw Europy także zawodnika rezerwowego, wybiera zespół pełniący funkcję selekcjonera, na zasadach określonych w rozdziale 4.
 
-3. <!-- unit:swoboda-wyboru-zawodow --> Zawodnik samodzielnie wybiera zawody, w których bierze udział. Warunkiem uwzględnienia go w rankingu indywidualnym jest co najmniej jeden start w Pucharze Polski Weteranów w Szermierce albo Mistrzostwach Polski Weteranów w Szermierce.
+3. <!-- unit:swoboda-wyboru-zawodow --> Zawodnik samodzielnie wybiera zawody, w których bierze udział. Warunkiem uwzględnienia go w Rankingu jest co najmniej jeden start w Pucharze Polski Weteranów w Szermierce albo Mistrzostwach Polski Weteranów w Szermierce.
 
-4. <!-- unit:dodatni-dorobek --> Z zastrzeżeniem ust. 5 poniżej<!-- ref:rola-rankingu/powolanie-uzupelniajace -->, do reprezentacji Polski na limitowane zawody międzynarodowe może zostać powołany wyłącznie zawodnik, który wystartował w co najmniej jednych zawodach uwzględnianych w rankingu indywidualnym i uzyskał w nim dorobek większy niż zero punktów.
+4. <!-- unit:dodatni-dorobek --> Z zastrzeżeniem ust. 5 poniżej<!-- ref:rola-rankingu/powolanie-uzupelniajace -->, do reprezentacji Polski na limitowane zawody międzynarodowe może zostać powołany wyłącznie zawodnik kategorii V1–V4, który wystartował w co najmniej jednych zawodach uwzględnianych w Rankingu i uzyskał w nim dorobek większy niż zero punktów. Pozycje kategorii V0 nie stanowią podstawy powołania do reprezentacji.
 
 5. <!-- unit:powolanie-uzupelniajace --> W zawodach innych niż Drużynowe Mistrzostwa Świata i Drużynowe Mistrzostwa Europy, w przypadku gdy nie jest możliwe skompletowanie drużyny z zawodników posiadających dodatni dorobek punktowy, dopuszcza się powołanie uzupełniające zawodnika bez punktów rankingowych, jeżeli łącznie:
    1) <!-- unit:uzupelnienie-niezbedne --> powołanie jest niezbędne do wystawienia kompletnej drużyny zgodnej z przepisami zawodów;
@@ -107,7 +110,7 @@ Treść dokumentu podzielono następująco:
 
 ### § 5 — Zawody uwzględniane w rankingu <!-- section:zawody-rankingowe -->
 
-1. <!-- unit:katalog-zawodow --> W sezonie 2026/2027 w rankingu indywidualnym uwzględnia się wyniki uzyskane w następujących cyklach i zawodach:
+1. <!-- unit:katalog-zawodow --> W sezonie 2026/2027 w Rankingu uwzględnia się wyniki uzyskane w następujących cyklach i zawodach, z zastrzeżeniem ust. 8 poniżej<!-- ref:zawody-rankingowe/v0-zawody -->:
    1) <!-- unit:zawody-ppw-mpw --> Pucharze Polski Weteranów w Szermierce oraz Mistrzostwach Polski Weteranów w Szermierce, organizowanych przez SPWS albo przez inny podmiot na zasadach określonych w ust. 2 poniżej<!-- ref:zawody-rankingowe/zewnetrzny-organizator -->;
    2) <!-- unit:zawody-pps-mps --> Pucharze Polski Seniorów w Szermierce oraz Mistrzostwach Polski Seniorów w Szermierce, ujętych w oficjalnym kalendarzu PZSz;
    3) <!-- unit:zawody-pew-mew --> Pucharze Europy Weteranów w Szermierce oraz Mistrzostwach Europy Weteranów w Szermierce, ujętych w oficjalnym kalendarzu EVF;
@@ -123,19 +126,23 @@ Treść dokumentu podzielono następująco:
    7) <!-- unit:warunek-dostepnosc --> protokoły i wyniki, o których mowa w pkt 6 powyżej<!-- ref:zawody-rankingowe/warunek-protokoly -->, pozostają dostępne online przez co najmniej 36 miesięcy od dnia zakończenia zawodów;
    8) <!-- unit:warunek-sedziowanie --> od ćwierć finałów, walki eliminacji bezpośredniej są prowadzone przez licencjonowanych sędziów PZSz.
 
-3. <!-- unit:osiem-pozycji-rankingowych --> Łączna liczba punktów zawodnika w rankingu indywidualnym jest sumą punktów przypisanych do ośmiu pozycji wynikowych:
+3. <!-- unit:osiem-pozycji-rankingowych --> Łączna liczba punktów zawodnika w Rankingu jest sumą punktów przypisanych do ośmiu pozycji wynikowych:
    1) <!-- unit:trzy-pozycje-krajowe --> trzech obowiązkowych pozycji krajowych;
    2) <!-- unit:piec-pozycji-otwartych --> pięciu pozycji otwartych.
 
 4. <!-- unit:obowiazkowe-pozycje-krajowe --> Trzy obowiązkowe pozycje krajowe wypełnia się wynikami uzyskanymi w zawodach Pucharu Polski Weteranów w Szermierce oraz Mistrzostwach Polski Weteranów w Szermierce, według następujących zasad:
-   1) <!-- unit:krajowe-trzy-najlepsze --> spośród wszystkich wyników uzyskanych przez zawodnika w tych zawodach wybiera się trzy wyniki, za które zawodnik otrzymał najwyższą liczbę punktów rankingowych;
-   2) <!-- unit:krajowe-brak-zero --> jeżeli zawodnik uzyskał mniej niż trzy wyniki w Pucharze Polski Weteranów w Szermierce lub Mistrzostwach Polski Weteranów w Szermierce, za każdą niewypełnioną obowiązkową pozycję krajową przyjmuje się zero punktów rankingowych.
+   1) <!-- unit:krajowe-dwa-ppw --> dwie pozycje wypełniają dwa najlepsze wyniki punktowe zawodnika uzyskane w PPW;
+   2) <!-- unit:krajowe-mpw --> trzecią pozycję wypełnia wynik punktowy uzyskany w MPW;
+   3) <!-- unit:krajowe-brak-ppw --> jeżeli zawodnik uzyskał mniej niż dwa wyniki w PPW, za każdą niewypełnioną pozycję PPW przyjmuje się 0 punktów;
+   4) <!-- unit:krajowe-brak-mpw --> jeżeli zawodnik nie wystartował w MPW, za obowiązkową pozycję MPW przyjmuje się 0 punktów; brak startu w MPW nie powoduje usunięcia zawodnika z Rankingu.
 
-5. <!-- unit:pozycje-otwarte --> Na pięć pozycji otwartych składa się pięć najwyżej punktowanych spośród pozostałych wyników zawodnika uwzględnianych w rankingu.
+5. <!-- unit:pozycje-otwarte --> Na pięć pozycji otwartych składa się pięć najwyżej punktowanych spośród pozostałych wyników zawodnika uwzględnianych w Rankingu.
 
 6. <!-- unit:kolejnosc-wyboru-wynikow --> Najpierw wybiera się wyniki wypełniające trzy obowiązkowe pozycje krajowe, a następnie wyniki wypełniające pięć pozycji otwartych.
 
 7. <!-- unit:zakaz-podwojnego-liczenia --> Żaden wynik nie może zostać policzony dwukrotnie.
+
+8. <!-- unit:v0-zawody --> W kategorii V0 w Rankingu uwzględnia się wyłącznie punkty z PPW, MPW, PPS i MPS; nie uwzględnia się punktów z zawodów EVF ani FIE. Kategorie V1–V4 prowadzi się na zasadach określonych w ust. 1–7.
 
 ### § 6 — Zasady obliczania punktów <!-- section:punktacja -->
 
@@ -163,7 +170,9 @@ Treść dokumentu podzielono następująco:
 
 ### § 7 — Publikacja rankingu <!-- section:publikacja-rankingu -->
 
-<!-- unit:publikacja-rankingu-zrodlo --> Ranking indywidualny oraz kalkulator punktów są publikowane na stronie internetowej.
+<!-- unit:publikacja-rankingu-zrodlo --> Ranking oraz kalkulator punktów są publikowane na stronie internetowej.
+
+<!-- unit:klasyfikacja-ppw-podzbior --> Klasyfikacja Pucharu Polski Weteranów jest filtrowanym podzbiorem Rankingu, a nie odrębnym systemem rankingowym. Otrzymuje się ją przez zastosowanie w systemie online filtra obejmującego PPW i MPW; pokazuje ona sumę dwóch najlepszych pozycji PPW i obowiązkowej pozycji MPW.
 
 <!-- note:materialy-pomocnicze -->
 **Materiały pomocnicze — wersja nieoficjalna**
@@ -184,7 +193,7 @@ Regulamin nie został jeszcze uchwalony. Poniższe odnośniki prowadzą do nieof
 
 ### § 9 — Zawodnicy uwzględniani w rankingu <!-- section:uprawnieni-w-rankingu -->
 
-1. <!-- unit:ranking-warunek-startu-krajowego --> W rankingu indywidualnym uwzględnia się wyłącznie weteranów szermierki, którzy co najmniej raz wystartowali w zawodach Pucharu Polski Weteranów w Szermierce albo Mistrzostwach Polski Weteranów w Szermierce.
+1. <!-- unit:ranking-warunek-startu-krajowego --> W Rankingu uwzględnia się wyłącznie weteranów szermierki, którzy co najmniej raz wystartowali w zawodach Pucharu Polski Weteranów w Szermierce albo Mistrzostwach Polski Weteranów w Szermierce.
 
 2. <!-- unit:ranking-powolanie-obywatelstwo --> Przy ustalaniu kolejności zawodników do powołania do reprezentacji Polski uwzględnia się wyłącznie zawodników posiadających polskie obywatelstwo albo kartę pobytu, zgodnie z przepisami FIE i EVF.
 
@@ -195,20 +204,20 @@ Regulamin nie został jeszcze uchwalony. Poniższe odnośniki prowadzą do nieof
 
 ### § 10 — Zasady powołań indywidualnych <!-- section:zasady-powolan-indywidualnych -->
 
-<!-- unit:czterech-z-rankingu --> Do startu indywidualnego w limitowanych zawodach międzynarodowych powołuje się czterech najwyżej sklasyfikowanych zawodników w rankingu właściwym dla danej broni, płci i kategorii wiekowej, z uwzględnieniem warunku dodatniego dorobku punktowego określonego w § 4 ust. 4<!-- ref:rola-rankingu/dodatni-dorobek -->.
+<!-- unit:czterech-z-rankingu --> Do startu indywidualnego w limitowanych zawodach międzynarodowych powołuje się czterech najwyżej sklasyfikowanych zawodników kategorii V1–V4 w Rankingu właściwym dla danej broni, płci i kategorii wiekowej, z uwzględnieniem warunku dodatniego dorobku punktowego określonego w § 4 ust. 4<!-- ref:rola-rankingu/dodatni-dorobek -->.
 
 ### § 11 — Rezygnacja i zastępstwo <!-- section:rezygnacja-indywidualna -->
 
-<!-- unit:rezygnacja-indywidualna-zrodlo --> W przypadku rezygnacji zawodnika z udziału w zawodach indywidualnych jego miejsce przechodzi na kolejnego zawodnika zgodnie z aktualnym rankingiem indywidualnym.
+<!-- unit:rezygnacja-indywidualna-zrodlo --> W przypadku rezygnacji zawodnika z udziału w zawodach indywidualnych jego miejsce przechodzi na kolejnego zawodnika zgodnie z aktualnym Rankingiem.
 
 ## Rozdział 4 — Dobór składu drużyny <!-- chapter:druzyna -->
 <!-- scope: pula kandydatów, wymogi kategorii i procedury wyboru -->
 
 ### § 12 — Pula kandydatów do drużyny <!-- section:pula-druzyny -->
 
-1. <!-- unit:pula-druzyny-ranking --> Ranking indywidualny weteranów przyjęty dla danego cyklu powołań wyznacza pulę kandydatów do drużyny właściwą dla danej broni, płci i kategorii drużynowej. Na Mistrzostwa Świata pula obejmuje po czterech zawodników z każdej z dwóch kategorii wiekowych, a na Mistrzostwa Europy — po sześciu.
+1. <!-- unit:pula-druzyny-ranking --> Ranking przyjęty dla danego cyklu powołań wyznacza pulę kandydatów do drużyny właściwą dla danej broni, płci i kategorii drużynowej. Na Mistrzostwa Świata pula obejmuje po czterech zawodników z każdej z dwóch kategorii wiekowych, a na Mistrzostwa Europy — po sześciu.
 
-2. <!-- unit:pula-druzyny-zastepstwo --> W przypadku rezygnacji zawodnika z udziału w puli kandydatów jego miejsce zajmuje kolejny zawodnik w rankingu indywidualnym jego kategorii wiekowej.
+2. <!-- unit:pula-druzyny-zastepstwo --> W przypadku rezygnacji zawodnika z udziału w puli kandydatów jego miejsce zajmuje kolejny zawodnik w Rankingu jego kategorii wiekowej.
 
 3. <!-- unit:pula-druzyny-zamknieta --> Na Drużynowe Mistrzostwa Europy powołuje się także zawodnika rezerwowego, wybieranego wyłącznie spośród zawodników należących do puli kandydatów do drużyny.
 
@@ -218,9 +227,9 @@ Regulamin nie został jeszcze uchwalony. Poniższe odnośniki prowadzą do nieof
 
 ### § 14 — Drużynowe Mistrzostwa Świata <!-- section:druzynowe-mistrzostwa-swiata -->
 
-1. <!-- unit:dms-pula --> Pulę kandydatów do drużyny tworzy ośmiu zawodników nominowanych do startu indywidualnego: po czterech zawodników z każdej z dwóch kategorii wiekowych objętych daną kategorią drużynową. Podstawą wyłonienia puli jest ranking indywidualny weteranów przyjęty dla danego cyklu powołań.
+1. <!-- unit:dms-pula --> Pulę kandydatów do drużyny tworzy ośmiu zawodników nominowanych do startu indywidualnego: po czterech zawodników z każdej z dwóch kategorii wiekowych objętych daną kategorią drużynową. Podstawą wyłonienia puli jest Ranking przyjęty dla danego cyklu powołań.
 
-2. <!-- unit:dms-liderzy --> Najwyżej sklasyfikowany w tym rankingu zawodnik młodszej kategorii wiekowej oraz najwyżej sklasyfikowany zawodnik starszej kategorii wiekowej spośród zawodników należących do puli mają zapewnione miejsca w drużynie. Wyniki turnieju indywidualnego Mistrzostw Świata nie zmieniają tego uprawnienia.
+2. <!-- unit:dms-liderzy --> Najwyżej sklasyfikowany w tym Rankingu zawodnik młodszej kategorii wiekowej oraz najwyżej sklasyfikowany zawodnik starszej kategorii wiekowej spośród zawodników należących do puli mają zapewnione miejsca w drużynie. Wyniki turnieju indywidualnego Mistrzostw Świata nie zmieniają tego uprawnienia.
 
 3. <!-- unit:dms-selekcjoner --> Funkcję selekcjonera drużyny pełni zespół złożony z tych dwóch zawodników.
 
@@ -232,13 +241,13 @@ Regulamin nie został jeszcze uchwalony. Poniższe odnośniki prowadzą do nieof
 
 ### § 15 — Drużynowe Mistrzostwa Europy <!-- section:druzynowe-mistrzostwa-europy -->
 
-1. <!-- unit:dme-pula --> Pulę kandydatów do drużyny tworzy dwunastu zawodników: sześciu najwyżej sklasyfikowanych zawodników młodszej kategorii wiekowej oraz sześciu najwyżej sklasyfikowanych zawodników starszej kategorii wiekowej w rankingu indywidualnym weteranów właściwym dla danej broni i płci, przyjętym dla danego cyklu powołań.
+1. <!-- unit:dme-pula --> Pulę kandydatów do drużyny tworzy dwunastu zawodników: sześciu najwyżej sklasyfikowanych zawodników młodszej kategorii wiekowej oraz sześciu najwyżej sklasyfikowanych zawodników starszej kategorii wiekowej w Rankingu właściwym dla danej broni i płci, przyjętym dla danego cyklu powołań.
 
 2. <!-- unit:dme-liderzy --> Najwyżej sklasyfikowani zawodnicy młodszej i starszej kategorii wiekowej spośród zawodników należących do puli kandydatów mają zapewnione miejsca w składzie drużyny — po jednym zawodniku z każdej kategorii. Funkcję selekcjonera drużyny pełni zespół złożony z tych dwóch zawodników.
 
 3. <!-- unit:dme-pozostaly-sklad --> Zespół wybiera trzech kolejnych zawodników do składu drużyny oraz jednego zawodnika rezerwowego wyłącznie spośród pozostałych dziesięciu zawodników z puli kandydatów.
 
-4. <!-- unit:dme-porozumienie --> Zespół ustala skład w drodze porozumienia, kierując się celem wystawienia możliwie najsilniejszej drużyny, osiągnięciami kandydatów w startach indywidualnych i drużynowych oraz wymaganiami dotyczącymi kategorii wiekowych. Miejsce w rankingu indywidualnym nie przesądza o wyborze pozostałych zawodników do drużyny.
+4. <!-- unit:dme-porozumienie --> Zespół ustala skład w drodze porozumienia, kierując się celem wystawienia możliwie najsilniejszej drużyny, osiągnięciami kandydatów w startach indywidualnych i drużynowych oraz wymaganiami dotyczącymi kategorii wiekowych. Miejsce w Rankingu nie przesądza o wyborze pozostałych zawodników do drużyny.
 
 5. <!-- unit:dme-brak-porozumienia-zrodlo --> W przypadku braku porozumienia do zespołu pełniącego funkcję selekcjonera dołącza Prezes SPWS. Jeżeli Prezes SPWS nie może uczestniczyć w pracach zespołu, wyznacza inną osobę do udziału w tych pracach w swoim imieniu.
 
@@ -279,7 +288,7 @@ Regulamin nie został jeszcze uchwalony. Poniższe odnośniki prowadzą do nieof
 
 12. <!-- unit:terminarz-jawnosc --> Reklamacje, zastrzeżenia oraz odpowiedzi udostępnia się zainteresowanemu zawodnikowi i archiwizuje wraz z dokumentacją cyklu.
 
-13. <!-- unit:terminarz-zrodla --> SPWS wykorzystuje oficjalne wyniki i protokoły zawodów uwzględnianych w rankingu: PPW i MPW, zawodów PZSz, EVF oraz FIE. Każdy wynik ujęty w karcie zawodnika zawiera odnośnik do publicznego protokołu stanowiącego jego źródło.
+13. <!-- unit:terminarz-zrodla --> SPWS wykorzystuje oficjalne wyniki i protokoły zawodów uwzględnianych w Rankingu: PPW i MPW, zawodów PZSz, EVF oraz FIE. Każdy wynik ujęty w karcie zawodnika zawiera odnośnik do publicznego protokołu stanowiącego jego źródło.
 
 14. <!-- unit:terminarz-archiwum --> SPWS archiwizuje stan danych z T−90<!-- term:otwarcie -->, późniejsze korekty wraz z ich uzasadnieniem oraz ostateczną wersję propozycji przekazaną PZSz. Dokumentacja obejmuje karty zawodników, deklaracje gotowości, uzasadnienia, reklamacje, zastrzeżenia i odpowiedzi oraz pozwala odtworzyć podstawę przekazanej propozycji. Dokumentację ostatecznego wyboru drużyny na Mistrzostwa Świata uzupełnia się po zakończeniu rywalizacji indywidualnej.
 

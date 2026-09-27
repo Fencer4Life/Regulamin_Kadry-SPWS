@@ -91,7 +91,7 @@ class SourceMigrationTests(unittest.TestCase):
         ]
         self.assertEqual(len(labels), 0)
         draft_texts = {
-            "W przypadku rezygnacji zawodnika z udziału w zawodach indywidualnych jego miejsce przechodzi na kolejnego zawodnika zgodnie z aktualnym rankingiem indywidualnym.",
+            "W przypadku rezygnacji zawodnika z udziału w zawodach indywidualnych jego miejsce przechodzi na kolejnego zawodnika zgodnie z aktualnym Rankingiem.",
             "1. Regulamin przyjmuje Zarząd SPWS w drodze uchwały. Regulamin wchodzi w życie w terminie określonym w tej uchwale.",
         }
         paragraphs = {paragraph.text: paragraph for paragraph in document.paragraphs}
