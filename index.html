@@ -25,6 +25,9 @@ description: Publiczny rejestr decyzji dotyczących Regulaminu Kadry SPWS.
     <label>Stan obowiązywania
       <select id="filter-effect"><option value="">Wszystkie</option>{% assign effects = site.decyzje | map: 'stan_obowiązywania' | uniq | sort %}{% for value in effects %}<option>{{ value }}</option>{% endfor %}</select>
     </label>
+    <label>Dokument
+      <select id="filter-document"><option value="">Wszystkie</option><option value="reprezentacja">Regulamin Reprezentacji</option><option value="zawody">Regulamin Zawodów</option><option value="none">Bez zmiany dokumentu</option></select>
+    </label>
     <label>Sezon
       <select id="filter-season"><option value="">Wszystkie</option>{% assign seasons = site.decyzje | map: 'sezon' | uniq | sort %}{% for value in seasons %}<option>{{ value }}</option>{% endfor %}</select>
     </label>

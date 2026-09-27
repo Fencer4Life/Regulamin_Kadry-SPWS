@@ -163,7 +163,10 @@ DR-002
         result = normalize_discussions(payload, "2026-09-12T12:00:00Z")
         self.assertEqual([item["number"] for item in result["open_items"]], [2, 6])
         self.assertEqual([item["number"] for item in result["closed_items"]], [5, 4])
-        self.assertEqual(result["open_items"][0]["labels"], ["do rozstrzygnięcia"])
+        self.assertEqual(
+            result["open_items"][0]["labels"],
+            ["do rozstrzygnięcia", "Regulamin: Reprezentacja"],
+        )
         self.assertEqual(result["open_items"][0]["coordinator"], "ala")
         self.assertEqual(
             result["open_items"][0]["coordinator_avatar_url"], "https://github.com/ala.png?size=80"
@@ -175,8 +178,46 @@ DR-002
         self.assertIsNone(result["open_items"][1]["priority"])
         self.assertEqual(result["open_items"][1]["author"], "konto usunięte")
         self.assertEqual(result["closed_items"][0]["closed_at"], "2026-09-13T08:00:00Z")
-        self.assertEqual(result["closed_items"][0]["labels"], ["rozstrzygnięta"])
+        self.assertEqual(
+            result["closed_items"][0]["labels"],
+            ["rozstrzygnięta", "Regulamin: Reprezentacja"],
+        )
         self.assertEqual(result["generated_at"], "2026-09-12T12:00:00Z")
+
+    def test_document_labels_are_derived_from_form_scope(self):
+        nodes = []
+        for number, body in (
+            (1, "### Dokument\nRegulamin Zawodów\n"),
+            (
+                2,
+                "### Fragment Regulaminu Reprezentacji do zastąpienia\na\n"
+                "### Nowe brzmienie Regulaminu Reprezentacji\nb\n"
+                "### Fragment Regulaminu Zawodów do zastąpienia\nc\n"
+                "### Nowe brzmienie Regulaminu Zawodów\nd\n",
+            ),
+            (3, "### Dokument\nBez zmiany dokumentu\n"),
+        ):
+            nodes.append(
+                {
+                    "number": number,
+                    "title": f"Dyskusja {number}",
+                    "url": f"https://example/{number}",
+                    "createdAt": f"2026-09-2{number}T10:00:00Z",
+                    "closedAt": None,
+                    "body": body,
+                    "author": {"login": "Fencer4Life"},
+                    "category": {"slug": "propozycje-zmian-regulaminu"},
+                    "comments": {"totalCount": 0},
+                    "labels": {"nodes": [{"name": "inne"}]},
+                }
+            )
+        snapshot = normalize_discussions(
+            {"data": {"repository": {"discussions": {"nodes": nodes}}}}, "now"
+        )
+        labels = {item["number"]: item["labels"] for item in snapshot["open_items"]}
+        self.assertEqual(labels[1], ["inne", "Regulamin: Zawody"])
+        self.assertEqual(labels[2], ["inne", "Regulamin: Reprezentacja", "Regulamin: Zawody"])
+        self.assertEqual(labels[3], ["inne"])
 
     def test_parser_reads_new_dependency_heading_and_old_heading(self):
         current = parse_discussion_form("### Zależy od\n\n#29, DR-015")

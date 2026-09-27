@@ -25,7 +25,7 @@ h2 { margin-top: 2.2rem; }
 .eyebrow { margin: 0 0 .8rem; color: var(--accent); font-size: .78rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
 .lead { max-width: 48rem; color: var(--muted); font-size: clamp(1.15rem, 2vw, 1.4rem); }
 .notice { max-width: 54rem; padding: 1rem 1.2rem; border-left: .3rem solid var(--warn); background: var(--surface); }
-.filters { display: grid; grid-template-columns: minmax(14rem, 2fr) repeat(5, minmax(9rem, 1fr)); gap: .8rem; }
+.filters { display: grid; grid-template-columns: minmax(14rem, 2fr) repeat(6, minmax(9rem, 1fr)); gap: .8rem; }
 label { color: var(--muted); font-size: .82rem; font-weight: 700; }
 input, select { width: 100%; margin-top: .3rem; padding: .7rem .75rem; border: 1px solid var(--line); border-radius: .35rem; color: var(--ink); background: var(--surface); font: inherit; }
 .result-count { color: var(--muted); }
@@ -36,6 +36,8 @@ input, select { width: 100%; margin-top: .3rem; padding: .7rem .75rem; border: 1
 .record-id { color: var(--accent); font-family: ui-monospace, monospace; font-weight: 800; }
 .status { display: inline-block; padding: .18rem .5rem; border-radius: 99rem; color: var(--good); background: color-mix(in srgb, var(--good) 14%, transparent); font-size: .74rem; font-weight: 800; }
 .badge-row { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .35rem; }
+.document-badges { display: flex; flex-wrap: wrap; gap: .4rem; margin: .45rem 0 .2rem; }
+.document-badge { display: inline-flex; align-items: center; border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--line)); border-radius: 999rem; background: color-mix(in srgb, var(--accent) 13%, transparent); color: var(--accent-dark); font-size: .72rem; font-weight: 800; padding: .28rem .55rem; }
 .effect { display: inline-block; padding: .18rem .5rem; border-radius: 99rem; font-size: .74rem; font-weight: 800; text-transform: uppercase; }
 .effect-obowiazuje { color: var(--good); background: color-mix(in srgb, var(--good) 14%, transparent); }
 .effect-czesciowo-zmieniona { color: var(--warn); background: color-mix(in srgb, var(--warn) 18%, transparent); }

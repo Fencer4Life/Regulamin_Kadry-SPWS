@@ -36,6 +36,7 @@ class RegistryPlatformTests(unittest.TestCase):
             'id="filter-season"',
             'id="filter-subject"',
             'id="filter-effect"',
+            'id="filter-document"',
             'id="page-size"',
             'id="pagination-top"',
             'id="pagination-bottom"',
@@ -44,6 +45,24 @@ class RegistryPlatformTests(unittest.TestCase):
         )
         missing = [fragment for fragment in required if fragment not in index]
         self.assertEqual(missing, [], f"Indeks nie zawiera wyszukiwarki lub filtrów: {missing}")
+
+    def test_public_views_expose_both_documents_forms_and_scope_labels(self):
+        default = (ROOT / "_layouts" / "default.html").read_text(encoding="utf-8")
+        card = (ROOT / "_includes" / "decision-card.html").read_text(encoding="utf-8")
+        detail = (ROOT / "_layouts" / "decision.html").read_text(encoding="utf-8")
+        script = (ROOT / "assets" / "rejestr.js").read_text(encoding="utf-8")
+        for fragment in (
+            "Regulamin Reprezentacji DOCX",
+            "Regulamin Zawodów DOCX",
+            "Zmiana jednego regulaminu",
+            "Wspólna zmiana obu regulaminów",
+        ):
+            self.assertIn(fragment, default)
+        for fragment in ("Regulamin: Reprezentacja", "Regulamin: Zawody"):
+            self.assertIn(fragment, card)
+            self.assertIn(fragment, detail)
+        self.assertIn("data-document", card)
+        self.assertIn("includes", script)
 
     def test_newest_decisions_are_rendered_first(self):
         index = (ROOT / "index.html").read_text(encoding="utf-8")

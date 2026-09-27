@@ -14,6 +14,10 @@ except ModuleNotFoundError:
 CATEGORIES = {"propozycje-zmian-regulaminu", "wspolna-zmiana-obu-regulaminow"}
 GITHUB_LOGIN = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$")
 PRIORITIES = {value.casefold(): value for value in ("Niski", "Średni", "Wysoki")}
+DOCUMENT_LABELS = {
+    "reprezentacja": "Regulamin: Reprezentacja",
+    "zawody": "Regulamin: Zawody",
+}
 
 
 def _discussion_nodes(payload: dict | list[dict]):
@@ -35,6 +39,12 @@ def normalize_discussions(payload: dict | list[dict], generated_at: str) -> dict
         coordinator = source["koordynator"].lstrip("@").strip() or None
         avatar_login = coordinator if coordinator and GITHUB_LOGIN.fullmatch(coordinator) else None
         priority = PRIORITIES.get(source["priorytet"].strip().casefold())
+        labels = [
+            label["name"]
+            for label in node.get("labels", {}).get("nodes", [])
+            if label["name"] not in DOCUMENT_LABELS.values()
+        ]
+        labels.extend(DOCUMENT_LABELS[identifier] for identifier in source["dokumenty"])
         item = {
             "number": node["number"],
             "title": node["title"],
@@ -42,7 +52,7 @@ def normalize_discussions(payload: dict | list[dict], generated_at: str) -> dict
             "created_at": node["createdAt"],
             "author": (node.get("author") or {}).get("login", "konto usunięte"),
             "comments": node.get("comments", {}).get("totalCount", 0),
-            "labels": [label["name"] for label in node.get("labels", {}).get("nodes", [])],
+            "labels": labels,
             "coordinator": coordinator,
             "coordinator_avatar_url": f"https://github.com/{avatar_login}.png?size=80"
             if avatar_login

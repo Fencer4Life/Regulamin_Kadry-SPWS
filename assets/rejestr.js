@@ -5,6 +5,7 @@
   const search = document.querySelector("#search");
   const pageSize = document.querySelector("#page-size");
   const filters = { type: document.querySelector("#filter-type"), status: document.querySelector("#filter-status"), effect: document.querySelector("#filter-effect"), season: document.querySelector("#filter-season"), subject: document.querySelector("#filter-subject") };
+  const documentFilter = document.querySelector("#filter-document");
   const controls = [...document.querySelectorAll(".pagination")];
   const allowedSizes = [20, 50, 100];
   const params = new URLSearchParams(location.search);
@@ -18,7 +19,11 @@
   function applyFilters(resetPage = false) {
     if (resetPage) page = 1;
     const query = normalize(search?.value || "");
-    const matching = cards.filter((card) => !query || normalize(card.dataset.search || "").includes(query)).filter((card) => Object.entries(filters).every(([key, element]) => !element?.value || card.dataset[key] === element.value));
+    const matching = cards.filter((card) => !query || normalize(card.dataset.search || "").includes(query)).filter((card) => Object.entries(filters).every(([key, element]) => !element?.value || card.dataset[key] === element.value)).filter((card) => {
+      if (!documentFilter?.value) return true;
+      const documents = (card.dataset.document || "").split(/\s+/).filter(Boolean);
+      return documentFilter.value === "none" ? documents.length === 0 : documents.includes(documentFilter.value);
+    });
     const pages = Math.max(1, Math.ceil(matching.length / size)); page = Math.min(page, pages);
     const start = (page - 1) * size, end = Math.min(start + size, matching.length);
     cards.forEach((card) => card.classList.add("hidden")); matching.slice(start, end).forEach((card) => card.classList.remove("hidden"));
@@ -31,6 +36,7 @@
   }
   search?.addEventListener("input", () => applyFilters(true));
   Object.values(filters).forEach((element) => element?.addEventListener("change", () => applyFilters(true)));
+  documentFilter?.addEventListener("change", () => applyFilters(true));
   pageSize?.addEventListener("change", () => { size = Number(pageSize.value); localStorage.setItem("registryPageSize", String(size)); applyFilters(true); });
   controls.forEach((control) => control.addEventListener("click", (event) => { const direction = event.target.dataset?.page; if (direction === "previous") page -= 1; if (direction === "next") page += 1; if (direction) { applyFilters(); list.scrollIntoView({ behavior: "smooth", block: "start" }); } }));
   applyFilters();
