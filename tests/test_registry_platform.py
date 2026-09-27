@@ -206,8 +206,17 @@ class RegistryPlatformTests(unittest.TestCase):
             "endCursor",
             "--paginate --slurp",
             "_data/discussions.json",
+            "pull-requests: read",
+            "Oczekiwanie na zamknięcie dyskusji decyzji",
+            "commits/${GITHUB_SHA}/pulls",
+            "resolve_discussion.py",
+            "for attempt in {1..30}",
         ):
             self.assertIn(fragment, pages)
+        self.assertLess(
+            pages.index("Oczekiwanie na zamknięcie dyskusji decyzji"),
+            pages.index("Pobranie otwartych i zamkniętych dyskusji"),
+        )
 
     def test_decision_creation_workflow_is_idempotent_and_serialized(self):
         workflow = ROOT / ".github" / "workflows" / "create-decision.yml"
@@ -265,13 +274,14 @@ class RegistryPlatformTests(unittest.TestCase):
         self.assertNotIn("Planowana ścieżka Markdown", readme)
         self.assertNotIn("Planowane przejście na Markdown", contributing)
 
-    def test_merged_decision_closes_its_discussion_as_resolved(self):
+    def test_merged_decision_closes_its_discussion_without_second_release(self):
         workflow = ROOT / ".github" / "workflows" / "resolve-discussion.yml"
         self.assertTrue(workflow.is_file())
         text = workflow.read_text(encoding="utf-8")
-        for fragment in ("pull_request:", "workflow_dispatch:", "pr_number:", "closed", "merged", "resolve_discussion.py", "RESOLVED", "closeDiscussion", "actions: write", "gh workflow run pages.yml --ref main"):
+        for fragment in ("pull_request:", "workflow_dispatch:", "pr_number:", "closed", "merged", "resolve_discussion.py", "RESOLVED", "closeDiscussion", "discussions: write"):
             self.assertIn(fragment, text)
-        self.assertLess(text.index("closeDiscussion"), text.index("gh workflow run pages.yml --ref main"))
+        self.assertNotIn("actions: write", text)
+        self.assertNotIn("gh workflow run pages.yml", text)
 
     def test_architecture_decision_index_keeps_newest_entries_first(self):
         index = (ROOT / "dokumentacja" / "adr" / "index.html").read_text(encoding="utf-8")
