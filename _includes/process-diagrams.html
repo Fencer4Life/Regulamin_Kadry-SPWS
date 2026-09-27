@@ -1,7 +1,7 @@
 <h2>Od problemu do zmiany regulaminu</h2>
 <p class="subtitle">Uproszczony diagram swimlane: role mają własne tory, a kolory pokazują status dyskusji i powstające dokumenty.</p>
 
-<div style="overflow-x:auto;padding-bottom:10px">
+<div class="process-diagram" data-process-diagram="roles" role="img" aria-label="Podział odpowiedzialności Komisji, Koordynatora, Redaktora i automatyzacji" style="overflow-x:auto;padding-bottom:10px">
 <div style="min-width:1080px;border:1px solid #c8d2df;border-radius:14px;overflow:hidden;background:#fff;color:#17233b">
   <div style="display:grid;grid-template-columns:150px repeat(7,1fr);background:#173f70;color:#fff;font-size:12px;font-weight:800;text-align:center">
     <div style="padding:12px;text-align:left">ROLA / ETAP</div><div style="padding:12px">ZGŁOSZENIE</div><div style="padding:12px">DYSKUSJA</div><div style="padding:12px">KONIEC?</div><div style="padding:12px">DOKUMENTACJA<br>DECYZJI</div><div style="padding:12px">REDAKCJA</div><div style="padding:12px">KONTROLA</div><div style="padding:12px">PUBLIKACJA</div>
@@ -21,8 +21,8 @@
     <div style="height:100%;padding:15px;background:#edf3fa;font-weight:800">🧭 Koordynator dyskusji</div>
     <div style="padding:8px"><div style="background:#f0f5fb;border:2px solid #7894b2;border-radius:9px;padding:10px"><b>@login</b><br><small>przypisany przy otwarciu</small></div></div>
     <div style="padding:8px"><div style="background:#f0f5fb;border:2px solid #7894b2;border-radius:9px;padding:10px"><b>Porządkuje</b><br><small>nie rozstrzyga sam</small></div></div>
-    <div style="padding:8px"><div style="background:#fff1ce;border:2px solid #d09a23;border-radius:9px;padding:10px"><b>Formularz wyniku</b><br><small>etykieta: rozstrzygnięta</small></div></div>
-    <div style="padding:8px"><div style="background:#f0f5fb;border:2px solid #7894b2;border-radius:9px;padding:10px"><b>Sprawdza DR</b><br><small>wierność dyskusji</small></div></div>
+    <div style="padding:8px"><div style="background:#fff1ce;border:2px solid #d09a23;border-radius:9px;padding:10px"><b>Zapisuje wynik</b><br><small>pola dyskusji + etykieta</small></div></div>
+    <div style="padding:8px"><div style="background:#f0f5fb;border:2px solid #7894b2;border-radius:9px;padding:10px"><b>Weryfikuje zapis</b><br><small>zgodność z decyzją Komisji</small></div></div>
     <div></div><div></div><div></div>
   </div>
 
@@ -40,8 +40,8 @@
   <div style="display:grid;grid-template-columns:150px repeat(7,1fr);min-height:112px;align-items:center">
     <div style="height:100%;padding:15px;background:#edf3fa;font-weight:800">✍️ Redaktor regulaminu</div>
     <div></div><div></div><div></div><div></div>
-    <div style="padding:8px"><div style="background:#f4e9ff;border:2px solid #8c63b5;border-radius:9px;padding:10px"><b>Dane w dyskusji</b><br><small>przed/po i powód<br>wdrażaj na PR</small></div></div>
-    <div style="padding:8px"><div style="background:#f4e9ff;border:2px solid #8c63b5;border-radius:9px;padding:10px"><b>Poprawia</b><br><small>po uwagach komisji</small></div></div>
+    <div style="padding:8px"><div style="background:#f4e9ff;border:2px solid #8c63b5;border-radius:9px;padding:10px"><b>Brzmienie ZTP</b><br><small>dokładne fragmenty w dyskusji<br>wdrażaj na PR</small></div></div>
+    <div style="padding:8px"><div style="background:#f4e9ff;border:2px solid #8c63b5;border-radius:9px;padding:10px"><b>Kontrola Word</b><br><small>każdy zmieniony DOCX</small></div></div>
     <div></div>
   </div>
 </div>
@@ -49,7 +49,7 @@
 
 <div class="section">
   <h3>Status dyskusji</h3>
-  <div style="overflow-x:auto;background:#fff;border:1px solid #d7dee8;border-radius:12px;padding:12px;text-align:center">
+  <div class="process-diagram" data-process-diagram="statuses" style="overflow-x:auto;background:#fff;border:1px solid #d7dee8;border-radius:12px;padding:12px;text-align:center">
   <svg viewBox="0 0 1040 455" role="img" aria-label="Diagram statusów dyskusji" style="display:block;width:min(100%,760px);height:auto;margin:0 auto;font-family:system-ui,-apple-system,Segoe UI,sans-serif">
     <defs>
       <marker id="arrow-blue" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#477cab"/></marker>
@@ -103,7 +103,7 @@
 <div class="section">
   <h3>Jak decyzja wybiera ścieżkę dokumentu</h3>
   <p><b>Różnica dotyczy momentu uruchomienia generatora.</b> Obie ścieżki pobierają komplet danych z dyskusji. Szybka korekta generuje DOCX od razu; pełna czeka na etykietę wdrażaj na PR.</p>
-  <div style="overflow-x:auto;background:#fff;border:1px solid #d7dee8;border-radius:12px;padding:12px;text-align:center">
+  <div class="process-diagram" data-process-diagram="paths" style="overflow-x:auto;background:#fff;border:1px solid #d7dee8;border-radius:12px;padding:12px;text-align:center">
   <svg viewBox="0 0 1200 720" role="img" aria-label="Diagram wyboru pełnej lub szybkiej ścieżki decyzji" style="display:block;width:min(100%,960px);height:auto;margin:0 auto;font-family:system-ui,-apple-system,Segoe UI,sans-serif">
     <defs>
       <marker id="decision-arrow-blue" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#477cab"/></marker>
@@ -153,13 +153,15 @@
 
 <div class="section">
   <h3>Artefakty, które powstają</h3>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+  <div class="process-diagram artifact-flow" data-process-diagram="artifacts" role="img" aria-label="Przepływ od dyskusji przez jedną kartę i jeden lub dwa dokumenty do kontroli Word i jednego wydania" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
     <span style="padding:10px 14px;background:#dbeafe;border-radius:8px">💬 Dyskusja</span><b>→</b>
-    <span style="padding:10px 14px;background:#fff1ce;border-radius:8px">📋 Formularz rozstrzygnięcia</span><b>→</b>
-    <span style="padding:10px 14px;background:#e8f6ef;border-radius:8px">📄 Karta DR</span><b>→</b>
-    <span style="padding:10px 14px;background:#f4e9ff;border-radius:8px">📝 Zmieniony regulamin DOCX</span><b>→</b>
-    <span style="padding:10px 14px;background:#dff3e7;border-radius:8px">🌐 Publikacja</span>
+    <span style="padding:10px 14px;background:#fff1ce;border-radius:8px">⚖️ Decyzja Komisji</span><b>→</b>
+    <span style="padding:10px 14px;background:#e8f6ef;border-radius:8px">📄 Jedna karta DR</span><b>→</b>
+    <span style="padding:10px 14px;background:#f4e9ff;border-radius:8px">📝 1 albo 2 pary Markdown + DOCX</span><b>→</b>
+    <span style="padding:10px 14px;background:#dbeafe;border-radius:8px">🔍 Kontrola w Wordzie</span><b>→</b>
+    <span style="padding:10px 14px;background:#dff3e7;border-radius:8px">🌐 Jedno wydanie</span>
   </div>
+  <p><b>Transakcja:</b> jeżeli zamiana, budowa albo test któregokolwiek wskazanego dokumentu nie powiedzie się, automat nie zapisuje żadnego Markdown, DOCX ani znacznika wdrożenia.</p>
 </div>
 
 <div class="section">

@@ -15,9 +15,9 @@ Numeru DR nie otrzymują poprawki literowe, zmiany fleksyjne, techniczne ponowie
 1. Propozycja rozpoczyna się w GitHub Discussions.
 2. Przy utworzeniu wskazuje się Koordynatora dyskusji przez login GitHub lub pseudonim oraz opisuje problem. Pozostałe pola są opcjonalne.
 3. Komisja rozważa warianty i uzgadnia wynik. Nie obowiązuje minimalny czas dyskusji ani minimalna liczba komentarzy.
-4. Koordynator publikuje końcowy formularz rozstrzygnięcia zgodny ze stanowiskiem komisji i nadaje etykietę `rozstrzygnięta`.
+4. Koordynator zapisuje w polach dyskusji wynik zgodny ze stanowiskiem Komisji, uzasadnienie i wpływ na drugi regulamin, a następnie nadaje etykietę `rozstrzygnięta`.
 5. Automatyzacja waliduje formularz, nadaje kolejny trwały numer `DR-NNN`, tworzy kartę Markdown z wynikiem `przyjęta` albo `odrzucona` oraz roboczy Pull Request.
-6. Jeżeli decyzja wymaga zmiany regulaminu, Redaktor regulaminu uzupełnia w karcie pola „Stary fragment Markdown” i „Nowy fragment Markdown”. Stary fragment kopiuje dokładnie z kanonicznego źródła, nowy zawiera jego kompletne zastępstwo. Dla przyjętej decyzji nadaje etykietę `wdrażaj` na tym samym Pull Requeście — nie na dyskusji. Numer DR i gałąź ustala automat. Automat bez LLM zmienia źródło i dołącza wygenerowane DOCX oraz link w sekcji „DOCX do sprawdzenia” na górze opisu PR; nie interpretuje opisu decyzji. Instrukcja: [ADR-003](dokumentacja/adr/ADR-003-deterministyczny-markdown.html).
+6. Jeżeli decyzja wymaga zmiany regulaminu, Redaktor regulaminu wpisuje wyłącznie w dyskusji dokładny fragment Markdown do zastąpienia i kompletne nowe brzmienie zgodne z ZTP — osobno dla każdego objętego dokumentu. Karta DR powstaje automatycznie i nie jest ręcznie redagowana. Dla przyjętej decyzji Redaktor nadaje etykietę `wdrażaj` na tym samym Pull Requeście, a automat bez LLM wykonuje literalne zamiany, buduje wskazane DOCX i testuje oba regulaminy. Redaktor otwiera każdy zmieniony DOCX w Microsoft Word przed zatwierdzeniem PR. Instrukcja: [ADR-003](dokumentacja/adr/ADR-003-deterministyczny-markdown.html).
 7. Scalenie Pull Requestu publikuje kartę, dodaje jej adres do dyskusji i technicznie zamyka dyskusję jako `RESOLVED`; jej status dla komisji to `Rozstrzygnięta`.
 
 Dyskusję zakończoną bez rozstrzygnięcia zamyka się jako `Porzucona` (`OUTDATED`) albo `Duplikat` (`DUPLICATE`). Nie tworzy się wtedy karty DR. Merytoryczne odrzucenie propozycji jest decyzją i otrzymuje kartę DR ze statusem `odrzucona`.
@@ -64,6 +64,6 @@ Każda decyzja wymagająca weryfikacji zawiera mierzalny plan oceny i termin prz
 
 ## Odpowiedzialność
 
-Komisja regulaminowa SPWS podejmuje decyzje i akceptuje ich dokumentację. Każda dyskusja ma własnego Koordynatora dyskusji, który porządkuje rozmowę i zapisuje jej uzgodniony wynik, ale nie rozstrzyga samodzielnie. Redaktor regulaminu przenosi przyjęte decyzje do dokumentu DOCX i czuwa nad spójnością jego treści. Publiczna dyskusja i recenzja nie zastępują decyzji komisji ani przyjęcia regulaminu uchwałą Zarządu SPWS.
+Komisja regulaminowa SPWS podejmuje decyzje i akceptuje ich dokumentację. Koordynator prowadzi dyskusję i zapisuje jej uzgodniony wynik, lecz nie rozstrzyga samodzielnie. Redaktor przygotowuje dokładne brzmienie zgodne z ZTP, czuwa nad spójnością obu regulaminów i sprawdza każdy zmieniony DOCX w Microsoft Word. Automat nie interpretuje decyzji. Publiczna dyskusja i recenzja nie zastępują decyzji Komisji ani przyjęcia regulaminu uchwałą Zarządu SPWS.
 
 Szczegółową instrukcję dla członków komisji zawiera [publiczny przewodnik](przewodnik.html).

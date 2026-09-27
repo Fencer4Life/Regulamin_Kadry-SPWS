@@ -85,6 +85,15 @@ class CommissionGuideTests(unittest.TestCase):
         ):
             self.assertIn(value, text)
         self.assertNotIn("Redaktor prowadzący", text)
+        for value in (
+            "Komisja regulaminowa",
+            "Komisji nie zastępuje etykieta",
+            "Koordynator uzupełnia pola wyniku",
+            "dokładne brzmienie zgodne z ZTP",
+            "każdy zmieniony DOCX w Microsoft Word",
+            "automat wykonuje wyłącznie literalną zmianę",
+        ):
+            self.assertIn(value, text)
 
     def test_public_guide_documents_the_operational_docx_review(self):
         text = (ROOT / "przewodnik.html").read_text(encoding="utf-8")
@@ -106,14 +115,19 @@ class CommissionGuideTests(unittest.TestCase):
         for value in (
             "grid-template-columns:150px repeat(7,1fr)",
             'aria-label="Diagram statusów dyskusji"',
-            "Formularz wyniku",
+            "Zapisuje wynik",
             "GitHub: OUTDATED · bez DR",
             "GitHub: DUPLICATE · bez nowej DR",
             "Artefakty, które powstają",
-            "Zmieniony regulamin DOCX",
+            "1 albo 2 pary Markdown + DOCX",
+            "Jedno wydanie",
+            "Transakcja:",
             "Notacja",
         ):
             self.assertIn(value, text)
+        self.assertEqual(text.count("data-process-diagram="), 4)
+        for identifier in ("roles", "statuses", "paths", "artifacts"):
+            self.assertIn(f'data-process-diagram="{identifier}"', text)
 
     def test_status_diagram_is_unchanged_and_decision_diagram_shows_both_docx_paths(self):
         text = (ROOT / "_includes/process-diagrams.html").read_text(encoding="utf-8")

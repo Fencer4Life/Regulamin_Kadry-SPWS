@@ -105,9 +105,12 @@ input, select { width: 100%; margin-top: .3rem; padding: .7rem .75rem; border: 1
 .decision-content { max-width: 52rem; margin-block: 2.5rem; }
 .decision-content h2 { padding-top: .6rem; border-top: 1px solid var(--line); }
 .record-links { padding-top: 1.2rem; border-top: 1px solid var(--line); }
+.process-diagram { max-width: 100%; border-color: var(--line) !important; }
+.artifact-flow { padding: 1rem; border: 1px solid var(--line); border-radius: .75rem; background: var(--surface); }
+@media (prefers-color-scheme: dark) { .process-diagram svg { filter: brightness(.88) contrast(1.08); } .process-diagram > div { border-color: var(--line) !important; } }
 .site-footer { padding-block: 1.5rem; border-top: 1px solid var(--line); color: var(--muted); background: var(--surface); font-size: .85rem; }
 .hidden { display: none !important; }
 @media (max-width: 74rem) { .discussion-page-layout { left: auto; grid-template-columns: 1fr; width: 100%; transform: none; } .discussion-archive-panel { padding: 0; border: 0; background: transparent; } .discussion-archive-toggle { display: block; } .discussion-archive-content { display: none; margin-top: .7rem; padding: 1rem; border: 1px solid var(--line); border-radius: .7rem; background: color-mix(in srgb, var(--surface) 58%, var(--background)); } .discussion-archive-panel.is-open .discussion-archive-content { display: block; } }
 @media (max-width: 58rem) { .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); } .discussion-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 38rem) { .header-inner { align-items: flex-start; flex-direction: column; } .filters { grid-template-columns: 1fr; } .discussion-sync { align-items: stretch; flex-direction: column; } .discussion-grid { grid-template-columns: 1fr; } }
+@media (max-width: 38rem) { .header-inner { align-items: flex-start; flex-direction: column; } .filters { grid-template-columns: 1fr; } .discussion-sync { align-items: stretch; flex-direction: column; } .discussion-grid { grid-template-columns: 1fr; } .artifact-flow { align-items: stretch !important; flex-direction: column; text-align: center; } .artifact-flow > b { transform: rotate(90deg); } }
 @media print { .site-header, .site-footer, .filters, .result-count { display: none; } body { background: #fff; color: #000; } .decision-card { break-inside: avoid; box-shadow: none; } }

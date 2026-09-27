@@ -25,8 +25,8 @@ permalink: /przewodnik/
   <div class="guide-steps">
     <div class="guide-step"><b>1. Otwórz dyskusję</b><br>Podaj koordynatora i opisz problem.</div>
     <div class="guide-step"><b>2. Omów warianty</b><br>Komisja dopisuje argumenty i propozycje.</div>
-    <div class="guide-step"><b>3. Podsumuj wynik</b><br>Koordynator wkleja gotowy formularz.</div>
-    <div class="guide-step"><b>4. Sprawdź zmianę</b><br>Komisja zatwierdza DR i, gdy potrzeba, regulamin.</div>
+    <div class="guide-step"><b>3. Zapisz wynik</b><br>Koordynator uzupełnia pola wyniku w dyskusji.</div>
+    <div class="guide-step"><b>4. Sprawdź zmianę</b><br>Redaktor kontroluje brzmienie ZTP i każdy DOCX w Wordzie.</div>
     <div class="guide-step"><b>5. Opublikuj</b><br>Po scaleniu rejestr i dokument są aktualizowane.</div>
   </div>
   <p><a class="button" href="https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/new?category=propozycje-zmian-regulaminu">Otwórz nową dyskusję na GitHubie</a></p>
@@ -37,9 +37,9 @@ permalink: /przewodnik/
   <table class="role-table">
     <thead><tr><th>Rola</th><th>Odpowiedzialność</th><th>Czego ta rola nie oznacza</th></tr></thead>
     <tbody>
-      <tr><td><b>Komisja regulaminowa</b></td><td>Rozważa warianty, uzgadnia wynik oraz akceptuje kartę decyzji i brzmienie regulaminu.</td><td>Decyzji nie zastępuje samo zamknięcie wątku.</td></tr>
-      <tr><td><b>Koordynator dyskusji</b></td><td>Jest wskazywany przy otwarciu każdej dyskusji przez login GitHub. Porządkuje rozmowę i zapisuje uzgodniony wynik w formularzu; jego avatar jest widoczny na karcie dyskusji.</td><td>Nie podejmuje decyzji samodzielnie. Dla każdej dyskusji może to być inna osoba.</td></tr>
-      <tr><td><b>Redaktor regulaminu</b></td><td>Przenosi przyjętą decyzję do kanonicznego Markdown i pilnuje spójności całego regulaminu. DOCX tworzy automat. Początkowo funkcję może pełnić jedna osoba; później komisja może wskazać kolejne.</td><td>Nie zmienia sensu decyzji komisji.</td></tr>
+      <tr><td><b>Komisja regulaminowa</b></td><td>Rozważa warianty, rozstrzyga sprawę i akceptuje wynik oraz brzmienie regulacji.</td><td>Decyzji Komisji nie zastępuje etykieta, automat ani samo zamknięcie wątku.</td></tr>
+      <tr><td><b>Koordynator dyskusji</b></td><td>Jest wskazywany przy otwarciu dyskusji. Prowadzi rozmowę i zapisuje w jej polach uzgodniony wynik, uzasadnienie oraz wpływ na drugi regulamin.</td><td>Nie podejmuje decyzji samodzielnie i nie redaguje karty DR ręcznie.</td></tr>
+      <tr><td><b>Redaktor regulaminu</b></td><td>Przygotowuje w dyskusji dokładne brzmienie zgodne z ZTP, kontroluje spójność obu regulaminów i otwiera każdy zmieniony DOCX w Microsoft Word.</td><td>Nie zmienia sensu decyzji Komisji; automat wykonuje wyłącznie literalną zmianę.</td></tr>
     </tbody>
   </table>
 </section>
@@ -52,7 +52,7 @@ permalink: /przewodnik/
   <h2>Jak otworzyć i prowadzić dyskusję</h2>
   <ol>
     <li>Zaloguj się lub utwórz bezpłatne konto na GitHubie.</li>
-    <li>Wybierz „Otwórz nową dyskusję”. Wymagane są tylko dwa pola: <b>Koordynator dyskusji</b> i <b>Problem</b>.</li>
+    <li>Wybierz formularz <b>zmiany jednego regulaminu</b> albo <b>wspólnej zmiany obu regulaminów</b> i wskaż Koordynatora.</li>
     <li>Opcjonalnie wybierz priorytet i obszar oraz dopisz rozwiązanie, alternatywy, materiały i element, od którego dyskusja zależy.</li>
     <li>Odpowiadaj komentarzami. Dla krótkiej, oczywistej sprawy dyskusja może od razu przejść do rozstrzygnięcia — nie obowiązuje minimalny czas ani liczba komentarzy.</li>
   </ol>
@@ -61,12 +61,12 @@ permalink: /przewodnik/
 <section class="guide-card">
   <h2>Jak zamknięta dyskusja staje się decyzją</h2>
   <ol>
-    <li>Po uzgodnieniu wyniku Koordynator dodaje etykietę <b>rozstrzygnięta</b>. Nie trzeba niczego przepisywać do komentarza.</li>
+    <li>Po decyzji Komisji Koordynator uzupełnia wynik i uzasadnienie w opisie dyskusji, a następnie dodaje etykietę <b>rozstrzygnięta</b>. Nie trzeba niczego przepisywać do komentarza. Karta DR również powstaje bez ręcznego przepisywania.</li>
     <li>Przed rozstrzygnięciem w opisie dyskusji wpisz <b>Uzasadnienie</b>, <b>Fragment Markdown do zastąpienia</b> i <b>Nowe brzmienie Markdown</b>. Zachowaj znaczniki i wcięcia źródła.</li>
     <li>Automat tworzy kompletną kartę i draft PR. Nie uzupełniasz karty i nie zaznaczasz Tak/Nie. Brakujące dane poprawiaj w dyskusji; jeśli PR jeszcze nie powstał, ponów etykietę rozstrzygnięta.</li>
     <li>Na <b>Pull Requeście</b> nadaj <b>wdrażaj</b>. Automat pobiera aktualne dane z dyskusji, wykonuje dokładną zmianę i generuje DOCX bez LLM. Poczekaj na <b>DOCX do sprawdzenia</b> i zielone CI. Nowa karta wymagająca zmiany dokumentu nie przejdzie kontroli scalenia bez wdrożenia. Ponowne nadanie etykiety nie stosuje wdrożonej zmiany drugi raz. Kolejną zmianę po wdrożeniu zgłoś w nowej dyskusji.</li>
     <li>Decyzja bez zmiany dokumentu: oba fragmenty pozostają puste; wymagane są Uzasadnienie i Proponowane rozwiązanie. Nie nadajesz wdrażaj.</li>
-    <li>Komisja przegląda kartę i dokument. Po akceptacji i scaleniu publikowane są DR oraz regulamin, a dyskusja jest technicznie zamykana jako <b>RESOLVED</b>. Dla użytkownika pozostaje <b>Rozstrzygnięta</b>.</li>
+    <li>Redaktor otwiera każdy zmieniony DOCX w Wordzie, a Komisja przegląda kartę i dokumenty. Po akceptacji i scaleniu jedno wydanie publikuje DR oraz wszystkie objęte decyzją DOCX, a dyskusja jest zamykana jako <b>RESOLVED</b>. Dla użytkownika pozostaje <b>Rozstrzygnięta</b>.</li>
   </ol>
 </section>
 
