@@ -30,7 +30,7 @@ class DecisionPatchTests(unittest.TestCase):
                 output.write_bytes(regulation.docx_path().read_bytes())
                 sources[regulation.identifier] = source
             old_representation = "<!-- unit:cel-glowny -->"
-            old_competition = "<!-- unit:cel-zalozenia -->"
+            old_competition = "<!-- unit:cel-glowny -->"
             card = root / "DR-999.md"
             card.write_text(
                 '---\nstatus: przyjęta\ndokumenty: ["reprezentacja", "zawody"]\n---\n\n'

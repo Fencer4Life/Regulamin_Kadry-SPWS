@@ -63,7 +63,7 @@ class EditorialChangeTests(unittest.TestCase):
             source.parent.mkdir(parents=True)
             source.write_bytes(regulation.source_path().read_bytes())
             docx.write_bytes(regulation.docx_path().read_bytes())
-            old = "<!-- unit:cel-zalozenia -->"
+            old = "<!-- unit:cel-glowny -->"
             body = (
                 "### Dokument\nRegulamin Zawodów\n### Wynik decyzji\nPrzyjęta\n"
                 "### Problem\nLiterówka.\n### Uzasadnienie\nKorekta bez zmiany sensu.\n"
