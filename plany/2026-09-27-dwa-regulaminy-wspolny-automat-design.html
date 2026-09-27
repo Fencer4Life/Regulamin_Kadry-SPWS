@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dwa spójne regulaminy i jeden automat — projekt</title>
+<style>
+  :root{
+    --bg:#e8ecf3; --surface:#ffffff; --surface-2:#dce2ec;
+    --ink:#0f1319; --muted:#414b59; --faint:#6b7482;
+    --line:#c9d1dc; --line-strong:#b3bdcc;
+    --accent:#12467e; --accent-ink:#0d3763; --accent-soft:#dbe7f5;
+    --danger:#9e2418; --danger-soft:#f7ddd9;
+    --good:#0f5f37; --good-soft:#d8eede;
+    --warn:#7a4d02; --warn-soft:#f4e6c8;
+    --serif:"Iowan Old Style","Charter","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,"Cascadia Code",Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#12151b; --surface:#1b2029; --surface-2:#232935;
+      --ink:#f1f4f8; --muted:#aeb8c6; --faint:#7c8797;
+      --line:#2c333f; --line-strong:#3c4552;
+      --accent:#8cbdec; --accent-ink:#a9d0f5; --accent-soft:#1a2a3c;
+      --danger:#f59a90; --danger-soft:#331d1a;
+      --good:#6cdc98; --good-soft:#15271b;
+      --warn:#e6bd6f; --warn-soft:#282011;
+    }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:20px;line-height:1.62;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:56rem;margin:0 auto;padding:60px 30px 110px}
+  code,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  code{background:var(--surface-2);color:var(--ink);padding:.1em .4em;border-radius:5px;font-size:.82em;font-weight:600;border:1px solid var(--line)}
+  a{color:var(--accent)}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+  .eyebrow{font-family:var(--mono);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 16px;font-weight:700}
+  h1{font-family:var(--serif);font-weight:700;font-size:clamp(38px,6vw,56px);line-height:1.06;letter-spacing:-.015em;margin:0 0 20px;text-wrap:balance;max-width:19ch;color:var(--ink)}
+  .dek{font-size:23px;line-height:1.5;color:var(--muted);margin:0 0 28px;max-width:56ch}
+  .dek b{color:var(--ink);font-weight:700}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 8px}
+  .pill{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:14px;letter-spacing:.02em;font-weight:600;padding:7px 13px;border-radius:7px;border:1px solid var(--line-strong);background:var(--surface);color:var(--muted)}
+  .pill .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+  .pill.warn .dot{background:var(--warn)}
+  .rule{height:2px;background:var(--line);border:0;margin:48px 0}
+  section{margin-top:52px}
+  .kicker{font-family:var(--mono);font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 10px}
+  h2{font-family:var(--serif);font-weight:700;font-size:33px;line-height:1.14;letter-spacing:-.012em;margin:0 0 18px;text-wrap:balance;color:var(--ink)}
+  h3{font-size:20px;font-weight:800;margin:26px 0 10px;letter-spacing:.005em;color:var(--ink)}
+  p{margin:0 0 16px;max-width:64ch}
+  ul,ol{margin:0 0 16px;padding-left:1.4em;max-width:64ch}
+  li{margin:9px 0}
+  li::marker{color:var(--accent)}
+  strong{font-weight:700;color:var(--ink)}
+  .note{border:1px solid var(--line);border-left-width:5px;border-radius:10px;background:var(--surface);padding:18px 22px;margin:20px 0;max-width:none}
+  .note>:last-child{margin-bottom:0}
+  .note .lede{font-weight:800;font-size:19px;margin:0 0 8px;display:flex;align-items:center;gap:11px}
+  .note.danger{border-left-color:var(--danger);background:var(--danger-soft)}
+  .note.danger .lede{color:var(--danger)}
+  .note.good{border-left-color:var(--good);background:var(--good-soft)}
+  .note.good .lede{color:var(--good)}
+  .note.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+  .note.warn .lede{color:var(--warn)}
+  .note.accent{border-left-color:var(--accent);background:var(--accent-soft)}
+  .note.accent .lede{color:var(--accent-ink)}
+  .tick{font-family:var(--mono);font-weight:800;font-size:17px}
+  .tablewrap{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:10px}
+  table{border-collapse:collapse;width:100%;font-size:17px;min-width:560px}
+  th,td{text-align:left;vertical-align:top;padding:13px 16px;border-bottom:1px solid var(--line)}
+  tr:last-child td{border-bottom:0}
+  thead th{background:var(--surface-2);font-family:var(--mono);font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700}
+  tbody tr:hover{background:var(--surface-2)}
+  td code{background:transparent;border:0;padding:0;font-size:.9em;color:var(--muted)}
+  .chip{font-family:var(--mono);font-size:13px;font-weight:800;letter-spacing:.03em;padding:3px 9px;border-radius:6px;white-space:nowrap}
+  .chip.good{color:var(--good);background:var(--good-soft)}
+  .chip.warn{color:var(--warn);background:var(--warn-soft)}
+  .chip.accent{color:var(--accent);background:var(--accent-soft)}
+  ol.steps{counter-reset:step;list-style:none;padding-left:0;max-width:64ch}
+  ol.steps>li{position:relative;padding-left:48px;margin:15px 0;min-height:32px}
+  ol.steps>li::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:-2px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:800;background:var(--accent);color:#fff}
+  blockquote{margin:18px 0;padding:16px 20px;border-left:5px solid var(--accent);background:var(--surface);border-radius:0 10px 10px 0}
+  blockquote p{max-width:none}
+  .foot{margin-top:60px;padding-top:24px;border-top:2px solid var(--line);font-size:15px;color:var(--faint);font-family:var(--mono)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">SPWS · dwa regulaminy · wspólny proces · specyfikacja</p>
+  <h1>Dwa spójne regulaminy i jeden automat</h1>
+  <p class="dek">Pełna redakcja <b>Regulaminu współzawodnictwa</b>, wspólne pojęcia i cel z <b>Regulaminem powoływania reprezentacji</b> oraz jeden proces: dyskusja → decyzja → Markdown → DOCX → kontrola → wydanie.</p>
+  <div class="meta">
+    <span class="pill"><span class="dot"></span>Projekt zatwierdzony 27.09.2026</span>
+    <span class="pill">TDD + Ruff</span>
+    <span class="pill warn"><span class="dot"></span>Kontrola Word przed scaleniem</span>
+  </div>
+
+  <hr class="rule">
+
+  <section>
+    <p class="kicker">Rezultat</p>
+    <h2>Dwa dokumenty, jedna logika regulacyjna</h2>
+    <p>Repozytorium obsługuje dwa samodzielne dokumenty. Regulamin powoływania jest nadrzędny w sprawach Rankingu i reprezentacji. Regulamin współzawodnictwa określa krajowe PPW, indywidualne MPW i drużynowe MPW oraz techniczne wykorzystanie danych Rankingu podczas zawodów.</p>
+    <div class="note good">
+      <p class="lede"><span class="tick">✓</span> Wspólny cel</p>
+      <p>Oba dokumenty wspierają wyłonienie możliwie najsilniejszej reprezentacji Polski weteranów w szermierce. Współzawodnictwo dostarcza przejrzystych, porównywalnych i wiarygodnych wyników; regulamin powołań określa, jak wyniki prowadzą do nominacji.</p>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">Zakres dokumentów</p>
+    <h2>Wyraźna granica odpowiedzialności</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Dokument</th><th>Odpowiada za</th><th>Nie reguluje</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Regulamin powoływania reprezentacji</strong></td><td>Ranking, punktację, kwalifikowanie i powoływanie do reprezentacji, drużyny, terminy procesu.</td><td>Technicznego przebiegu krajowych PPW i MPW.</td></tr>
+        <tr><td><strong>Regulamin współzawodnictwa</strong></td><td>Organizację i przebieg PPW, indywidualnych MPW i drużynowych MPW, Klasyfikację łączoną, protokoły i przekazanie wyników.</td><td>Zasad powoływania reprezentacji oraz samodzielnego, konkurencyjnego systemu rankingowego.</td></tr>
+      </tbody>
+    </table></div>
+    <blockquote><p>Zasady tworzenia i prowadzenia Rankingu wyłaniania Reprezentacji Polski Weteranów oraz zasady kwalifikowania i powoływania zawodników do reprezentacji Polski określa odrębny „Regulamin powoływania Reprezentacji Polski Weteranów w szermierce”. Niniejszy Regulamin określa organizację i przebieg krajowych zawodów weteranów oraz techniczne wykorzystanie danych Rankingu podczas tych zawodów. W sprawach dotyczących Rankingu i wyłaniania reprezentacji, w przypadku rozbieżności między dokumentami, stosuje się postanowienia regulaminu powoływania reprezentacji.</p></blockquote>
+  </section>
+
+  <section>
+    <p class="kicker">Nowy dokument</p>
+    <h2>Pełna redakcja zgodna z ZTP</h2>
+    <p>Źródłem jest 24-stronicowy „Regulamin współzawodnictwa sportowego w kategorii Weteran” opublikowany przez SPWS. Źródłowy PDF i strona SPWS pozostają bez zmian. Nowa wersja powstaje w repozytorium jako kanoniczny Markdown i generowany DOCX.</p>
+    <p><code>regulamin-wspolzawodnictwa/Regulamin-wspolzawodnictwa-sportowego-w-kategorii-Weteran_2026-2027.md</code></p>
+    <p><code>regulamin-wspolzawodnictwa/Regulamin-wspolzawodnictwa-sportowego-w-kategorii-Weteran_2026-2027.docx</code></p>
+    <h3>Układ merytoryczny</h3>
+    <ol>
+      <li>Postanowienia ogólne.</li>
+      <li>Kategorie wiekowe V0–V4.</li>
+      <li>Kalendarz i powierzanie organizacji zawodów.</li>
+      <li>Obowiązki organizatora.</li>
+      <li>Zgłoszenia i warunki udziału.</li>
+      <li>Komisja Techniczna, sędziowie i spory.</li>
+      <li>Zasady bezpieczeństwa.</li>
+      <li>Formuła indywidualnych PPW i MPW.</li>
+      <li>Klasyfikacja łączona i rozstawienie pierwszej rundy.</li>
+      <li>Eliminacja bezpośrednia i klasyfikacja końcowa.</li>
+      <li>Drużynowe MPW.</li>
+      <li>Wyniki, protokoły i przekazywanie danych do Rankingu.</li>
+      <li>Postanowienia końcowe.</li>
+      <li>Załączniki dotyczące bezpieczeństwa i formularzy.</li>
+    </ol>
+    <div class="note accent">
+      <p class="lede">Zasada redakcji</p>
+      <p>Zachować sens przepisów organizacyjnych, usunąć pozorne regulowanie zawodów EVF i FIE, naprawić numerację i powtórzenia, a stare zasady wyłaniania reprezentacji zastąpić odesłaniem do dokumentu nadrzędnego. Załączniki przechodzą redakcję językową i strukturalną bez niejawnej zmiany ich sensu.</p>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">Wspólna reguła</p>
+    <h2>Dwa najlepsze PPW plus pozycja MPW</h2>
+    <p>Oba regulaminy zapisują tę samą konstrukcję krajowej części Rankingu:</p>
+    <blockquote><p>Krajową część Rankingu tworzą trzy pozycje wynikowe: dwa najlepsze wyniki punktowe zawodnika uzyskane w zawodach PPW oraz wynik punktowy uzyskany w MPW. Jeżeli zawodnik uzyskał mniej niż dwa wyniki w PPW, za każdą niewypełnioną pozycję przyjmuje się 0 punktów. Jeżeli zawodnik nie wystartował w MPW, za obowiązkową pozycję MPW przyjmuje się 0 punktów; brak startu w MPW nie powoduje usunięcia zawodnika z Rankingu.</p></blockquote>
+    <p>Klasyfikacja Pucharu Polski Weteranów nie jest osobną bazą ani konkurencyjnym rankingiem. Jest widokiem Rankingu po zastosowaniu filtra „tylko PPW”, obejmującego PPW i MPW, i pokazuje sumę dwóch najlepszych PPW oraz pozycji MPW.</p>
+  </section>
+
+  <section>
+    <p class="kicker">Kluczowy przepis zawodów</p>
+    <h2>Klasyfikacja łączona</h2>
+    <ol>
+      <li>W PPW i indywidualnych MPW pierwszą rundę grupową rozgrywa się we wspólnej puli kobiet i mężczyzn, z kategoriami V0–V4.</li>
+      <li>Klasyfikację łączoną sporządza się osobno dla każdej broni na podstawie bieżącego stanu Rankingu wyłaniania Reprezentacji Polski Weteranów w chwili wygenerowania XML do programu obsługującego zawody.</li>
+      <li>Ranking prowadzi się osobno dla każdej broni, płci i kategorii wiekowej.</li>
+      <li>V0 służy wyłącznie krajowym PPW i MPW i nie stanowi podstawy powołania. Uwzględnia punkty z PPW, MPW, PPS i MPS; nie uwzględnia EVF ani FIE, ponieważ nie prowadzą kategorii V0.</li>
+      <li>Dla zawodnika z dodatnim dorobkiem przyjmuje się rzeczywiste miejsce we właściwym Rankingu. Nie przelicza się miejsca z powodu absencji osób sklasyfikowanych wyżej.</li>
+      <li>Kroki obejmują kolejno wszystkich zawodników z miejsca 1, miejsca 2 i dalszych rzeczywistych miejsc.</li>
+      <li>W kroku decydują kolejno: punkty malejąco; kategorie MV0, MV1, MV2, MV3, MV4, KV0, KV1, KV2, KV3, KV4; nazwisko i imię alfabetycznie.</li>
+      <li>Po zawodnikach z punktami umieszcza się wszystkich bez punktów: najpierw mężczyzn, potem kobiety; w każdej płci od najmłodszych do najstarszych; następnie alfabetycznie według nazwiska i imienia.</li>
+      <li>Kolejne pozycje są numerami rozstawienia do pierwszej rundy. Drugą rundę rozstawia się wyłącznie według wyników pierwszej rundy.</li>
+    </ol>
+  </section>
+
+  <section>
+    <p class="kicker">Pojęcia i założenia</p>
+    <h2>Wspólne, zakresowe i lokalne</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Rodzaj</th><th>Przykład</th><th>Kontrola</th></tr></thead>
+      <tbody>
+        <tr><td><span class="chip good">wspólne</span></td><td>SPWS, PZSz, PPW, MPW, Ranking, sezon, kategoria wiekowa.</td><td>Identyczne znaczenie; preferowane identyczne brzmienie.</td></tr>
+        <tr><td><span class="chip warn">zakresowe</span></td><td>V0: część systemu krajowego, ale nie podstawa powołań.</td><td>Różnica dozwolona wyłącznie w jawnie opisany sposób.</td></tr>
+        <tr><td><span class="chip accent">lokalne</span></td><td>Klasyfikacja łączona.</td><td>Występuje tylko w regulaminie współzawodnictwa.</td></tr>
+      </tbody>
+    </table></div>
+    <blockquote><p>Celem Regulaminu jest zapewnienie przejrzystej, równej i bezpiecznej rywalizacji w krajowych zawodach weteranów oraz uzyskiwanie kompletnych, wiarygodnych i porównywalnych wyników, które zasilają Ranking i wspierają wyłonienie możliwie najsilniejszej reprezentacji Polski weteranów w szermierce.</p></blockquote>
+    <p>Wspólne założenia to równe traktowanie, przejrzystość, porównywalność wyników, wiarygodność danych oraz stosowanie opublikowanych zasad.</p>
+  </section>
+
+  <section>
+    <p class="kicker">Architektura automatu</p>
+    <h2>Jeden silnik, rejestr dokumentów</h2>
+    <p>Repozytorium pozostaje wspólne. Nie kopiuje się automatu do drugiego repo. Rejestr dokumentów opisuje stabilny identyfikator, ścieżkę Markdown, ścieżkę DOCX, nazwę publikacyjną i zestaw walidatorów. Historyczne skrypty migracyjne pozostają specyficzne i nie są sztucznie uogólniane.</p>
+    <ul>
+      <li>Generator przyjmuje identyfikator dokumentu albo jawne ścieżki.</li>
+      <li>Walidacja zawsze parsuje i buduje oba regulaminy.</li>
+      <li>Jedna decyzja może dotyczyć jednego albo obu dokumentów.</li>
+      <li>Zmiana wielodokumentowa jest atomowa: błąd jednego dokumentu zachowuje oba poprzednie DOCX.</li>
+      <li>Jeden PR i jedno wydanie na decyzję zawierają wszystkie zmienione DOCX.</li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="kicker">Dyskusje i decyzje</p>
+    <h2>Dwa formularze, jeden model danych</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Formularz</th><th>Pola dokumentowe</th><th>Rezultat</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Zmiana jednego regulaminu</strong></td><td>Wybór Reprezentacja / Zawody / brak zmiany; jedna para fragmentów; obowiązkowy wpływ na drugi dokument.</td><td>Jedna zmiana albo decyzja procesowa.</td></tr>
+        <tr><td><strong>Wspólna zmiana obu regulaminów</strong></td><td>Dwie osobne pary fragmentów; obowiązkowe wyjaśnienie zgodności pojęć, założeń i celu.</td><td>Atomowa zmiana obu dokumentów.</td></tr>
+      </tbody>
+    </table></div>
+    <p>Obecna kategoria GitHub Discussions zachowuje obsługę pojedynczego dokumentu i zgodność historyczną. Nowa kategoria obsługuje wspólną zmianę. Oba formularze są normalizowane do jednego schematu karty; dane pochodzą wyłącznie z pól dyskusji.</p>
+    <h3>Etykiety dokumentów</h3>
+    <ul>
+      <li><code>Regulamin: Reprezentacja</code></li>
+      <li><code>Regulamin: Zawody</code></li>
+    </ul>
+    <p>Zmiana obu dokumentów ma obie etykiety, procesowa — żadnej. Widoki HTML wyświetlają te same oznaczenia i pozwalają po nich filtrować. Historyczne decyzje są w widoku domyślnie przypisane do Reprezentacji bez masowej edycji kart.</p>
+  </section>
+
+  <section>
+    <p class="kicker">HTML i publikacja</p>
+    <h2>Zakres widoczny bez otwierania karty</h2>
+    <ul>
+      <li>Karty otwartych i zamkniętych dyskusji pokazują etykiety dokumentów.</li>
+      <li>Rejestr Decyzji filtruje po Reprezentacji i Zawodach; decyzja wspólna pojawia się w obu filtrach.</li>
+      <li>Pełna karta decyzji pokazuje wpływ na drugi dokument i osobne sekcje zmian.</li>
+      <li>Karta zawiera odnośniki do właściwych Markdown i DOCX.</li>
+      <li>PR prezentuje osobny link „DOCX do sprawdzenia” dla każdego zmienionego dokumentu.</li>
+      <li>Wydanie pozostaje jedno na decyzję i dołącza jeden albo dwa dokumenty.</li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="kicker">TDD · bramki obowiązkowe</p>
+    <h2>Najpierw test, potem kod</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Warstwa</th><th>Testy wymagane przed implementacją</th></tr></thead>
+      <tbody>
+        <tr><td>Rejestr dokumentów</td><td>Poprawne ścieżki, unikalne identyfikatory, brak nieznanego dokumentu, budowanie wybranego i obu.</td></tr>
+        <tr><td>Atomowość</td><td>Błąd drugiego źródła nie zmienia żadnego Markdown ani DOCX.</td></tr>
+        <tr><td>Formularze</td><td>Jedna para dla pojedynczego dokumentu, dwie kompletne pary dla wspólnej zmiany, odrzucenie par częściowych i sprzecznego zakresu.</td></tr>
+        <tr><td>Karty decyzji</td><td>Bezpośrednie mapowanie pól, schema nowej wersji, zgodność wsteczna kart historycznych.</td></tr>
+        <tr><td>HTML</td><td>Etykiety, filtry, widoczność decyzji wspólnej w obu filtrach, brak etykiety dla decyzji procesowej.</td></tr>
+        <tr><td>ZTP</td><td>Przedmiot → definicje → cel; ciągła numeracja; stabilne identyfikatory; poprawne odesłania i hierarchia jednostek.</td></tr>
+        <tr><td>Markdown–DOCX</td><td>Pokrycie treści, deterministyczna generacja, kontrakt układu i zachowanie poprzedniego DOCX po błędzie.</td></tr>
+        <tr><td>Między dokumentami</td><td>Nazwa Rankingu, 2×PPW + MPW, 0 za brak MPW, V0, nadrzędność, wspólny cel, zgodność słowniczka.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note accent">
+      <p class="lede">Bramka CI</p>
+      <p><code>ruff format --check</code>, <code>ruff check</code>, pełne testy Python, walidacja obu Markdown, generacja i weryfikacja obu DOCX oraz testy spójności międzydokumentowej. Nie ma deklaracji sukcesu bez rzeczywiście zielonych poleceń.</p>
+    </div>
+    <p>Automat nie udaje pełnej semantycznej analizy prawa. Pilnuje jawnie zdefiniowanych reguł wspólnych, pojęć, założeń, celu, ZTP i zgodności źródła z DOCX. Pozostałe znaczenie ocenia człowiek.</p>
+  </section>
+
+  <section>
+    <p class="kicker">Przepływ zmiany</p>
+    <h2>Jedna decyzja, pełna odpowiedzialność</h2>
+    <ol class="steps">
+      <li>Autor wybiera formularz jednego dokumentu albo formularz wspólny.</li>
+      <li>Workflow nadaje etykiety dokumentów i publikuje dyskusję w HTML.</li>
+      <li>Po rozstrzygnięciu automat tworzy kartę decyzji ze źródłowych pól.</li>
+      <li>Etykieta <code>wdrażaj</code> uruchamia dokładne poprawki we wskazanych Markdown.</li>
+      <li>Automat sprawdza oba dokumenty, buduje kandydackie DOCX i publikuje linki w PR.</li>
+      <li>Redaktor otwiera każdy zmieniony DOCX w Microsoft Word i wybiera Approve albo Request changes.</li>
+      <li>Po scaleniu jedno wydanie publikuje kartę oraz wszystkie dokumenty objęte decyzją.</li>
+    </ol>
+  </section>
+
+  <section>
+    <p class="kicker">Etapy wdrożenia</p>
+    <h2>Małe, testowalne porcje</h2>
+    <ol>
+      <li><strong>Fundament:</strong> Ruff, rejestr dokumentów, wielodokumentowe build/verify, testy atomowości.</li>
+      <li><strong>Proces:</strong> dwa formularze, wspólny parser, nowy schemat decyzji, etykiety i zgodność historyczna.</li>
+      <li><strong>Prezentacja:</strong> dyskusje HTML, karty decyzji, filtry i linki do dokumentów.</li>
+      <li><strong>Treść:</strong> pełny regulamin współzawodnictwa zgodny z ZTP oraz uzgodniona zmiana regulaminu powołań.</li>
+      <li><strong>Spójność:</strong> testy wspólnego słowniczka, założeń, celu i reguł rankingowych.</li>
+      <li><strong>Publikacja:</strong> wielodokumentowe artefakty PR i jedno wydanie na decyzję.</li>
+    </ol>
+  </section>
+
+  <section>
+    <p class="kicker">Granice i ryzyka</p>
+    <h2>Co pozostaje jawne</h2>
+    <ul>
+      <li>Utworzenie drugiej kategorii GitHub Discussions jest operacją administracyjną poza samym commitem; formularz zacznie działać po istnieniu kategorii o zgodnym identyfikatorze.</li>
+      <li>Źródłowa strona i PDF SPWS nie są automatycznie publikowane ani zastępowane przez repozytorium.</li>
+      <li>Redakcja załączników bezpieczeństwa i formularzy nie jest w tym zakresie poradą prawną ani ukrytą zmianą odpowiedzialności.</li>
+      <li>Kontrola automatyczna nie zastępuje przeglądu komisji i kontroli Worda.</li>
+      <li>Nie dodaje się nowej zależności produkcyjnej bez osobnej zgody.</li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="kicker">Kryteria akceptacji</p>
+    <h2>Gotowe oznacza sprawdzone</h2>
+    <ul>
+      <li>W repo znajdują się nowe pliki Markdown i DOCX regulaminu współzawodnictwa.</li>
+      <li>Oba regulaminy przechodzą walidację ZTP i są zgodne ze swoimi DOCX.</li>
+      <li>Wspólne reguły, słowniczek, założenia i cel przechodzą testy międzydokumentowe.</li>
+      <li>Oba formularze tworzą poprawne karty i obsługują odpowiednio jeden albo dwa dokumenty.</li>
+      <li>Zmiana wspólna jest atomowa i generuje dwa dokumenty do przeglądu.</li>
+      <li>HTML poprawnie pokazuje i filtruje etykiety <code>Regulamin: Reprezentacja</code> oraz <code>Regulamin: Zawody</code>.</li>
+      <li>Ruff i pełny zestaw testów są zielone.</li>
+      <li>Każdy zmieniony DOCX został ręcznie sprawdzony w Microsoft Word przed scaleniem.</li>
+    </ul>
+  </section>
+
+  <p class="foot">specyfikacja projektu · dwa regulaminy · wspólny automat · 2026-09-27</p>
+</div>
+</body>
+</html>
