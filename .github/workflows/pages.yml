@@ -12,6 +12,7 @@ on:
 permissions:
   contents: read
   discussions: read
+  pull-requests: read
   pages: write
   id-token: write
 
@@ -35,6 +36,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - name: Oczekiwanie na zamknięcie dyskusji decyzji
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pr_number=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/pulls" --jq '[.[] | select(.merged_at != null) | select(any(.labels[]; .name == "decyzja")) | .number][0] // empty')
+          if [[ -z "$pr_number" ]]; then
+            exit 0
+          fi
+          path=$(gh pr view "$pr_number" --json files --jq '.files[].path | select(startswith("_decyzje/DR-") and endswith(".md"))' | head -n 1)
+          test -n "$path"
+          discussion_number=$(python narzedzia/resolve_discussion.py "$path")
+          for attempt in {1..30}; do
+            discussion_closed=$(gh api graphql -f query='query($owner:String!,$name:String!,$number:Int!){repository(owner:$owner,name:$name){discussion(number:$number){closed}}}' -f owner=Fencer4Life -f name=Regulamin_Kadry-SPWS -F number="$discussion_number" --jq '.data.repository.discussion.closed')
+            if [[ "$discussion_closed" == "true" ]]; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Dyskusja #${discussion_number} nie została zamknięta przed publikacją."
+          exit 1
       - name: Pobranie otwartych i zamkniętych dyskusji
         env:
           GH_TOKEN: ${{ github.token }}
