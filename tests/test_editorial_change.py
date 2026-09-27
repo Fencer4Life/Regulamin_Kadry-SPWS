@@ -5,7 +5,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from narzedzia.apply_editorial_change import apply_editorial_change
+from narzedzia.apply_editorial_change import (
+    apply_editorial_change,
+    apply_registered_editorial_change,
+)
+from narzedzia.regulation_registry import get_regulation
 
 
 def event(body: str) -> dict[str, object]:
@@ -51,6 +55,34 @@ nowe brzmienie
 
 
 class EditorialChangeTests(unittest.TestCase):
+    def test_registered_fast_path_uses_selected_document_and_shared_transaction(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            regulation = get_regulation("zawody")
+            source, docx = regulation.source_path(root), regulation.docx_path(root)
+            source.parent.mkdir(parents=True)
+            source.write_bytes(regulation.source_path().read_bytes())
+            docx.write_bytes(regulation.docx_path().read_bytes())
+            old = "<!-- unit:cel-zalozenia -->"
+            body = (
+                "### Dokument\nRegulamin Zawodów\n### Wynik decyzji\nPrzyjęta\n"
+                "### Problem\nLiterówka.\n### Uzasadnienie\nKorekta bez zmiany sensu.\n"
+                f"### Fragment Markdown do zastąpienia\n{old}\n"
+                f"### Nowe brzmienie Markdown\n{old} [REDAKCJA]\n"
+                "### Wpływ na drugi regulamin\nBrak wpływu.\n"
+            )
+            event_path = root / "event.json"
+            event_path.write_text(json.dumps(event(body)), encoding="utf-8")
+            decisions = root / "_decyzje"
+            decisions.mkdir()
+
+            card, selected = apply_registered_editorial_change(event_path, decisions, root)
+
+            self.assertEqual(selected, ("zawody",))
+            self.assertIn("[REDAKCJA]", source.read_text(encoding="utf-8"))
+            self.assertIn("applied-source-sha256:", card.read_text(encoding="utf-8"))
+            self.assertIn("typ: redakcyjna", card.read_text(encoding="utf-8"))
+
     def test_form_preserves_source_heading_and_indentation_in_before_after_fields(self):
         from narzedzia.create_decision_from_discussion import parse_discussion_form
 

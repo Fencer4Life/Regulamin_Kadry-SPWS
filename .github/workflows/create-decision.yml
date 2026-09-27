@@ -34,8 +34,6 @@ jobs:
           TRIGGER_LABEL: ${{ github.event.label.name }}
         run: |
           branch="decision/discussion-${DISCUSSION_NUMBER}"
-          source_path="regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md"
-          docx_path="regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
           candidate_path="/tmp/regulamin-candidate.docx"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -52,7 +50,7 @@ jobs:
             fi
           else
             if [ "$TRIGGER_LABEL" = "redakcja-bez-zmiany-sensu" ]; then
-              if ! python -m narzedzia.apply_editorial_change "$GITHUB_EVENT_PATH" _decyzje "$source_path" >/tmp/editorial-paths.txt 2>/tmp/decision-error.txt; then
+              if ! python -m narzedzia.apply_editorial_change "$GITHUB_EVENT_PATH" _decyzje --registered-root . >/tmp/editorial-paths.txt 2>/tmp/decision-error.txt; then
                 error=$(cat /tmp/decision-error.txt)
                 gh api graphql -f query='mutation($discussionId:ID!,$body:String!){addDiscussionComment(input:{discussionId:$discussionId,body:$body}){comment{id}}}' \
                   -F discussionId="$DISCUSSION_ID" \
@@ -60,6 +58,9 @@ jobs:
                 exit 1
               fi
               path=$(sed -n '1p' /tmp/editorial-paths.txt)
+              document_id=$(sed -n '2p' /tmp/editorial-paths.txt)
+              source_path=$(python -c 'import sys; from narzedzia.regulation_registry import get_regulation; print(get_regulation(sys.argv[1]).markdown)' "$document_id")
+              docx_path=$(python -c 'import sys; from narzedzia.regulation_registry import get_regulation; print(get_regulation(sys.argv[1]).docx)' "$document_id")
             elif ! path=$(python -m narzedzia.create_decision_from_discussion "$GITHUB_EVENT_PATH" _decyzje 2>/tmp/decision-error.txt); then
               error=$(cat /tmp/decision-error.txt)
               gh api graphql -f query='mutation($discussionId:ID!,$body:String!){addDiscussionComment(input:{discussionId:$discussionId,body:$body}){comment{id}}}' \
@@ -70,12 +71,9 @@ jobs:
             git switch -c "$branch"
           fi
           if [ "$TRIGGER_LABEL" = "redakcja-bez-zmiany-sensu" ]; then
-            python -m narzedzia.prepare_regulamin normalize-and-build "$source_path" "$candidate_path"
-            python -m narzedzia.normalize_regulamin_markdown "$source_path" --check
-            python tests/test_approved_sections_02_03.py "$candidate_path"
-            python tests/test_docx_pagination.py "$candidate_path"
+            python -m narzedzia.regulations verify --all
+            cp "$docx_path" "$candidate_path"
             REGULAMIN_DOCX_PATH="$candidate_path" python -m unittest tests.test_docx_publication_safety -v
-            cp "$candidate_path" "$docx_path"
             python -m narzedzia.docx_parity "$docx_path" "$candidate_path" >/tmp/docx-parity.json
             python -m unittest discover -s tests -v
             git add -- "$path" "$source_path" "$docx_path"
@@ -99,7 +97,8 @@ jobs:
           if [ "$TRIGGER_LABEL" = "redakcja-bez-zmiany-sensu" ]; then
             pr_number=$(gh pr view "$branch" --json number --jq .number)
             python -m narzedzia.pr_docx_link "$GITHUB_REPOSITORY" "$pr_number" "$(git rev-parse HEAD)" \
-              --run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+              --run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
+              --document "$document_id"
           fi
           gh workflow run validate.yml --repo "$GITHUB_REPOSITORY" --ref "$branch"
       - name: Kandydacki DOCX szybkiej korekty

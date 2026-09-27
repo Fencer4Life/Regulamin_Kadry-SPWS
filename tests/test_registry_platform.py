@@ -251,8 +251,8 @@ class RegistryPlatformTests(unittest.TestCase):
         for fragment in (
             "redakcja-bez-zmiany-sensu",
             "narzedzia.apply_editorial_change",
-            "prepare_regulamin normalize-and-build",
-            "normalize_regulamin_markdown",
+            "--registered-root",
+            "narzedzia.regulations verify --all",
             "REGULAMIN_DOCX_PATH",
             "docx_parity",
             "actions/upload-artifact",
@@ -271,6 +271,16 @@ class RegistryPlatformTests(unittest.TestCase):
             "narzedzia.validate_regulation_change",
             "actions/upload-artifact",
             "regulamin-candidate",
+        ):
+            self.assertIn(fragment, workflow)
+
+    def test_ci_builds_and_verifies_both_registered_regulations(self):
+        workflow = (ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+        for fragment in (
+            "narzedzia.regulations verify --all",
+            "narzedzia.regulations build-candidates --all",
+            "regulamin-reprezentacja-candidate",
+            "regulamin-zawody-candidate",
         ):
             self.assertIn(fragment, workflow)
 
@@ -306,6 +316,16 @@ class RegistryPlatformTests(unittest.TestCase):
             self.assertIn(fragment, text)
         self.assertNotIn("actions: write", text)
         self.assertNotIn("gh workflow run pages.yml", text)
+
+    def test_merged_decision_publishes_one_release_before_closing_discussion(self):
+        text = (ROOT / ".github" / "workflows" / "resolve-discussion.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("contents: write", text)
+        self.assertIn("narzedzia.publish_decision_release", text)
+        self.assertLess(
+            text.index("narzedzia.publish_decision_release"), text.index("closeDiscussion")
+        )
 
     def test_architecture_decision_index_keeps_newest_entries_first(self):
         index = (ROOT / "dokumentacja" / "adr" / "index.html").read_text(encoding="utf-8")

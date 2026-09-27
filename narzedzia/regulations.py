@@ -92,12 +92,34 @@ def verify_regulations(regulations: tuple[Regulation, ...], *, root: Path = ROOT
         verify(regulation.source_path(root), regulation.docx_path(root))
 
 
+def build_candidates(
+    regulations: tuple[Regulation, ...], output_dir: Path, *, root: Path = ROOT
+) -> tuple[Path, ...]:
+    if not regulations:
+        raise ValueError("Nie wskazano dokumentów do zbudowania")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    outputs = []
+    for regulation in regulations:
+        source = regulation.source_path(root)
+        candidate = output_dir / f"{regulation.artifact}.docx"
+        with tempfile.TemporaryDirectory(
+            prefix=f".{regulation.identifier}-", dir=output_dir
+        ) as directory:
+            normalized = Path(directory) / source.name
+            normalized.write_text(normalize_source(source), encoding="utf-8")
+            build_document(normalized, candidate)
+            verify(normalized, candidate)
+        outputs.append(candidate)
+    return tuple(outputs)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Buduje i sprawdza regulaminy z rejestru")
-    parser.add_argument("mode", choices=("normalize-and-build", "verify"))
+    parser.add_argument("mode", choices=("normalize-and-build", "build-candidates", "verify"))
     selection = parser.add_mutually_exclusive_group(required=True)
     selection.add_argument("--document", action="append", default=[])
     selection.add_argument("--all", action="store_true", dest="all_documents")
+    parser.add_argument("--output-dir", type=Path)
     arguments = parser.parse_args()
 
     regulations = select_regulations(
@@ -106,9 +128,18 @@ def main() -> None:
         all_documents=arguments.all_documents,
     )
     if arguments.mode == "normalize-and-build":
+        if arguments.output_dir is not None:
+            parser.error("--output-dir dotyczy wyłącznie build-candidates")
         for output in build_regulations(regulations):
             print(output)
+    elif arguments.mode == "build-candidates":
+        if arguments.output_dir is None:
+            parser.error("build-candidates wymaga --output-dir")
+        for output in build_candidates(regulations, arguments.output_dir):
+            print(output)
     else:
+        if arguments.output_dir is not None:
+            parser.error("--output-dir dotyczy wyłącznie build-candidates")
         verify_regulations(regulations)
         print("OK: wszystkie wskazane Markdown i DOCX są zgodne")
 

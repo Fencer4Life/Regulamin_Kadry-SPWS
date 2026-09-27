@@ -10,7 +10,7 @@ on:
         type: number
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: read
   discussions: write
 
@@ -28,6 +28,9 @@ jobs:
           gh pr view "$PR_NUMBER" --json mergedAt,labels --jq '(.mergedAt != null) and any(.labels[]; .name == "decyzja")' | grep -qx true
           path=$(gh pr view "$PR_NUMBER" --json files --jq '.files[].path | select(startswith("_decyzje/DR-") and endswith(".md"))' | head -n 1)
           test -n "$path"
+          merge_sha=$(gh pr view "$PR_NUMBER" --json mergeCommit --jq '.mergeCommit.oid')
+          [[ "$merge_sha" =~ ^[0-9a-f]{40}$ ]]
+          python -m narzedzia.publish_decision_release "$GITHUB_REPOSITORY" "$merge_sha" "$path" --root .
           discussion_number=$(python narzedzia/resolve_discussion.py "$path")
           discussion=$(gh api graphql -f query='query($owner:String!,$name:String!,$number:Int!){repository(owner:$owner,name:$name){discussion(number:$number){id closed}}}' -f owner=Fencer4Life -f name=Regulamin_Kadry-SPWS -F number="$discussion_number")
           discussion_id=$(jq -r '.data.repository.discussion.id' <<< "$discussion")

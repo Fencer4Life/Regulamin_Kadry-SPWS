@@ -32,6 +32,8 @@ jobs:
       - name: Zbudowanie i kontrola kandydackiego DOCX
         run: |
           mkdir -p .artifacts
+          python -m narzedzia.regulations verify --all
+          python -m narzedzia.regulations build-candidates --all --output-dir .artifacts
           python -m narzedzia.normalize_regulamin_markdown \
             regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md \
             --check
@@ -54,6 +56,20 @@ jobs:
           name: regulamin-candidate
           path: |
             .artifacts/regulamin-candidate.docx
+          if-no-files-found: error
+          retention-days: 14
+      - name: Kandydat Regulaminu Reprezentacji
+        uses: actions/upload-artifact@v4
+        with:
+          name: regulamin-reprezentacja-candidate
+          path: .artifacts/regulamin-reprezentacja-candidate.docx
+          if-no-files-found: error
+          retention-days: 14
+      - name: Kandydat Regulaminu Zawodów
+        uses: actions/upload-artifact@v4
+        with:
+          name: regulamin-zawody-candidate
+          path: .artifacts/regulamin-zawody-candidate.docx
           if-no-files-found: error
           retention-days: 14
       - name: Pokrycie źródła i E2E decyzja Markdown DOCX

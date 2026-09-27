@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
-import sys
 from pathlib import Path
 
 from narzedzia.create_decision_from_discussion import create, parse_discussion_form
-from narzedzia.decision_patch import replace_exact
+from narzedzia.decision_patch import apply_registered_decision, document_ids, replace_exact
 
 EMPTY_FORM_VALUES = {"", "_No response_"}
 
@@ -55,12 +55,49 @@ def apply_editorial_change(
     return card_path, source_path
 
 
+def apply_registered_editorial_change(
+    event_path: Path, decisions_dir: Path, root: Path
+) -> tuple[Path, tuple[str, ...]]:
+    card_path = create(event_path, decisions_dir)
+    try:
+        card = card_path.read_text(encoding="utf-8")
+        identifiers = document_ids(card)
+        if len(identifiers) != 1:
+            raise ValueError("Szybka korekta redakcyjna może dotyczyć tylko jednego regulaminu")
+        card_path.write_text(
+            card.replace("typ: merytoryczna", "typ: redakcyjna", 1),
+            encoding="utf-8",
+        )
+        apply_registered_decision(card_path, root)
+    except Exception:
+        card_path.unlink(missing_ok=True)
+        raise
+    return card_path, identifiers
+
+
 def main() -> None:
-    card_path, source_path = apply_editorial_change(
-        Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3])
-    )
-    print(card_path)
-    print(source_path)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("event", type=Path)
+    parser.add_argument("decisions", type=Path)
+    parser.add_argument("source", type=Path, nargs="?")
+    parser.add_argument("--registered-root", type=Path)
+    arguments = parser.parse_args()
+    if arguments.registered_root is not None:
+        if arguments.source is not None:
+            parser.error("--registered-root nie łączy się ze ścieżką source")
+        card_path, identifiers = apply_registered_editorial_change(
+            arguments.event, arguments.decisions, arguments.registered_root
+        )
+        print(card_path)
+        print(*identifiers, sep="\n")
+    elif arguments.source is not None:
+        card_path, source_path = apply_editorial_change(
+            arguments.event, arguments.decisions, arguments.source
+        )
+        print(card_path)
+        print(source_path)
+    else:
+        parser.error("podaj source albo --registered-root")
 
 
 if __name__ == "__main__":

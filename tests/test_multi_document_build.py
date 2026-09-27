@@ -5,8 +5,13 @@ import unittest
 from pathlib import Path
 
 from narzedzia.normalize_regulamin_markdown import normalize_source
-from narzedzia.regulation_registry import Regulation
-from narzedzia.regulations import build_regulations, select_regulations, verify_regulations
+from narzedzia.regulation_registry import Regulation, all_regulations
+from narzedzia.regulations import (
+    build_candidates,
+    build_regulations,
+    select_regulations,
+    verify_regulations,
+)
 from tests.test_docx_current_contract import CANONICAL_SOURCE
 
 COMPETITION_SOURCE = (
@@ -30,6 +35,29 @@ def regulation(identifier: str, directory: str) -> Regulation:
 
 
 class MultiDocumentBuildTests(unittest.TestCase):
+    def test_candidate_export_uses_registered_artifact_names_without_mutating_sources(self):
+        documents = all_regulations()
+        before = {
+            path: path.read_bytes()
+            for item in documents
+            for path in (item.source_path(), item.docx_path())
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            outputs = build_candidates(documents, Path(directory))
+            self.assertEqual(
+                {path.name for path in outputs},
+                {f"{item.artifact}.docx" for item in documents},
+            )
+            self.assertTrue(all(path.is_file() for path in outputs))
+        self.assertEqual(
+            {
+                path: path.read_bytes()
+                for item in documents
+                for path in (item.source_path(), item.docx_path())
+            },
+            before,
+        )
+
     def test_normalization_preserves_publication_blocks_without_points_annex(self):
         normalized = normalize_source(COMPETITION_SOURCE)
 
