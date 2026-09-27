@@ -132,6 +132,13 @@ def serialize_regulation(model: RegulationDocument) -> str:
         for note in model.annex_notes:
             _serialize_note(note, lines)
             lines.append("")
+    elif model.publication:
+        lines.append(
+            "".join(
+                wrap(key, model.publication[key]) for key in ("annex-heading", "annex-note")
+            ).rstrip()
+        )
+        lines.append("")
     if model.publication:
         lines.append(
             "".join(wrap(key, model.publication[key]) for key in ("history", "running")).rstrip()

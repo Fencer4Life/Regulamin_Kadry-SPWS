@@ -33,6 +33,8 @@ class RegulationRegistryTests(unittest.TestCase):
             self.assertEqual(regulation.markdown.suffix, ".md")
             self.assertEqual(regulation.docx.suffix, ".docx")
             self.assertEqual(regulation.markdown.with_suffix(""), regulation.docx.with_suffix(""))
+            self.assertTrue(regulation.source_path().is_file())
+            self.assertTrue(regulation.docx_path().is_file())
 
     def test_unknown_document_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "Nieznany dokument"):
