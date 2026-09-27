@@ -21,16 +21,33 @@ class PrDecisionTests(unittest.TestCase):
     def test_label_pr_may_change_only_decision_and_document_data(self):
         from narzedzia.pr_decision import check_changed_paths
         from narzedzia.pr_docx_link import DOCX, SOURCE
+        from narzedzia.regulation_registry import get_regulation
 
         card = "_decyzje/DR-026-test.md"
-        check_changed_paths([{"filename": p} for p in (card, SOURCE, DOCX)], card)
+        check_changed_paths(
+            [{"filename": p} for p in (card, SOURCE, DOCX)], card, ("reprezentacja",)
+        )
+        competition = get_regulation("zawody")
+        with self.assertRaises(ValueError):
+            check_changed_paths(
+                [
+                    {"filename": card},
+                    {"filename": SOURCE},
+                    {"filename": DOCX},
+                    {"filename": str(competition.markdown)},
+                ],
+                card,
+                ("reprezentacja",),
+            )
         for extra in (
             ".github/workflows/validate.yml",
             "narzedzia/pr_decision.py",
             "tests/test_fake.py",
         ):
             with self.assertRaises(ValueError):
-                check_changed_paths([{"filename": card}, {"filename": extra}], card)
+                check_changed_paths(
+                    [{"filename": card}, {"filename": extra}], card, ("reprezentacja",)
+                )
 
     def test_ci_is_dispatched_automatically_with_actions_permission(self):
         root = Path(__file__).resolve().parents[1]

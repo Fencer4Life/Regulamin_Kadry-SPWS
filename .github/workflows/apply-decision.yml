@@ -41,8 +41,6 @@ jobs:
           mapfile -t cards < <(find _decyzje -maxdepth 1 -type f | grep -E "^_decyzje/${DECISION_ID}[-.].*\.md$")
           [[ ${#cards[@]} == 1 ]] || { echo "Nie znaleziono jednej karty decyzji"; exit 1; }
           card="${cards[0]}"
-          source="regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md"
-          docx="regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
           branch="$GITHUB_REF_NAME"
           if [[ "$branch" == main ]]; then
             branch="decision/apply-${DECISION_ID}"
@@ -58,13 +56,19 @@ jobs:
             git switch "$branch"
           fi
           python -c 'import sys; from pathlib import Path; from narzedzia.pr_decision import refresh_from_discussion; refresh_from_discussion(Path(sys.argv[1]), sys.argv[2])' "$card" "$GITHUB_REPOSITORY"
-          python -m narzedzia.decision_patch "$card" "$source" "$docx"
-          python -m narzedzia.prepare_regulamin verify "$source" "$docx"
+          mapfile -t document_ids < <(python -c 'import sys; from pathlib import Path; from narzedzia.decision_patch import document_ids; print(*document_ids(Path(sys.argv[1]).read_text(encoding="utf-8")), sep="\n")' "$card")
+          mapfile -t document_paths < <(python -c 'import sys; from pathlib import Path; from narzedzia.decision_patch import registered_paths; print(*(str(path) for pair in registered_paths(Path(sys.argv[1]).read_text(encoding="utf-8"), Path(".")).values() for path in pair), sep="\n")' "$card")
+          doc_args=()
+          for document_id in "${document_ids[@]}"; do
+            doc_args+=(--document "$document_id")
+          done
+          python -m narzedzia.decision_patch "$card" --registered-root .
+          python -m narzedzia.regulations verify --all
           python -m unittest discover -s tests -v
           git diff --check
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -- "$card" "$source" "$docx"
+          git add -- "$card" "${document_paths[@]}"
           git diff --cached --check
           git commit -m "docs: apply exact change from ${DECISION_ID}"
           git push origin "HEAD:$branch"
@@ -74,9 +78,10 @@ jobs:
           else
             gh pr create --draft --base main --head "$branch" \
               --title "Wdrożenie ${DECISION_ID}: dokładna zmiana Markdown" \
-              --body "Automat bez LLM zastosował dosłowną zmianę z karty ${DECISION_ID}. Sprawdź diff źródła i DOCX przed Approve. [DOCX](https://github.com/${GITHUB_REPOSITORY}/raw/refs/heads/${branch}/${docx}) · [Źródło Markdown](https://github.com/${GITHUB_REPOSITORY}/blob/${branch}/${source}). Testy i kontrola zgodności wykonane w tym uruchomieniu Actions."
+              --body "Automat bez LLM zastosował dosłowną zmianę z karty ${DECISION_ID}. Sprawdź diff źródeł i wszystkie wskazane DOCX przed Approve. Przypięte do commita linki doda automat po wypchnięciu zmian."
           fi
           pr_number=$(gh pr view "$branch" --json number --jq .number)
           python -m narzedzia.pr_docx_link "$GITHUB_REPOSITORY" "$pr_number" "$(git rev-parse HEAD)" \
-            --run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+            --run-url "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
+            "${doc_args[@]}"
           gh workflow run validate.yml --repo "$GITHUB_REPOSITORY" --ref "$branch"

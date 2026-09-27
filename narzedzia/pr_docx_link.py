@@ -7,10 +7,18 @@ import subprocess
 import time
 from urllib.parse import quote
 
-from narzedzia.validate_regulation_change import DOCX, SOURCE
+from narzedzia.regulation_registry import get_regulation
+
+_REPRESENTATION = get_regulation("reprezentacja")
+SOURCE = str(_REPRESENTATION.markdown)
+DOCX = str(_REPRESENTATION.docx)
 
 START = "<!-- regulamin-docx:start -->"
 END = "<!-- regulamin-docx:end -->"
+LINK_TITLES = {
+    "reprezentacja": "Regulamin Reprezentacji",
+    "zawody": "Regulamin Zawodów",
+}
 
 
 def gh_api(endpoint, *, payload=None):
@@ -27,7 +35,7 @@ def gh_api(endpoint, *, payload=None):
     return json.loads(result.stdout)
 
 
-def update_body(body, repo, sha, run_url):
+def update_body(body, repo, sha, run_url, *, documents=("reprezentacja",)):
     if not re.fullmatch(r"[\w.-]+/[\w.-]+", repo) or not re.fullmatch(r"[0-9a-f]{40}", sha):
         raise ValueError("Niepoprawne repozytorium lub SHA dokumentu")
     if run_url and not re.fullmatch(r"https://github\.com/[\w./-]+", run_url):
@@ -42,18 +50,35 @@ def update_body(body, repo, sha, run_url):
             tail = tail[2:]
         body = body[:begin] + tail
     base = f"https://github.com/{repo}"
-    section = (
-        f"{START}\n## DOCX do sprawdzenia\n\n"
-        f"**[Pobierz DOCX]({base}/raw/{sha}/{quote(DOCX, safe='/')})**"
-        f" · [Źródło Markdown]({base}/blob/{sha}/{quote(SOURCE, safe='/')})\n\n"
-        f"Wersja dokumentu: `{sha}`. Otwórz DOCX w Wordzie przed zatwierdzeniem PR.\n"
-    )
+    if not documents or len(documents) != len(set(documents)):
+        raise ValueError("Wskaż co najmniej jeden dokument bez powtórzeń")
+    links = []
+    for identifier in documents:
+        regulation = get_regulation(identifier)
+        links.append(
+            f"**[Pobierz DOCX — {LINK_TITLES[identifier]}]"
+            f"({base}/raw/{sha}/{quote(str(regulation.docx), safe='/')})**"
+            f" · [Źródło Markdown]"
+            f"({base}/blob/{sha}/{quote(str(regulation.markdown), safe='/')})"
+        )
+    section = f"{START}\n## DOCX do sprawdzenia\n\n" + "\n\n".join(links)
+    section += f"\n\nWersja dokumentów: `{sha}`. Otwórz DOCX w Wordzie przed zatwierdzeniem PR.\n"
     if run_url:
         section += f"\n[Uruchomienie automatu]({run_url})\n"
     return section + f"{END}\n\n" + body
 
 
-def publish(repo, number, sha, run_url, *, api=gh_api, wait_for_sha=False, sleep=time.sleep):
+def publish(
+    repo,
+    number,
+    sha,
+    run_url,
+    *,
+    documents=("reprezentacja",),
+    api=gh_api,
+    wait_for_sha=False,
+    sleep=time.sleep,
+):
     endpoint = f"repos/{repo}/pulls/{int(number)}"
 
     def check(pr):
@@ -80,11 +105,16 @@ def publish(repo, number, sha, run_url, *, api=gh_api, wait_for_sha=False, sleep
     pr = current_pr()
     tree = api(f"repos/{repo}/git/trees/{sha}?recursive=1")
     paths = {item["path"] for item in tree["tree"] if item["type"] == "blob"}
-    if tree.get("truncated") or not {SOURCE, DOCX}.issubset(paths):
+    required = {
+        str(path)
+        for identifier in documents
+        for path in (get_regulation(identifier).markdown, get_regulation(identifier).docx)
+    }
+    if tree.get("truncated") or not required.issubset(paths):
         raise ValueError("Brak potwierdzonego Markdown lub DOCX w commicie")
     # Refresh immediately before writing: preserve recent human edits, reject stale results.
     pr = current_pr()
-    body = update_body(pr.get("body"), repo, sha, run_url)
+    body = update_body(pr.get("body"), repo, sha, run_url, documents=documents)
     if body != (pr.get("body") or ""):
         api(endpoint, payload={"body": body})
     return body
@@ -96,8 +126,16 @@ def main():
     parser.add_argument("pr", type=int)
     parser.add_argument("sha")
     parser.add_argument("--run-url", default="")
+    parser.add_argument("--document", action="append", dest="documents")
     args = parser.parse_args()
-    publish(args.repo, args.pr, args.sha, args.run_url, wait_for_sha=True)
+    publish(
+        args.repo,
+        args.pr,
+        args.sha,
+        args.run_url,
+        documents=tuple(args.documents or ("reprezentacja",)),
+        wait_for_sha=True,
+    )
     print(f"Link DOCX opublikowany w PR #{args.pr}")
 
 

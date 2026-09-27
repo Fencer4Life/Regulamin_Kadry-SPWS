@@ -68,6 +68,23 @@ class PrDocxLinkTests(unittest.TestCase):
         self.assertNotIn("a" * 40, newer)
         self.assertTrue(newer.endswith(original))
 
+    def test_shared_decision_publishes_separate_commit_pinned_links(self):
+        from narzedzia.pr_docx_link import update_body
+
+        body = update_body(
+            "Opis",
+            "owner/repo",
+            "a" * 40,
+            "",
+            documents=("reprezentacja", "zawody"),
+        )
+
+        self.assertEqual(body.count("**[Pobierz DOCX —"), 2)
+        self.assertIn("Regulamin Reprezentacji", body)
+        self.assertIn("Regulamin Zawodów", body)
+        self.assertEqual(body.count("/raw/" + "a" * 40 + "/"), 2)
+        self.assertEqual(body.count("/blob/" + "a" * 40 + "/"), 2)
+
     def test_malformed_markers_and_invalid_sha_are_rejected(self):
         from narzedzia.pr_docx_link import update_body
 

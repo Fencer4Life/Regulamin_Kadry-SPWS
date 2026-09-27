@@ -9,9 +9,15 @@ import sys
 import tempfile
 from pathlib import Path
 
-from narzedzia.decision_patch import apply_decision
-from narzedzia.pr_docx_link import DOCX, SOURCE, gh_api, publish
+from narzedzia.decision_patch import (
+    apply_decision,
+    apply_registered_decision,
+    document_ids,
+)
+from narzedzia.pr_docx_link import gh_api, publish
 from narzedzia.prepare_regulamin import verify
+from narzedzia.regulation_registry import get_regulation
+from narzedzia.regulations import verify_regulations
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -81,8 +87,11 @@ def select_card(files):
     return paths[0]
 
 
-def check_changed_paths(files, card):
-    allowed = {card, SOURCE, DOCX}
+def check_changed_paths(files, card, documents=("reprezentacja",)):
+    allowed = {card}
+    for identifier in documents:
+        regulation = get_regulation(identifier)
+        allowed.update((str(regulation.markdown), str(regulation.docx)))
     if any(
         f["filename"] not in allowed or f.get("previous_filename", f["filename"]) not in allowed
         for f in files
@@ -119,18 +128,54 @@ def apply_once(card, source, output):
     return True
 
 
+def apply_registered_once(card, root):
+    text = card.read_text(encoding="utf-8")
+    regulations = tuple(get_regulation(identifier) for identifier in document_ids(text))
+    if re.search(r"<!-- applied-source-sha256:[a-f0-9]{64} -->", text):
+        verify_regulations(regulations, root=root)
+        return False
+    apply_registered_decision(card, root)
+    verify_regulations(regulations, root=root)
+    return True
+
+
 def command(args, *, cwd=ROOT, env=None):
     return subprocess.run(
         args, cwd=cwd, env=env, check=True, text=True, stdout=subprocess.PIPE
     ).stdout.strip()
 
 
-def candidate_checks(docx, source):
+def candidate_checks(regulations, root):
     # Never execute scripts supplied by the PR; only trusted tests from this checkout.
-    env = {**os.environ, "REGULAMIN_SOURCE_PATH": str(source), "REGULAMIN_DOCX_PATH": str(docx)}
-    for script in ("test_approved_sections_02_03.py", "test_docx_pagination.py"):
-        command([sys.executable, str(ROOT / "tests" / script), str(docx)], env=env)
-    command([sys.executable, "-m", "unittest", "tests.test_docx_publication_safety", "-v"], env=env)
+    if isinstance(regulations, Path):
+        docx, source = regulations, root
+        env = {
+            **os.environ,
+            "REGULAMIN_SOURCE_PATH": str(source),
+            "REGULAMIN_DOCX_PATH": str(docx),
+        }
+        for script in ("test_approved_sections_02_03.py", "test_docx_pagination.py"):
+            command([sys.executable, str(ROOT / "tests" / script), str(docx)], env=env)
+        command(
+            [sys.executable, "-m", "unittest", "tests.test_docx_publication_safety", "-v"],
+            env=env,
+        )
+        return
+    verify_regulations(regulations, root=root)
+    for regulation in regulations:
+        source, docx = regulation.source_path(root), regulation.docx_path(root)
+        env = {
+            **os.environ,
+            "REGULAMIN_SOURCE_PATH": str(source),
+            "REGULAMIN_DOCX_PATH": str(docx),
+        }
+        if regulation.identifier == "reprezentacja":
+            for script in ("test_approved_sections_02_03.py", "test_docx_pagination.py"):
+                command([sys.executable, str(ROOT / "tests" / script), str(docx)], env=env)
+        command(
+            [sys.executable, "-m", "unittest", "tests.test_docx_publication_safety", "-v"],
+            env=env,
+        )
 
 
 def run(repo, number, run_url):
@@ -142,14 +187,29 @@ def run(repo, number, run_url):
     )
     files = [f for page in pages for f in page]
     card_path = select_card(files)
-    check_changed_paths(files, card_path)
     sha, branch = pr["head"]["sha"], pr["head"]["ref"]
     command(["git", "fetch", "origin", sha])
     with tempfile.TemporaryDirectory(prefix="decision-pr-") as directory:
         checkout = Path(directory) / "proposal"
         command(["git", "worktree", "add", "--detach", str(checkout), sha])
         try:
-            for relative in (card_path, SOURCE, DOCX):
+            card = checkout / card_path
+            if (
+                not card.is_file()
+                or card.is_symlink()
+                or not card.resolve().is_relative_to(checkout.resolve())
+            ):
+                raise ValueError("Karta decyzji musi być zwykłym plikiem wewnątrz PR")
+            refresh_from_discussion(card, repo)
+            documents = document_ids(card.read_text(encoding="utf-8"))
+            regulations = tuple(get_regulation(identifier) for identifier in documents)
+            check_changed_paths(files, card_path, documents)
+            relative_paths = [
+                str(path)
+                for regulation in regulations
+                for path in (regulation.markdown, regulation.docx)
+            ]
+            for relative in relative_paths:
                 path = checkout / relative
                 if (
                     not path.is_file()
@@ -159,15 +219,14 @@ def run(repo, number, run_url):
                     raise ValueError(
                         "Pliki decyzji i dokumentu muszą być zwykłymi plikami wewnątrz PR"
                     )
-            refresh_from_discussion(checkout / card_path, repo)
-            changed = apply_once(checkout / card_path, checkout / SOURCE, checkout / DOCX)
-            candidate_checks(checkout / DOCX, checkout / SOURCE)
+            changed = apply_registered_once(card, checkout)
+            candidate_checks(regulations, checkout)
             latest = gh_api(endpoint)
             check_pr(latest, repo)
             if latest["head"]["sha"] != sha:
                 raise ValueError("PR zmienił się podczas generowania; nadaj etykietę ponownie")
             if changed:
-                command(["git", "add", "--", card_path, SOURCE, DOCX], cwd=checkout)
+                command(["git", "add", "--", card_path, *relative_paths], cwd=checkout)
                 command(["git", "diff", "--cached", "--check"], cwd=checkout)
                 command(
                     [
@@ -184,7 +243,14 @@ def run(repo, number, run_url):
                 )
                 sha = command(["git", "rev-parse", "HEAD"], cwd=checkout)
                 command(["git", "push", "origin", f"HEAD:refs/heads/{branch}"], cwd=checkout)
-            publish(repo, number, sha, run_url, wait_for_sha=True)
+            publish(
+                repo,
+                number,
+                sha,
+                run_url,
+                documents=documents,
+                wait_for_sha=True,
+            )
             # GITHUB_TOKEN commits do not reliably start required pull_request CI.
             # Explicit dispatch starts read-only validation without a human action.
             dispatch_ci(repo, branch)

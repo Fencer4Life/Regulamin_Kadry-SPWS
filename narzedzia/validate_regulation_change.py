@@ -6,23 +6,31 @@ import subprocess
 import sys
 from pathlib import Path
 
-SOURCE = "regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md"
-DOCX = "regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
+from narzedzia.regulation_registry import all_regulations, get_regulation
+
+_REPRESENTATION = get_regulation("reprezentacja")
+SOURCE = str(_REPRESENTATION.markdown)
+DOCX = str(_REPRESENTATION.docx)
 
 
 def validate_changes(changes: dict[str, str]) -> None:
-    if SOURCE not in changes:
-        return
-    missing: list[str] = []
-    if DOCX not in changes:
-        missing.append("wygenerowanego DOCX")
-    initial_migration = changes[SOURCE] == "A"
-    if not initial_migration and not any(
-        path.startswith("_decyzje/DR-") and path.endswith(".md") for path in changes
-    ):
-        missing.append("karty decyzji DR")
-    if missing:
-        raise ValueError("Zmiana kanonicznego Markdown wymaga także " + " oraz ".join(missing))
+    for regulation in all_regulations():
+        source, docx = str(regulation.markdown), str(regulation.docx)
+        if source not in changes:
+            continue
+        missing: list[str] = []
+        if docx not in changes:
+            missing.append("wygenerowanego DOCX")
+        initial_migration = changes[source] == "A"
+        if not initial_migration and not any(
+            path.startswith("_decyzje/DR-") and path.endswith(".md") for path in changes
+        ):
+            missing.append("karty decyzji DR")
+        if missing:
+            raise ValueError(
+                f"Zmiana kanonicznego Markdown ({regulation.identifier}) wymaga także "
+                + " oraz ".join(missing)
+            )
 
 
 def changed_paths(base_sha: str) -> dict[str, str]:
@@ -76,8 +84,6 @@ def validate_pending_decisions(changes, root=Path(".")):
                 fragments = read_document_fragments(text)
                 if not isinstance(documents, list) or set(documents) != set(fragments):
                     raise ValueError(f"{name}: fragmenty nie odpowiadają wskazanym dokumentom")
-                from narzedzia.regulation_registry import get_regulation
-
                 required_paths = tuple(
                     str(path)
                     for identifier in documents
@@ -92,6 +98,17 @@ def validate_pending_decisions(changes, root=Path(".")):
                 )
             if any(path not in changes for path in required_paths):
                 raise ValueError(f"{name}: wdrożenie wymaga zmienionego Markdown i DOCX w tym PR")
+            registered_paths = {
+                str(path)
+                for regulation in all_regulations()
+                for path in (regulation.markdown, regulation.docx)
+            }
+            unexpected = (set(changes) & registered_paths) - set(required_paths)
+            if unexpected:
+                raise ValueError(
+                    f"{name}: PR zawiera zmiany dokumentów niewskazanych przez kartę: "
+                    + ", ".join(sorted(unexpected))
+                )
         elif "zmiana_regulaminu: false\n" in front:
             rejected = bool(re.search(r"^status:\s*[\"]?odrzucona[\"]?\s*$", front, re.MULTILINE))
             proposed = "proponowana_zmiana: true\n" in front

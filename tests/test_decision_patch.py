@@ -3,11 +3,70 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from narzedzia.decision_patch import apply_decision, format_fragments, read_fragments, replace_exact
+from narzedzia.decision_patch import (
+    apply_decision,
+    apply_registered_decision,
+    format_document_fragments,
+    format_fragments,
+    read_fragments,
+    replace_exact,
+)
+from narzedzia.regulation_registry import all_regulations
 from tests.test_docx_current_contract import CANONICAL_SOURCE, CURRENT_DOCUMENT
 
 
 class DecisionPatchTests(unittest.TestCase):
+    def test_shared_registered_change_is_atomic_when_second_build_fails(self):
+        from narzedzia.decision_patch import normalize_and_build as real_build
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            sources = {}
+            for regulation in all_regulations():
+                source = regulation.source_path(root)
+                output = regulation.docx_path(root)
+                source.parent.mkdir(parents=True, exist_ok=True)
+                source.write_bytes(regulation.source_path().read_bytes())
+                output.write_bytes(regulation.docx_path().read_bytes())
+                sources[regulation.identifier] = source
+            old_representation = "<!-- unit:cel-glowny -->"
+            old_competition = "<!-- unit:cel-zalozenia -->"
+            card = root / "DR-999.md"
+            card.write_text(
+                '---\nstatus: przyjęta\ndokumenty: ["reprezentacja", "zawody"]\n---\n\n'
+                + format_document_fragments(
+                    "reprezentacja", old_representation, old_representation + " [TEST R]"
+                )
+                + format_document_fragments(
+                    "zawody", old_competition, old_competition + " [TEST Z]"
+                ),
+                encoding="utf-8",
+            )
+            protected = [
+                path
+                for regulation in all_regulations()
+                for path in (regulation.source_path(root), regulation.docx_path(root))
+            ] + [card]
+            before = {path: path.read_bytes() for path in protected}
+            calls = 0
+
+            def fail_second(source, output):
+                nonlocal calls
+                calls += 1
+                if calls == 2:
+                    raise ValueError("second build")
+                return real_build(source, output)
+
+            with patch("narzedzia.decision_patch.normalize_and_build", side_effect=fail_second):
+                with self.assertRaisesRegex(ValueError, "second build"):
+                    apply_registered_decision(card, root)
+
+            self.assertEqual({path: path.read_bytes() for path in protected}, before)
+            apply_registered_decision(card, root)
+            self.assertIn("[TEST R]", sources["reprezentacja"].read_text(encoding="utf-8"))
+            self.assertIn("[TEST Z]", sources["zawody"].read_text(encoding="utf-8"))
+            self.assertIn("applied-source-sha256:", card.read_text(encoding="utf-8"))
+
     def test_decision_before_after_changes_annex_table_without_preview(self):
         from docx import Document
 
@@ -99,11 +158,12 @@ class DecisionPatchTests(unittest.TestCase):
         for expected in (
             "workflow_dispatch:",
             "decision_patch",
-            "prepare_regulamin verify",
+            "regulations verify --all",
             "unittest discover",
             "gh pr view",
             "--draft",
-            'git add -- "$card" "$source" "$docx"',
+            'git add -- "$card" "${document_paths[@]}"',
+            '"${doc_args[@]}"',
         ):
             self.assertIn(expected, workflow)
         for forbidden in (
@@ -121,6 +181,25 @@ class DecisionPatchTests(unittest.TestCase):
             card.write_text("---\nstatus: projekt\n---\n" + format_fragments("a", "b"))
             with self.assertRaises(ValueError):
                 apply_decision(card, CANONICAL_SOURCE, Path(directory) / "out.docx")
+
+    def test_rejected_registered_decision_cannot_modify_a_document(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            regulation = next(item for item in all_regulations() if item.identifier == "zawody")
+            source, output = regulation.source_path(root), regulation.docx_path(root)
+            source.parent.mkdir(parents=True)
+            source.write_bytes(regulation.source_path().read_bytes())
+            output.write_bytes(regulation.docx_path().read_bytes())
+            card = root / "DR-999.md"
+            card.write_text(
+                '---\nstatus: odrzucona\ndokumenty: ["zawody"]\n---\n\n'
+                + format_document_fragments("zawody", "PROJEKT", "PROJEKT ODRZUCONY"),
+                encoding="utf-8",
+            )
+            before = source.read_bytes(), output.read_bytes(), card.read_bytes()
+            with self.assertRaisesRegex(ValueError, "wyłącznie decyzje.*przyjęta"):
+                apply_registered_decision(card, root)
+            self.assertEqual(before, (source.read_bytes(), output.read_bytes(), card.read_bytes()))
 
     def test_workflow_does_not_require_uninstalled_ripgrep(self):
         workflow = (
