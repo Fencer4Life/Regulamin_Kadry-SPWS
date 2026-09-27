@@ -4,7 +4,6 @@ import argparse
 import re
 from pathlib import Path
 
-
 DISCUSSION_URL = re.compile(
     r"https://github\.com/Fencer4Life/Regulamin_Kadry-SPWS/discussions/(\d+)"
 )

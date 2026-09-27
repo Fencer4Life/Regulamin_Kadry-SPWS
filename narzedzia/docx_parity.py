@@ -10,7 +10,6 @@ from docx import Document
 from docx.oxml.ns import qn
 from lxml import etree
 
-
 WORD_NS = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
 CORE_TIME_NS = {"dcterms": "http://purl.org/dc/terms/"}
 TRACKED_STYLES = (
@@ -179,7 +178,11 @@ def _toc_hyperlink_contract(main_root) -> list[dict[str, object]]:
         {
             "style": paragraph.xpath("string(w:pPr/w:pStyle/@w:val)", namespaces=WORD_NS),
             "tabs": [
-                tuple(sorted((etree.QName(name).localname, value) for name, value in tab.attrib.items()))
+                tuple(
+                    sorted(
+                        (etree.QName(name).localname, value) for name, value in tab.attrib.items()
+                    )
+                )
                 for tab in paragraph.xpath("w:pPr/w:tabs/w:tab", namespaces=WORD_NS)
             ],
             "hyperlinks": [
@@ -190,9 +193,7 @@ def _toc_hyperlink_contract(main_root) -> list[dict[str, object]]:
                     "field_instructions": hyperlink.xpath(
                         ".//w:instrText/text()", namespaces=WORD_NS
                     ),
-                    "run_styles": hyperlink.xpath(
-                        ".//w:rStyle/@w:val", namespaces=WORD_NS
-                    ),
+                    "run_styles": hyperlink.xpath(".//w:rStyle/@w:val", namespaces=WORD_NS),
                 }
                 for hyperlink in paragraph.xpath("w:hyperlink", namespaces=WORD_NS)
             ],
@@ -261,7 +262,9 @@ def document_layout_contract(path: Path) -> dict[str, object]:
     with ZipFile(path) as archive:
         field_parts = []
         for name in sorted(
-            item for item in archive.namelist() if item.startswith("word/") and item.endswith(".xml")
+            item
+            for item in archive.namelist()
+            if item.startswith("word/") and item.endswith(".xml")
         ):
             root = etree.fromstring(archive.read(name))
             instructions = [
@@ -287,13 +290,11 @@ def document_layout_contract(path: Path) -> dict[str, object]:
                 "alignment": None if table.alignment is None else int(table.alignment),
                 "autofit": table.autofit,
                 "grid_widths": [
-                    column.get(qn("w:w"))
-                    for column in table._tbl.tblGrid.findall(qn("w:gridCol"))
+                    column.get(qn("w:w")) for column in table._tbl.tblGrid.findall(qn("w:gridCol"))
                 ],
                 "rows": [
                     {
-                        "cant_split": row._tr.get_or_add_trPr().find(qn("w:cantSplit"))
-                        is not None,
+                        "cant_split": row._tr.get_or_add_trPr().find(qn("w:cantSplit")) is not None,
                         "cells": [_cell_layout(cell) for cell in row.cells],
                     }
                     for row in table.rows

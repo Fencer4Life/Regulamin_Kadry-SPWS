@@ -19,7 +19,9 @@ PRIORITIES = {value.casefold(): value for value in ("Niski", "Średni", "Wysoki"
 def _discussion_nodes(payload: dict | list[dict]):
     pages = payload if isinstance(payload, list) else [payload]
     for page in pages:
-        yield from page.get("data", {}).get("repository", {}).get("discussions", {}).get("nodes", [])
+        yield from (
+            page.get("data", {}).get("repository", {}).get("discussions", {}).get("nodes", [])
+        )
 
 
 def normalize_discussions(payload: dict | list[dict], generated_at: str) -> dict:
@@ -34,12 +36,17 @@ def normalize_discussions(payload: dict | list[dict], generated_at: str) -> dict
         avatar_login = coordinator if coordinator and GITHUB_LOGIN.fullmatch(coordinator) else None
         priority = PRIORITIES.get(source["priorytet"].strip().casefold())
         item = {
-            "number": node["number"], "title": node["title"], "url": node["url"],
-            "created_at": node["createdAt"], "author": (node.get("author") or {}).get("login", "konto usunięte"),
+            "number": node["number"],
+            "title": node["title"],
+            "url": node["url"],
+            "created_at": node["createdAt"],
+            "author": (node.get("author") or {}).get("login", "konto usunięte"),
             "comments": node.get("comments", {}).get("totalCount", 0),
             "labels": [label["name"] for label in node.get("labels", {}).get("nodes", [])],
             "coordinator": coordinator,
-            "coordinator_avatar_url": f"https://github.com/{avatar_login}.png?size=80" if avatar_login else None,
+            "coordinator_avatar_url": f"https://github.com/{avatar_login}.png?size=80"
+            if avatar_login
+            else None,
             "priority": priority,
             "depends_on": source["zalezy_od"],
             "closed_at": node.get("closedAt"),
@@ -60,9 +67,15 @@ def main() -> None:
     parser.add_argument("destination", type=Path)
     args = parser.parse_args()
     payload = json.loads(args.source.read_text(encoding="utf-8"))
-    generated_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    generated_at = (
+        datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    )
     args.destination.parent.mkdir(parents=True, exist_ok=True)
-    args.destination.write_text(json.dumps(normalize_discussions(payload, generated_at), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    args.destination.write_text(
+        json.dumps(normalize_discussions(payload, generated_at), ensure_ascii=False, indent=2)
+        + "\n",
+        encoding="utf-8",
+    )
 
 
 if __name__ == "__main__":

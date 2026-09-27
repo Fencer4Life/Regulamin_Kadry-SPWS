@@ -4,7 +4,6 @@ import re
 import unittest
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 REQUIRED_PLATFORM_FILES = (
@@ -84,7 +83,7 @@ class RegistryPlatformTests(unittest.TestCase):
             'class="discussion-rail discussion-age-fresh"',
             'class="discussion-number"',
             'class="discussion-priority discussion-priority-{{ discussion.priority | downcase }}"',
-            '<span>priorytet</span><strong>{{ discussion.priority | escape }}</strong>',
+            "<span>priorytet</span><strong>{{ discussion.priority | escape }}</strong>",
             'data-created-at="{{ discussion.created_at }}"',
             'class="discussion-coordinator"',
             'class="discussion-pills"',
@@ -105,7 +104,10 @@ class RegistryPlatformTests(unittest.TestCase):
             self.assertIn(fragment, css)
         self.assertRegex(css, r"\.discussion-pills\s*\{[^}]*margin-top:\s*auto;")
         self.assertRegex(css, r"\.discussion-comments\s*\{[^}]*margin-top:\s*12px;")
-        self.assertRegex(css, r"\.discussion-priority\s*\{[^}]*width:\s*100%;[^}]*max-width:\s*100%;[^}]*overflow:\s*hidden;")
+        self.assertRegex(
+            css,
+            r"\.discussion-priority\s*\{[^}]*width:\s*100%;[^}]*max-width:\s*100%;[^}]*overflow:\s*hidden;",
+        )
         for fragment in ("calendarDayAge", "discussion-age-fresh", "odswiez", "Date.now()"):
             self.assertIn(fragment, script)
         self.assertIn("assets/dyskusje.js", layout)
@@ -123,13 +125,13 @@ class RegistryPlatformTests(unittest.TestCase):
         for fragment in (
             'class="discussion-page-layout"',
             'class="discussion-archive-panel"',
-            'data-discussion-archive-toggle',
-            'Zamknięte dyskusje ({{ snapshot.closed_items.size }})',
+            "data-discussion-archive-toggle",
+            "Zamknięte dyskusje ({{ snapshot.closed_items.size }})",
             'class="discussion-archive-card"',
-            'data-discussion-archive-item',
-            'data-discussion-archive-previous',
-            'data-discussion-archive-next',
-            'data-discussion-archive-page',
+            "data-discussion-archive-item",
+            "data-discussion-archive-previous",
+            "data-discussion-archive-next",
+            "data-discussion-archive-page",
         ):
             self.assertIn(fragment, page)
         for fragment in (
@@ -191,6 +193,19 @@ class RegistryPlatformTests(unittest.TestCase):
         self.assertNotIn("actions/jekyll-build-pages", pages)
         self.assertNotIn("pull_request:", pages)
 
+    def test_ci_enforces_pinned_ruff_checks(self):
+        validate = (ROOT / ".github/workflows/validate.yml").read_text(encoding="utf-8")
+        requirements = (ROOT / "narzedzia/requirements-dev.txt").read_text(encoding="utf-8")
+        config = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+
+        self.assertIn("ruff==0.16.9", requirements)
+        self.assertIn("-r requirements-docx.txt", requirements)
+        self.assertIn("narzedzia/requirements-dev.txt", validate)
+        self.assertIn("ruff format --check narzedzia tests", validate)
+        self.assertIn("ruff check narzedzia tests", validate)
+        self.assertIn("[tool.ruff]", config)
+        self.assertIn('target-version = "py312"', config)
+
     def test_pages_refreshes_discussions_safely(self):
         pages = (ROOT / ".github/workflows/pages.yml").read_text(encoding="utf-8")
         for fragment in (
@@ -245,9 +260,7 @@ class RegistryPlatformTests(unittest.TestCase):
             self.assertIn(fragment, workflow)
 
     def test_ci_builds_and_exposes_the_candidate_docx_for_pr_review(self):
-        workflow = (ROOT / ".github" / "workflows" / "validate.yml").read_text(
-            encoding="utf-8"
-        )
+        workflow = (ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
         for fragment in (
             "build_regulamin_docx",
             "prepare_regulamin verify",
@@ -278,7 +291,17 @@ class RegistryPlatformTests(unittest.TestCase):
         workflow = ROOT / ".github" / "workflows" / "resolve-discussion.yml"
         self.assertTrue(workflow.is_file())
         text = workflow.read_text(encoding="utf-8")
-        for fragment in ("pull_request:", "workflow_dispatch:", "pr_number:", "closed", "merged", "resolve_discussion.py", "RESOLVED", "closeDiscussion", "discussions: write"):
+        for fragment in (
+            "pull_request:",
+            "workflow_dispatch:",
+            "pr_number:",
+            "closed",
+            "merged",
+            "resolve_discussion.py",
+            "RESOLVED",
+            "closeDiscussion",
+            "discussions: write",
+        ):
             self.assertIn(fragment, text)
         self.assertNotIn("actions: write", text)
         self.assertNotIn("gh workflow run pages.yml", text)

@@ -5,9 +5,10 @@ from pathlib import Path
 
 from docx import Document
 
-
-DOCUMENT = Path(__file__).resolve().parents[1] / "regulamin" / (
-    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
+DOCUMENT = (
+    Path(__file__).resolve().parents[1]
+    / "regulamin"
+    / ("Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx")
 )
 
 EXPECTED_SELECTION_RULES = [

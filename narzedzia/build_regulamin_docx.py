@@ -8,28 +8,25 @@ from urllib.parse import urlsplit
 from docx import Document
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT, WD_TABLE_ALIGNMENT
-from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
-from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.shared import Cm, Pt, RGBColor
 
 from narzedzia.docx_model import (
     NoteBlock,
-    _parse_inline_runs,
     RegulationDocument,
     TableBlock,
     ZtpUnit,
+    _parse_inline_runs,
     parse_regulation_source,
 )
-from narzedzia.normalize_regulamin_markdown import resolve_references
 from narzedzia.generate_regulamin_docx import (
     BLUE,
-    LIGHT,
     LINE,
     MUTED,
     add_cover,
-    add_field,
     add_header_footer,
     configure_page,
     configure_styles,
@@ -38,7 +35,7 @@ from narzedzia.generate_regulamin_docx import (
     set_repeat_table_header,
     set_table_borders,
 )
-
+from narzedzia.normalize_regulamin_markdown import resolve_references
 
 PLACE_BLOCKS = ((1, 10), (11, 20), (21, 30), (31, 40))
 PARTICIPANT_CHUNK_SIZE = 17
@@ -288,7 +285,7 @@ def _add_internal_hyperlink(paragraph, text: str, anchor: str, page: int) -> Non
 
 def _add_toc(document: Document, model: RegulationDocument) -> None:
     _ensure_toc_styles(document)
-    heading = document.add_heading(model.metadata.get('toc_title', 'Spis treści'), level=1)
+    heading = document.add_heading(model.metadata.get("toc_title", "Spis treści"), level=1)
     heading.paragraph_format.space_after = Pt(16)
     _add_bookmark(heading, 0)
     entries = [
@@ -298,12 +295,14 @@ def _add_toc(document: Document, model: RegulationDocument) -> None:
         ("Historia wersji", 11, 1),
     ]
     if model.publication:
-        titles = [line[2:] for line in model.publication['toc'].splitlines() if line.startswith('- ')]
+        titles = [
+            line[2:] for line in model.publication["toc"].splitlines() if line.startswith("- ")
+        ]
         if len(titles) != len(entries):
-            raise ValueError('Spis treści nie odpowiada liczbie rozdziałów')
+            raise ValueError("Spis treści nie odpowiada liczbie rozdziałów")
         entries = []
         for title in titles:
-            name, page = title.rsplit('\t', 1)
+            name, page = title.rsplit("\t", 1)
             entries.append((name, int(page), 1))
     for index, (title, page, level) in enumerate(entries):
         paragraph = document.add_paragraph(style=f"toc {level}")
@@ -320,7 +319,9 @@ def _add_toc(document: Document, model: RegulationDocument) -> None:
 
 
 def _add_outline(document: Document, model: RegulationDocument) -> None:
-    heading = document.add_heading(model.metadata.get('outline_title', 'Konstrukcja regulaminu'), level=1)
+    heading = document.add_heading(
+        model.metadata.get("outline_title", "Konstrukcja regulaminu"), level=1
+    )
     _add_bookmark(heading, 1)
     document.add_paragraph(model.metadata["outline_intro"])
     table = document.add_table(rows=1, cols=3)
@@ -333,10 +334,17 @@ def _add_outline(document: Document, model: RegulationDocument) -> None:
     header = table.rows[0]
     set_repeat_table_header(header)
     from narzedzia.publication_source import table_rows
-    outline_rows = table_rows(model.publication['outline']) if model.publication else [
-        ['Rozdział', 'Tytuł', 'Zakres'], *[[str(i), c.title, c.scope] for i, c in enumerate(model.chapters, 1)]]
+
+    outline_rows = (
+        table_rows(model.publication["outline"])
+        if model.publication
+        else [
+            ["Rozdział", "Tytuł", "Zakres"],
+            *[[str(i), c.title, c.scope] for i, c in enumerate(model.chapters, 1)],
+        ]
+    )
     if len(outline_rows[0]) != 3:
-        raise ValueError('Tabela konstrukcji wymaga trzech kolumn')
+        raise ValueError("Tabela konstrukcji wymaga trzech kolumn")
     for cell, width, text in zip(header.cells, widths, outline_rows[0]):
         cell.width = width
         set_cell_shading(cell, BLUE)
@@ -414,7 +422,9 @@ def _add_rank_coefficients(document: Document, block: TableBlock):
             paragraph = cell.paragraphs[0]
             if row_index > 0:
                 paragraph.paragraph_format.space_after = Pt(0)
-            paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER if index != 1 else WD_ALIGN_PARAGRAPH.LEFT
+            paragraph.alignment = (
+                WD_ALIGN_PARAGRAPH.CENTER if index != 1 else WD_ALIGN_PARAGRAPH.LEFT
+            )
             run = paragraph.add_run(text)
             run.font.size = Pt(9)
             if row_index == 0 or index in (0, 2):
@@ -507,7 +517,9 @@ def _add_unit(
         if inline_run.href:
             _add_external_link(content, inline_run.href, inline_run.text)
             continue
-        run = content.add_run(resolve_references(model, inline_run.text, current_unit=unit.identifier))
+        run = content.add_run(
+            resolve_references(model, inline_run.text, current_unit=unit.identifier)
+        )
         if inline_run.bold:
             run.bold = True
     indents = {
@@ -680,9 +692,7 @@ def _add_points_annex(document: Document, model: RegulationDocument) -> None:
     title.alignment = WD_ALIGN_PARAGRAPH.CENTER
     subtitle = document.add_paragraph(style="Normal")
     subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    subtitle.add_run(
-        model.metadata["annex_subtitle"]
-    ).italic = True
+    subtitle.add_run(model.metadata["annex_subtitle"]).italic = True
     coefficient = document.add_paragraph(style="Normal")
     coefficient.alignment = WD_ALIGN_PARAGRAPH.CENTER
     coefficient.add_run(model.metadata["annex_coefficient"]).bold = True
@@ -718,9 +728,7 @@ def _add_points_annex(document: Document, model: RegulationDocument) -> None:
                     alternate=row_number % 2 == 1,
                 )
         _keep_table_together(table)
-    note = document.add_paragraph(
-        model.metadata["annex_note"]
-    )
+    note = document.add_paragraph(model.metadata["annex_note"])
     note.paragraph_format.space_before = Pt(8)
     if model.annex_notes:
         note.paragraph_format.keep_with_next = True
@@ -730,7 +738,9 @@ def _add_points_annex(document: Document, model: RegulationDocument) -> None:
 
 
 def _add_history(document: Document, model: RegulationDocument) -> None:
-    history_heading = document.add_heading(model.metadata.get('history_title', 'Historia wersji'), level=1)
+    history_heading = document.add_heading(
+        model.metadata.get("history_title", "Historia wersji"), level=1
+    )
     _add_bookmark(history_heading, 9)
     table = document.add_table(rows=1, cols=4)
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
@@ -738,7 +748,12 @@ def _add_history(document: Document, model: RegulationDocument) -> None:
     header = table.rows[0]
     set_repeat_table_header(header)
     from narzedzia.publication_source import table_rows
-    history_headers = table_rows(model.publication['history'])[0] if model.publication else ('Wersja', 'Data', 'Zakres zmian', 'Status')
+
+    history_headers = (
+        table_rows(model.publication["history"])[0]
+        if model.publication
+        else ("Wersja", "Data", "Zakres zmian", "Status")
+    )
     for cell, text in zip(header.cells, history_headers):
         set_cell_shading(cell, BLUE)
         set_cell_margins(cell)
@@ -754,7 +769,7 @@ def _add_history(document: Document, model: RegulationDocument) -> None:
         model.metadata["version"],
         model.metadata["project_date"],
         model.metadata["history_scope"],
-        model.metadata.get('history_status', model.metadata["status"]),
+        model.metadata.get("history_status", model.metadata["status"]),
     )
     for cell, text in zip(cells, values):
         set_cell_margins(cell)

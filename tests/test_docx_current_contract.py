@@ -5,46 +5,69 @@ import unittest
 from pathlib import Path
 
 from docx import Document
+
 from narzedzia.build_regulamin_docx import build_document
 from narzedzia.docx_parity import document_content_contract
 
-
 ROOT = Path(__file__).resolve().parents[1]
-CURRENT_DOCUMENT = ROOT / "regulamin" / (
-    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
+CURRENT_DOCUMENT = (
+    ROOT
+    / "regulamin"
+    / ("Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx")
 )
-CANONICAL_SOURCE = ROOT / "regulamin" / (
-    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md"
+CANONICAL_SOURCE = (
+    ROOT
+    / "regulamin"
+    / ("Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md")
 )
 EXPECTED_HEADINGS = [
     "Spis treści",
     "Konstrukcja Regulaminu",
     "Postanowienia ogólne",
-    "§ 1", "Przedmiot regulaminu",
-    "§ 2", "Definicje",
-    "§ 3", "Cel i zasady wyłaniania reprezentacji",
+    "§ 1",
+    "Przedmiot regulaminu",
+    "§ 2",
+    "Definicje",
+    "§ 3",
+    "Cel i zasady wyłaniania reprezentacji",
     "Ranking indywidualny",
-    "§ 4", "Rola rankingu indywidualnego",
-    "§ 5", "Zawody uwzględniane w rankingu",
-    "§ 6", "Zasady obliczania punktów",
-    "§ 7", "Publikacja rankingu",
-    "§ 8", "Wyniki w połączonych kategoriach wiekowych",
-    "§ 9", "Zawodnicy uwzględniani w rankingu",
+    "§ 4",
+    "Rola rankingu indywidualnego",
+    "§ 5",
+    "Zawody uwzględniane w rankingu",
+    "§ 6",
+    "Zasady obliczania punktów",
+    "§ 7",
+    "Publikacja rankingu",
+    "§ 8",
+    "Wyniki w połączonych kategoriach wiekowych",
+    "§ 9",
+    "Zawodnicy uwzględniani w rankingu",
     "Powołania do startów indywidualnych",
-    "§ 10", "Zasady powołań indywidualnych",
-    "§ 11", "Rezygnacja i zastępstwo",
+    "§ 10",
+    "Zasady powołań indywidualnych",
+    "§ 11",
+    "Rezygnacja i zastępstwo",
     "Dobór składu drużyny",
-    "§ 12", "Pula kandydatów do drużyny",
-    "§ 13", "Kategorie wiekowe w drużynie",
-    "§ 14", "Drużynowe Mistrzostwa Świata",
-    "§ 15", "Drużynowe Mistrzostwa Europy",
-    "§ 16", "Powołanie uzupełniające",
+    "§ 12",
+    "Pula kandydatów do drużyny",
+    "§ 13",
+    "Kategorie wiekowe w drużynie",
+    "§ 14",
+    "Drużynowe Mistrzostwa Świata",
+    "§ 15",
+    "Drużynowe Mistrzostwa Europy",
+    "§ 16",
+    "Powołanie uzupełniające",
     "Terminarz procesu powoływania",
-    "§ 17", "Terminy procesu",
+    "§ 17",
+    "Terminy procesu",
     "Ocena regulaminu i doskonalenie metody",
-    "§ 18", "Posezonowa ocena działania regulaminu",
+    "§ 18",
+    "Posezonowa ocena działania regulaminu",
     "Postanowienia końcowe",
-    "§ 19", "Wejście w życie",
+    "§ 19",
+    "Wejście w życie",
     "Tabela punktacji Pucharu Polski Weteranów w szermierce",
     "Miejsca 1–10 · stawka 4–20 zawodników",
     "Miejsca 1–10 · stawka 21–37 zawodników",
@@ -73,11 +96,20 @@ class CurrentDocxContractTests(unittest.TestCase):
 
     def test_age_definitions_and_european_reserve_are_explicit(self):
         texts = [p.text for p in self.document.paragraphs]
-        definitions = "\n".join(texts[texts.index("§ 2"):texts.index("§ 3")])
-        for definition in ("V1 – od 40 do 49 lat", "V2 – od 50 do 59 lat", "V3 – od 60 do 69 lat", "V4 – 70 lat i więcej", "31 grudnia"):
+        definitions = "\n".join(texts[texts.index("§ 2") : texts.index("§ 3")])
+        for definition in (
+            "V1 – od 40 do 49 lat",
+            "V2 – od 50 do 59 lat",
+            "V3 – od 60 do 69 lat",
+            "V4 – 70 lat i więcej",
+            "31 grudnia",
+        ):
             self.assertIn(definition, definitions)
-        self.assertIn("3. Na Drużynowe Mistrzostwa Europy powołuje się także zawodnika rezerwowego, wybieranego wyłącznie spośród zawodników należących do puli kandydatów do drużyny.", texts)
-        categories = "\n".join(texts[texts.index("§ 13"):texts.index("§ 14")])
+        self.assertIn(
+            "3. Na Drużynowe Mistrzostwa Europy powołuje się także zawodnika rezerwowego, wybieranego wyłącznie spośród zawodników należących do puli kandydatów do drużyny.",
+            texts,
+        )
+        categories = "\n".join(texts[texts.index("§ 13") : texts.index("§ 14")])
         self.assertIn("kategorie V1 i V2", categories)
         self.assertIn("kategorie V3 i V4", categories)
 
@@ -99,8 +131,9 @@ class CurrentDocxContractTests(unittest.TestCase):
                 [len(table.rows) for table in self.document.tables],
                 [len(table.rows) for table in expected.tables],
             )
-            self.assertEqual(len(self.contract["blocks"]),
-                             len(document_content_contract(candidate)["blocks"]))
+            self.assertEqual(
+                len(self.contract["blocks"]), len(document_content_contract(candidate)["blocks"])
+            )
 
     def test_current_document_heading_order_is_explicit(self):
         headings = [

@@ -4,16 +4,24 @@ import argparse
 import re
 from pathlib import Path
 
-from narzedzia.docx_model import NoteBlock, RegulationDocument, TableBlock, ZtpUnit, parse_regulation_source, resolve_terms
-
+from narzedzia.docx_model import (
+    NoteBlock,
+    RegulationDocument,
+    TableBlock,
+    ZtpUnit,
+    parse_regulation_source,
+    resolve_terms,
+)
 
 REFERENCE_RE = re.compile(r"\{\{ref:([a-z0-9-]+)/([a-z0-9-]+)}}")
 INDENTS = {"paragraph": 0, "ust": 0, "pkt": 3, "lit": 6, "tiret": 9, "double-tiret": 12}
 
 
 def _markdown_text(unit: ZtpUnit) -> str:
-    return "".join(f"[{run.text}]({run.href})" if run.href else
-                   f"**{run.text}**" if run.bold else run.text for run in unit.runs)
+    return "".join(
+        f"[{run.text}]({run.href})" if run.href else f"**{run.text}**" if run.bold else run.text
+        for run in unit.runs
+    )
 
 
 def _unit_marker(unit: ZtpUnit, index: int) -> str:
@@ -67,11 +75,16 @@ def _serialize_note(note: NoteBlock, lines: list[str]) -> None:
 
 
 def serialize_regulation(model: RegulationDocument) -> str:
-    from narzedzia.publication_source import wrap, make_visible
+    from narzedzia.publication_source import make_visible, wrap
+
     lines = ["+++", model.metadata_source, "+++", ""]
     if model.publication:
-        lines.append(''.join(wrap(key, model.publication[key]) for key in ('cover', 'toc', 'outline')).rstrip())
-        lines.append('')
+        lines.append(
+            "".join(
+                wrap(key, model.publication[key]) for key in ("cover", "toc", "outline")
+            ).rstrip()
+        )
+        lines.append("")
     for chapter in model.chapters:
         lines.extend(
             [
@@ -107,7 +120,7 @@ def serialize_regulation(model: RegulationDocument) -> str:
     if model.has_points_annex:
         lines.extend(["{{annex:points}}", ""])
         if model.publication:
-            lines.extend([wrap('annex-heading', model.publication['annex-heading']).rstrip(), ''])
+            lines.extend([wrap("annex-heading", model.publication["annex-heading"]).rstrip(), ""])
         for table in model.annex_tables:
             lines.extend([f"#### {table.name}", ""])
             lines.append("| " + " | ".join(table.rows[0]) + " |")
@@ -115,12 +128,14 @@ def serialize_regulation(model: RegulationDocument) -> str:
             lines.extend("| " + " | ".join(row) + " |" for row in table.rows[1:])
             lines.append("")
         if model.publication:
-            lines.extend([wrap('annex-note', model.publication['annex-note']).rstrip(), ''])
+            lines.extend([wrap("annex-note", model.publication["annex-note"]).rstrip(), ""])
         for note in model.annex_notes:
             _serialize_note(note, lines)
             lines.append("")
     if model.publication:
-        lines.append(''.join(wrap(key, model.publication[key]) for key in ('history', 'running')).rstrip())
+        lines.append(
+            "".join(wrap(key, model.publication[key]) for key in ("history", "running")).rstrip()
+        )
     result = "\n".join(lines).rstrip() + "\n"
     return make_visible(result, model) if model.publication else result
 
@@ -165,18 +180,22 @@ def _reference_locations(model: RegulationDocument) -> dict:
     locations = {}
     for chapter in model.chapters:
         for section in chapter.sections:
+
             def visit(unit, path, number):
                 current = path + ((unit.kind, number),)
                 locations[(section.identifier, unit.identifier)] = current
                 for i, child in enumerate(unit.children, 1):
                     visit(child, current, i)
+
             units = [block for block in section.blocks if isinstance(block, ZtpUnit)]
             for i, unit in enumerate(units, 1):
                 visit(unit, (), i)
     return locations
 
 
-def resolve_references(model: RegulationDocument, text: str, *, current_unit: str | None = None) -> str:
+def resolve_references(
+    model: RegulationDocument, text: str, *, current_unit: str | None = None
+) -> str:
     references = _reference_index(model)
     locations = _reference_locations(model)
     current = None
@@ -203,23 +222,32 @@ def resolve_references(model: RegulationDocument, text: str, *, current_unit: st
                 break
             common += 1
         # When referring to an ancestor, retain its own label.
-        visible = target[min(common, len(target) - 1):]
-        labels = {'ust': 'ust.', 'pkt': 'pkt', 'lit': 'lit.',
-                  'tiret': 'tiret', 'double-tiret': 'podwójne tiret'}
+        visible = target[min(common, len(target) - 1) :]
+        labels = {
+            "ust": "ust.",
+            "pkt": "pkt",
+            "lit": "lit.",
+            "tiret": "tiret",
+            "double-tiret": "podwójne tiret",
+        }
         parts = []
         for kind, number in visible:
             if kind in labels:
-                parts.extend((labels[kind], chr(96 + number) if kind == 'lit' else str(number)))
+                parts.extend((labels[kind], chr(96 + number) if kind == "lit" else str(number)))
         if not parts:
             raise ValueError("Brak numerowanej jednostki docelowej odsyłacza lokalnego")
-        direction = 'powyżej' if tuple(n for _, n in origin) > tuple(n for _, n in target) else 'poniżej'
-        return ' '.join([*parts, direction])
+        direction = (
+            "powyżej" if tuple(n for _, n in origin) > tuple(n for _, n in target) else "poniżej"
+        )
+        return " ".join([*parts, direction])
 
     return resolve_terms(model.milestones, REFERENCE_RE.sub(replace, text))
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Normalizuje semantyczny Markdown regulaminu do ZTP")
+    parser = argparse.ArgumentParser(
+        description="Normalizuje semantyczny Markdown regulaminu do ZTP"
+    )
     parser.add_argument("source", type=Path)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--write", action="store_true")

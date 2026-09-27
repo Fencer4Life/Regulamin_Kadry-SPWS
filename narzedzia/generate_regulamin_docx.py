@@ -1,17 +1,17 @@
 from pathlib import Path
 
 from docx import Document
-from docx.enum.section import WD_SECTION
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT, WD_TABLE_ALIGNMENT
-from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
 
-
-OUTPUT = Path(__file__).resolve().parents[1] / "regulamin" / (
-    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
+OUTPUT = (
+    Path(__file__).resolve().parents[1]
+    / "regulamin"
+    / ("Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx")
 )
 
 BLUE = "174A84"
@@ -184,7 +184,9 @@ def add_header_footer(section, content=None):
     p = header.paragraphs[0]
     p.alignment = WD_ALIGN_PARAGRAPH.LEFT
     set_bottom_border(p)
-    run = p.add_run(content.get("header_text", "Regulamin powoływania reprezentacji Polski weteranów"))
+    run = p.add_run(
+        content.get("header_text", "Regulamin powoływania reprezentacji Polski weteranów")
+    )
     run.font.name = "Aptos"
     run.font.size = Pt(8)
     run.font.color.rgb = RGBColor.from_string(MUTED)
@@ -234,7 +236,9 @@ def add_cover(doc, content=None):
     # Keep the existing cover spacing, without a decorative line above the title.
 
     title = doc.add_paragraph(style="Title")
-    title.add_run(content.get("title", "Regulamin powoływania reprezentacji Polski weteranów w szermierce"))
+    title.add_run(
+        content.get("title", "Regulamin powoływania reprezentacji Polski weteranów w szermierce")
+    )
 
     subtitle = doc.add_paragraph()
     subtitle.paragraph_format.space_after = Pt(96)
@@ -283,10 +287,16 @@ def add_toc(doc):
     heading = doc.add_heading("Spis treści", level=1)
     heading.paragraph_format.space_after = Pt(16)
     p = doc.add_paragraph()
-    add_field(p, 'TOC \\o "1-2" \\h \\z \\u', "Spis treści zostanie zaktualizowany po otwarciu dokumentu w Wordzie.")
+    add_field(
+        p,
+        'TOC \\o "1-2" \\h \\z \\u',
+        "Spis treści zostanie zaktualizowany po otwarciu dokumentu w Wordzie.",
+    )
     p.paragraph_format.space_after = Pt(16)
     note = doc.add_paragraph(style="Tekst roboczy")
-    note.add_run("W Wordzie wybierz spis treści i polecenie „Aktualizuj tabelę”, jeżeli nie odświeży się automatycznie.")
+    note.add_run(
+        "W Wordzie wybierz spis treści i polecenie „Aktualizuj tabelę”, jeżeli nie odświeży się automatycznie."
+    )
     doc.add_page_break()
 
 
@@ -302,7 +312,11 @@ def add_outline(doc):
         ("II", "Ranking indywidualny", "wyniki, punktacja, klasyfikacja i publikacja"),
         ("III", "Powołania do startów indywidualnych", "uprawnienia, kolejność i rezygnacje"),
         ("IV", "Dobór składu drużyny", "pula kandydatów, kryteria, role i odpowiedzialność"),
-        ("V", "Terminarz procesu powoływania", "zamknięcie danych, konsultacje i ogłoszenie nominacji"),
+        (
+            "V",
+            "Terminarz procesu powoływania",
+            "zamknięcie danych, konsultacje i ogłoszenie nominacji",
+        ),
         ("VI", "Ocena regulaminu i doskonalenie metody", "ewaluacja sezonowa i zasady zmian"),
         ("VII", "Postanowienia końcowe", "wejście w życie, przepisy przejściowe i załączniki"),
     )
@@ -355,13 +369,86 @@ def add_chapter(doc, numeral, title, paragraphs):
 
 def add_skeleton(doc):
     chapters = (
-        ("I", "Postanowienia ogólne", (("§ 1", ("[Cel regulaminu.]", "[Zakres spraw regulowanych dokumentem.]")), ("§ 2", ("[Definicje pojęć używanych w regulaminie.]",)))),
-        ("II", "Ranking indywidualny", (("§ 3", ("[Cel i znaczenie rankingu indywidualnego.]",)), ("§ 4", ("[Kategorie, zawody i wyniki uwzględniane w rankingu.]", "[Zasady punktacji i publikacji rankingu.]")))),
-        ("III", "Powołania do startów indywidualnych", (("§ 5", ("[Zasady kwalifikacji i ustalania kolejności kandydatów.]", "[Rezygnacja, zastępstwo i sytuacje szczególne.]")),)),
-        ("IV", "Dobór składu drużyny", (("§ 6", ("[Pula kandydatów do drużyny.]", "[Wymogi kategorii wiekowych i dostępności.]")), ("§ 7", ("[Kryteria wyboru składu, role i odpowiedzialność za decyzję.]",)))),
-        ("V", "Terminarz procesu powoływania", (("§ 8", ("[Daty graniczne procesu.]", "[Deklaracje, weryfikacja danych i ogłoszenie decyzji.]")),)),
-        ("VI", "Ocena regulaminu i doskonalenie metody", (("§ 9", ("[Zakres i termin oceny posezonowej.]", "[Zasady przygotowania zmian na kolejny sezon.]")),)),
-        ("VII", "Postanowienia końcowe", (("§ 10", ("[Przepisy przejściowe.]", "[Wejście regulaminu w życie.]")),)),
+        (
+            "I",
+            "Postanowienia ogólne",
+            (
+                ("§ 1", ("[Cel regulaminu.]", "[Zakres spraw regulowanych dokumentem.]")),
+                ("§ 2", ("[Definicje pojęć używanych w regulaminie.]",)),
+            ),
+        ),
+        (
+            "II",
+            "Ranking indywidualny",
+            (
+                ("§ 3", ("[Cel i znaczenie rankingu indywidualnego.]",)),
+                (
+                    "§ 4",
+                    (
+                        "[Kategorie, zawody i wyniki uwzględniane w rankingu.]",
+                        "[Zasady punktacji i publikacji rankingu.]",
+                    ),
+                ),
+            ),
+        ),
+        (
+            "III",
+            "Powołania do startów indywidualnych",
+            (
+                (
+                    "§ 5",
+                    (
+                        "[Zasady kwalifikacji i ustalania kolejności kandydatów.]",
+                        "[Rezygnacja, zastępstwo i sytuacje szczególne.]",
+                    ),
+                ),
+            ),
+        ),
+        (
+            "IV",
+            "Dobór składu drużyny",
+            (
+                (
+                    "§ 6",
+                    (
+                        "[Pula kandydatów do drużyny.]",
+                        "[Wymogi kategorii wiekowych i dostępności.]",
+                    ),
+                ),
+                ("§ 7", ("[Kryteria wyboru składu, role i odpowiedzialność za decyzję.]",)),
+            ),
+        ),
+        (
+            "V",
+            "Terminarz procesu powoływania",
+            (
+                (
+                    "§ 8",
+                    (
+                        "[Daty graniczne procesu.]",
+                        "[Deklaracje, weryfikacja danych i ogłoszenie decyzji.]",
+                    ),
+                ),
+            ),
+        ),
+        (
+            "VI",
+            "Ocena regulaminu i doskonalenie metody",
+            (
+                (
+                    "§ 9",
+                    (
+                        "[Zakres i termin oceny posezonowej.]",
+                        "[Zasady przygotowania zmian na kolejny sezon.]",
+                    ),
+                ),
+            ),
+        ),
+        (
+            "VII",
+            "Postanowienia końcowe",
+            (("§ 10", ("[Przepisy przejściowe.]", "[Wejście regulaminu w życie.]")),),
+        ),
     )
     for numeral, title, paragraphs in chapters:
         add_chapter(doc, numeral, title, paragraphs)
@@ -386,7 +473,10 @@ def add_version_history(doc):
         run.font.size = Pt(9)
         run.font.color.rgb = RGBColor(255, 255, 255)
     cells = table.add_row().cells
-    for cell, text in zip(cells, ("0.1", "[data]", "Pierwszy prototyp struktury i formatowania", "projekt do konsultacji")):
+    for cell, text in zip(
+        cells,
+        ("0.1", "[data]", "Pierwszy prototyp struktury i formatowania", "projekt do konsultacji"),
+    ):
         set_cell_margins(cell)
         p = cell.paragraphs[0]
         p.paragraph_format.space_after = Pt(0)
@@ -427,7 +517,9 @@ def main():
     doc.core_properties.title = "Regulamin powoływania reprezentacji Polski weteranów w szermierce"
     doc.core_properties.subject = "Prototyp struktury i formatowania — sezon 2026/2027"
     doc.core_properties.author = "Komisja regulaminowa"
-    doc.core_properties.comments = "Projekt do konsultacji; treść normatywna nie została jeszcze uzgodniona."
+    doc.core_properties.comments = (
+        "Projekt do konsultacji; treść normatywna nie została jeszcze uzgodniona."
+    )
     doc.save(OUTPUT)
     print(OUTPUT.resolve())
 

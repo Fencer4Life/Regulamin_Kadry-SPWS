@@ -1,10 +1,9 @@
 """Close a labeled discussion without creating a decision or editing the regulation."""
 
 import json
-from pathlib import Path
 import subprocess
 import sys
-
+from pathlib import Path
 
 REASONS = {"PORZUCONA": "OUTDATED", "DUPLIKAT": "DUPLICATE"}
 DECISION_LABELS = {"rozstrzygnięta", "redakcja-bez-zmiany-sensu"}
@@ -28,11 +27,18 @@ def abandon_discussion(event, *, gh=call_gh):
     repo = event["repository"]["full_name"]
     owner, name = repo.split("/")
     number = int(event["discussion"]["number"])
-    data = graphql(gh,
+    data = graphql(
+        gh,
         "query($owner:String!,$name:String!,$number:Int!){"
         "repository(owner:$owner,name:$name){discussion(number:$number){"
         "id closed stateReason labels(first:100){nodes{name} pageInfo{hasNextPage}}}}}",
-        "-f", f"owner={owner}", "-f", f"name={name}", "-F", f"number={number}")
+        "-f",
+        f"owner={owner}",
+        "-f",
+        f"name={name}",
+        "-F",
+        f"number={number}",
+    )
     discussion = data["repository"]["discussion"]
     if discussion is None:
         raise ValueError("Nie znaleziono dyskusji")
@@ -49,10 +55,13 @@ def abandon_discussion(event, *, gh=call_gh):
             raise ValueError("Dyskusję zamknięto z innym powodem; wymagana kontrola ręczna")
     else:
         # The interpolated reason comes only from the fixed mapping, never user text.
-        result = graphql(gh,
+        result = graphql(
+            gh,
             "mutation($discussionId:ID!){closeDiscussion(input:{discussionId:$discussionId,"
             f"reason:{reason}" + "}){discussion{closed stateReason}}}",
-            "-f", f"discussionId={discussion['id']}")
+            "-f",
+            f"discussionId={discussion['id']}",
+        )
         closed = result["closeDiscussion"]["discussion"]
         if not closed["closed"] or closed["stateReason"] != reason:
             raise ValueError("GitHub nie potwierdził zamknięcia z oczekiwanym powodem")

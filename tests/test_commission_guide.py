@@ -9,10 +9,13 @@ ROOT = Path(__file__).resolve().parents[1]
 class CommissionGuideTests(unittest.TestCase):
     def test_decision_cards_and_discussion_form_have_public_return_links(self):
         decision = (ROOT / "_layouts/decision.html").read_text(encoding="utf-8")
-        links = "\n".join((ROOT / path).read_text(encoding="utf-8") for path in ("_layouts/default.html", "dyskusje.html", "przewodnik.html"))
+        links = "\n".join(
+            (ROOT / path).read_text(encoding="utf-8")
+            for path in ("_layouts/default.html", "dyskusje.html", "przewodnik.html")
+        )
         self.assertEqual(decision.count("/?strona=1&amp;na_stronie=20"), 2)
         self.assertEqual(decision.count("Powrót do Rejestru Decyzji"), 2)
-        self.assertEqual(links.count("discussions/new?category=propozycje-zmian-regulaminu\""), 3)
+        self.assertEqual(links.count('discussions/new?category=propozycje-zmian-regulaminu"'), 3)
         self.assertNotIn("&amp;title=", links)
         self.assertNotIn("&amp;body=", links)
 
@@ -63,8 +66,23 @@ class CommissionGuideTests(unittest.TestCase):
     def test_public_guide_explains_roles_sync_and_full_process(self):
         guide = ROOT / "przewodnik.html"
         self.assertTrue(guide.is_file())
-        text = guide.read_text(encoding="utf-8") + (ROOT / "_includes/process-diagrams.html").read_text(encoding="utf-8")
-        for value in ("Koordynator dyskusji", "Redaktor regulaminu", "co 15 minut", "Rozstrzygnięta", "Uzasadnienie", "swimlane", "Decyzja?", "DOKUMENTACJA<br>DECYZJI", "Zamknięte dyskusje i decyzje", "czeka na zamknięcie dyskusji", "Odśwież dane", "cache GitHub Pages"):
+        text = guide.read_text(encoding="utf-8") + (
+            ROOT / "_includes/process-diagrams.html"
+        ).read_text(encoding="utf-8")
+        for value in (
+            "Koordynator dyskusji",
+            "Redaktor regulaminu",
+            "co 15 minut",
+            "Rozstrzygnięta",
+            "Uzasadnienie",
+            "swimlane",
+            "Decyzja?",
+            "DOKUMENTACJA<br>DECYZJI",
+            "Zamknięte dyskusje i decyzje",
+            "czeka na zamknięcie dyskusji",
+            "Odśwież dane",
+            "cache GitHub Pages",
+        ):
             self.assertIn(value, text)
         self.assertNotIn("Redaktor prowadzący", text)
 
@@ -99,8 +117,8 @@ class CommissionGuideTests(unittest.TestCase):
 
     def test_status_diagram_is_unchanged_and_decision_diagram_shows_both_docx_paths(self):
         text = (ROOT / "_includes/process-diagrams.html").read_text(encoding="utf-8")
-        status = text.split('<h3>Status dyskusji</h3>', 1)[1].split(
-            '<h3>Jak decyzja wybiera ścieżkę dokumentu</h3>', 1
+        status = text.split("<h3>Status dyskusji</h3>", 1)[1].split(
+            "<h3>Jak decyzja wybiera ścieżkę dokumentu</h3>", 1
         )[0]
         self.assertIn("OTWARTA", status)
         self.assertIn("DYSKUSJA", status)
@@ -109,9 +127,9 @@ class CommissionGuideTests(unittest.TestCase):
         self.assertIn("DUPLIKAT", status)
         self.assertNotIn("redakcja-bez-zmiany-sensu", status)
 
-        decision = text.split(
-            '<h3>Jak decyzja wybiera ścieżkę dokumentu</h3>', 1
-        )[1].split('<h3>Artefakty, które powstają</h3>', 1)[0]
+        decision = text.split("<h3>Jak decyzja wybiera ścieżkę dokumentu</h3>", 1)[1].split(
+            "<h3>Artefakty, które powstają</h3>", 1
+        )[0]
         for value in (
             'aria-label="Diagram wyboru pełnej lub szybkiej ścieżki decyzji"',
             "Czy ma etykietę",
@@ -131,7 +149,11 @@ class CommissionGuideTests(unittest.TestCase):
 
     def test_guide_uses_direct_card_creation_without_resolution_template(self):
         template = ROOT / "szablony/formularz-rozstrzygniecia.md"
-        guide = (ROOT / "przewodnik.html").read_text(encoding="utf-8") if (ROOT / "przewodnik.html").exists() else ""
+        guide = (
+            (ROOT / "przewodnik.html").read_text(encoding="utf-8")
+            if (ROOT / "przewodnik.html").exists()
+            else ""
+        )
         self.assertFalse(template.exists())
         self.assertNotIn("formularz-rozstrzygniecia.md", guide)
         self.assertIn("Nie trzeba niczego przepisywać do komentarza.", guide)

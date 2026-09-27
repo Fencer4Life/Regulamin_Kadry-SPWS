@@ -5,23 +5,51 @@ import re
 import unittest
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 DECISIONS = ROOT / "_decyzje"
 
 REQUIRED_FIELDS = {
-    "id", "tytul", "typ", "status", "data_inicjacji", "data_decyzji", "sezon",
-    "dotyczy", "decydenci", "discussion_url", "pr_url", "stan_obowiązywania",
-    "zmienia", "zmieniona_przez", "zakres_zmiany", "zastepuje",
-    "zastapiona_przez", "termin_oceny",
+    "id",
+    "tytul",
+    "typ",
+    "status",
+    "data_inicjacji",
+    "data_decyzji",
+    "sezon",
+    "dotyczy",
+    "decydenci",
+    "discussion_url",
+    "pr_url",
+    "stan_obowiązywania",
+    "zmienia",
+    "zmieniona_przez",
+    "zakres_zmiany",
+    "zastepuje",
+    "zastapiona_przez",
+    "termin_oceny",
 }
 REQUIRED_SECTIONS = (
-    "## Problem", "## Kontekst", "## Dyskusja", "## Rozważane warianty", "## Decyzja",
-    "## Uzasadnienie", "## Konsekwencje", "## Odrzucone alternatywy", "## Plan oceny",
-    "## Ocena po sezonie", "## Historia zmian",
+    "## Problem",
+    "## Kontekst",
+    "## Dyskusja",
+    "## Rozważane warianty",
+    "## Decyzja",
+    "## Uzasadnienie",
+    "## Konsekwencje",
+    "## Odrzucone alternatywy",
+    "## Plan oceny",
+    "## Ocena po sezonie",
+    "## Historia zmian",
 )
 ALLOWED_TYPES = {"merytoryczna", "redakcyjna"}
-ALLOWED_STATUSES = {"projekt", "w dyskusji", "do zatwierdzenia", "przyjęta", "odrzucona", "wstrzymana"}
+ALLOWED_STATUSES = {
+    "projekt",
+    "w dyskusji",
+    "do zatwierdzenia",
+    "przyjęta",
+    "odrzucona",
+    "wstrzymana",
+}
 ALLOWED_EFFECTS = {"nie dotyczy", "obowiązuje", "częściowo zmieniona", "zastąpiona"}
 
 
@@ -74,8 +102,11 @@ class DecisionRegistryTests(unittest.TestCase):
             if metadata.get("stan_obowiązywania") not in ALLOWED_EFFECTS:
                 errors.append(f"{path.name}: niedozwolony stan obowiązywania")
             structured_fields = (
-                ("zmienia", list), ("zmieniona_przez", list), ("zakres_zmiany", dict),
-                ("zastepuje", list), ("zastapiona_przez", list),
+                ("zmienia", list),
+                ("zmieniona_przez", list),
+                ("zakres_zmiany", dict),
+                ("zastepuje", list),
+                ("zastapiona_przez", list),
             )
             for field, expected_type in structured_fields:
                 try:
@@ -87,8 +118,11 @@ class DecisionRegistryTests(unittest.TestCase):
             for date_field in ("data_inicjacji", "data_decyzji"):
                 if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", metadata.get(date_field, "")):
                     errors.append(f"{path.name}: niepoprawne pole {date_field}")
-            sections = (("## Decyzja", "## Uzasadnienie", "## Dyskusja", "## Wdrożenie")
-                        if metadata.get('schema_version') == '2' else REQUIRED_SECTIONS)
+            sections = (
+                ("## Decyzja", "## Uzasadnienie", "## Dyskusja", "## Wdrożenie")
+                if metadata.get("schema_version") == "2"
+                else REQUIRED_SECTIONS
+            )
             missing_sections = [section for section in sections if section not in body]
             if missing_sections:
                 errors.append(f"{path.name}: brak sekcji {missing_sections}")
@@ -107,7 +141,12 @@ class DecisionRegistryTests(unittest.TestCase):
 
     def test_relationship_graph_is_consistent(self):
         records = {read_record(path)[0]["id"]: read_record(path)[0] for path in self.paths}
-        inverse = {"zmienia": "zmieniona_przez", "zmieniona_przez": "zmienia", "zastepuje": "zastapiona_przez", "zastapiona_przez": "zastepuje"}
+        inverse = {
+            "zmienia": "zmieniona_przez",
+            "zmieniona_przez": "zmienia",
+            "zastepuje": "zastapiona_przez",
+            "zastapiona_przez": "zastepuje",
+        }
         errors = []
         for decision_id, metadata in records.items():
             for field, opposite in inverse.items():

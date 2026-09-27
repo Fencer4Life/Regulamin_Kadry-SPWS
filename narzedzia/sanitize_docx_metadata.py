@@ -7,10 +7,11 @@ from zipfile import ZIP_DEFLATED, ZipFile
 
 from lxml import etree
 
-
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_DOCUMENT = ROOT / "regulamin" / (
-    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
+DEFAULT_DOCUMENT = (
+    ROOT
+    / "regulamin"
+    / ("Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx")
 )
 PUBLIC_EDITOR = "Komisja regulaminowa SPWS"
 
@@ -28,11 +29,7 @@ def assert_safe_revision_state(archive: ZipFile) -> None:
 
     document = etree.fromstring(archive.read("word/document.xml"))
     tracked_tags = ("ins", "del", "moveFrom", "moveTo")
-    found = [
-        tag
-        for tag in tracked_tags
-        if document.xpath(f"//w:{tag}", namespaces=WORD_NS)
-    ]
+    found = [tag for tag in tracked_tags if document.xpath(f"//w:{tag}", namespaces=WORD_NS)]
     if found:
         raise RuntimeError(f"Dokument zawiera niezaakceptowane śledzone zmiany: {found}")
 
@@ -56,7 +53,9 @@ def sanitize(path: Path) -> None:
             core = sanitized_core_properties(source.read("docProps/core.xml"))
             with ZipFile(temporary, "w", compression=ZIP_DEFLATED) as target:
                 for item in source.infolist():
-                    payload = core if item.filename == "docProps/core.xml" else source.read(item.filename)
+                    payload = (
+                        core if item.filename == "docProps/core.xml" else source.read(item.filename)
+                    )
                     target.writestr(item, payload)
         os.replace(temporary, path)
     finally:

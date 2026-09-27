@@ -4,13 +4,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from narzedzia.docx_model import parse_regulation_source
 from narzedzia.normalize_regulamin_markdown import normalize_source, resolve_references
 from narzedzia.prepare_regulamin import normalize_and_build, verify
-from narzedzia.docx_model import parse_regulation_source
 from tests.test_ztp_model import METADATA
 
-
-BODY = '''
+BODY = """
 ## [chapter:ogolne] Ogólne
 <!-- scope: zakres -->
 ### [section:zasady] Zasady
@@ -18,7 +17,7 @@ BODY = '''
    9) [unit:punkt-a] pierwszy punkt;
    4) [unit:punkt-b] drugi punkt.
 2. [unit:drugi] Drugi ustęp odsyła do {{ref:zasady/punkt-a}}.
-'''
+"""
 
 
 class RegulationNormalizationTests(unittest.TestCase):
@@ -39,14 +38,14 @@ class RegulationNormalizationTests(unittest.TestCase):
     def test_normalizes_technical_enumeration_punctuation(self):
         normalized = normalize_source(
             self.source(
-                '''
+                """
 ## [chapter:ogolne] Ogólne
 <!-- scope: zakres -->
 ### [section:zasady] Zasady
 1. [unit:wprowadzenie] Wyliczenie.
    1) [unit:pierwszy] pierwszy punkt.
    2) [unit:drugi] drugi punkt;
-'''
+"""
             )
         )
         self.assertIn("[unit:wprowadzenie] Wyliczenie:", normalized)
@@ -55,7 +54,7 @@ class RegulationNormalizationTests(unittest.TestCase):
 
     def test_normalization_is_idempotent(self):
         first = normalize_source(self.source())
-        second = normalize_source(self.source(first[len(METADATA):]))
+        second = normalize_source(self.source(first[len(METADATA) :]))
         self.assertEqual(first, second)
 
     def test_resolves_stable_reference_to_current_visible_number(self):
@@ -88,7 +87,10 @@ class RegulationNormalizationTests(unittest.TestCase):
         source = self.source()
         target = source.with_suffix(".docx")
         normalize_and_build(source, target)
-        source.write_text(source.read_text(encoding="utf-8").replace("1. [unit:pierwszy]", "8. [unit:pierwszy]"), encoding="utf-8")
+        source.write_text(
+            source.read_text(encoding="utf-8").replace("1. [unit:pierwszy]", "8. [unit:pierwszy]"),
+            encoding="utf-8",
+        )
         before = (source.read_bytes(), target.read_bytes())
         with self.assertRaisesRegex(ValueError, "wymaga normalizacji"):
             verify(source, target)

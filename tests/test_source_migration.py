@@ -5,14 +5,18 @@ import unittest
 from pathlib import Path
 
 from docx import Document
-from narzedzia.docx_model import ZtpUnit, parse_regulation_source
 
+from narzedzia.docx_model import ZtpUnit, parse_regulation_source
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "dokumentacja/migracja/2026-09-19-mapa-tresci-zrodlowej.json"
-SOURCE = ROOT / "regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md"
+SOURCE = (
+    ROOT / "regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md"
+)
 DISCUSSIONS = ROOT / "dokumentacja/dyskusje/2026-09-19-propozycje-z-dokumentu-zrodlowego.md"
-DOCX = ROOT / "regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
+DOCX = (
+    ROOT / "regulamin/Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
+)
 
 
 def walk(unit: ZtpUnit):
@@ -81,7 +85,8 @@ class SourceMigrationTests(unittest.TestCase):
     def test_docx_marks_every_continuous_source_draft_section_visibly(self):
         document = Document(DOCX)
         labels = [
-            paragraph for paragraph in document.paragraphs
+            paragraph
+            for paragraph in document.paragraphs
             if paragraph.text == "BRUDNOPIS ZE ŹRÓDŁA — DO OPRACOWANIA"
         ]
         self.assertEqual(len(labels), 0)

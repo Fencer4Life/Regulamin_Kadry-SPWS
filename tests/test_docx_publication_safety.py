@@ -7,10 +7,11 @@ from zipfile import ZipFile
 
 from lxml import etree
 
-
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_DOCUMENT = ROOT / "regulamin" / (
-    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
+DEFAULT_DOCUMENT = (
+    ROOT
+    / "regulamin"
+    / ("Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx")
 )
 DOCUMENT = Path(os.environ.get("REGULAMIN_DOCX_PATH", DEFAULT_DOCUMENT))
 ALLOWED_EDITOR = "Komisja regulaminowa SPWS"
@@ -38,10 +39,7 @@ class DocxPublicationSafetyTests(unittest.TestCase):
     def test_document_contains_no_tracked_changes(self):
         document = etree.fromstring(self.archive.read("word/document.xml"))
         tracked_tags = ("ins", "del", "moveFrom", "moveTo")
-        found = {
-            tag: len(document.xpath(f"//w:{tag}", namespaces=WORD_NS))
-            for tag in tracked_tags
-        }
+        found = {tag: len(document.xpath(f"//w:{tag}", namespaces=WORD_NS)) for tag in tracked_tags}
         self.assertEqual(found, {tag: 0 for tag in tracked_tags})
 
     def test_public_metadata_uses_commission_role_not_personal_name(self):

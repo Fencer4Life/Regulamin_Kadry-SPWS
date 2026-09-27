@@ -6,7 +6,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from urllib.parse import urlsplit
 
-
 CHAPTER_RE = re.compile(r"^## \[chapter:([a-z0-9-]+)] (.+)$")
 SECTION_RE = re.compile(r"^### \[section:([a-z0-9-]+)](?: (.*))?$")
 SCOPE_RE = re.compile(r"^<!-- scope: (.+) -->$")
@@ -127,6 +126,7 @@ def resolve_terms(milestones: dict[str, int], text: str) -> str:
             raise ValueError(f"Nieznany termin: {key}")
         days = milestones[key]
         return str(days) if match.group(1) == "days" else (f"T−{days}" if days else "T")
+
     result = TERM_RE.sub(replace, text)
     if "{{term:" in result or "{{days:" in result:
         raise ValueError("Niepoprawny znacznik terminu")
@@ -172,9 +172,7 @@ def _append_unit(section: RegulationSection, unit: ZtpUnit, stack: dict[int, Ztp
         return
     parent = stack.get(level - 1)
     if parent is None:
-        raise ValueError(
-            f"Jednostka {unit.identifier} ({unit.kind}) nie ma jednostki nadrzędnej"
-        )
+        raise ValueError(f"Jednostka {unit.identifier} ({unit.kind}) nie ma jednostki nadrzędnej")
     if unit.status == "accepted" and parent.status != "accepted":
         unit.status = parent.status
     parent.children.append(unit)
@@ -194,6 +192,7 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
         raise ValueError("Brak zamykającego bloku metadanych TOML") from error
     metadata = tomllib.loads(metadata_text)
     from narzedzia.publication_source import extract, restore_tokens
+
     markdown, publication = extract(markdown, metadata)
     markdown = restore_tokens(markdown)
     milestones = metadata.pop("milestones", {})
@@ -203,10 +202,27 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
     ):
         raise ValueError("Terminy muszą być nieujemnymi całkowitymi liczbami dni")
     required = {
-        "title", "subtitle", "version", "status", "project_date", "subject",
-        "comments", "outline_intro", "toc_note", "history_scope",
-        "cover_version", "cover_date", "cover_label", "cover_footer", "header_text", "footer_text",
-        "annex_label", "annex_title", "annex_subtitle", "annex_coefficient", "annex_note",
+        "title",
+        "subtitle",
+        "version",
+        "status",
+        "project_date",
+        "subject",
+        "comments",
+        "outline_intro",
+        "toc_note",
+        "history_scope",
+        "cover_version",
+        "cover_date",
+        "cover_label",
+        "cover_footer",
+        "header_text",
+        "footer_text",
+        "annex_label",
+        "annex_title",
+        "annex_subtitle",
+        "annex_coefficient",
+        "annex_note",
     }
     missing = sorted(required - metadata.keys())
     if missing:
@@ -228,12 +244,12 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
         index += 1
         if not line:
             continue
-        if line.startswith('#### ') and has_points_annex:
+        if line.startswith("#### ") and has_points_annex:
             while index < len(lines) and not lines[index].strip():
                 index += 1
             rows, index = _parse_markdown_table(lines, index)
             if len(rows[0]) != 11:
-                raise ValueError('Tabela załącznika wymaga 11 kolumn')
+                raise ValueError("Tabela załącznika wymaga 11 kolumn")
             annex_tables.append(TableBlock(name=line[5:], rows=rows))
             continue
         if note_match := re.fullmatch(r"<!-- note:([a-z0-9-]+) -->", line):
@@ -302,7 +318,9 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
                     resolve_terms(milestones, cell)
             if name.startswith("timeline-"):
                 if rows[0] != ["Termin", "Zdarzenie", "Zakres"] or not 2 <= len(rows) - 1 <= 4:
-                    raise ValueError("Oś czasu wymaga kolumn Termin, Zdarzenie, Zakres oraz 2–4 etapów")
+                    raise ValueError(
+                        "Oś czasu wymaga kolumn Termin, Zdarzenie, Zakres oraz 2–4 etapów"
+                    )
                 terms = []
                 for row in rows[1:]:
                     token = TERM_RE.fullmatch(row[0])
@@ -324,8 +342,7 @@ def parse_regulation_source(path: Path) -> RegulationDocument:
         unit_match = UNIT_RE.fullmatch(raw_line)
         if unit_match is None:
             raise ValueError(
-                "Treść jednostki musi zawierać stabilny identyfikator [unit:...]: "
-                f"{line}"
+                f"Treść jednostki musi zawierać stabilny identyfikator [unit:...]: {line}"
             )
         identifier = unit_match.group("identifier")
         if identifier in identifiers:

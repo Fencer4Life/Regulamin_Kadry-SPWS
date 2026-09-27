@@ -7,9 +7,10 @@ from pathlib import Path
 from docx import Document
 from docx.oxml.ns import qn
 
-
-DEFAULT_DOCUMENT = Path(__file__).resolve().parents[1] / "regulamin" / (
-    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx"
+DEFAULT_DOCUMENT = (
+    Path(__file__).resolve().parents[1]
+    / "regulamin"
+    / ("Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.docx")
 )
 MAX_ATOMIC_TABLE_ROWS = 18
 SECTION_TITLE_STYLE = "Tytuł paragrafu"
@@ -142,8 +143,10 @@ class PaginationTests(unittest.TestCase):
         missing = []
         for table_index, table in enumerate(self.document.tables, start=1):
             following = table._tbl.getnext()
-            text = "" if following is None else "".join(
-                element.text or "" for element in following.iter(qn("w:t"))
+            text = (
+                ""
+                if following is None
+                else "".join(element.text or "" for element in following.iter(qn("w:t")))
             )
             if following is None or following.tag != qn("w:p") or text:
                 missing.append(table_index)

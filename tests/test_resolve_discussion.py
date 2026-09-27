@@ -20,7 +20,9 @@ class ResolveDiscussionTests(unittest.TestCase):
     def test_rejects_missing_or_invalid_discussion_number(self):
         with tempfile.TemporaryDirectory() as directory:
             card = Path(directory) / "DR-028-test.md"
-            card.write_text("discussion_url: https://example.com/discussions/not-a-number\n", encoding="utf-8")
+            card.write_text(
+                "discussion_url: https://example.com/discussions/not-a-number\n", encoding="utf-8"
+            )
 
             with self.assertRaisesRegex(ValueError, "Niepoprawny discussion_url"):
                 discussion_number_from_card(card)

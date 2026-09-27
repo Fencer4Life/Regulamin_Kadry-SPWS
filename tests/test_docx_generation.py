@@ -6,6 +6,7 @@ from pathlib import Path
 
 from docx import Document
 from docx.shared import Cm
+
 from narzedzia.build_regulamin_docx import build_document
 from narzedzia.docx_parity import (
     document_content_contract,
@@ -15,24 +16,25 @@ from narzedzia.docx_parity import (
 from tests.test_docx_current_contract import CURRENT_DOCUMENT
 from tests.test_ztp_model import METADATA
 
-
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "regulamin" / (
-    "Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md"
+SOURCE = (
+    ROOT
+    / "regulamin"
+    / ("Regulamin-powolywania-Reprezentacji-Polski-Weteranow-w-szermierce_2026.md")
 )
 
 
 class GeneratedDocxTests(unittest.TestCase):
     def test_outline_is_reader_facing_and_uses_a_compact_chapter_column(self):
         document = Document(CURRENT_DOCUMENT)
-        self.assertIn("Treść dokumentu podzielono następująco:", [
-            paragraph.text for paragraph in document.paragraphs
-        ])
+        self.assertIn(
+            "Treść dokumentu podzielono następująco:",
+            [paragraph.text for paragraph in document.paragraphs],
+        )
         outline = next(
             table
             for table in document.tables
-            if [cell.text for cell in table.rows[0].cells]
-            == ["Rozdział", "Tytuł", "Zakres"]
+            if [cell.text for cell in table.rows[0].cells] == ["Rozdział", "Tytuł", "Zakres"]
         )
         self.assertFalse(outline.autofit)
         self.assertAlmostEqual(outline.columns[0].width, Cm(1.8), delta=Cm(0.01))
@@ -40,14 +42,17 @@ class GeneratedDocxTests(unittest.TestCase):
         self.assertLess(outline.columns[0].width, outline.columns[2].width)
 
     def test_renders_arabic_chapter_separate_paragraph_title_and_draft_label(self):
-        source_text = METADATA + '''
+        source_text = (
+            METADATA
+            + """
 ## [chapter:ogolne] Ogólne
 <!-- scope: zakres -->
 ### [section:zasady] Zasady
 1. [unit:przyjete] Treść przyjęta.
 2. [unit:szkic-a] [status:source-draft] Pierwszy szkic.
 3. [unit:szkic-b] [status:source-draft] Drugi szkic.
-'''
+"""
+        )
         with tempfile.TemporaryDirectory() as directory:
             source = Path(directory) / "source.md"
             target = Path(directory) / "target.docx"
@@ -61,14 +66,12 @@ class GeneratedDocxTests(unittest.TestCase):
             self.assertNotIn("§ 1. Zasady", texts)
             self.assertEqual(texts.count("BRUDNOPIS ZE ŹRÓDŁA — DO OPRACOWANIA"), 1)
             draft_paragraphs = [
-                paragraph for paragraph in document.paragraphs
-                if "szkic" in paragraph.text.lower()
+                paragraph for paragraph in document.paragraphs if "szkic" in paragraph.text.lower()
             ]
             self.assertEqual(len(draft_paragraphs), 2)
             self.assertTrue(
                 all(
-                    run.font.color.rgb is not None
-                    and str(run.font.color.rgb) == "595959"
+                    run.font.color.rgb is not None and str(run.font.color.rgb) == "595959"
                     for paragraph in draft_paragraphs
                     for run in paragraph.runs
                     if run.text

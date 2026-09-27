@@ -20,9 +20,7 @@ class RegulationChangeGateTests(unittest.TestCase):
             validate_changes({SOURCE: "M"})
 
     def test_complete_regulation_change_is_accepted(self):
-        validate_changes(
-            {SOURCE: "M", DOCX: "M", "_decyzje/DR-018-korekta.md": "A"}
-        )
+        validate_changes({SOURCE: "M", DOCX: "M", "_decyzje/DR-018-korekta.md": "A"})
 
     def test_initial_markdown_migration_requires_docx_but_not_decision(self):
         validate_changes({SOURCE: "A", DOCX: "M"})

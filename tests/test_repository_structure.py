@@ -5,7 +5,6 @@ import subprocess
 import unittest
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 REQUIRED_PATHS = (
@@ -76,7 +75,9 @@ class RepositoryStructureTests(unittest.TestCase):
                 or Path(path).name == ".DS_Store"
             )
         ]
-        self.assertEqual(forbidden, [], f"Pliki robocze nie mogą trafić do repozytorium: {forbidden}")
+        self.assertEqual(
+            forbidden, [], f"Pliki robocze nie mogą trafić do repozytorium: {forbidden}"
+        )
 
 
 if __name__ == "__main__":

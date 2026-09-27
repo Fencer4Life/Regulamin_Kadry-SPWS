@@ -6,8 +6,7 @@ from pathlib import Path
 
 from narzedzia.docx_model import parse_regulation_source
 
-
-METADATA = '''+++
+METADATA = """+++
 title = "T"
 subtitle = "S"
 version = "1"
@@ -31,7 +30,7 @@ annex_coefficient = "Współczynnik"
 annex_note = "Nota"
 prototype_note = "P"
 +++
-'''
+"""
 
 
 class ZtpModelTests(unittest.TestCase):
@@ -43,7 +42,7 @@ class ZtpModelTests(unittest.TestCase):
 
     def test_parses_the_complete_ztp_hierarchy(self):
         model = self.parse(
-            '''
+            """
 ## [chapter:ogolne] Ogólne
 <!-- scope: zakres -->
 ### [section:zasady] Zasady
@@ -52,7 +51,7 @@ class ZtpModelTests(unittest.TestCase):
       a) [unit:litera] litera:
          - [unit:tiret] tiret:
             -- [unit:double-tiret] podwójne tiret.
-'''
+"""
         )
         unit = model.chapters[0].sections[0].blocks[0]
         self.assertEqual(unit.kind, "ust")
@@ -66,23 +65,23 @@ class ZtpModelTests(unittest.TestCase):
 
     def test_single_thought_paragraph_has_no_artificial_subsection(self):
         model = self.parse(
-            '''
+            """
 ## [chapter:ogolne] Ogólne
 <!-- scope: zakres -->
 ### [section:zasada] Zasada
 [unit:jedna-mysl] Jedna myśl.
-'''
+"""
         )
         self.assertEqual(model.chapters[0].sections[0].blocks[0].kind, "paragraph")
 
     def test_preserves_source_draft_status(self):
         model = self.parse(
-            '''
+            """
 ## [chapter:ogolne] Ogólne
 <!-- scope: zakres -->
 ### [section:zasada] Zasada
 [unit:szkic] [status:source-draft] Treść do pracy.
-'''
+"""
         )
         self.assertEqual(
             model.chapters[0].sections[0].blocks[0].status,
@@ -92,13 +91,13 @@ class ZtpModelTests(unittest.TestCase):
     def test_rejects_duplicate_unit_identifiers(self):
         with self.assertRaisesRegex(ValueError, "Powtórzony identyfikator"):
             self.parse(
-                '''
+                """
 ## [chapter:ogolne] Ogólne
 <!-- scope: zakres -->
 ### [section:zasada] Zasada
 1. [unit:duplikat] Pierwszy.
 2. [unit:duplikat] Drugi.
-'''
+"""
             )
 
 

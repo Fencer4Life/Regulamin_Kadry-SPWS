@@ -68,7 +68,9 @@ def verify(source: Path, tracked_docx: Path) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Normalizuje Markdown i bezpiecznie buduje Regulamin")
+    parser = argparse.ArgumentParser(
+        description="Normalizuje Markdown i bezpiecznie buduje Regulamin"
+    )
     subparsers = parser.add_subparsers(dest="mode", required=True)
     build = subparsers.add_parser("normalize-and-build")
     build.add_argument("source", type=Path)
