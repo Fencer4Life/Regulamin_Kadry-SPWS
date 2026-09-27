@@ -16,6 +16,7 @@ REQUIRED_PLATFORM_FILES = (
     "assets/rejestr.js",
     "assets/dyskusje.js",
     "_data/discussions.json",
+    "_data/regulations.json",
     ".github/workflows/validate.yml",
     ".github/workflows/pages.yml",
 )
