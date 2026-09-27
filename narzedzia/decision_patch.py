@@ -10,6 +10,10 @@ from narzedzia.prepare_regulamin import normalize_and_build, verify
 
 OLD = "Stary fragment Markdown"
 NEW = "Nowy fragment Markdown"
+DOCUMENT_NAMES = {
+    "reprezentacja": "Regulamin Reprezentacji",
+    "zawody": "Regulamin Zawodów",
+}
 
 
 def format_fragments(old="", new="", *, instructions=True):
@@ -33,9 +37,28 @@ def format_fragments(old="", new="", *, instructions=True):
     )
 
 
+def format_document_fragments(identifier: str, old: str, new: str) -> str:
+    try:
+        title = DOCUMENT_NAMES[identifier]
+    except KeyError as error:
+        raise ValueError(f"Nieznany dokument w karcie decyzji: {identifier}") from error
+    fragments = format_fragments(old, new, instructions=False)
+    fragments = fragments.replace(f"## {OLD}", f"### {OLD}", 1)
+    fragments = fragments.replace(f"## {NEW}", f"### {NEW}", 1)
+    return f"## Zmiana — {title}\n\n{fragments}\n"
+
+
 def read_fragments(card):
+    changes = read_document_fragments(card)
+    if len(changes) != 1:
+        raise ValueError("Karta musi wskazywać dokładnie jeden dokument")
+    return next(iter(changes.values()))
+
+
+def read_document_fragments(card):
     result = {}
     heading = None
+    document = "legacy"
     fence = None
     buffer = []
     # Track all fences, so headings copied from source are not decision sections.
@@ -44,9 +67,10 @@ def read_fragments(card):
         if fence is not None:
             if raw == fence:
                 if heading in {OLD, NEW}:
-                    if heading in result:
+                    key = (document, heading)
+                    if key in result:
                         raise ValueError("Pole zmiany zawiera więcej niż jeden blok kodu")
-                    result[heading] = "".join(buffer).removesuffix("\n")
+                    result[key] = "".join(buffer).removesuffix("\n")
                 fence, buffer = None, []
             else:
                 buffer.append(line)
@@ -54,11 +78,25 @@ def read_fragments(card):
             if heading in {OLD, NEW} and match.group(2) not in {"markdown", "md", ""}:
                 raise ValueError("Fragment zmiany musi być blokiem kodu Markdown")
             fence = match.group(1)
-        elif raw.startswith("## "):
-            heading = raw[3:]
-    if fence is not None or any(not result.get(key, "").strip() for key in (OLD, NEW)):
+        elif raw.startswith("## Zmiana — "):
+            title = raw.removeprefix("## Zmiana — ")
+            matches = [key for key, value in DOCUMENT_NAMES.items() if value == title]
+            if len(matches) != 1:
+                raise ValueError(f"Nieznany dokument w karcie decyzji: {title}")
+            document = matches[0]
+            heading = None
+        elif raw.startswith(("## ", "### ")):
+            heading = raw.lstrip("# ")
+    documents = {key[0] for key in result}
+    if fence is not None or not documents:
         raise ValueError("Wypełnij oba pola: Stary fragment Markdown i Nowy fragment Markdown")
-    return result[OLD], result[NEW]
+    changes = {}
+    for identifier in documents:
+        values = tuple(result.get((identifier, heading), "") for heading in (OLD, NEW))
+        if any(not value.strip() for value in values):
+            raise ValueError("Wypełnij oba pola: Stary fragment Markdown i Nowy fragment Markdown")
+        changes[identifier] = values
+    return changes
 
 
 def replace_exact(source, old, new):

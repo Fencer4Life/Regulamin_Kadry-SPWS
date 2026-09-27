@@ -118,11 +118,28 @@ class DecisionRegistryTests(unittest.TestCase):
             for date_field in ("data_inicjacji", "data_decyzji"):
                 if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", metadata.get(date_field, "")):
                     errors.append(f"{path.name}: niepoprawne pole {date_field}")
+            schema = metadata.get("schema_version")
             sections = (
-                ("## Decyzja", "## Uzasadnienie", "## Dyskusja", "## Wdrożenie")
-                if metadata.get("schema_version") == "2"
+                (
+                    "## Decyzja",
+                    "## Uzasadnienie",
+                    "## Dyskusja",
+                    "## Wdrożenie",
+                )
+                if schema in {"2", "3"}
                 else REQUIRED_SECTIONS
             )
+            if schema == "3":
+                sections += ("## Wpływ na spójność dokumentów",)
+                try:
+                    documents = structured(metadata, "dokumenty")
+                    if not isinstance(documents, list) or not set(documents) <= {
+                        "reprezentacja",
+                        "zawody",
+                    }:
+                        errors.append(f"{path.name}: dokumenty mają zły typ lub wartość")
+                except (KeyError, json.JSONDecodeError):
+                    errors.append(f"{path.name}: dokumenty nie są poprawnym JSON/YAML inline")
             missing_sections = [section for section in sections if section not in body]
             if missing_sections:
                 errors.append(f"{path.name}: brak sekcji {missing_sections}")

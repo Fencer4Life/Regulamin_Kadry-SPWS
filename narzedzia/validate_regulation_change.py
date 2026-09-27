@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 import subprocess
 import sys
@@ -52,20 +53,55 @@ def validate_pending_decisions(changes, root=Path(".")):
             continue
         text = (root / name).read_text(encoding="utf-8")
         front = text.split("---", 2)[1]
-        if "schema_version: 2\n" not in front:
+        schema_match = re.search(r"^schema_version:\s*([23])\s*$", front, re.MULTILINE)
+        if not schema_match:
             continue  # Preserve historical records; the new contract is versioned.
-        from narzedzia.decision_patch import read_fragments
+        schema = int(schema_match.group(1))
+        from narzedzia.decision_patch import read_document_fragments, read_fragments
+
+        has_marker = bool(re.search(r"<!-- applied-source-sha256:[a-f0-9]{64} -->", text))
 
         if "zmiana_regulaminu: true\n" in front:
-            read_fragments(text)
-            if not re.search(r"<!-- applied-source-sha256:[a-f0-9]{64} -->", text):
+            if schema == 2:
+                read_fragments(text)
+                required_paths = (SOURCE, DOCX)
+            else:
+                document_match = re.search(r"^dokumenty:\s*(\[.*\])\s*$", front, re.MULTILINE)
+                if not document_match:
+                    raise ValueError(f"{name}: brak listy dokumentów")
+                try:
+                    documents = json.loads(document_match.group(1))
+                except json.JSONDecodeError as error:
+                    raise ValueError(f"{name}: niepoprawna lista dokumentów") from error
+                fragments = read_document_fragments(text)
+                if not isinstance(documents, list) or set(documents) != set(fragments):
+                    raise ValueError(f"{name}: fragmenty nie odpowiadają wskazanym dokumentom")
+                from narzedzia.regulation_registry import get_regulation
+
+                required_paths = tuple(
+                    str(path)
+                    for identifier in documents
+                    for path in (
+                        get_regulation(identifier).markdown,
+                        get_regulation(identifier).docx,
+                    )
+                )
+            if not has_marker:
                 raise ValueError(
                     f"{name}: najpierw nadaj etykietę wdrażaj na PR i poczekaj na DOCX"
                 )
-            if SOURCE not in changes or DOCX not in changes:
+            if any(path not in changes for path in required_paths):
                 raise ValueError(f"{name}: wdrożenie wymaga zmienionego Markdown i DOCX w tym PR")
         elif "zmiana_regulaminu: false\n" in front:
-            if "## Stary fragment Markdown" in text or "## Nowy fragment Markdown" in text:
+            rejected = bool(re.search(r"^status:\s*[\"]?odrzucona[\"]?\s*$", front, re.MULTILINE))
+            proposed = "proponowana_zmiana: true\n" in front
+            has_fragments = "Stary fragment Markdown" in text or "Nowy fragment Markdown" in text
+            if schema == 3 and rejected:
+                if has_marker:
+                    raise ValueError(f"{name}: decyzja odrzucona nie może mieć znacznika wdrożenia")
+                if proposed != has_fragments:
+                    raise ValueError(f"{name}: propozycja zmiany i jej fragmenty są niespójne")
+            elif has_fragments:
                 raise ValueError(f"{name}: sprzeczne oznaczenie zmiany dokumentu")
         else:
             raise ValueError(f"{name}: brak automatycznego oznaczenia zmiany dokumentu")

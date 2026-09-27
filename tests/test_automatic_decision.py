@@ -39,10 +39,11 @@ class AutomaticDecisionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             card = self.generate(Path(directory)).read_text()
         for text in (
-            "schema_version: 2",
+            "schema_version: 3",
             "Uzgodnione uzasadnienie z dyskusji.",
-            "## Stary fragment Markdown",
-            "## Nowy fragment Markdown",
+            "## Zmiana — Regulamin Reprezentacji",
+            "### Stary fragment Markdown",
+            "### Nowy fragment Markdown",
             "DR-002",
         ):
             self.assertIn(text, card)
@@ -161,7 +162,7 @@ pr_url: https://github.com/Fencer4Life/Regulamin_Kadry-SPWS/pull/100
             with patch("narzedzia.pr_decision.load_discussion", return_value=discussion()):
                 refresh_from_discussion(card, "Fencer4Life/Regulamin_Kadry-SPWS")
             migrated = card.read_text(encoding="utf-8")
-            self.assertIn("schema_version: 2", migrated)
+            self.assertIn("schema_version: 3", migrated)
             self.assertIn("Uzgodnione uzasadnienie z dyskusji.", migrated)
             self.assertNotIn("Do uzupełnienia", migrated)
 

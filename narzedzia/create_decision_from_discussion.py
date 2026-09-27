@@ -100,6 +100,7 @@ def parse_discussion_form(body: str, *, strict=True) -> dict[str, object]:
         raise ValueError(f"Nieznany wynik decyzji: {result_value}")
 
     return {
+        "legacy": not document_value and not result_value and not is_shared,
         "koordynator": _discussion_field(body, "Koordynator dyskusji", strict=strict),
         "problem": _discussion_field(body, "Problem", strict=strict),
         "dokumenty": documents,
@@ -134,25 +135,42 @@ def _discussion_fragment(body: str, label: str, *, strict=True) -> str:
 
 def render_card(discussion: dict, decision_id: str, pr_url: str = "") -> str:
     """An exact snapshot of structured discussion fields, never a guessed summary."""
-    from narzedzia.decision_patch import format_fragments
+    from narzedzia.decision_patch import format_document_fragments
 
     source = parse_discussion_form(discussion.get("body") or "")
     if "<!-- applied-source-sha256:" in (discussion.get("body") or ""):
         raise ValueError(
             "Znacznik wdrożenia jest zastrzeżony dla automatu; usuń go z opisu dyskusji"
         )
-    old, new = source["fragment_markdown"], source["nowe_brzmienie_markdown"]
     if not source["uzasadnienie"]:
         raise ValueError(
             "Uzupełnij pole „Uzasadnienie” w opisie dyskusji; nie w karcie ani komentarzu"
         )
-    if bool(old.strip()) != bool(new.strip()):
-        raise ValueError(
-            "Uzupełnij oba pola w dyskusji: Fragment Markdown do zastąpienia i Nowe brzmienie Markdown"
-        )
-    if old and old == new:
-        raise ValueError("Nowe brzmienie musi różnić się od zastępowanego fragmentu")
-    if not old and not source["propozycja"]:
+    if source["wynik"] == "do rozstrzygnięcia":
+        raise ValueError("Przed utworzeniem karty wybierz wynik decyzji: Przyjęta albo Odrzucona")
+
+    documents = source["dokumenty"]
+    changes = source["zmiany"]
+    proposed_change = False
+    for identifier, change in changes.items():
+        old, new = change["stary"], change["nowy"]
+        if bool(old.strip()) != bool(new.strip()):
+            raise ValueError(f"Uzupełnij oba fragmenty Markdown dla dokumentu: {identifier}")
+        if old and old == new:
+            raise ValueError(f"Nowe brzmienie dokumentu {identifier} musi różnić się od starego")
+        proposed_change = proposed_change or bool(old)
+    if not documents and (source["fragment_markdown"] or source["nowe_brzmienie_markdown"]):
+        raise ValueError("Decyzja bez zmiany dokumentu nie może zawierać fragmentów Markdown")
+    if len(documents) == 2:
+        if not all(change["stary"] and change["nowy"] for change in changes.values()):
+            raise ValueError("Wspólna zmiana wymaga dwóch kompletnych par fragmentów Markdown")
+        if not source["spojnosc"]:
+            raise ValueError("Uzupełnij pole „Spójność obu regulaminów”")
+    elif documents and not source["legacy"] and not source["wplyw_na_drugi"]:
+        raise ValueError("Uzupełnij pole „Wpływ na drugi regulamin”")
+    if documents and not source["legacy"] and source["wynik"] == "przyjęta" and not proposed_change:
+        raise ValueError("Przyjęta zmiana dokumentu wymaga kompletnej pary fragmentów Markdown")
+    if not proposed_change and not source["propozycja"]:
         raise ValueError(
             "Decyzja bez zmiany dokumentu wymaga pola „Proponowane rozwiązanie” w dyskusji"
         )
@@ -162,12 +180,12 @@ def render_card(discussion: dict, decision_id: str, pr_url: str = "") -> str:
 
     date = discussion["created_at"][:10]
     metadata = {
-        "schema_version": 2,
+        "schema_version": 3,
         "id": decision_id,
         "tytul": discussion["title"],
         "typ": "merytoryczna",
-        "status": "przyjęta",
-        "stan_obowiązywania": "obowiązuje",
+        "status": source["wynik"],
+        "stan_obowiązywania": ("obowiązuje" if source["wynik"] == "przyjęta" else "nie dotyczy"),
         "data_inicjacji": date,
         "data_decyzji": date,
         "sezon": "2026/2027",
@@ -175,7 +193,9 @@ def render_card(discussion: dict, decision_id: str, pr_url: str = "") -> str:
         "decydenci": "Komisja regulaminowa SPWS",
         "discussion_url": discussion["html_url"],
         "pr_url": pr_url,
-        "zmiana_regulaminu": bool(old),
+        "dokumenty": list(documents),
+        "zmiana_regulaminu": source["wynik"] == "przyjęta" and proposed_change,
+        "proponowana_zmiana": proposed_change,
         "powiazane": source["powiazane"],
         "zmienia": [],
         "zmieniona_przez": [],
@@ -194,21 +214,33 @@ def render_card(discussion: dict, decision_id: str, pr_url: str = "") -> str:
         source["propozycja"]
         or "Zastąpić wskazany fragment Markdown dokładnie podanym nowym brzmieniem."
     )
-    fragments = format_fragments(old, new, instructions=False) if old else ""
+    fragments = "\n".join(
+        format_document_fragments(identifier, change["stary"], change["nowy"])
+        for identifier, change in changes.items()
+        if change["stary"]
+    )
+    coherence = source["spojnosc"] or source["wplyw_na_drugi"] or "Nie dotyczy."
+    deployment = (
+        "Oczekuje na etykietę `wdrażaj` na PR."
+        if metadata["zmiana_regulaminu"]
+        else (
+            "Decyzja odrzucona; automat nie zmienia Markdown ani DOCX."
+            if source["wynik"] == "odrzucona"
+            else "Bez zmiany dokumentu; nie nadawaj etykiety `wdrażaj`."
+        )
+    )
     return (
         f"---\n{front}\n---\n\n"
         "Karta automatyczna. Dane poprawiaj wyłącznie w dyskusji źródłowej.\n\n"
         f"## Decyzja\n\n{clean(resolution)}\n\n"
         f"## Uzasadnienie\n\n{clean(source['uzasadnienie'])}\n\n"
-        f"{fragments}\n"
+        f"## Wpływ na spójność dokumentów\n\n{clean(coherence)}\n\n"
+        f"{fragments}"
         f"## Dyskusja\n\n{discussion['html_url']}\n\n"
         + (f"Powiązania: {clean(source['powiazane'])}\n\n" if source["powiazane"] else "")
         + "## Wdrożenie\n\n"
-        + (
-            "Oczekuje na etykietę `wdrażaj` na PR.\n"
-            if old
-            else "Bez zmiany dokumentu; nie nadawaj etykiety `wdrażaj`.\n"
-        )
+        + deployment
+        + "\n"
     )
 
 
