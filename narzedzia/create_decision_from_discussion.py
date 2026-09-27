@@ -6,6 +6,40 @@ import sys
 import unicodedata
 from pathlib import Path
 
+FORM_LABELS = (
+    "Koordynator dyskusji",
+    "Problem",
+    "Dokument",
+    "Wynik decyzji",
+    "Priorytet",
+    "Obszar",
+    "Proponowane rozwiązanie",
+    "Uzasadnienie",
+    "Fragment Markdown do zastąpienia",
+    "Nowe brzmienie Markdown",
+    "Wpływ na drugi regulamin",
+    "Fragment Regulaminu Reprezentacji do zastąpienia",
+    "Nowe brzmienie Regulaminu Reprezentacji",
+    "Fragment Regulaminu Zawodów do zastąpienia",
+    "Nowe brzmienie Regulaminu Zawodów",
+    "Spójność obu regulaminów",
+    "Inne rozważane podejścia",
+    "Materiały lub przykłady",
+    "Zależy od",
+    "Powiązane decyzje",
+)
+
+DOCUMENT_SCOPE = {
+    "Regulamin Reprezentacji": ("reprezentacja",),
+    "Regulamin Zawodów": ("zawody",),
+    "Bez zmiany dokumentu": (),
+}
+DECISION_RESULTS = {
+    "Przyjęta": "przyjęta",
+    "Odrzucona": "odrzucona",
+    "Do rozstrzygnięcia": "do rozstrzygnięcia",
+}
+
 
 def next_decision_id(names: list[str]) -> str:
     numbers = [int(match.group(1)) for name in names if (match := re.match(r"DR-(\d{3})", name))]
@@ -27,23 +61,58 @@ def _discussion_field(body: str, label: str, *, strict=True) -> str:
     return "" if value in {"", "_No response_"} else value
 
 
-def parse_discussion_form(body: str, *, strict=True) -> dict[str, str]:
+def parse_discussion_form(body: str, *, strict=True) -> dict[str, object]:
     zalezy_od = _discussion_field(body, "Zależy od", strict=strict) or _discussion_field(
         body, "Powiązane decyzje", strict=strict
     )
+    generic_old = _discussion_fragment(body, "Fragment Markdown do zastąpienia", strict=strict)
+    generic_new = _discussion_fragment(body, "Nowe brzmienie Markdown", strict=strict)
+    shared_changes = {
+        "reprezentacja": {
+            "stary": _discussion_fragment(
+                body, "Fragment Regulaminu Reprezentacji do zastąpienia", strict=strict
+            ),
+            "nowy": _discussion_fragment(
+                body, "Nowe brzmienie Regulaminu Reprezentacji", strict=strict
+            ),
+        },
+        "zawody": {
+            "stary": _discussion_fragment(
+                body, "Fragment Regulaminu Zawodów do zastąpienia", strict=strict
+            ),
+            "nowy": _discussion_fragment(body, "Nowe brzmienie Regulaminu Zawodów", strict=strict),
+        },
+    }
+    is_shared = any(value for change in shared_changes.values() for value in change.values())
+    document_value = _discussion_field(body, "Dokument", strict=strict)
+    if is_shared:
+        if document_value:
+            raise ValueError("Wspólna zmiana nie może wskazywać pojedynczego dokumentu")
+        documents = ("reprezentacja", "zawody")
+        changes = shared_changes
+    else:
+        if document_value and document_value not in DOCUMENT_SCOPE:
+            raise ValueError(f"Nieznany zakres dokumentu: {document_value}")
+        documents = DOCUMENT_SCOPE.get(document_value, ("reprezentacja",))
+        changes = {documents[0]: {"stary": generic_old, "nowy": generic_new}} if documents else {}
+    result_value = _discussion_field(body, "Wynik decyzji", strict=strict)
+    if result_value and result_value not in DECISION_RESULTS:
+        raise ValueError(f"Nieznany wynik decyzji: {result_value}")
+
     return {
         "koordynator": _discussion_field(body, "Koordynator dyskusji", strict=strict),
         "problem": _discussion_field(body, "Problem", strict=strict),
+        "dokumenty": documents,
+        "wynik": DECISION_RESULTS.get(result_value, "przyjęta"),
         "priorytet": _discussion_field(body, "Priorytet", strict=strict),
         "obszar": _discussion_field(body, "Obszar", strict=strict),
         "uzasadnienie": _discussion_field(body, "Uzasadnienie", strict=strict),
         "propozycja": _discussion_field(body, "Proponowane rozwiązanie", strict=strict),
-        "fragment_markdown": _discussion_fragment(
-            body, "Fragment Markdown do zastąpienia", strict=strict
-        ),
-        "nowe_brzmienie_markdown": _discussion_fragment(
-            body, "Nowe brzmienie Markdown", strict=strict
-        ),
+        "fragment_markdown": generic_old,
+        "nowe_brzmienie_markdown": generic_new,
+        "zmiany": changes,
+        "wplyw_na_drugi": _discussion_field(body, "Wpływ na drugi regulamin", strict=strict),
+        "spojnosc": _discussion_field(body, "Spójność obu regulaminów", strict=strict),
         "alternatywy": _discussion_field(body, "Inne rozważane podejścia", strict=strict),
         "materialy": _discussion_field(body, "Materiały lub przykłady", strict=strict),
         "powiazane": zalezy_od,
@@ -53,21 +122,7 @@ def parse_discussion_form(body: str, *, strict=True) -> dict[str, str]:
 
 def _discussion_fragment(body: str, label: str, *, strict=True) -> str:
     # Source section headings are content, not form boundaries. Preserve ZTP indentation.
-    labels = (
-        "Koordynator dyskusji",
-        "Problem",
-        "Priorytet",
-        "Obszar",
-        "Proponowane rozwiązanie",
-        "Uzasadnienie",
-        "Fragment Markdown do zastąpienia",
-        "Nowe brzmienie Markdown",
-        "Inne rozważane podejścia",
-        "Materiały lub przykłady",
-        "Zależy od",
-        "Powiązane decyzje",
-    )
-    boundary = "|".join(re.escape(item) for item in labels)
+    boundary = "|".join(re.escape(item) for item in FORM_LABELS)
     pattern = rf"^### {re.escape(label)}[ \t]*\r?\n(.*?)(?=^### (?:{boundary})[ \t]*\r?$|\Z)"
     matches = list(re.finditer(pattern, body, re.MULTILINE | re.DOTALL))
     if strict and len(matches) > 1:

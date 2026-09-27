@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   add-return-link:
-    if: github.event.discussion.category.slug == 'propozycje-zmian-regulaminu'
+    if: github.event.discussion.category.slug == 'propozycje-zmian-regulaminu' || github.event.discussion.category.slug == 'wspolna-zmiana-obu-regulaminow'
     runs-on: ubuntu-latest
     steps:
       - name: Dodanie stałego powrotu do listy dyskusji

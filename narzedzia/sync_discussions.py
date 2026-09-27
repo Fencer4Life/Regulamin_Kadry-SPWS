@@ -11,7 +11,7 @@ try:
 except ModuleNotFoundError:
     from create_decision_from_discussion import parse_discussion_form
 
-CATEGORY = "propozycje-zmian-regulaminu"
+CATEGORIES = {"propozycje-zmian-regulaminu", "wspolna-zmiana-obu-regulaminow"}
 GITHUB_LOGIN = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$")
 PRIORITIES = {value.casefold(): value for value in ("Niski", "Średni", "Wysoki")}
 
@@ -28,7 +28,7 @@ def normalize_discussions(payload: dict | list[dict], generated_at: str) -> dict
     open_items = []
     closed_items = []
     for node in _discussion_nodes(payload):
-        if node.get("category", {}).get("slug") != CATEGORY:
+        if node.get("category", {}).get("slug") not in CATEGORIES:
             continue
         # Listing unfinished discussions must not require a valid decision form.
         source = parse_discussion_form(node.get("body") or "", strict=False)

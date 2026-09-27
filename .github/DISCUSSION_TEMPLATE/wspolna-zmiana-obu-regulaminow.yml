@@ -1,0 +1,125 @@
+title: "[Wspólna zmiana] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Wspólna zmiana obu regulaminów
+
+        Ten formularz służy jednej decyzji, która atomowo zmienia Regulamin Reprezentacji i Regulamin Zawodów.
+
+  - type: input
+    id: coordinator
+    attributes:
+      label: Koordynator dyskusji
+      description: Podaj login GitHub osoby porządkującej rozmowę.
+      placeholder: "@login"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Opisz wspólny problem i skutki dla obu regulaminów.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: result
+    attributes:
+      label: Wynik decyzji
+      description: Przed rozstrzygnięciem zmień wartość początkową na Przyjęta albo Odrzucona.
+      options:
+        - Do rozstrzygnięcia
+        - Przyjęta
+        - Odrzucona
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorytet
+      options:
+        - Nie określono
+        - Niski
+        - Średni
+        - Wysoki
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Obszar
+      options:
+        - Nie określono
+        - Ranking
+        - Zawody
+        - Punktacja
+        - Kategorie wiekowe
+        - Słowniczek i cel
+        - Inne
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proponowane rozwiązanie
+      description: Opisz wspólne rozwiązanie przyjęte do dalszej redakcji.
+
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Uzasadnienie
+      description: Wpisz uzgodniony powód decyzji; automat kopiuje go dosłownie.
+
+  - type: textarea
+    id: representation_current_markdown
+    attributes:
+      label: Fragment Regulaminu Reprezentacji do zastąpienia
+      description: Wklej dokładny stary fragment kanonicznego Markdown Regulaminu Reprezentacji.
+
+  - type: textarea
+    id: representation_replacement_markdown
+    attributes:
+      label: Nowe brzmienie Regulaminu Reprezentacji
+      description: Wklej kompletne nowe brzmienie z zachowaniem stabilnych identyfikatorów.
+
+  - type: textarea
+    id: competition_current_markdown
+    attributes:
+      label: Fragment Regulaminu Zawodów do zastąpienia
+      description: Wklej dokładny stary fragment kanonicznego Markdown Regulaminu Zawodów.
+
+  - type: textarea
+    id: competition_replacement_markdown
+    attributes:
+      label: Nowe brzmienie Regulaminu Zawodów
+      description: Wklej kompletne nowe brzmienie z zachowaniem stabilnych identyfikatorów.
+
+  - type: textarea
+    id: coherence
+    attributes:
+      label: Spójność obu regulaminów
+      description: Wyjaśnij zgodność pojęć, założeń, celu oraz podziału zakresów po zmianie.
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Inne rozważane podejścia
+
+  - type: textarea
+    id: materials
+    attributes:
+      label: Materiały lub przykłady
+
+  - type: input
+    id: related
+    attributes:
+      label: Zależy od
+      description: Podaj identyfikatory powiązanych dyskusji albo decyzji.
+
+  - type: markdown
+    attributes:
+      value: |
+        Przed rozstrzygnięciem uzupełnij wynik, uzasadnienie, obie kompletne pary fragmentów oraz wyjaśnienie spójności. Automat nie wdroży tylko połowy wspólnej zmiany.
+
+        [← Powrót do publicznej listy dyskusji](https://fencer4life.github.io/Regulamin_Kadry-SPWS/dyskusje/)

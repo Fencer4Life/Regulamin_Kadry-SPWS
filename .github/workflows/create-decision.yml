@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   create:
-    if: (github.event.label.name == 'rozstrzygnięta' || github.event.label.name == 'redakcja-bez-zmiany-sensu') && github.event.discussion.category.slug == 'propozycje-zmian-regulaminu'
+    if: (github.event.label.name == 'rozstrzygnięta' || github.event.label.name == 'redakcja-bez-zmiany-sensu') && (github.event.discussion.category.slug == 'propozycje-zmian-regulaminu' || github.event.discussion.category.slug == 'wspolna-zmiana-obu-regulaminow')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

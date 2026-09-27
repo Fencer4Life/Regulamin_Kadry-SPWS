@@ -5,7 +5,7 @@ body:
       value: |
         ## Nowa dyskusja komisji regulaminowej
 
-        Wymagane są tylko pola **Koordynator dyskusji** i **Problem**. Pozostałe informacje można uzupełnić teraz albo dopisać później w toku rozmowy.
+        Wymagane są pola **Koordynator dyskusji**, **Problem** i **Dokument**. Pozostałe informacje można uzupełnić teraz albo dopisać później w toku rozmowy.
 
   - type: input
     id: coordinator
@@ -22,6 +22,30 @@ body:
       label: Problem
       description: Opisz krótko sprawę, którą komisja ma omówić, oraz jej skutki.
       placeholder: Na czym polega problem?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: document
+    attributes:
+      label: Dokument
+      description: Wybierz dokument objęty dyskusją albo decyzję procesową bez zmiany regulaminu.
+      options:
+        - Regulamin Reprezentacji
+        - Regulamin Zawodów
+        - Bez zmiany dokumentu
+    validations:
+      required: true
+
+  - type: dropdown
+    id: result
+    attributes:
+      label: Wynik decyzji
+      description: Przed rozstrzygnięciem zmień wartość początkową na Przyjęta albo Odrzucona.
+      options:
+        - Do rozstrzygnięcia
+        - Przyjęta
+        - Odrzucona
     validations:
       required: true
 
@@ -82,6 +106,12 @@ body:
       description: Wklej kompletny nowy fragment zastępujący stary. Zachowaj identyfikatory istniejących jednostek. Automat przeniesie go do pola Nowy fragment Markdown w karcie decyzji; nie wywnioskuje zmiany z opisu ani uzasadnienia.
 
   - type: textarea
+    id: second_regulation_impact
+    attributes:
+      label: Wpływ na drugi regulamin
+      description: Wyjaśnij, czy decyzja wymaga zmiany drugiego regulaminu i dlaczego oba dokumenty pozostaną spójne.
+
+  - type: textarea
     id: alternatives
     attributes:
       label: Inne rozważane podejścia
@@ -102,7 +132,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Przed rozstrzygnięciem uzupełnij Uzasadnienie oraz oba fragmenty Markdown. Dla decyzji bez zmiany dokumentu zostaw oba fragmenty puste i wpisz rozstrzygnięcie w Proponowane rozwiązanie.
+        Przed rozstrzygnięciem wybierz wynik decyzji i uzupełnij Uzasadnienie, Wpływ na drugi regulamin oraz oba fragmenty Markdown. Dla decyzji bez zmiany dokumentu zostaw oba fragmenty puste i wpisz rozstrzygnięcie w Proponowane rozwiązanie.
 
         Koordynator dodaje etykietę **rozstrzygnięta** na dyskusji. Automat tworzy kompletną kartę i draft PR. Na PR nadaj **wdrażaj** i poczekaj na DOCX do sprawdzenia; niczego nie przepisuj do karty. Poprawki wprowadzaj w opisie dyskusji. Dla oczywistej korekty bez zmiany sensu etykieta **redakcja-bez-zmiany-sensu** nadal uruchamia szybką ścieżkę.
 
