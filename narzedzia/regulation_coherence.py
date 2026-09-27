@@ -16,7 +16,6 @@ COMMON_PHRASES = (
     "wynik punktowy uzyskany w MPW",
     "za każdą niewypełnioną pozycję PPW przyjmuje się 0 punktów",
     "za obowiązkową pozycję MPW przyjmuje się 0 punktów",
-    "nie powoduje usunięcia zawodnika z Rankingu",
     "Klasyfikacja Pucharu Polski Weteranów",
     "filtrowanym podzbiorem Rankingu",
     "filtra obejmującego PPW i MPW",

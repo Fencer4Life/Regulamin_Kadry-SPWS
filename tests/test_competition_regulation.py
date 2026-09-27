@@ -74,7 +74,6 @@ class CompetitionRegulationTests(unittest.TestCase):
         for fragment in (
             "dwa najlepsze wyniki punktowe zawodnika uzyskane w PPW",
             "obowiązkową pozycję MPW przyjmuje się 0 punktów",
-            "nie powoduje usunięcia zawodnika z Rankingu",
             "filtrowanym podzbiorem Rankingu",
             "V0 obejmuje zawodników w wieku od 30 do 39 lat",
             "PPW, MPW, PPS i MPS",
@@ -82,6 +81,18 @@ class CompetitionRegulationTests(unittest.TestCase):
             "nie stanowią podstawy powołania do reprezentacji",
         ):
             self.assertIn(fragment, self.text)
+        self.assertNotIn("brak startu w MPW nie powoduje usunięcia", self.text)
+
+    def test_online_results_are_fetched_and_only_corrections_are_sent(self):
+        self.assertIn(
+            "najpóźniej do 7 dni po zawodach publikuje je w serwisie internetowym używanym do obsługi zawodów",
+            self.text,
+        )
+        self.assertIn("W przypadku pomyłki w protokole internetowym", self.text)
+        self.assertIn("organizator przekazuje skorygowany plik do SPWS", self.text)
+        self.assertNotIn("przekazuje SPWS pliki wynikowe", self.text)
+        self.assertNotIn("przekazuje je SPWS", self.text)
+        self.assertNotIn("w ciągu 3 dni roboczych", self.text)
 
     def test_safety_rules_do_not_hide_responsibility(self):
         safety = self.text.split("### § 25 — Zasady bezpieczeństwa i wejście w życie", 1)[1]

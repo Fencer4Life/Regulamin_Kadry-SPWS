@@ -46,7 +46,7 @@ Treść dokumentu podzielono następująco:
 | 4 | PPW i indywidualne MPW | formuła walk, grupy, Klasyfikacja łączona i eliminacja bezpośrednia |
 | 5 | Drużynowe MPW | skład drużyny, system rozgrywek i klasyfikacja |
 | 6 | Ranking i klasyfikacje | źródło danych, krajowa część Rankingu i Klasyfikacja PPW |
-| 7 | Wyniki, protokoły i dane | ogłaszanie wyników, protokoły, korekty i przekazanie danych |
+| 7 | Wyniki, protokoły i dane | ogłaszanie wyników, protokoły, publikacja i korekty danych |
 | 8 | Postanowienia końcowe | odesłania, zasady bezpieczeństwa i wejście w życie |
 <!-- /publication -->
 
@@ -280,7 +280,7 @@ Treść dokumentu podzielono następująco:
 
 2. <!-- unit:krajowe-brak-ppw --> Jeżeli zawodnik uzyskał mniej niż dwa wyniki w PPW, za każdą niewypełnioną pozycję PPW przyjmuje się 0 punktów.
 
-3. <!-- unit:krajowe-brak-mpw --> Jeżeli zawodnik nie wystartował w MPW, za obowiązkową pozycję MPW przyjmuje się 0 punktów; brak startu w MPW nie powoduje usunięcia zawodnika z Rankingu.
+3. <!-- unit:krajowe-brak-mpw --> Jeżeli zawodnik nie wystartował w MPW, za obowiązkową pozycję MPW przyjmuje się 0 punktów.
 
 4. <!-- unit:krajowe-punktacja --> Sposób obliczania punktów za pojedynczy wynik oraz współczynniki zawodów określa regulamin, o którym mowa w § 1 ust. 3<!-- ref:przedmiot/przedmiot-pierwszenstwo -->.
 
@@ -293,15 +293,15 @@ Treść dokumentu podzielono następująco:
 3. <!-- unit:ppw-sezon --> Klasyfikację końcową ustala się po ostatnich zawodach krajowych zaliczanych do danego sezonu.
 
 ## Rozdział 7 — Wyniki, protokoły i dane <!-- chapter:wyniki-dane -->
-<!-- scope: ogłaszanie wyników, protokoły, korekty i przekazanie danych -->
+<!-- scope: ogłaszanie wyników, protokoły, publikacja i korekty danych -->
 
 ### § 22 — Ogłaszanie i zatwierdzanie wyników <!-- section:oglaszanie-wynikow -->
 
-1. <!-- unit:wyniki-biezace --> Komisja Techniczna ogłasza wyniki poszczególnych faz w miejscu zawodów i, w miarę możliwości, w serwisie internetowym używanym do obsługi zawodów.
+1. <!-- unit:wyniki-biezace --> Komisja Techniczna ogłasza wyniki poszczególnych faz w miejscu zawodów, a najpóźniej do 7 dni po zawodach publikuje je w serwisie internetowym używanym do obsługi zawodów.
 
 2. <!-- unit:wyniki-weryfikacja --> Zawodnik albo kapitan drużyny zgłasza zauważony błąd Komisji Technicznej niezwłocznie po ogłoszeniu wyniku właściwej fazy.
 
-3. <!-- unit:wyniki-zatwierdzenie --> Po zakończeniu weryfikacji Komisja Techniczna zatwierdza klasyfikacje końcowe, a organizator przekazuje je SPWS.
+3. <!-- unit:wyniki-zatwierdzenie --> Po zakończeniu weryfikacji Komisja Techniczna zatwierdza klasyfikacje końcowe i zapewnia ich publikację w serwisie internetowym używanym do obsługi zawodów.
 
 ### § 23 — Protokół i publikacja danych <!-- section:protokol -->
 
@@ -309,11 +309,9 @@ Treść dokumentu podzielono następująco:
 
 2. <!-- unit:protokol-kompletny --> Organizator publikuje w ogólnodostępnym serwisie internetowym kompletne protokoły wszystkich rozegranych walk wraz z klasyfikacjami końcowymi i liczbą uczestników oraz zapewnia ich dostępność przez co najmniej 36 miesięcy.
 
-3. <!-- unit:protokol-przekazanie --> Organizator przekazuje SPWS pliki wynikowe w formacie wymaganym przez system Rankingu nie później niż w ciągu 3 dni roboczych od zakończenia zawodów.
+3. <!-- unit:protokol-korekta --> W przypadku pomyłki w protokole internetowym korekta opublikowanego protokołu wymaga wskazania przyczyny, daty i zakresu zmiany; organizator przekazuje skorygowany plik do SPWS bez zbędnej zwłoki.
 
-4. <!-- unit:protokol-korekta --> Korekta opublikowanego protokołu wymaga wskazania przyczyny, daty i zakresu zmiany; organizator przekazuje skorygowany plik SPWS bez zbędnej zwłoki.
-
-5. <!-- unit:protokol-dane-osobowe --> Zakres publikowanych danych ogranicza się do danych niezbędnych do identyfikacji wyniku sportowego i prowadzenia Rankingu, z zachowaniem przepisów o ochronie danych osobowych.
+4. <!-- unit:protokol-dane-osobowe --> Zakres publikowanych danych ogranicza się do danych niezbędnych do identyfikacji wyniku sportowego i prowadzenia Rankingu, z zachowaniem przepisów o ochronie danych osobowych.
 
 ## Rozdział 8 — Postanowienia końcowe <!-- chapter:postanowienia-koncowe -->
 <!-- scope: odesłania, zasady bezpieczeństwa i wejście w życie -->

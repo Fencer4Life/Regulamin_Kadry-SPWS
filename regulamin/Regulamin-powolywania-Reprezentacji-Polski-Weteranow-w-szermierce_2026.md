@@ -134,7 +134,7 @@ Treść dokumentu podzielono następująco:
    1) <!-- unit:krajowe-dwa-ppw --> dwie pozycje wypełniają dwa najlepsze wyniki punktowe zawodnika uzyskane w PPW;
    2) <!-- unit:krajowe-mpw --> trzecią pozycję wypełnia wynik punktowy uzyskany w MPW;
    3) <!-- unit:krajowe-brak-ppw --> jeżeli zawodnik uzyskał mniej niż dwa wyniki w PPW, za każdą niewypełnioną pozycję PPW przyjmuje się 0 punktów;
-   4) <!-- unit:krajowe-brak-mpw --> jeżeli zawodnik nie wystartował w MPW, za obowiązkową pozycję MPW przyjmuje się 0 punktów; brak startu w MPW nie powoduje usunięcia zawodnika z Rankingu.
+   4) <!-- unit:krajowe-brak-mpw --> jeżeli zawodnik nie wystartował w MPW, za obowiązkową pozycję MPW przyjmuje się 0 punktów.
 
 5. <!-- unit:pozycje-otwarte --> Na pięć pozycji otwartych składa się pięć najwyżej punktowanych spośród pozostałych wyników zawodnika uwzględnianych w Rankingu.
 

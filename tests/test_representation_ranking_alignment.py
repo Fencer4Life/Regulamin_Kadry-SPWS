@@ -29,9 +29,9 @@ class RepresentationRankingAlignmentTests(unittest.TestCase):
             "wynik punktowy uzyskany w MPW",
             "za każdą niewypełnioną pozycję PPW przyjmuje się 0 punktów",
             "za obowiązkową pozycję MPW przyjmuje się 0 punktów",
-            "nie powoduje usunięcia zawodnika z Rankingu",
         ):
             self.assertIn(fragment, self.text)
+        self.assertNotIn("brak startu w MPW nie powoduje usunięcia", self.text)
 
     def test_v0_is_domestic_only_and_cannot_be_used_for_selection(self):
         for fragment in (

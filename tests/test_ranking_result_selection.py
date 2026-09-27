@@ -23,8 +23,7 @@ EXPECTED_SELECTION_RULES = [
     "2) trzecią pozycję wypełnia wynik punktowy uzyskany w MPW;",
     "3) jeżeli zawodnik uzyskał mniej niż dwa wyniki w PPW, za każdą niewypełnioną pozycję "
     "PPW przyjmuje się 0 punktów;",
-    "4) jeżeli zawodnik nie wystartował w MPW, za obowiązkową pozycję MPW przyjmuje się "
-    "0 punktów; brak startu w MPW nie powoduje usunięcia zawodnika z Rankingu.",
+    "4) jeżeli zawodnik nie wystartował w MPW, za obowiązkową pozycję MPW przyjmuje się 0 punktów.",
     "5. Na pięć pozycji otwartych składa się pięć najwyżej punktowanych spośród pozostałych "
     "wyników zawodnika uwzględnianych w Rankingu.",
     "6. Najpierw wybiera się wyniki wypełniające trzy obowiązkowe pozycje krajowe, a następnie "
